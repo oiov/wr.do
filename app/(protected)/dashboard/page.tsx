@@ -23,9 +23,7 @@ export default async function DashboardPage() {
         heading="Dashboard"
         // text={`Current Role : ${user?.role}`}
       />
-
-      {user && <AddRecordForm user={{ id: user.id, name: user.name || "" }} />}
-
+      <AddRecordForm user={{ id: user.id, name: user.name || "" }} />、
       <EmptyPlaceholder>
         <EmptyPlaceholder.Icon name="post" />
         <EmptyPlaceholder.Title>No record created</EmptyPlaceholder.Title>

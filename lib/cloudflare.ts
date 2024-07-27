@@ -14,13 +14,13 @@ export interface CreateDNSRecord {
 export type RecordType = "A" | "CNAME";
 
 export const RECORD_TYPE_ENUMS = [
-  // {
-  //   value: "A",
-  //   label: "A",
-  // },
   {
     value: "CNAME",
     label: "CNAME",
+  },
+  {
+    value: "A",
+    label: "A",
   },
 ];
 export const TTL_ENUMS = [
@@ -101,7 +101,40 @@ export const createDNSRecord = async (
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error creating DNS record:", error);
+    // console.error("Error creating DNS record.", error);
+    throw error;
+  }
+};
+
+export const deleteDNSRecord = async (
+  zoneId: string,
+  apiKey: string,
+  email: string,
+  recordId: string,
+): Promise<Pick<CreateDNSRecordResponse, "result">> => {
+  try {
+    const url = `${CLOUDFLARE_API_URL}/zones/${zoneId}/dns_records/${recordId}`;
+
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`,
+      "X-Auth-Email": email,
+      "X-Auth-Key": apiKey,
+    };
+
+    const response = await fetch(url, {
+      method: "DELETE",
+      headers,
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error deleting DNS record.", error);
     throw error;
   }
 };

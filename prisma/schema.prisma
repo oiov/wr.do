@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider     = "postgresql"
-  url          = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 enum UserRole {
@@ -55,12 +55,15 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+  active        Int       @default(1) // 0 封禁，1 正常
+  team          String?
   createdAt     DateTime  @default(now()) @map(name: "created_at")
   updatedAt     DateTime  @default(now()) @map(name: "updated_at")
   role          UserRole  @default(USER)
 
-  accounts Account[]
-  sessions Session[]
+  accounts   Account[]
+  sessions   Session[]
+  UserRecord UserRecord[]
 
   @@map(name: "users")
 }
@@ -72,4 +75,28 @@ model VerificationToken {
 
   @@unique([identifier, token])
   @@map(name: "verification_tokens")
+}
+
+model UserRecord {
+  id          String    @id @default(cuid())
+  userId      String
+  record_id   String    @unique
+  zone_id     String
+  zone_name   String
+  name        String
+  type        String
+  content     String
+  proxiable   Boolean?
+  proxied     Boolean?
+  ttl         Int?
+  comment     String?
+  tags        String
+  created_on  DateTime?
+  modified_on DateTime?
+  active      Int?      @default(1)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map(name: "user_records")
 }

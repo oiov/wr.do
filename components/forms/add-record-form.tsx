@@ -26,7 +26,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { Switch } from "../ui/switch";
 
 export type FormData = CreateDNSRecord;
 
@@ -53,22 +52,21 @@ export function AddRecordForm({ user }: AddRecordFormProps) {
 
   const onSubmit = handleSubmit((data) => {
     startTransition(async () => {
-      // const response = await fetch("/api/record/add", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     records: [data],
-      //   }),
-      // });
-      // if (!response.ok) {
-      //   toast.error("Something went wrong.", {
-      //     description: "emmm...",
-      //   });
-      // }
-      // const res = await response.json();
-      // toast.success(`Created record [${res?.result?.name}] successfully`);
+      const response = await fetch("/api/record/add", {
+        method: "POST",
+        body: JSON.stringify({
+          records: [data],
+        }),
+      });
+      if (!response.ok || response.status !== 200) {
+        toast.error("Add Record Failed", {
+          description: response.statusText,
+        });
+      } else {
+        const res = await response.json();
+        toast.success(`Created record [${res?.name}] successfully`);
+        setShow(false);
+      }
     });
   });
 
