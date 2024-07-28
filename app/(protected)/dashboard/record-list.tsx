@@ -4,8 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { UserRecordFormData } from "@/actions/cloudflare-dns-record";
 import { User } from "@prisma/client";
-import { ArrowUpRight } from "lucide-react";
-import useSWR from "swr";
+import { ArrowUpRight, DotSquareIcon, RefreshCwIcon } from "lucide-react";
+import useSWR, { useSWRConfig } from "swr";
 
 import { TTL_ENUMS } from "@/lib/cloudflare";
 import { fetcher } from "@/lib/utils";
@@ -66,6 +66,7 @@ export default function UserRecordsList({ user }: RecordListProps) {
   const [currentEditRecord, setCurrentEditRecord] =
     useState<UserRecordFormData | null>(null);
 
+  const { mutate } = useSWRConfig();
   const { data, error, isLoading } = useSWR<UserRecordFormData[]>(
     "/api/record",
     fetcher,
@@ -73,6 +74,10 @@ export default function UserRecordsList({ user }: RecordListProps) {
       revalidateOnFocus: false,
     },
   );
+
+  const handleRefresh = () => {
+    mutate("/api/record", undefined);
+  };
 
   return (
     <>
@@ -84,18 +89,31 @@ export default function UserRecordsList({ user }: RecordListProps) {
               All Dns Records
             </CardDescription>
           </div>
-          <Button
-            className="ml-auto w-[120px] shrink-0 gap-1"
-            variant="default"
-            onClick={() => {
-              setCurrentEditRecord(null);
-              setShowForm(false);
-              setFormType("add");
-              setShowForm(!isShowForm);
-            }}
-          >
-            Add record
-          </Button>
+          <div className="ml-auto flex items-center justify-end gap-3">
+            <Button
+              variant={"outline"}
+              onClick={() => handleRefresh()}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <RefreshCwIcon className="h-4 w-4 animate-spin" />
+              ) : (
+                <RefreshCwIcon className="h-4 w-4" />
+              )}
+            </Button>
+            <Button
+              className="w-[120px] shrink-0 gap-1"
+              variant="default"
+              onClick={() => {
+                setCurrentEditRecord(null);
+                setShowForm(false);
+                setFormType("add");
+                setShowForm(!isShowForm);
+              }}
+            >
+              Add record
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           {isShowForm && (
@@ -105,6 +123,7 @@ export default function UserRecordsList({ user }: RecordListProps) {
               setShowForm={setShowForm}
               type={formType}
               initData={currentEditRecord}
+              onRefresh={handleRefresh}
             />
           )}
           <Table>
@@ -179,7 +198,18 @@ export default function UserRecordsList({ user }: RecordListProps) {
                   <EmptyPlaceholder.Description>
                     You don&apos;t have any record yet. Start creating record.
                   </EmptyPlaceholder.Description>
-                  <Button>Add Record</Button>
+                  <Button
+                    className="w-[120px] shrink-0 gap-1"
+                    variant="default"
+                    onClick={() => {
+                      setCurrentEditRecord(null);
+                      setShowForm(false);
+                      setFormType("add");
+                      setShowForm(!isShowForm);
+                    }}
+                  >
+                    Add record
+                  </Button>
                 </EmptyPlaceholder>
               )}
             </TableBody>

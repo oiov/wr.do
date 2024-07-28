@@ -27,3 +27,19 @@ export const getUserById = async (id: string) => {
     return null;
   }
 };
+
+export function checkUserStatus(user: any) {
+  if (!user?.id) {
+    throw new Response("Unauthorized", {
+      status: 401,
+      statusText: "Unauthorized",
+    });
+  }
+  if (user.active === 0) {
+    throw new Response("Forbidden", {
+      status: 403,
+      statusText: "Forbidden",
+    });
+  }
+  return user;
+}

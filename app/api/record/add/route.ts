@@ -7,11 +7,14 @@ import {
 import { env } from "@/env.mjs";
 import { createDNSRecord } from "@/lib/cloudflare";
 import { getCurrentUser } from "@/lib/session";
+import { checkUserStatus } from "@/lib/user";
 import { generateSecret } from "@/lib/utils";
 
 export async function POST(req: Request) {
   try {
-    const user = await getCurrentUser();
+    const user = checkUserStatus(await getCurrentUser());
+    if (user instanceof Response) return user;
+
     const { records } = await req.json();
     const {
       CLOUDFLARE_ZONE_ID,
@@ -19,13 +22,6 @@ export async function POST(req: Request) {
       CLOUDFLARE_EMAIL,
       NEXT_PUBLIC_FREE_RECORD_QUOTA,
     } = env;
-
-    if (!user?.id) {
-      return Response.json("Unauthorized", {
-        status: 401,
-        statusText: "Unauthorized",
-      });
-    }
 
     if (!CLOUDFLARE_ZONE_ID || !CLOUDFLARE_API_KEY || !CLOUDFLARE_EMAIL) {
       return Response.json("API key、zone iD and email are required", {
@@ -106,9 +102,9 @@ export async function POST(req: Request) {
     }
   } catch (error) {
     console.error(error);
-    return Response.json(error, {
-      status: 500,
-      statusText: "Server error",
+    return Response.json(error?.statusText || error, {
+      status: error?.status || 500,
+      statusText: error?.statusText || "Server error",
     });
   }
 }

@@ -38,6 +38,7 @@ export interface RecordFormProps {
   setShowForm: Dispatch<SetStateAction<boolean>>;
   type: FormType;
   initData?: UserRecordFormData | null;
+  onRefresh: () => void;
 }
 
 export function RecordForm({
@@ -46,8 +47,10 @@ export function RecordForm({
   setShowForm,
   type,
   initData,
+  onRefresh,
 }: RecordFormProps) {
   const [isPending, startTransition] = useTransition();
+  const [isDeleting, startDeleteTransition] = useTransition();
 
   const {
     handleSubmit,
@@ -66,68 +69,79 @@ export function RecordForm({
   });
 
   const onSubmit = handleSubmit((data) => {
-    startTransition(async () => {
-      if (type === "add") {
-        handleCreateRecord(data);
-      } else if (type === "edit") {
-        handleUpdateRecord(data);
-      }
-    });
+    if (type === "add") {
+      handleCreateRecord(data);
+    } else if (type === "edit") {
+      handleUpdateRecord(data);
+    }
   });
 
   const handleCreateRecord = async (data: CreateDNSRecord) => {
-    const response = await fetch("/api/record/add", {
-      method: "POST",
-      body: JSON.stringify({
-        records: [data],
-      }),
-    });
-    if (!response.ok || response.status !== 200) {
-      toast.error("Created Failed!", {
-        description: response.statusText,
+    startTransition(async () => {
+      const response = await fetch("/api/record/add", {
+        method: "POST",
+        body: JSON.stringify({
+          records: [data],
+        }),
       });
-    } else {
-      const res = await response.json();
-      toast.success(`Created successfully!`);
-      setShowForm(false);
-    }
+      if (!response.ok || response.status !== 200) {
+        toast.error("Created Failed!", {
+          description: response.statusText,
+        });
+      } else {
+        const res = await response.json();
+        toast.success(`Created successfully!`);
+        setShowForm(false);
+        onRefresh();
+      }
+    });
   };
 
   const handleUpdateRecord = async (data: CreateDNSRecord) => {
-    const response = await fetch("/api/record/update", {
-      method: "POST",
-      body: JSON.stringify({
-        records: [data],
-      }),
+    startTransition(async () => {
+      if (type === "edit") {
+        const response = await fetch("/api/record/update", {
+          method: "POST",
+          body: JSON.stringify({
+            records: [data],
+          }),
+        });
+        if (!response.ok || response.status !== 200) {
+          toast.error("Update Failed", {
+            description: response.statusText,
+          });
+        } else {
+          const res = await response.json();
+          toast.success(`Update successfully!`);
+          setShowForm(false);
+          onRefresh();
+        }
+      }
     });
-    if (!response.ok || response.status !== 200) {
-      toast.error("Update Failed", {
-        description: response.statusText,
-      });
-    } else {
-      const res = await response.json();
-      toast.success(`Update successfully!`);
-      setShowForm(false);
-    }
   };
 
   const handleDeleteRecord = async () => {
-    const response = await fetch("/api/record/delete", {
-      method: "POST",
-      body: JSON.stringify({
-        record_id: initData?.record_id,
-        zone_id: initData?.zone_id,
-        active: initData?.active,
-      }),
-    });
-    if (!response.ok || response.status !== 200) {
-      toast.error("Delete Failed", {
-        description: response.statusText,
+    if (type === "edit") {
+      startTransition(async () => {
+        const response = await fetch("/api/record/delete", {
+          method: "POST",
+          body: JSON.stringify({
+            record_id: initData?.record_id,
+            zone_id: initData?.zone_id,
+            active: initData?.active,
+          }),
+        });
+        if (!response.ok || response.status !== 200) {
+          toast.error("Delete Failed", {
+            description: response.statusText,
+          });
+        } else {
+          await response.json();
+          toast.success(`Success`);
+          setShowForm(false);
+          onRefresh();
+        }
       });
-    } else {
-      await response.json();
-      toast.success(`Delete successfully!`);
-      setShowForm(false);
     }
   };
 
@@ -261,16 +275,22 @@ export function RecordForm({
       <div className="flex justify-end gap-3">
         {type === "edit" && (
           <Button
-            variant={"destructive"}
+            type="button"
+            variant="destructive"
             className="mr-auto w-[80px] px-0"
             onClick={() => handleDeleteRecord()}
+            disabled={isDeleting}
           >
-            Delete
+            {isDeleting ? (
+              <Icons.spinner className="size-4 animate-spin" />
+            ) : (
+              <p>Delete</p>
+            )}
           </Button>
         )}
         <Button
           type="reset"
-          variant={"outline"}
+          variant="outline"
           className="w-[80px] px-0"
           onClick={() => setShowForm(false)}
         >
