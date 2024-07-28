@@ -1,9 +1,8 @@
-import { updateUserRecord } from "@/actions/cloudflare-dns-record";
-
 import { env } from "@/env.mjs";
 import { updateDNSRecord } from "@/lib/cloudflare";
+import { updateUserRecord } from "@/lib/dto/cloudflare-dns-record";
+import { checkUserStatus } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";
-import { checkUserStatus } from "@/lib/user";
 
 export async function POST(req: Request) {
   try {

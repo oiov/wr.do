@@ -106,7 +106,7 @@ CREATE TABLE "user_records"
     "modified_on" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "active" INTEGER NOT NULL DEFAULT 1,
 
-    CONSTRAINT "user_records_pkey" PRIMARY KEY ("id"),
+    CONSTRAINT "user_records_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -117,3 +117,48 @@ CREATE UNIQUE INDEX "user_records_record_id_key" ON "user_records"("record_id");
 
 -- AddForeignKey
 ALTER TABLE "user_records" ADD CONSTRAINT "user_records_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- CreateTable
+CREATE TABLE "user_urls"
+(
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "userName" TEXT NOT NULL,
+    "target" TEXT NOT NULL,
+    "url" TEXT NOT NULL,
+    "visible" INTEGER NOT NULL DEFAULT 0,
+    "active" INTEGER NOT NULL DEFAULT 1,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "user_urls_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateIndex
+CREATE INDEX "user_urls_userId_idx" ON "user_urls" ("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "user_urls_url_key" ON "user_urls"("url");
+
+-- AddForeignKey
+ALTER TABLE "user_urls" ADD CONSTRAINT "user_urls_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- CreateTable
+CREATE TABLE "url_metas"
+(
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "urlId" TEXT NOT NULL,
+    "click" INTEGER NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "url_metas_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateIndex
+CREATE INDEX "url_metas_userId_urlId_idx" ON "url_metas" ("userId", "urlId");
+
+-- AddForeignKey
+ALTER TABLE "url_metas" ADD CONSTRAINT "url_metas_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "url_metas" ADD CONSTRAINT "url_metas_urlId_fkey" FOREIGN KEY ("urlId") REFERENCES "user_urls"("id") ON DELETE CASCADE ON UPDATE CASCADE;

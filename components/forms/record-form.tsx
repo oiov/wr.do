@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useState,
-  useTransition,
-} from "react";
-import { UserRecordFormData } from "@/actions/cloudflare-dns-record";
+import { Dispatch, SetStateAction, useState, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";
 import { useForm } from "react-hook-form";
@@ -19,6 +12,7 @@ import {
   RecordType,
   TTL_ENUMS,
 } from "@/lib/cloudflare";
+import { UserRecordFormData } from "@/lib/dto/cloudflare-dns-record";
 import { createRecordSchema } from "@/lib/validations/record";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

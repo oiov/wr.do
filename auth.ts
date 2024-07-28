@@ -4,7 +4,7 @@ import { UserRole } from "@prisma/client";
 import NextAuth, { type DefaultSession } from "next-auth";
 
 import { prisma } from "@/lib/db";
-import { getUserById } from "@/lib/user";
+import { getUserById } from "@/lib/dto/user";
 
 // More info: https://authjs.dev/getting-started/typescript#module-augmentation
 declare module "next-auth" {

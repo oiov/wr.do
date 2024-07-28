@@ -1,9 +1,8 @@
-import { deleteUserRecord } from "@/actions/cloudflare-dns-record";
-
 import { env } from "@/env.mjs";
 import { deleteDNSRecord } from "@/lib/cloudflare";
+import { deleteUserRecord } from "@/lib/dto/cloudflare-dns-record";
+import { checkUserStatus } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";
-import { checkUserStatus } from "@/lib/user";
 
 export async function POST(req: Request) {
   try {
@@ -30,7 +29,7 @@ export async function POST(req: Request) {
     if (res && res.result?.id) {
       // Then delete user record.
       await deleteUserRecord(user.id, record_id, zone_id, active);
-      return Response.json({
+      return Response.json("success", {
         status: 200,
         statusText: "success",
       });

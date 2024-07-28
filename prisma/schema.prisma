@@ -64,6 +64,8 @@ model User {
   accounts   Account[]
   sessions   Session[]
   UserRecord UserRecord[]
+  UserUrl    UserUrl[]
+  UrlMeta    UrlMeta[]
 
   @@map(name: "users")
 }
@@ -99,4 +101,38 @@ model UserRecord {
 
   @@index([userId])
   @@map(name: "user_records")
+}
+
+model UserUrl {
+  id        String   @id @default(cuid())
+  userId    String
+  userName  String
+  target    String
+  url       String   @unique
+  visible   Int      @default(0)
+  active    Int      @default(1)
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @default(now()) @map(name: "updated_at")
+
+  user    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  UrlMeta UrlMeta[]
+
+  @@index([userId])
+  @@map(name: "user_urls")
+}
+
+model UrlMeta {
+  id     String @id @default(cuid())
+  userId String
+  urlId  String
+  click  Int
+
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @default(now()) @map(name: "updated_at")
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userUrl UserUrl @relation(fields: [urlId], references: [id], onDelete: Cascade)
+
+  @@index([userId, urlId])
+  @@map(name: "url_metas")
 }

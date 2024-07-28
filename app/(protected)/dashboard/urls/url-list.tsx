@@ -2,17 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { UserRecordFormData } from "@/actions/cloudflare-dns-record";
 import { User } from "@prisma/client";
-import {
-  ArrowUpRight,
-  DotSquareIcon,
-  PenLine,
-  RefreshCwIcon,
-} from "lucide-react";
+import { PenLine, RefreshCwIcon } from "lucide-react";
 import useSWR, { useSWRConfig } from "swr";
 
 import { TTL_ENUMS } from "@/lib/cloudflare";
+import { ShortUrlFormData } from "@/lib/dto/short-urls";
 import { fetcher } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -33,23 +28,24 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import StatusDot from "@/components/dashboard/status-dot";
-import { FormType, RecordForm } from "@/components/forms/record-form";
+import { FormType } from "@/components/forms/record-form";
+import { UrlForm } from "@/components/forms/url-form";
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
 
-export interface RecordListProps {
+export interface UrlListProps {
   user: Pick<User, "id" | "name">;
 }
 
 function TableColumnSekleton({ className }: { className?: string }) {
   return (
-    <TableRow className="grid grid-cols-3 items-center sm:grid-cols-5">
-      <TableCell className="col-span-1">
+    <TableRow className="grid grid-cols-5 items-center sm:grid-cols-7">
+      <TableCell className="col-span-2">
         <Skeleton className="h-5 w-24" />
       </TableCell>
-      <TableCell className="col-span-1 hidden sm:inline-block">
+      <TableCell className="col-span-2">
         <Skeleton className="h-5 w-24" />
       </TableCell>
-      <TableCell className="col-span-1 hidden sm:inline-block">
+      <TableCell className="col-span-1 hidden justify-center sm:flex">
         <Skeleton className="h-5 w-16" />
       </TableCell>
       <TableCell className="col-span-1 hidden justify-center sm:flex">
@@ -62,15 +58,16 @@ function TableColumnSekleton({ className }: { className?: string }) {
   );
 }
 
-export default function UserUrlsList({ user }: RecordListProps) {
+export default function UserUrlsList({ user }: UrlListProps) {
   const [isShowForm, setShowForm] = useState(false);
   const [formType, setFormType] = useState<FormType>("add");
-  const [currentEditRecord, setCurrentEditRecord] =
-    useState<UserRecordFormData | null>(null);
+  const [currentEditUrl, setCurrentEditUrl] = useState<ShortUrlFormData | null>(
+    null,
+  );
 
   const { mutate } = useSWRConfig();
-  const { data, error, isLoading } = useSWR<UserRecordFormData[]>(
-    "/api/record",
+  const { data, error, isLoading } = useSWR<ShortUrlFormData[]>(
+    "/api/url",
     fetcher,
     {
       revalidateOnFocus: false,
@@ -78,7 +75,7 @@ export default function UserUrlsList({ user }: RecordListProps) {
   );
 
   const handleRefresh = () => {
-    // mutate("/api/record", undefined);
+    mutate("/api/url", undefined);
   };
 
   return (
@@ -107,10 +104,10 @@ export default function UserUrlsList({ user }: RecordListProps) {
               className="w-[120px] shrink-0 gap-1"
               variant="default"
               onClick={() => {
-                // setCurrentEditRecord(null);
-                // setShowForm(false);
-                // setFormType("add");
-                // setShowForm(!isShowForm);
+                setCurrentEditUrl(null);
+                setShowForm(false);
+                setFormType("add");
+                setShowForm(!isShowForm);
               }}
             >
               Add url
@@ -118,30 +115,30 @@ export default function UserUrlsList({ user }: RecordListProps) {
           </div>
         </CardHeader>
         <CardContent>
-          {/* {isShowForm && (
-            <RecordForm
+          {isShowForm && (
+            <UrlForm
               user={{ id: user.id, name: user.name || "" }}
               isShowForm={isShowForm}
               setShowForm={setShowForm}
               type={formType}
-              initData={currentEditRecord}
+              initData={currentEditUrl}
               onRefresh={handleRefresh}
             />
-          )} */}
+          )}
           <Table>
             <TableHeader>
-              <TableRow className="grid grid-cols-3 items-center sm:grid-cols-5">
-                <TableHead className="col-span-1 flex items-center font-bold">
+              <TableRow className="grid grid-cols-5 items-center sm:grid-cols-7">
+                <TableHead className="col-span-2 flex items-center font-bold">
                   Target
                 </TableHead>
-                <TableHead className="col-span-1 hidden items-center font-bold sm:flex">
+                <TableHead className="col-span-2 flex items-center font-bold">
                   Url
                 </TableHead>
-                <TableHead className="col-span-1 hidden items-center font-bold sm:flex">
-                  Clicks
+                <TableHead className="col-span-1 hidden items-center justify-center font-bold sm:flex">
+                  Visible
                 </TableHead>
                 <TableHead className="col-span-1 hidden items-center justify-center font-bold sm:flex">
-                  Public
+                  Active
                 </TableHead>
                 <TableHead className="col-span-1 flex items-center justify-center font-bold">
                   Actions
@@ -149,17 +146,78 @@ export default function UserUrlsList({ user }: RecordListProps) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableColumnSekleton />
-              {/* <EmptyPlaceholder>
-                <EmptyPlaceholder.Icon name="link" />
-                <EmptyPlaceholder.Title>No urls</EmptyPlaceholder.Title>
-                <EmptyPlaceholder.Description>
-                  You don&apos;t have any url yet. Start creating url.
-                </EmptyPlaceholder.Description>
-                <Button className="w-[120px] shrink-0 gap-1" variant="default">
-                  Add url
-                </Button>
-              </EmptyPlaceholder> */}
+              {isLoading ? (
+                <>
+                  <TableColumnSekleton />
+                  <TableColumnSekleton />
+                  <TableColumnSekleton />
+                </>
+              ) : data && data.length > 0 ? (
+                data.map((short) => (
+                  <TableRow className="grid animate-fade-in grid-cols-5 items-center animate-in sm:grid-cols-7">
+                    <TableCell className="col-span-2">
+                      <Link
+                        className="font-semibold text-slate-600 hover:text-blue-400 hover:underline"
+                        href={short.target}
+                        target="_blank"
+                      >
+                        {short.target}
+                      </Link>
+                    </TableCell>
+                    <TableCell className="col-span-2">
+                      <Link
+                        className="font-semibold text-slate-600 after:content-['_↗'] hover:text-blue-400 hover:underline"
+                        href={short.url}
+                        target="_blank"
+                      >
+                        {short.url.slice(16)}
+                      </Link>
+                    </TableCell>
+                    <TableCell className="col-span-1 hidden justify-center font-semibold sm:flex">
+                      {short.visible === 1 ? "Public" : "Private"}
+                    </TableCell>
+                    <TableCell className="col-span-1 hidden justify-center sm:flex">
+                      <StatusDot status={short.active} />
+                    </TableCell>
+                    <TableCell className="col-span-1 flex justify-center">
+                      <Button
+                        className="text-sm hover:bg-slate-100"
+                        size="sm"
+                        variant={"outline"}
+                        onClick={() => {
+                          setCurrentEditUrl(short);
+                          setShowForm(false);
+                          setFormType("edit");
+                          setShowForm(!isShowForm);
+                        }}
+                      >
+                        <p>Edit</p>
+                        <PenLine className="ml-1 h-4 w-4" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <EmptyPlaceholder>
+                  {/* <EmptyPlaceholder.Icon name="link" /> */}
+                  <EmptyPlaceholder.Title>No urls</EmptyPlaceholder.Title>
+                  <EmptyPlaceholder.Description>
+                    You don&apos;t have any url yet. Start creating url.
+                  </EmptyPlaceholder.Description>
+                  <Button
+                    className="w-[120px] shrink-0 gap-1"
+                    variant="default"
+                    onClick={() => {
+                      setCurrentEditUrl(null);
+                      setShowForm(false);
+                      setFormType("add");
+                      setShowForm(!isShowForm);
+                    }}
+                  >
+                    Add url
+                  </Button>
+                </EmptyPlaceholder>
+              )}
             </TableBody>
           </Table>
         </CardContent>

@@ -1,17 +1,24 @@
 import { env } from "@/env.mjs";
 import { getUserRecords } from "@/lib/dto/cloudflare-dns-record";
+import { deleteUserShortUrl } from "@/lib/dto/short-urls";
 import { checkUserStatus } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";
 
-export async function GET(req: Request) {
+export async function POST(req: Request) {
   try {
     const user = checkUserStatus(await getCurrentUser());
     if (user instanceof Response) return user;
-    // const { CLOUDFLARE_ZONE_ID, CLOUDFLARE_API_KEY, CLOUDFLARE_EMAIL } = env;
 
-    const user_records = await getUserRecords(user.id, 1);
+    const { url_id } = await req.json();
+    if (!url_id) {
+      return Response.json("url id is required", {
+        status: 400,
+        statusText: "url id is required",
+      });
+    }
 
-    return Response.json(user_records);
+    await deleteUserShortUrl(user.id, url_id);
+    return Response.json("success");
   } catch (error) {
     return Response.json(error?.statusText || error, {
       status: error.status || 500,

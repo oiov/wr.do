@@ -1,13 +1,12 @@
+import { env } from "@/env.mjs";
+import { createDNSRecord } from "@/lib/cloudflare";
 import {
   createUserRecord,
   getUserRecordByTypeNameContent,
   getUserRecordCount,
-} from "@/actions/cloudflare-dns-record";
-
-import { env } from "@/env.mjs";
-import { createDNSRecord } from "@/lib/cloudflare";
+} from "@/lib/dto/cloudflare-dns-record";
+import { checkUserStatus } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";
-import { checkUserStatus } from "@/lib/user";
 import { generateSecret } from "@/lib/utils";
 
 export async function POST(req: Request) {
@@ -28,13 +27,6 @@ export async function POST(req: Request) {
         statusText: "API key、zone iD and email are required",
       });
     }
-    const { records } = await req.json();
-    const record = {
-      ...records[0],
-      id: generateSecret(16),
-      type: "CNAME",
-      proxied: false,
-    };
 
     // check quota
     const user_records_count = await getUserRecordCount(user.id);
@@ -47,6 +39,14 @@ export async function POST(req: Request) {
         statusText: "Your records have reached the free limit.",
       });
     }
+
+    const { records } = await req.json();
+    const record = {
+      ...records[0],
+      id: generateSecret(16),
+      type: "CNAME",
+      proxied: false,
+    };
 
     const user_record = await getUserRecordByTypeNameContent(
       user.id,

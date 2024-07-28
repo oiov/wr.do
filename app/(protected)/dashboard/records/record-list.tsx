@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { UserRecordFormData } from "@/actions/cloudflare-dns-record";
 import { User } from "@prisma/client";
 import {
   ArrowUpRight,
@@ -13,6 +12,7 @@ import {
 import useSWR, { useSWRConfig } from "swr";
 
 import { TTL_ENUMS } from "@/lib/cloudflare";
+import { UserRecordFormData } from "@/lib/dto/cloudflare-dns-record";
 import { fetcher } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -157,8 +157,9 @@ export default function UserRecordsList({ user }: RecordListProps) {
             <TableBody>
               {isLoading ? (
                 <>
-                  <TableColumnSekleton className="col-span-1" />
-                  <TableColumnSekleton className="col-span-1" />
+                  <TableColumnSekleton />
+                  <TableColumnSekleton />
+                  <TableColumnSekleton />
                 </>
               ) : data && data.length > 0 ? (
                 data.map((record) => (
@@ -201,7 +202,7 @@ export default function UserRecordsList({ user }: RecordListProps) {
                 ))
               ) : (
                 <EmptyPlaceholder>
-                  <EmptyPlaceholder.Icon name="globeLock" />
+                  {/* <EmptyPlaceholder.Icon name="globeLock" /> */}
                   <EmptyPlaceholder.Title>No records</EmptyPlaceholder.Title>
                   <EmptyPlaceholder.Description>
                     You don&apos;t have any record yet. Start creating record.
