@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { Dispatch, SetStateAction, useState, useTransition } from "react";
+import { UserRecordFormData } from "@/actions/cloudflare-dns-record";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";
 import { useForm } from "react-hook-form";
@@ -29,13 +30,24 @@ import {
 
 export type FormData = CreateDNSRecord;
 
-interface AddRecordFormProps {
+export type FormType = "add" | "edit";
+
+export interface RecordFormProps {
   user: Pick<User, "id" | "name">;
+  isShowForm: boolean;
+  setShowForm: Dispatch<SetStateAction<boolean>>;
+  type: FormType;
+  initData?: UserRecordFormData | null;
 }
 
-export function AddRecordForm({ user }: AddRecordFormProps) {
+export function RecordForm({
+  user,
+  isShowForm,
+  setShowForm,
+  type,
+  initData,
+}: RecordFormProps) {
   const [isPending, startTransition] = useTransition();
-  const [isShow, setShow] = useState(false);
 
   const {
     handleSubmit,
@@ -44,33 +56,82 @@ export function AddRecordForm({ user }: AddRecordFormProps) {
   } = useForm<FormData>({
     resolver: zodResolver(createRecordSchema),
     defaultValues: {
-      type: "CNAME",
-      ttl: 1,
-      proxied: false,
+      type: initData?.type || "CNAME",
+      ttl: initData?.ttl || 1,
+      proxied: initData?.proxied || false,
+      comment: initData?.comment || "",
+      name: initData?.name || "",
+      content: initData?.content || "",
     },
   });
 
   const onSubmit = handleSubmit((data) => {
     startTransition(async () => {
-      const response = await fetch("/api/record/add", {
-        method: "POST",
-        body: JSON.stringify({
-          records: [data],
-        }),
-      });
-      if (!response.ok || response.status !== 200) {
-        toast.error("Add Record Failed", {
-          description: response.statusText,
-        });
-      } else {
-        const res = await response.json();
-        toast.success(`Created record [${res?.name}] successfully`);
-        setShow(false);
+      if (type === "add") {
+        handleCreateRecord(data);
+      } else if (type === "edit") {
+        handleUpdateRecord(data);
       }
     });
   });
 
-  return isShow ? (
+  const handleCreateRecord = async (data: CreateDNSRecord) => {
+    const response = await fetch("/api/record/add", {
+      method: "POST",
+      body: JSON.stringify({
+        records: [data],
+      }),
+    });
+    if (!response.ok || response.status !== 200) {
+      toast.error("Created Failed!", {
+        description: response.statusText,
+      });
+    } else {
+      const res = await response.json();
+      toast.success(`Created successfully!`);
+      setShowForm(false);
+    }
+  };
+
+  const handleUpdateRecord = async (data: CreateDNSRecord) => {
+    const response = await fetch("/api/record/update", {
+      method: "POST",
+      body: JSON.stringify({
+        records: [data],
+      }),
+    });
+    if (!response.ok || response.status !== 200) {
+      toast.error("Update Failed", {
+        description: response.statusText,
+      });
+    } else {
+      const res = await response.json();
+      toast.success(`Update successfully!`);
+      setShowForm(false);
+    }
+  };
+
+  const handleDeleteRecord = async () => {
+    const response = await fetch("/api/record/delete", {
+      method: "POST",
+      body: JSON.stringify({
+        record_id: initData?.record_id,
+        zone_id: initData?.zone_id,
+        active: initData?.active,
+      }),
+    });
+    if (!response.ok || response.status !== 200) {
+      toast.error("Delete Failed", {
+        description: response.statusText,
+      });
+    } else {
+      await response.json();
+      toast.success(`Delete successfully!`);
+      setShowForm(false);
+    }
+  };
+
+  return (
     <form
       className="rounded-lg border border-dashed p-4 shadow-sm animate-in fade-in-50"
       onSubmit={onSubmit}
@@ -80,8 +141,8 @@ export function AddRecordForm({ user }: AddRecordFormProps) {
           <Select
             onValueChange={(value: RecordType) => {}}
             name={"type"}
-            defaultValue="CNAME"
             disabled
+            defaultValue="CNAME"
           >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select a type" />
@@ -122,10 +183,10 @@ export function AddRecordForm({ user }: AddRecordFormProps) {
             )}
           </div>
         </FormSectionColumns>
-        <FormSectionColumns title="Target">
+        <FormSectionColumns title="Content">
           <div className="flex w-full items-center gap-2">
-            <Label className="sr-only" htmlFor="target">
-              Target
+            <Label className="sr-only" htmlFor="content">
+              Content
             </Label>
             <Input
               id="content"
@@ -152,7 +213,7 @@ export function AddRecordForm({ user }: AddRecordFormProps) {
         <FormSectionColumns title="TTL">
           <Select
             onValueChange={(value: RecordType) => {}}
-            name={"ttl"}
+            name="ttl"
             defaultValue="1"
           >
             <SelectTrigger className="w-full">
@@ -198,11 +259,20 @@ export function AddRecordForm({ user }: AddRecordFormProps) {
       </div>
 
       <div className="flex justify-end gap-3">
+        {type === "edit" && (
+          <Button
+            variant={"destructive"}
+            className="mr-auto w-[80px] px-0"
+            onClick={() => handleDeleteRecord()}
+          >
+            Delete
+          </Button>
+        )}
         <Button
           type="reset"
-          variant={"destructive"}
+          variant={"outline"}
           className="w-[80px] px-0"
-          onClick={() => setShow(false)}
+          onClick={() => setShowForm(false)}
         >
           Cancle
         </Button>
@@ -215,18 +285,10 @@ export function AddRecordForm({ user }: AddRecordFormProps) {
           {isPending ? (
             <Icons.spinner className="size-4 animate-spin" />
           ) : (
-            <p>Save</p>
+            <p>{type === "edit" ? "Update" : "Save"}</p>
           )}
         </Button>
       </div>
     </form>
-  ) : (
-    <Button
-      className="w-[120px]"
-      variant="default"
-      onClick={() => setShow(true)}
-    >
-      Add record
-    </Button>
   );
 }

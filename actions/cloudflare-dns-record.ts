@@ -98,6 +98,24 @@ export async function getUserRecordCount(userId: string, active: number = 1) {
   });
 }
 
+export async function getUserRecordByTypeNameContent(
+  userId: string,
+  type: string,
+  name: string,
+  content: string,
+  active: number = 1,
+) {
+  return await prisma.userRecord.findMany({
+    where: {
+      userId,
+      type,
+      content,
+      // name,
+      active,
+    },
+  });
+}
+
 export async function deleteUserRecord(
   userId: string,
   record_id: string,
@@ -109,6 +127,46 @@ export async function deleteUserRecord(
       userId,
       record_id,
       zone_id,
+      active,
+    },
+  });
+}
+
+export async function updateUserRecord(
+  userId: string,
+  data: UserRecordFormData,
+) {
+  return await prisma.userRecord.update({
+    where: {
+      userId,
+      record_id: data.record_id,
+      zone_id: data.zone_id,
+      active: data.active,
+    },
+    data: {
+      type: data.type,
+      name: data.name,
+      content: data.content,
+      ttl: data.ttl,
+      comment: data.comment,
+      proxied: data.proxied,
+      modified_on: new Date().toISOString(),
+    },
+  });
+}
+export async function updateUserRecordState(
+  userId: string,
+  record_id: string,
+  zone_id: string,
+  active: number,
+) {
+  return await prisma.userRecord.update({
+    where: {
+      userId,
+      record_id,
+      zone_id,
+    },
+    data: {
       active,
     },
   });

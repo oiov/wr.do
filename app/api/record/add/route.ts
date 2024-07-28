@@ -1,5 +1,6 @@
 import {
   createUserRecord,
+  getUserRecordByTypeNameContent,
   getUserRecordCount,
 } from "@/actions/cloudflare-dns-record";
 
@@ -40,12 +41,30 @@ export async function POST(req: Request) {
       proxied: false,
     };
 
-    // return Response.json(record);
+    // check quota
     const user_records_count = await getUserRecordCount(user.id);
-    if (user_records_count >= NEXT_PUBLIC_FREE_RECORD_QUOTA) {
+    if (
+      Number(NEXT_PUBLIC_FREE_RECORD_QUOTA) > 0 &&
+      user_records_count >= Number(NEXT_PUBLIC_FREE_RECORD_QUOTA)
+    ) {
       return Response.json("Your records have reached the free limit.", {
         status: 409,
         statusText: "Your records have reached the free limit.",
+      });
+    }
+
+    const user_record = await getUserRecordByTypeNameContent(
+      user.id,
+      record.type,
+      record.name,
+      record.content,
+      1,
+    );
+
+    if (user_record && user_record.length > 0) {
+      return Response.json("Record already exists", {
+        status: 403,
+        statusText: "Record already exists",
       });
     }
 
@@ -55,7 +74,7 @@ export async function POST(req: Request) {
       CLOUDFLARE_EMAIL,
       record,
     );
-    if (!data.success || !data.result) {
+    if (!data.success || !data.result?.id) {
       return Response.json(data.errors, {
         status: 501,
         statusText: `Error occurred. ${data.errors}`,
@@ -86,6 +105,7 @@ export async function POST(req: Request) {
       return Response.json(res.data);
     }
   } catch (error) {
+    console.error(error);
     return Response.json(error, {
       status: 500,
       statusText: "Server error",

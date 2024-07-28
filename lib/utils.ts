@@ -165,7 +165,6 @@ export const placeholderBlurhash =
 export function generateSecret(length: number = 16): string {
   // 使用 crypto.randomBytes 生成随机字节
   const buffer = crypto.randomBytes(length);
-  console.log(buffer);
   // 将字节转换为十六进制字符串
   return buffer.toString("hex");
 }

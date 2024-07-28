@@ -2,14 +2,13 @@ import { redirect } from "next/navigation";
 
 import { getCurrentUser } from "@/lib/session";
 import { constructMetadata } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import { DashboardHeader } from "@/components/dashboard/header";
-import { AddRecordForm } from "@/components/forms/add-record-form";
-import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
+
+import UserRecordsList from "./record-list";
 
 export const metadata = constructMetadata({
-  title: "Dashboard – Next Template",
-  description: "Create and manage content.",
+  title: "Dashboard - WRDO",
+  description: "List and manage records.",
 });
 
 export default async function DashboardPage() {
@@ -19,19 +18,8 @@ export default async function DashboardPage() {
 
   return (
     <>
-      <DashboardHeader
-        heading="Dashboard"
-        // text={`Current Role : ${user?.role}`}
-      />
-      <AddRecordForm user={{ id: user.id, name: user.name || "" }} />、
-      <EmptyPlaceholder>
-        <EmptyPlaceholder.Icon name="post" />
-        <EmptyPlaceholder.Title>No record created</EmptyPlaceholder.Title>
-        <EmptyPlaceholder.Description>
-          You don&apos;t have any record yet. Start creating record.
-        </EmptyPlaceholder.Description>
-        <Button>Add Record</Button>
-      </EmptyPlaceholder>
+      <DashboardHeader heading="Dashboard" />
+      <UserRecordsList user={{ id: user.id, name: user.name || "" }} />
     </>
   );
 }
