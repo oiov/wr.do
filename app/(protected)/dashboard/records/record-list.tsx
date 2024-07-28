@@ -4,7 +4,12 @@ import { useState } from "react";
 import Link from "next/link";
 import { UserRecordFormData } from "@/actions/cloudflare-dns-record";
 import { User } from "@prisma/client";
-import { ArrowUpRight, DotSquareIcon, RefreshCwIcon } from "lucide-react";
+import {
+  ArrowUpRight,
+  DotSquareIcon,
+  PenLine,
+  RefreshCwIcon,
+} from "lucide-react";
 import useSWR, { useSWRConfig } from "swr";
 
 import { TTL_ENUMS } from "@/lib/cloudflare";
@@ -37,20 +42,20 @@ export interface RecordListProps {
 
 function TableColumnSekleton({ className }: { className?: string }) {
   return (
-    <TableRow className="grid grid-cols-6 items-center">
+    <TableRow className="grid grid-cols-3 items-center sm:grid-cols-6">
       <TableCell className="col-span-1">
         <Skeleton className="h-5 w-24" />
       </TableCell>
       <TableCell className="col-span-1">
         <Skeleton className="h-5 w-24" />
       </TableCell>
-      <TableCell className="col-span-1">
+      <TableCell className="col-span-1 hidden sm:inline-block">
         <Skeleton className="h-5 w-24" />
       </TableCell>
-      <TableCell className="col-span-1">
+      <TableCell className="col-span-1 hidden sm:inline-block">
         <Skeleton className="h-5 w-16" />
       </TableCell>
-      <TableCell className="col-span-1 flex justify-center">
+      <TableCell className="col-span-1 hidden justify-center sm:flex">
         <Skeleton className="h-5 w-16" />
       </TableCell>
       <TableCell className="col-span-1 flex justify-center">
@@ -86,7 +91,7 @@ export default function UserRecordsList({ user }: RecordListProps) {
           <div className="grid gap-2">
             <CardTitle>Records</CardTitle>
             <CardDescription className="text-balance">
-              All Dns Records
+              All DNS Records
             </CardDescription>
           </div>
           <div className="ml-auto flex items-center justify-end gap-3">
@@ -128,20 +133,20 @@ export default function UserRecordsList({ user }: RecordListProps) {
           )}
           <Table>
             <TableHeader>
-              <TableRow className="grid grid-cols-6 items-center">
+              <TableRow className="grid grid-cols-3 items-center sm:grid-cols-6">
                 <TableHead className="col-span-1 flex items-center font-bold">
                   Type
                 </TableHead>
                 <TableHead className="col-span-1 flex items-center font-bold">
                   Name
                 </TableHead>
-                <TableHead className="col-span-1 flex items-center font-bold">
+                <TableHead className="col-span-1 hidden items-center font-bold sm:flex">
                   Content
                 </TableHead>
-                <TableHead className="col-span-1 flex items-center font-bold">
+                <TableHead className="col-span-1 hidden items-center font-bold sm:flex">
                   TTL
                 </TableHead>
-                <TableHead className="col-span-1 flex items-center justify-center font-bold">
+                <TableHead className="col-span-1 hidden items-center justify-center font-bold sm:flex">
                   Status
                 </TableHead>
                 <TableHead className="col-span-1 flex items-center justify-center font-bold">
@@ -157,27 +162,29 @@ export default function UserRecordsList({ user }: RecordListProps) {
                 </>
               ) : data && data.length > 0 ? (
                 data.map((record) => (
-                  <TableRow className="grid animate-fade-in grid-cols-6 items-center animate-in">
+                  <TableRow className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-6">
                     <TableCell className="col-span-1">
                       <Badge className="text-xs" variant="outline">
                         {record.type}
                       </Badge>
                     </TableCell>
                     <TableCell className="col-span-1">{record.name}</TableCell>
-                    <TableCell className="col-span-1">
+                    <TableCell className="col-span-1 hidden sm:inline-block">
                       {record.content}
                     </TableCell>
-                    <TableCell className="col-span-1">
+                    <TableCell className="col-span-1 hidden sm:inline-block">
                       {
                         TTL_ENUMS.find((ttl) => ttl.value === `${record.ttl}`)
                           ?.label
                       }
                     </TableCell>
-                    <TableCell className="col-span-1 flex justify-center">
+                    <TableCell className="col-span-1 hidden justify-center sm:flex">
                       <StatusDot status={record.active} />
                     </TableCell>
                     <TableCell className="col-span-1 flex justify-center">
                       <Button
+                        className="text-sm hover:bg-slate-100"
+                        size="sm"
                         variant={"outline"}
                         onClick={() => {
                           setCurrentEditRecord(record);
@@ -186,14 +193,15 @@ export default function UserRecordsList({ user }: RecordListProps) {
                           setShowForm(!isShowForm);
                         }}
                       >
-                        Edit
+                        <p>Edit</p>
+                        <PenLine className="ml-1 h-4 w-4" />
                       </Button>
                     </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <EmptyPlaceholder>
-                  <EmptyPlaceholder.Icon name="post" />
+                  <EmptyPlaceholder.Icon name="globeLock" />
                   <EmptyPlaceholder.Title>No records</EmptyPlaceholder.Title>
                   <EmptyPlaceholder.Description>
                     You don&apos;t have any record yet. Start creating record.

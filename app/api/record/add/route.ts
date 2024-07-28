@@ -15,7 +15,6 @@ export async function POST(req: Request) {
     const user = checkUserStatus(await getCurrentUser());
     if (user instanceof Response) return user;
 
-    const { records } = await req.json();
     const {
       CLOUDFLARE_ZONE_ID,
       CLOUDFLARE_API_KEY,
@@ -29,7 +28,7 @@ export async function POST(req: Request) {
         statusText: "API key、zone iD and email are required",
       });
     }
-
+    const { records } = await req.json();
     const record = {
       ...records[0],
       id: generateSecret(16),
@@ -56,7 +55,6 @@ export async function POST(req: Request) {
       record.content,
       1,
     );
-
     if (user_record && user_record.length > 0) {
       return Response.json("Record already exists", {
         status: 403,
@@ -73,7 +71,7 @@ export async function POST(req: Request) {
     if (!data.success || !data.result?.id) {
       return Response.json(data.errors, {
         status: 501,
-        statusText: `Error occurred. ${data.errors}`,
+        statusText: `An error occurred. ${data.errors}`,
       });
     } else {
       const res = await createUserRecord(user.id, {
@@ -95,7 +93,7 @@ export async function POST(req: Request) {
       if (res.status !== "success") {
         return Response.json(res.status, {
           status: 502,
-          statusText: `Error occurred. ${res.status}`,
+          statusText: `An error occurred. ${res.status}`,
         });
       }
       return Response.json(res.data);

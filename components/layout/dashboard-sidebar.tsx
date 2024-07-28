@@ -19,8 +19,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import ProjectSwitcher from "@/components/dashboard/project-switcher";
-import { UpgradeCard } from "@/components/dashboard/upgrade-card";
 import { Icons } from "@/components/shared/icons";
 
 interface DashboardSidebarProps {
@@ -67,13 +65,17 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
           <aside
             className={cn(
               isSidebarExpanded ? "w-[220px] xl:w-[260px]" : "w-[68px]",
-              "hidden h-screen md:block",
+              "hidden h-screen transition-all duration-100 md:block",
             )}
           >
             <div className="flex h-full max-h-screen flex-1 flex-col gap-2">
               <div className="flex h-14 items-center p-4 lg:h-[60px]">
-                {isSidebarExpanded ? <ProjectSwitcher /> : null}
-
+                {/* {isSidebarExpanded ? <ProjectSwitcher /> : null} */}
+                {isSidebarExpanded && (
+                  <h1 className="font-satoshi text-xl font-bold">
+                    {siteConfig.name}
+                  </h1>
+                )}
                 <Button
                   variant="ghost"
                   size="icon"
@@ -210,7 +212,7 @@ export function MobileSheetSidebar({ links }: DashboardSidebarProps) {
                   </span>
                 </Link>
 
-                <ProjectSwitcher large />
+                {/* <ProjectSwitcher large /> */}
 
                 {links.map((section) => (
                   <section

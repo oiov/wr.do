@@ -13,7 +13,7 @@ export function EmptyPlaceholder({
   return (
     <div
       className={cn(
-        "flex flex-1 items-center justify-center rounded-lg border border-dashed p-8 text-center shadow-sm animate-in fade-in-50",
+        "flex max-h-[300px] flex-1 items-center justify-center rounded-lg p-8 text-center shadow-sm animate-in fade-in-50",
         className,
       )}
       {...props}

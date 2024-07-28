@@ -6,28 +6,35 @@ export const sidebarLinks: SidebarNavItem[] = [
   {
     title: "MENU",
     items: [
+      { href: "/dashboard", icon: "dashboard", title: "Dashboard" },
+      { href: "/dashboard/records", icon: "globeLock", title: "DNS Records" },
+      { href: "/dashboard/urls", icon: "link", title: "Short Urls" },
+      {
+        href: "/dashboard/charts",
+        icon: "lineChart",
+        title: "Charts",
+        authorizeOnly: UserRole.ADMIN,
+      },
       {
         href: "/admin",
         icon: "laptop",
         title: "Admin Panel",
         authorizeOnly: UserRole.ADMIN,
       },
-      { href: "/dashboard", icon: "dashboard", title: "Dashboard" },
-      { href: "/dashboard/charts", icon: "lineChart", title: "Charts" },
-      {
-        href: "/admin/orders",
-        icon: "package",
-        title: "Orders",
-        badge: 2,
-        authorizeOnly: UserRole.ADMIN,
-      },
-      {
-        href: "#/dashboard/posts",
-        icon: "post",
-        title: "User Posts",
-        authorizeOnly: UserRole.USER,
-        disabled: true,
-      },
+      // {
+      //   href: "/admin/orders",
+      //   icon: "package",
+      //   title: "Orders",
+      //   badge: 2,
+      //   authorizeOnly: UserRole.ADMIN,
+      // },
+      // {
+      //   href: "#/dashboard/posts",
+      //   icon: "post",
+      //   title: "User Posts",
+      //   authorizeOnly: UserRole.USER,
+      //   disabled: true,
+      // },
     ],
   },
   {

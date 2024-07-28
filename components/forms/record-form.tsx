@@ -1,6 +1,12 @@
 "use client";
 
-import { Dispatch, SetStateAction, useState, useTransition } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+  useTransition,
+} from "react";
 import { UserRecordFormData } from "@/actions/cloudflare-dns-record";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";
@@ -51,11 +57,16 @@ export function RecordForm({
 }: RecordFormProps) {
   const [isPending, startTransition] = useTransition();
   const [isDeleting, startDeleteTransition] = useTransition();
+  const [currentRecordType, setCurrentRecordType] = useState(
+    initData?.type || "CNAME",
+  );
 
   const {
     handleSubmit,
     register,
     formState: { errors },
+    getValues,
+    setValue,
   } = useForm<FormData>({
     resolver: zodResolver(createRecordSchema),
     defaultValues: {
@@ -103,7 +114,8 @@ export function RecordForm({
         const response = await fetch("/api/record/update", {
           method: "POST",
           body: JSON.stringify({
-            records: [data],
+            recordId: initData?.record_id,
+            record: data,
           }),
         });
         if (!response.ok || response.status !== 200) {
@@ -122,7 +134,7 @@ export function RecordForm({
 
   const handleDeleteRecord = async () => {
     if (type === "edit") {
-      startTransition(async () => {
+      startDeleteTransition(async () => {
         const response = await fetch("/api/record/delete", {
           method: "POST",
           body: JSON.stringify({
@@ -153,12 +165,15 @@ export function RecordForm({
       <div className="items-center justify-start gap-4 md:flex">
         <FormSectionColumns title="Type">
           <Select
-            onValueChange={(value: RecordType) => {}}
+            onValueChange={(value: RecordType) => {
+              setValue("type", value);
+              setCurrentRecordType(value);
+            }}
             name={"type"}
-            disabled
+            // disabled
             defaultValue="CNAME"
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full shadow-inner">
               <SelectValue placeholder="Select a type" />
             </SelectTrigger>
             <SelectContent>
@@ -180,7 +195,7 @@ export function RecordForm({
             </Label>
             <Input
               id="name"
-              className="flex-1"
+              className="flex-1 shadow-inner"
               size={32}
               {...register("name")}
             />
@@ -197,14 +212,22 @@ export function RecordForm({
             )}
           </div>
         </FormSectionColumns>
-        <FormSectionColumns title="Content">
+        <FormSectionColumns
+          title={
+            currentRecordType === "CNAME"
+              ? "Content"
+              : currentRecordType === "A"
+                ? "IPv4 address"
+                : "Not support"
+          }
+        >
           <div className="flex w-full items-center gap-2">
             <Label className="sr-only" htmlFor="content">
               Content
             </Label>
             <Input
               id="content"
-              className="flex-1"
+              className="flex-1 shadow-inner"
               size={32}
               {...register("content")}
             />
@@ -216,21 +239,27 @@ export function RecordForm({
               </p>
             ) : (
               <p className="pb-0.5 text-[13px] text-muted-foreground">
-                Required. E.g. www.example.com
+                {currentRecordType === "CNAME"
+                  ? "Required. E.g. www.example.com"
+                  : currentRecordType === "A"
+                    ? "Required. E.g. 8.8.8.8"
+                    : "Not support"}
               </p>
             )}
           </div>
         </FormSectionColumns>
       </div>
 
-      <div className="flex items-center justify-between gap-4">
+      <div className="items-center justify-start gap-4 md:flex">
         <FormSectionColumns title="TTL">
           <Select
-            onValueChange={(value: RecordType) => {}}
+            onValueChange={(value: string) => {
+              setValue("ttl", Number(value));
+            }}
             name="ttl"
             defaultValue="1"
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full shadow-inner">
               <SelectValue placeholder="Select a time" />
             </SelectTrigger>
             <SelectContent>
@@ -252,8 +281,8 @@ export function RecordForm({
             </Label>
             <Input
               id="comment"
-              className="flex-1"
-              size={100}
+              className="flex-2 shadow-inner"
+              size={74}
               {...register("comment")}
             />
           </div>
@@ -272,6 +301,7 @@ export function RecordForm({
         </FormSectionColumns> */}
       </div>
 
+      {/* Action buttons */}
       <div className="flex justify-end gap-3">
         {type === "edit" && (
           <Button
@@ -298,7 +328,7 @@ export function RecordForm({
         </Button>
         <Button
           type="submit"
-          variant={"default"}
+          variant="default"
           disabled={isPending}
           className="w-[80px] shrink-0 px-0"
         >

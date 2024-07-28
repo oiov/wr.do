@@ -11,16 +11,12 @@ export interface CreateDNSRecord {
   comment?: string;
 }
 
+export interface UpdateDNSRecord extends Omit<CreateDNSRecord, "id"> {}
+
 export interface DNSRecordResponse {
   success: boolean;
-  errors: {
-    code: number;
-    message: string;
-  }[];
-  messages: {
-    code: number;
-    message: string;
-  }[];
+  errors: ResultMeta[];
+  messages: ResultMeta[];
   result?: DNSRecordResult;
   result_info?: {
     count: number;
@@ -49,6 +45,11 @@ export interface DNSRecordResult {
   tags: string[];
   created_on: string;
   modified_on: string;
+}
+
+export interface ResultMeta {
+  code: number;
+  message: string;
 }
 
 export type RecordType = "A" | "CNAME";
@@ -159,6 +160,41 @@ export const deleteDNSRecord = async (
     return data;
   } catch (error) {
     console.error("Error deleting DNS record.", error);
+    throw error;
+  }
+};
+
+export const updateDNSRecord = async (
+  zoneId: string,
+  apiKey: string,
+  email: string,
+  recordId: string,
+  data: UpdateDNSRecord,
+): Promise<DNSRecordResponse> => {
+  try {
+    const url = `${CLOUDFLARE_API_URL}/zones/${zoneId}/dns_records/${recordId}`;
+
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`,
+      "X-Auth-Email": email,
+      "X-Auth-Key": apiKey,
+    };
+
+    const response = await fetch(url, {
+      method: "PATCH",
+      headers,
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error status: ${response.status}`);
+    }
+
+    const res = await response.json();
+    return res;
+  } catch (error) {
+    console.error("Error updating DNS record.", error);
     throw error;
   }
 };
