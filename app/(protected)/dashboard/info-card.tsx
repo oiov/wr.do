@@ -16,7 +16,7 @@ export async function DNSInfoCard({ userId }: { userId: string }) {
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">
           <Link
-            className="font-semibold text-slate-500 duration-500 group-hover:text-cyan-500 group-hover:underline"
+            className="font-semibold text-slate-500 duration-500 group-hover:text-blue-500 group-hover:underline"
             href="/dashboard/records"
           >
             DNS Records
@@ -48,7 +48,7 @@ export async function UrlsInfoCard({ userId }: { userId: string }) {
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">
           <Link
-            className="font-semibold text-slate-500 duration-500 group-hover:text-cyan-500 group-hover:underline"
+            className="font-semibold text-slate-500 duration-500 group-hover:text-blue-500 group-hover:underline"
             href="/dashboard/urls"
           >
             Short URLs

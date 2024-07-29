@@ -1,5 +1,5 @@
-import darkPreview from "@/public/_static/images/dark-preview.jpg";
-import lightPreview from "@/public/_static/images/light-preview.jpg";
+import darkPreview from "@/public/_static/images/dark-preview.png";
+import lightPreview from "@/public/_static/images/light-preview.png";
 
 import BlurImage from "@/components/shared/blur-image";
 import MaxWidthWrapper from "@/components/shared/max-width-wrapper";

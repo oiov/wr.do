@@ -17,6 +17,8 @@ import { ModalContext } from "@/components/modals/providers";
 import { Icons } from "@/components/shared/icons";
 import MaxWidthWrapper from "@/components/shared/max-width-wrapper";
 
+import { ModeToggle } from "./mode-toggle";
+
 interface NavBarProps {
   scroll?: boolean;
   large?: boolean;
@@ -98,6 +100,7 @@ export function NavBar({ scroll = false }: NavBarProps) {
             </div>
           ) : null}
 
+          <ModeToggle />
           {session ? (
             <Link
               href={session.user.role === "ADMIN" ? "/admin" : "/dashboard"}

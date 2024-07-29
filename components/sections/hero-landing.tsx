@@ -16,7 +16,7 @@ export default async function HeroLanding() {
             "px-4",
           )}
         >
-          <span className="mr-3">🎉</span> WR.DO Beta Launching Now!
+          <span className="mr-3">🎉</span> 𝐖𝐑.𝐃𝐎 Beta Launching Now!
         </Link>
 
         <h1 className="text-balance font-satoshi text-[40px] font-black leading-[1.15] tracking-tight sm:text-5xl md:text-6xl md:leading-[1.15]">

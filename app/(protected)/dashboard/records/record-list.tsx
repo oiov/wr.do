@@ -32,6 +32,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import StatusDot from "@/components/dashboard/status-dot";
 import { FormType, RecordForm } from "@/components/forms/record-form";
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
@@ -42,14 +48,14 @@ export interface RecordListProps {
 
 function TableColumnSekleton({ className }: { className?: string }) {
   return (
-    <TableRow className="grid grid-cols-3 items-center sm:grid-cols-6">
+    <TableRow className="grid grid-cols-3 items-center sm:grid-cols-7">
       <TableCell className="col-span-1">
         <Skeleton className="h-5 w-24" />
       </TableCell>
       <TableCell className="col-span-1">
         <Skeleton className="h-5 w-24" />
       </TableCell>
-      <TableCell className="col-span-1 hidden sm:inline-block">
+      <TableCell className="col-span-2 hidden sm:inline-block">
         <Skeleton className="h-5 w-24" />
       </TableCell>
       <TableCell className="col-span-1 hidden sm:inline-block">
@@ -133,14 +139,14 @@ export default function UserRecordsList({ user }: RecordListProps) {
           )}
           <Table>
             <TableHeader>
-              <TableRow className="grid grid-cols-3 items-center sm:grid-cols-6">
+              <TableRow className="grid grid-cols-3 items-center sm:grid-cols-7">
                 <TableHead className="col-span-1 flex items-center font-bold">
                   Type
                 </TableHead>
                 <TableHead className="col-span-1 flex items-center font-bold">
                   Name
                 </TableHead>
-                <TableHead className="col-span-1 hidden items-center font-bold sm:flex">
+                <TableHead className="col-span-2 hidden items-center font-bold sm:flex">
                   Content
                 </TableHead>
                 <TableHead className="col-span-1 hidden items-center font-bold sm:flex">
@@ -163,15 +169,24 @@ export default function UserRecordsList({ user }: RecordListProps) {
                 </>
               ) : data && data.length > 0 ? (
                 data.map((record) => (
-                  <TableRow className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-6">
+                  <TableRow className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-7">
                     <TableCell className="col-span-1">
                       <Badge className="text-xs" variant="outline">
                         {record.type}
                       </Badge>
                     </TableCell>
-                    <TableCell className="col-span-1">{record.name}</TableCell>
-                    <TableCell className="col-span-1 hidden sm:inline-block">
-                      {record.content}
+                    <TableCell className="col-span-1">
+                      {record.name.endsWith(".wr.do")
+                        ? record.name.slice(0, -6)
+                        : record.name}
+                    </TableCell>
+                    <TableCell className="col-span-2 hidden truncate text-nowrap sm:inline-block">
+                      <TooltipProvider>
+                        <Tooltip delayDuration={200}>
+                          <TooltipTrigger>{record.content}</TooltipTrigger>
+                          <TooltipContent>{record.content}</TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                     </TableCell>
                     <TableCell className="col-span-1 hidden sm:inline-block">
                       {

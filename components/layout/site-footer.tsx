@@ -48,7 +48,7 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
             >
               oiov
             </Link>
-            . Built with{" "}
+            . <br className="block sm:hidden" /> Built with{" "}
             <Link
               href="https://nextjs.org?ref=wrdo"
               target="_blank"
