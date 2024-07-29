@@ -1,16 +1,16 @@
 {
-  "name": "Next Auth Roles Template",
-  "short_name": "Next Template",
+  "name": "WR.DO",
+  "short_name": "WR.DO",
   "icons": [
     {
-      "src": "./favicons/android-chrome-192x192.png",
+      "src": "./logo.svg",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/svg+xml"
     },
     {
-      "src": "./favicons/android-chrome-512x512.png",
+      "src": "./logo.svg",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/svg+xml"
     }
   ],
   "theme_color": "#ffffff",

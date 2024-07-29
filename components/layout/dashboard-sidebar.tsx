@@ -65,16 +65,20 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
           <aside
             className={cn(
               isSidebarExpanded ? "w-[220px] xl:w-[260px]" : "w-[68px]",
-              "hidden h-screen transition-all duration-100 md:block",
+              "hidden h-screen transition-all duration-200 md:block",
             )}
           >
             <div className="flex h-full max-h-screen flex-1 flex-col gap-2">
-              <div className="flex h-14 items-center p-4 lg:h-[60px]">
+              <div className="flex h-14 items-center gap-2 p-4 lg:h-[60px]">
                 {/* {isSidebarExpanded ? <ProjectSwitcher /> : null} */}
+
                 {isSidebarExpanded && (
-                  <Link href="/" className="font-satoshi text-xl font-bold">
-                    {siteConfig.name}
-                  </Link>
+                  <>
+                    <Icons.logo />
+                    <Link href="/" className="font-satoshi text-xl font-bold">
+                      {siteConfig.name}
+                    </Link>
+                  </>
                 )}
                 <Button
                   variant="ghost"

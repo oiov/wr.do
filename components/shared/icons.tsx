@@ -34,6 +34,8 @@ import {
   X,
 } from "lucide-react";
 
+import LogoIcon from "./logo";
+
 export type Icon = LucideIcon;
 
 export const Icons = {
@@ -86,7 +88,7 @@ export const Icons = {
   home: Home,
   laptop: Laptop,
   lineChart: LineChart,
-  logo: Flame,
+  logo: LogoIcon,
   media: Image,
   messages: MessagesSquare,
   moon: Moon,

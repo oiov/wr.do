@@ -26,11 +26,11 @@ export const docsConfig: DocsConfig = {
           href: "/docs/short-urls",
           icon: "page",
         },
-        {
-          title: "Newsletter",
-          href: "/docs/newsletter",
-          icon: "page",
-        },
+        // {
+        //   title: "Newsletter",
+        //   href: "/docs/newsletter",
+        //   icon: "page",
+        // },
       ],
     },
     {
@@ -38,42 +38,42 @@ export const docsConfig: DocsConfig = {
       items: [
         {
           title: "Installation",
-          href: "/docs/installation",
+          href: "/docs/developer/installation",
           icon: "page",
         },
         {
           title: "Authentification",
-          href: "/docs/configuration/authentification",
+          href: "/docs/developer/authentification",
           icon: "page",
         },
         {
           title: "Components",
-          href: "/docs/configuration/components",
+          href: "/docs/developer/components",
           icon: "page",
         },
         {
           title: "Config files",
-          href: "/docs/configuration/config-files",
+          href: "/docs/developer/config-files",
           icon: "page",
         },
         {
           title: "Database",
-          href: "/docs/configuration/database",
+          href: "/docs/developer/database",
           icon: "page",
         },
         {
           title: "Email",
-          href: "/docs/configuration/email",
+          href: "/docs/developer/email",
           icon: "page",
         },
         {
           title: "Layout Options",
-          href: "/docs/configuration/layouts",
+          href: "/docs/developer/layouts",
           icon: "page",
         },
         {
           title: "Markdown files",
-          href: "/docs/configuration/markdown-files",
+          href: "/docs/developer/markdown-files",
           icon: "page",
         },
       ],

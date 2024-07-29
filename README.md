@@ -1,54 +1,46 @@
 <div align="center">
   <h1>𝐖𝐑.𝐃𝐎</h1>
-  <p><a href="https://discord.gg/d68kWCBDEs">Discord</a> · English | <a href="/README.md">简体中文</a></p>
-  <p>Temporary email service build with email worker.</p>
-  <!-- <img src="https://img.inke.app/file/beb0212f96c6cd37eaeb8.jpg"/> -->
+  <p><a href="https://discord.gg/d68kWCBDEs">Discord</a> · English | <a href="/README-zh.md">简体中文</a></p>
+  <p>Craft DNS Records, Make Short Links</p>
+  <img src="https://f8dd841.webp.li/wrdo-og.png"/>
 </div>
 
 ## Features
 
-- 🎯 Privacy-friendly, no registration required, out-of-the-box
-- ✈️ Support email sending and receiving
-- ✨ Support saving passwords and retrieving email addresses
-- 😄 Support multiple domain name suffixes
-- 🚀 100% open source, quick deployment, no server required
+- 🌐 **Multi-Tenant Support:** Manage multiple DNS records seamlessly
+- ⚡ **Instant Record Creation:** Set up CNAME, A, and other records quickly
+- 🔗 **URL Shortening:** Generate short links effortlessly
+- 💻 **User-Friendly Interface:** Intuitive and easy to navigate
+- 🔒 **Secure & Reliable:** Built on Cloudflare's robust DNS API
+- 💰 **Free Registration:** No cost to create and manage records
+- 🔄 **Real-Time Updates:** Instant propagation of DNS changes
+- 🚀 **Open Source:** Fully transparent, customizable code base
 
-Principles： 
+## Quick Start
 
-- Receiving emails (email worker)
-- Display email (remix)
-- Mail Storage (sqlite)
-- [Nodejs](https://nodejs.org) >= 18
-
-> Worker receives email -> saves to database -> client queries email
+See docs about [guide](https://wr.do/docs/quick-start) for quick start.
 
 ## Self-hosted Tutorial
 
 ### Requirements
 
-- [Cloudflare](https://dash.cloudflare.com/) account and a domain name hosted on Cloudflare
-- [turso](https://turso.tech) sqlite (a free plan available for personal use)
-- [Vercel](https://vercel.com) or [fly.io](https://fly.io) to deploy Remix app
+- [Vercel](https://vercel.com) to deploy app
+- [Cloudflare](https://dash.cloudflare.com/) account  
+- A **domain** name hosted on Cloudflare
 
-### Receiving Emails steps
-
-See [receive-tutorial-en.md](/docs//receive-tutorial-en.md)
-
-### Sending Emails steps
-
-See [send-tutorial-en.md](/docs/send-tutorial-en.md)
+See docs about [developer](https://wr.do/docs/developer).
 
 ## Local development
 
-copy `apps/remix/.env.example` to `apps/remix/.env` and fill in the necessary environment variables.
+copy `.env.example` to `.env` and fill in the necessary environment variables.
 
 ```bash
-git clone https://github.com/oiov/vmail
-cd vmail
+git clone https://github.com/oiov/wr.do
+cd wr.do
 pnpm install
 
 # run on localhost:3000
-pnpm run remix:dev
+pnpm dev
 ```
 
 ## Community Group
@@ -57,10 +49,8 @@ pnpm run remix:dev
 
 ## License
 
-GNU General Public License v3.0
+[MIT](/LICENSE.md)
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=oiov/vmail&type=Date)](https://star-history.com/#oiov/vmail&Date)
-
-Inspired by smail.pw & email.ml
+[![Star History Chart](https://api.star-history.com/svg?repos=oiov/wr.do&type=Date)](https://star-history.com/#oiov/wr.do&Date)
