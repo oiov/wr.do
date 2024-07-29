@@ -95,9 +95,9 @@ export default function UserUrlsList({ user }: UrlListProps) {
               disabled={isLoading}
             >
               {isLoading ? (
-                <RefreshCwIcon className="h-4 w-4 animate-spin" />
+                <RefreshCwIcon className="size-4 animate-spin" />
               ) : (
-                <RefreshCwIcon className="h-4 w-4" />
+                <RefreshCwIcon className="size-4" />
               )}
             </Button>
             <Button
@@ -199,7 +199,7 @@ export default function UserUrlsList({ user }: UrlListProps) {
                         }}
                       >
                         <p>Edit</p>
-                        <PenLine className="ml-1 h-4 w-4" />
+                        <PenLine className="ml-1 size-4" />
                       </Button>
                     </TableCell>
                   </TableRow>
