@@ -11,7 +11,7 @@ import UserRecordsList from "./records/record-list";
 import UserUrlsList from "./urls/url-list";
 
 export const metadata = constructMetadata({
-  title: "Dashboard - WRDO",
+  title: "Dashboard - WR.DO",
   description: "List and manage records.",
 });
 
@@ -24,7 +24,7 @@ export default async function DashboardPage() {
     <>
       <DashboardHeader
         heading="Dashboard"
-        text="𝐖𝐑.𝐃𝐎 Beta Launching Now! 🎉"
+        text="WR.DO Beta Launching Now! 🎉"
       />
       <div className="flex flex-col gap-5">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 xl:grid-cols-3">

@@ -1,6 +1,7 @@
 "use client";
 
 import { Fragment, useEffect, useState } from "react";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { NavItem, SidebarNavItem } from "@/types";
 import { Menu, PanelLeftClose, PanelRightClose } from "lucide-react";
@@ -75,7 +76,11 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
                 {isSidebarExpanded && (
                   <>
                     <Icons.logo />
-                    <Link href="/" className="font-satoshi text-xl font-bold">
+                    <Link
+                      href="/"
+                      style={{ fontFamily: "Bahamas Bold" }}
+                      className="text-2xl"
+                    >
                       {siteConfig.name}
                     </Link>
                   </>
@@ -237,11 +242,15 @@ export function MobileSheetSidebar({ links }: DashboardSidebarProps) {
             <div className="flex h-screen flex-col">
               <nav className="flex flex-1 flex-col gap-y-8 p-6 text-lg font-medium">
                 <Link
-                  href="#"
+                  href="/"
                   className="flex items-center gap-2 text-lg font-semibold"
                 >
-                  <Icons.logo className="size-6" />
-                  <span className="font-satoshi text-lg font-bold">
+                  {/* <Icons.logo /> */}
+                  <Image src="/favicon.ico" alt="logo" width={20} height={20} />
+                  <span
+                    style={{ fontFamily: "Bahamas Bold" }}
+                    className="pt-0.5 text-xl"
+                  >
                     {siteConfig.name}
                   </span>
                 </Link>

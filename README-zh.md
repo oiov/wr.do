@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>𝐖𝐑.𝐃𝐎</h1>
+  <h1>WR.DO</h1>
   <p><a href="https://discord.gg/d68kWCBDEs">Discord</a> · English | <a href="/README-zh.md">简体中文</a></p>
   <p>创建 DNS 记录，生成短链接</p>
   <img src="https://f8dd841.webp.li/wrdo-og.png"/>

@@ -16,7 +16,9 @@ export default async function HeroLanding() {
             "px-4",
           )}
         >
-          <span className="mr-3">🎉</span> 𝐖𝐑.𝐃𝐎 Beta Launching Now!
+          <span className="mr-3">🎉</span>{" "}
+          <span style={{ fontFamily: "Bahamas Bold" }}>WR.DO </span>&nbsp;Beta
+          Launching Now!
         </Link>
 
         <h1 className="text-balance font-satoshi text-[40px] font-black leading-[1.15] tracking-tight sm:text-5xl md:text-6xl md:leading-[1.15]">
@@ -32,17 +34,6 @@ export default async function HeroLanding() {
         </p>
 
         <div className="flex justify-center space-x-2">
-          <Link
-            href="/dashboard"
-            prefetch={true}
-            className={cn(
-              buttonVariants({ rounded: "xl", size: "lg" }),
-              "gap-2 px-5 text-[15px]",
-            )}
-          >
-            <span>Dashboard</span>
-            <Icons.arrowRight className="size-4" />
-          </Link>
           <Link
             href={siteConfig.links.github}
             target="_blank"
@@ -60,6 +51,17 @@ export default async function HeroLanding() {
             <p>
               <span className="hidden sm:inline-block">Star on</span> GitHub
             </p>
+          </Link>
+          <Link
+            href="/dashboard"
+            prefetch={true}
+            className={cn(
+              buttonVariants({ rounded: "xl", size: "lg" }),
+              "gap-2 px-5 text-[15px]",
+            )}
+          >
+            <span>Dashboard</span>
+            <Icons.arrowRight className="size-4" />
           </Link>
         </div>
       </div>

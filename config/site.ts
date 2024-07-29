@@ -7,7 +7,7 @@ const free_url_quota = env.NEXT_PUBLIC_FREE_URL_QUOTA;
 const open_signup = env.NEXT_PUBLIC_OPEN_SIGNUP;
 
 export const siteConfig: SiteConfig = {
-  name: "𝐖𝐑.𝐃𝐎",
+  name: "WR.DO",
   description: "A DNS record distribution system",
   url: site_url,
   ogImage: `${site_url}/_static/og.jpg`,
@@ -30,10 +30,11 @@ export const footerLinks: SidebarNavItem[] = [
       { title: "About", href: "/docs" },
       { title: "Terms", href: "/terms" },
       { title: "Privacy", href: "/privacy" },
+      { title: "Blog", href: "https://www.oiov.dev" },
     ],
   },
   {
-    title: "Product",
+    title: "Products",
     items: [
       { title: "Vmail", href: "https://vmail.dev" },
       { title: "Moise", href: "https://moise.oiov.dev" },

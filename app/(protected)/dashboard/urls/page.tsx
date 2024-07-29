@@ -7,7 +7,7 @@ import { DashboardHeader } from "@/components/dashboard/header";
 import UserUrlsList from "./url-list";
 
 export const metadata = constructMetadata({
-  title: "Short URLs - WRDO",
+  title: "Short URLs - WR.DO",
   description: "List and manage records.",
 });
 

@@ -169,7 +169,10 @@ export default function UserRecordsList({ user }: RecordListProps) {
                 </>
               ) : data && data.length > 0 ? (
                 data.map((record) => (
-                  <TableRow className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-7">
+                  <TableRow
+                    key={record.id}
+                    className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-7"
+                  >
                     <TableCell className="col-span-1">
                       <Badge className="text-xs" variant="outline">
                         {record.type}

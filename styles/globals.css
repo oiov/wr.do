@@ -117,3 +117,21 @@
   background-position: 50%;
   background-size: 20px 20px;
 }
+
+@font-face {
+  font-family: "Bahamas Normal";
+  /* font-style: normal;
+  font-weight: normal; */
+  src:
+    local("Bahamas Normal"),
+    url("/_static/fonts/BAHAMASN.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Bahamas Bold";
+  font-style: normal;
+  font-weight: normal;
+  src:
+    local("Bahamas Bold"),
+    url("/_static/fonts/BAHAMASB.woff") format("woff");
+}

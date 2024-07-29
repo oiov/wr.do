@@ -125,3 +125,16 @@ export async function getUserUrlMetaInfo(userId: string, urlId: string) {
     },
   });
 }
+
+export async function getUrlBySuffix(suffix: string) {
+  return await prisma.userUrl.findFirst({
+    where: {
+      url: suffix,
+      active: 1,
+    },
+    select: {
+      id: true,
+      target: true,
+    },
+  });
+}

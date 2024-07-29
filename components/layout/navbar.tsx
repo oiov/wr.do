@@ -1,6 +1,5 @@
 "use client";
 
-import { useContext } from "react";
 import Link from "next/link";
 import { useSelectedLayoutSegment } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -13,11 +12,11 @@ import { useScroll } from "@/hooks/use-scroll";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { DocsSearch } from "@/components/docs/search";
-import { ModalContext } from "@/components/modals/providers";
 import { Icons } from "@/components/shared/icons";
 import MaxWidthWrapper from "@/components/shared/max-width-wrapper";
 
 import { ModeToggle } from "./mode-toggle";
+import { UserAccountNav } from "./user-account-nav";
 
 interface NavBarProps {
   scroll?: boolean;
@@ -27,7 +26,6 @@ interface NavBarProps {
 export function NavBar({ scroll = false }: NavBarProps) {
   const scrolled = useScroll(50);
   const { data: session, status } = useSession();
-  const { setShowSignInModal } = useContext(ModalContext);
 
   const selectedLayout = useSelectedLayoutSegment();
   const documentation = selectedLayout === "docs";
@@ -49,12 +47,16 @@ export function NavBar({ scroll = false }: NavBarProps) {
         className="flex h-14 items-center justify-between py-4"
         large={documentation}
       >
-        <div className="flex gap-6 md:gap-10">
+        <div className="flex items-center gap-6 md:gap-10">
           <Link href="/" className="flex items-center space-x-1.5">
             <Icons.logo />
-            <span className="text-xl font-bold">{siteConfig.name}</span>
+            <h1 style={{ fontFamily: "Bahamas Bold" }} className="text-2xl">
+              {siteConfig.name}
+            </h1>
           </Link>
+        </div>
 
+        <div className="flex items-center space-x-4">
           {links && links.length > 0 ? (
             <nav className="hidden gap-6 md:flex">
               {links.map((item, index) => (
@@ -75,9 +77,7 @@ export function NavBar({ scroll = false }: NavBarProps) {
               ))}
             </nav>
           ) : null}
-        </div>
 
-        <div className="flex items-center space-x-3">
           {/* right header for docs */}
           {documentation ? (
             <div className="hidden flex-1 items-center space-x-4 sm:justify-end lg:flex">
@@ -100,21 +100,17 @@ export function NavBar({ scroll = false }: NavBarProps) {
             </div>
           ) : null}
 
-          <ModeToggle />
           {session ? (
-            <Link
-              href={session.user.role === "ADMIN" ? "/admin" : "/dashboard"}
-              className="hidden md:block"
-            >
-              <Button
-                className="gap-2 px-4"
-                variant="default"
-                size="sm"
-                rounded="xl"
+            <div className="hidden items-center gap-4 md:flex">
+              <Link
+                href="/dashboard"
+                className="hidden text-sm font-medium text-foreground/60 transition-colors hover:text-foreground/80 md:block"
               >
-                <span>Dashboard</span>
-              </Button>
-            </Link>
+                Dashboard
+              </Link>
+              <ModeToggle />
+              <UserAccountNav />
+            </div>
           ) : status === "unauthenticated" ? (
             <Link href="login">
               <Button

@@ -156,7 +156,10 @@ export default function UserUrlsList({ user }: UrlListProps) {
                 </>
               ) : data && data.length > 0 ? (
                 data.map((short) => (
-                  <TableRow className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-7">
+                  <TableRow
+                    key={short.id}
+                    className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-7"
+                  >
                     <TableCell className="col-span-1 sm:col-span-2">
                       <Link
                         className="text-slate-600 hover:text-blue-400 hover:underline"

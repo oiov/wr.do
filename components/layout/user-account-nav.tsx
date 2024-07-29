@@ -125,7 +125,7 @@ export function UserAccountNav() {
       <DropdownMenuTrigger>
         <UserAvatar
           user={{ name: user.name || null, image: user.image || null }}
-          className="size-8 border"
+          className="size-8 border border-gray-200 shadow-inner"
         />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
