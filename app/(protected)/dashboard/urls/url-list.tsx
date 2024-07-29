@@ -157,7 +157,7 @@ export default function UserUrlsList({ user }: UrlListProps) {
                   <TableRow className="grid animate-fade-in grid-cols-5 items-center animate-in sm:grid-cols-7">
                     <TableCell className="col-span-2">
                       <Link
-                        className="font-semibold text-slate-600 hover:text-blue-400 hover:underline"
+                        className="text-slate-600 hover:text-blue-400 hover:underline"
                         href={short.target}
                         target="_blank"
                       >
@@ -166,7 +166,7 @@ export default function UserUrlsList({ user }: UrlListProps) {
                     </TableCell>
                     <TableCell className="col-span-2 flex items-center gap-1">
                       <Link
-                        className="font-semibold text-slate-600 hover:text-blue-400 hover:underline"
+                        className="text-slate-600 hover:text-blue-400 hover:underline"
                         href={`/s/${short.url}`}
                         target="_blank"
                       >
@@ -180,7 +180,7 @@ export default function UserUrlsList({ user }: UrlListProps) {
                         )}
                       />
                     </TableCell>
-                    <TableCell className="col-span-1 hidden justify-center font-semibold sm:flex">
+                    <TableCell className="col-span-1 hidden justify-center sm:flex">
                       {short.visible === 1 ? "Public" : "Private"}
                     </TableCell>
                     <TableCell className="col-span-1 hidden justify-center sm:flex">

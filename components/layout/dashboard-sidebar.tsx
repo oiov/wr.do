@@ -1,10 +1,10 @@
 "use client";
 
 import { Fragment, useEffect, useState } from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NavItem, SidebarNavItem } from "@/types";
 import { Menu, PanelLeftClose, PanelRightClose } from "lucide-react";
+import { Link } from "next-view-transitions";
 
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";

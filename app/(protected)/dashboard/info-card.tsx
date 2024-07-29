@@ -12,10 +12,13 @@ export async function DNSInfoCard({ userId }: { userId: string }) {
   const count = await getUserRecordCount(userId);
 
   return (
-    <Card>
+    <Card className="grids group bg-gray-50/70 backdrop-blur-lg dark:bg-primary-foreground">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">
-          <Link className="hover:underline" href="/dashboard/records">
+          <Link
+            className="font-semibold text-slate-500 duration-500 group-hover:text-cyan-500 group-hover:underline"
+            href="/dashboard/records"
+          >
             DNS Records
           </Link>
         </CardTitle>
@@ -41,10 +44,13 @@ export async function DNSInfoCard({ userId }: { userId: string }) {
 export async function UrlsInfoCard({ userId }: { userId: string }) {
   const count = await getUserShortUrlCount(userId);
   return (
-    <Card>
+    <Card className="grids group bg-gray-50/70 backdrop-blur-lg dark:bg-primary-foreground">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">
-          <Link className="hover:underline" href="/dashboard/urls">
+          <Link
+            className="font-semibold text-slate-500 duration-500 group-hover:text-cyan-500 group-hover:underline"
+            href="/dashboard/urls"
+          >
             Short URLs
           </Link>
         </CardTitle>
