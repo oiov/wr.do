@@ -19,7 +19,7 @@ export default async function DashboardPage() {
   return (
     <>
       <DashboardHeader
-        heading="Manage Short URLs"
+        heading="Manage&nbsp;Short&nbsp;URLs"
         text="List and manage short urls."
         link="/docs/short-urls"
         linkText="Short urls."

@@ -56,6 +56,15 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
               className="font-medium text-primary underline underline-offset-2"
             >
               Nextjs
+            </Link>{" "}
+            &{" "}
+            <Link
+              href="https://www.cloudflare.com?ref=wrdo"
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium text-primary underline underline-offset-2"
+            >
+              Cloudflare
             </Link>
             .
           </p>

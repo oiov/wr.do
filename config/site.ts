@@ -7,7 +7,7 @@ const free_url_quota = env.NEXT_PUBLIC_FREE_URL_QUOTA;
 const open_signup = env.NEXT_PUBLIC_OPEN_SIGNUP;
 
 export const siteConfig: SiteConfig = {
-  name: "WR.DO",
+  name: "𝐖𝐑.𝐃𝐎",
   description: "A DNS record distribution system",
   url: site_url,
   ogImage: `${site_url}/_static/og.jpg`,
@@ -46,6 +46,7 @@ export const footerLinks: SidebarNavItem[] = [
     items: [
       { title: "Introduction", href: "/docs" },
       { title: "Guide", href: "/docs/quick-start" },
+      { title: "Developer", href: "/docs/developer" },
     ],
   },
 ];

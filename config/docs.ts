@@ -12,18 +12,37 @@ export const docsConfig: DocsConfig = {
           icon: "page",
         },
         {
-          title: "Installation",
-          href: "/docs/installation",
+          title: "Quick Start",
+          href: "/docs/quick-start",
+          icon: "page",
+        },
+        {
+          title: "DNS Records",
+          href: "/docs/dns-records",
+          icon: "page",
+        },
+        {
+          title: "Short URLs",
+          href: "/docs/short-urls",
+          icon: "page",
+        },
+        {
+          title: "Newsletter",
+          href: "/docs/newsletter",
           icon: "page",
         },
       ],
     },
     {
-      title: "Configuration",
+      title: "Developer",
       items: [
         {
+          title: "Installation",
+          href: "/docs/installation",
+          icon: "page",
+        },
+        {
           title: "Authentification",
-          // title: "Blog",
           href: "/docs/configuration/authentification",
           icon: "page",
         },

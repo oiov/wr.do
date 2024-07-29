@@ -9,6 +9,7 @@ import useSWR, { useSWRConfig } from "swr";
 import { siteConfig } from "@/config/site";
 import { ShortUrlFormData } from "@/lib/dto/short-urls";
 import { cn, fetcher } from "@/lib/utils";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -38,12 +39,12 @@ export interface UrlListProps {
 
 function TableColumnSekleton({ className }: { className?: string }) {
   return (
-    <TableRow className="grid grid-cols-5 items-center sm:grid-cols-7">
-      <TableCell className="col-span-2">
-        <Skeleton className="h-5 w-24" />
+    <TableRow className="grid grid-cols-3 items-center sm:grid-cols-7">
+      <TableCell className="col-span-1 sm:col-span-2">
+        <Skeleton className="h-5 w-20" />
       </TableCell>
-      <TableCell className="col-span-2">
-        <Skeleton className="h-5 w-24" />
+      <TableCell className="col-span-1 sm:col-span-2">
+        <Skeleton className="h-5 w-20" />
       </TableCell>
       <TableCell className="col-span-1 hidden justify-center sm:flex">
         <Skeleton className="h-5 w-16" />
@@ -59,6 +60,7 @@ function TableColumnSekleton({ className }: { className?: string }) {
 }
 
 export default function UserUrlsList({ user }: UrlListProps) {
+  const { isMobile } = useMediaQuery();
   const [isShowForm, setShowForm] = useState(false);
   const [formType, setFormType] = useState<FormType>("add");
   const [currentEditUrl, setCurrentEditUrl] = useState<ShortUrlFormData | null>(
@@ -127,11 +129,11 @@ export default function UserUrlsList({ user }: UrlListProps) {
           )}
           <Table>
             <TableHeader>
-              <TableRow className="grid grid-cols-5 items-center sm:grid-cols-7">
-                <TableHead className="col-span-2 flex items-center font-bold">
+              <TableRow className="grid grid-cols-3 items-center sm:grid-cols-7">
+                <TableHead className="col-span-1 flex items-center font-bold sm:col-span-2">
                   Target
                 </TableHead>
-                <TableHead className="col-span-2 flex items-center font-bold">
+                <TableHead className="col-span-1 flex items-center font-bold sm:col-span-2">
                   Url
                 </TableHead>
                 <TableHead className="col-span-1 hidden items-center justify-center font-bold sm:flex">
@@ -154,17 +156,20 @@ export default function UserUrlsList({ user }: UrlListProps) {
                 </>
               ) : data && data.length > 0 ? (
                 data.map((short) => (
-                  <TableRow className="grid animate-fade-in grid-cols-5 items-center animate-in sm:grid-cols-7">
-                    <TableCell className="col-span-2">
+                  <TableRow className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-7">
+                    <TableCell className="col-span-1 sm:col-span-2">
                       <Link
                         className="text-slate-600 hover:text-blue-400 hover:underline"
                         href={short.target}
                         target="_blank"
                       >
-                        {short.target}
+                        {short.target.startsWith("http")
+                          ? short.target.split("//")[1]
+                          : short.target}
+                        {/* {isMobile ? short.target.split("//")[1] :short.target} */}
                       </Link>
                     </TableCell>
-                    <TableCell className="col-span-2 flex items-center gap-1">
+                    <TableCell className="col-span-1 flex items-center gap-1 sm:col-span-2">
                       <Link
                         className="text-slate-600 hover:text-blue-400 hover:underline"
                         href={`/s/${short.url}`}

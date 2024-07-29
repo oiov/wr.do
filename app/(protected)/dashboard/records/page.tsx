@@ -19,7 +19,7 @@ export default async function DashboardPage() {
   return (
     <>
       <DashboardHeader
-        heading="Manage DNS Records"
+        heading="Manage&nbsp;&nbsp;DNS&nbsp;&nbsp;Records"
         text="List and manage records."
         link="/docs/dns-records"
         linkText="DNS Records."
