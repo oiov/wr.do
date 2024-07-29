@@ -19,8 +19,9 @@ export const env = createEnv({
   },
   client: {
     NEXT_PUBLIC_APP_URL: z.string().min(1),
-    NEXT_PUBLIC_FREE_RECORD_QUOTA: z.string().min(1),
-    NEXT_PUBLIC_FREE_URL_QUOTA: z.string().min(1),
+    NEXT_PUBLIC_FREE_RECORD_QUOTA: z.string().min(1).default("3"),
+    NEXT_PUBLIC_FREE_URL_QUOTA: z.string().min(1).default("100"),
+    NEXT_PUBLIC_OPEN_SIGNUP: z.string().min(1).default("1"),
   },
   runtimeEnv: {
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
@@ -34,6 +35,7 @@ export const env = createEnv({
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     NEXT_PUBLIC_FREE_RECORD_QUOTA: process.env.NEXT_PUBLIC_FREE_RECORD_QUOTA,
     NEXT_PUBLIC_FREE_URL_QUOTA: process.env.NEXT_PUBLIC_FREE_URL_QUOTA,
+    NEXT_PUBLIC_OPEN_SIGNUP: process.env.NEXT_PUBLIC_OPEN_SIGNUP,
     CLOUDFLARE_ZONE_ID: process.env.CLOUDFLARE_ZONE_ID,
     CLOUDFLARE_API_KEY: process.env.CLOUDFLARE_API_KEY,
     CLOUDFLARE_EMAIL: process.env.CLOUDFLARE_EMAIL,

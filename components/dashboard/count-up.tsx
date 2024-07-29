@@ -2,6 +2,6 @@
 
 import CountUp from "react-countup";
 
-export default ({ count }: { count: number }) => {
+export default function ({ count }: { count: number }) {
   return <CountUp end={count} duration={3} />;
-};
+}

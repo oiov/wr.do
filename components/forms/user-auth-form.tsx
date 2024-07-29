@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
 
+import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { userAuthSchema } from "@/lib/validations/auth";
 import { buttonVariants } from "@/components/ui/button";
@@ -82,7 +83,12 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
           </div>
           <button
             className={cn(buttonVariants(), "mt-3")}
-            disabled={isLoading || isGoogleLoading || isGithubLoading}
+            disabled={
+              !siteConfig.openSignup ||
+              isLoading ||
+              isGoogleLoading ||
+              isGithubLoading
+            }
           >
             {isLoading && (
               <Icons.spinner className="mr-2 size-4 animate-spin" />
@@ -110,7 +116,12 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
           setIsGoogleLoading(true);
           signIn("google");
         }}
-        disabled={isLoading || isGoogleLoading || isGithubLoading}
+        disabled={
+          !siteConfig.openSignup ||
+          isLoading ||
+          isGoogleLoading ||
+          isGithubLoading
+        }
       >
         {isGoogleLoading ? (
           <Icons.spinner className="mr-2 size-4 animate-spin" />
@@ -126,7 +137,12 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
           setIsGithubLoading(true);
           signIn("github");
         }}
-        disabled={isLoading || isGithubLoading || isGoogleLoading}
+        disabled={
+          !siteConfig.openSignup ||
+          isLoading ||
+          isGithubLoading ||
+          isGoogleLoading
+        }
       >
         {isGithubLoading ? (
           <Icons.spinner className="mr-2 size-4 animate-spin" />

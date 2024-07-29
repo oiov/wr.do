@@ -17,6 +17,7 @@ export type SiteConfig = {
     record: number;
     url: number;
   };
+  openSignup: boolean;
 };
 
 export type NavItem = {
