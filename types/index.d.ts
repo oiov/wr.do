@@ -13,6 +13,10 @@ export type SiteConfig = {
     twitter: string;
     github: string;
   };
+  freeQuota: {
+    record: number;
+    url: number;
+  };
 };
 
 export type NavItem = {

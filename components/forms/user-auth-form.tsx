@@ -57,7 +57,7 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
   }
 
   return (
-    <div className={cn("grid gap-6", className)} {...props}>
+    <div className={cn("grid gap-3", className)} {...props}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-2">
           <div className="grid gap-1">
@@ -80,7 +80,10 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
               </p>
             )}
           </div>
-          <button className={cn(buttonVariants())} disabled={isLoading}>
+          <button
+            className={cn(buttonVariants(), "mt-3")}
+            disabled={isLoading || isGoogleLoading || isGithubLoading}
+          >
             {isLoading && (
               <Icons.spinner className="mr-2 size-4 animate-spin" />
             )}
@@ -88,7 +91,8 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
           </button>
         </div>
       </form>
-      <div className="relative">
+
+      <div className="relative my-3">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t" />
         </div>
@@ -98,6 +102,7 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
           </span>
         </div>
       </div>
+
       <button
         type="button"
         className={cn(buttonVariants({ variant: "outline" }))}
@@ -105,7 +110,7 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
           setIsGoogleLoading(true);
           signIn("google");
         }}
-        disabled={isLoading || isGoogleLoading}
+        disabled={isLoading || isGoogleLoading || isGithubLoading}
       >
         {isGoogleLoading ? (
           <Icons.spinner className="mr-2 size-4 animate-spin" />
@@ -114,7 +119,6 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
         )}{" "}
         Google
       </button>
-
       <button
         type="button"
         className={cn(buttonVariants({ variant: "outline" }))}
@@ -122,7 +126,7 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
           setIsGithubLoading(true);
           signIn("github");
         }}
-        disabled={isLoading || isGithubLoading}
+        disabled={isLoading || isGithubLoading || isGoogleLoading}
       >
         {isGithubLoading ? (
           <Icons.spinner className="mr-2 size-4 animate-spin" />

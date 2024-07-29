@@ -15,7 +15,11 @@ export async function updateUserRole(userId: string, data: FormData) {
   try {
     const session = await auth();
 
-    if (!session?.user || session?.user.id !== userId) {
+    if (
+      !session?.user ||
+      session?.user.id !== userId ||
+      session.user.role !== "ADMIN"
+    ) {
       throw new Error("Unauthorized");
     }
 

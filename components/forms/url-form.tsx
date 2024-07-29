@@ -3,10 +3,12 @@
 import { Dispatch, SetStateAction, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";
+import { Sparkles } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { ShortUrlFormData } from "@/lib/dto/short-urls";
+import { generateUrlSuffix } from "@/lib/utils";
 import { createUrlSchema } from "@/lib/validations/url";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -156,7 +158,7 @@ export function UrlForm({
             )}
           </div>
         </FormSectionColumns>
-        <FormSectionColumns title="Url">
+        <FormSectionColumns title="Url Suffix">
           <div className="flex w-full items-center gap-2">
             <Label className="sr-only" htmlFor="url">
               Url
@@ -168,10 +170,23 @@ export function UrlForm({
               </span>
               <Input
                 id="url"
-                className="flex-1 pl-[116px] shadow-inner"
+                className="flex-1 rounded-r-none pl-[116px] shadow-inner"
                 size={20}
                 {...register("url")}
+                disabled={type === "edit"}
               />
+              <Button
+                className="rounded-l-none"
+                type="button"
+                size="sm"
+                variant="outline"
+                disabled={type === "edit"}
+                onClick={() => {
+                  setValue("url", generateUrlSuffix(6));
+                }}
+              >
+                <Sparkles className="h-4 w-4 text-slate-500" />
+              </Button>
             </div>
           </div>
           <div className="flex flex-col justify-between p-1">
@@ -181,7 +196,7 @@ export function UrlForm({
               </p>
             ) : (
               <p className="pb-0.5 text-[13px] text-muted-foreground">
-                A random url.
+                A random url suffix.
               </p>
             )}
           </div>

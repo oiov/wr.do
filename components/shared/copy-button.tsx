@@ -2,8 +2,8 @@
 
 import React from "react";
 
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 import { Icons } from "./icons";
 
@@ -30,7 +30,7 @@ export function CopyButton({ value, className, ...props }: CopyButtonProps) {
       size="sm"
       variant="ghost"
       className={cn(
-        "z-10 size-[30px] border border-white/25 bg-zinc-900 p-1.5 text-primary-foreground hover:text-foreground dark:text-foreground",
+        "z-10 size-[30px] p-1.5 text-foreground hover:border hover:text-foreground dark:text-foreground",
         className,
       )}
       onClick={() => handleCopyValue(value)}

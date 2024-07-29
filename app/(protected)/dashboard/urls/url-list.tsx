@@ -6,10 +6,9 @@ import { User } from "@prisma/client";
 import { PenLine, RefreshCwIcon } from "lucide-react";
 import useSWR, { useSWRConfig } from "swr";
 
-import { TTL_ENUMS } from "@/lib/cloudflare";
+import { siteConfig } from "@/config/site";
 import { ShortUrlFormData } from "@/lib/dto/short-urls";
-import { fetcher } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
+import { cn, fetcher } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -30,6 +29,7 @@ import {
 import StatusDot from "@/components/dashboard/status-dot";
 import { FormType } from "@/components/forms/record-form";
 import { UrlForm } from "@/components/forms/url-form";
+import { CopyButton } from "@/components/shared/copy-button";
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
 
 export interface UrlListProps {
@@ -138,7 +138,7 @@ export default function UserUrlsList({ user }: UrlListProps) {
                   Visible
                 </TableHead>
                 <TableHead className="col-span-1 hidden items-center justify-center font-bold sm:flex">
-                  Active
+                  Status
                 </TableHead>
                 <TableHead className="col-span-1 flex items-center justify-center font-bold">
                   Actions
@@ -164,14 +164,21 @@ export default function UserUrlsList({ user }: UrlListProps) {
                         {short.target}
                       </Link>
                     </TableCell>
-                    <TableCell className="col-span-2">
+                    <TableCell className="col-span-2 flex items-center gap-1">
                       <Link
-                        className="font-semibold text-slate-600 after:content-['_↗'] hover:text-blue-400 hover:underline"
-                        href={short.url}
+                        className="font-semibold text-slate-600 hover:text-blue-400 hover:underline"
+                        href={`/s/${short.url}`}
                         target="_blank"
                       >
-                        {short.url.slice(16)}
+                        {short.url}
                       </Link>
+                      <CopyButton
+                        value={`${siteConfig.url}/s/${short.url}`}
+                        className={cn(
+                          "size-[25px]",
+                          "duration-250 transition-all group-hover:opacity-100",
+                        )}
+                      />
                     </TableCell>
                     <TableCell className="col-span-1 hidden justify-center font-semibold sm:flex">
                       {short.visible === 1 ? "Public" : "Private"}

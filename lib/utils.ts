@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import crypto, { randomBytes } from "crypto";
 import { Metadata } from "next";
 import { clsx, type ClassValue } from "clsx";
 import ms from "ms";
@@ -167,4 +167,18 @@ export function generateSecret(length: number = 16): string {
   const buffer = crypto.randomBytes(length);
   // 将字节转换为十六进制字符串
   return buffer.toString("hex");
+}
+
+export function generateUrlSuffix(length: number = 6): string {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const charactersLength = characters.length;
+  let result = "";
+
+  const randomValues = randomBytes(length);
+  for (let i = 0; i < length; i++) {
+    result += characters[randomValues[i] % charactersLength];
+  }
+
+  return result;
 }

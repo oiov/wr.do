@@ -2,6 +2,8 @@ import { SidebarNavItem, SiteConfig } from "types";
 import { env } from "@/env.mjs";
 
 const site_url = env.NEXT_PUBLIC_APP_URL;
+const free_recored_quota = env.NEXT_PUBLIC_FREE_RECORD_QUOTA;
+const free_url_quota = env.NEXT_PUBLIC_FREE_URL_QUOTA;
 
 export const siteConfig: SiteConfig = {
   name: "WRDO",
@@ -13,6 +15,10 @@ export const siteConfig: SiteConfig = {
     github: "https://github.com/oiov/wr.do",
   },
   mailSupport: "support@wr.do",
+  freeQuota: {
+    record: Number(free_recored_quota),
+    url: Number(free_url_quota),
+  },
 };
 
 export const footerLinks: SidebarNavItem[] = [

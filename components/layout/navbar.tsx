@@ -118,7 +118,7 @@ export function NavBar({ scroll = false }: NavBarProps) {
             <Link href="login">
               <Button
                 className="hidden gap-2 px-4 md:flex"
-                variant="link"
+                variant="default"
                 size="sm"
                 rounded="lg"
               >
