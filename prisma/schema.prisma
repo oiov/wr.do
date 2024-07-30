@@ -125,7 +125,7 @@ model UrlMeta {
   urlId String
   click Int
 
-  ip        String  @unique
+  ip        String  @default("127.0.0.1")
   city      String?
   country   String?
   region    String?
@@ -137,6 +137,7 @@ model UrlMeta {
 
   userUrl UserUrl @relation(fields: [urlId], references: [id], onDelete: Cascade)
 
+  @@unique([urlId, ip])
   @@index([urlId])
   @@map(name: "url_metas")
 }

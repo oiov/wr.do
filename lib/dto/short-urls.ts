@@ -138,37 +138,40 @@ export async function getUrlBySuffix(suffix: string) {
   });
 }
 
+// meta
 export async function createUserShortUrlMeta(
   data: Omit<UrlMeta, "id" | "createdAt" | "updatedAt">,
 ) {
   try {
-    const meta = await prisma.urlMeta.count({
-      where: {
-        ip: data.ip,
-        urlId: data.urlId,
-      },
-    });
-
-    if (meta > 0) {
-      await prisma.urlMeta.update({
-        where: {
-          ip: data.ip,
-          urlId: data.urlId,
-        },
-        data: {
-          click: {
-            increment: 1,
-          },
-          updatedAt: new Date().toISOString(),
-        },
-      });
-    } else {
-      const res = await prisma.urlMeta.create({
-        data,
-      });
-      return { status: "success", data: res };
-    }
+    const meta = await findOrCreateUrlMeta(data);
+    return { status: "success", data: meta };
   } catch (error) {
-    return { status: error };
+    console.error("create meta error", error);
+    return { status: "error", message: error.message };
   }
+}
+
+async function findOrCreateUrlMeta(data) {
+  const meta = await prisma.urlMeta.findFirst({
+    where: {
+      ip: data.ip,
+      urlId: data.urlId,
+    },
+  });
+
+  if (meta) {
+    return await incrementClick(meta.id);
+  } else {
+    return await prisma.urlMeta.create({ data });
+  }
+}
+
+async function incrementClick(id) {
+  return await prisma.urlMeta.update({
+    where: { id },
+    data: {
+      click: { increment: 1 },
+      updatedAt: new Date(), // Prisma will handle the ISO string conversion
+    },
+  });
 }

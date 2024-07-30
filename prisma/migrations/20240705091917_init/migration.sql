@@ -162,7 +162,8 @@ CREATE INDEX "url_metas_urlId_idx" ON "url_metas" ("urlId");
 ALTER TABLE "url_metas" ADD CONSTRAINT "url_metas_urlId_fkey" FOREIGN KEY ("urlId") REFERENCES "user_urls"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE "url_metas" ADD COLUMN "ip" TEXT NOT NULL;
-CREATE UNIQUE INDEX "url_metas_ip_key" ON "url_metas" ("ip");
+
+ALTER TABLE "url_metas" ADD CONSTRAINT "unique_urlId_ip" UNIQUE ("urlId", "ip");
 
 ALTER TABLE "url_metas" ADD COLUMN "city" TEXT;
 ALTER TABLE "url_metas" ADD COLUMN "country" TEXT;

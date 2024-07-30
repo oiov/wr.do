@@ -9,14 +9,19 @@ import { createUserShortUrlMeta, getUrlBySuffix } from "./lib/dto/short-urls";
 // Or like this if you need to do something here.
 export default auth(async (req) => {
   // console.log(req.auth); //  { session: { user: { ... } } }
+  const ip = req.headers.get("X-Forwarded-For");
+  // console.log("[middle/s]", ip);
 
   if (req.url.includes("/s/")) {
     const slugRegex = /[^/]+$/;
     const match = req.url.match(slugRegex);
     if (match) {
-      const res = await fetch(`${siteConfig.url}/api/s?slug=${match[0]}`, {
-        method: "GET",
-      });
+      const res = await fetch(
+        `${siteConfig.url}/api/s?slug=${match[0]}&ip=${ip}`,
+        {
+          method: "GET",
+        },
+      );
 
       if (!res.ok) {
         return NextResponse.redirect(`${siteConfig.url}/docs/short-urls`);
