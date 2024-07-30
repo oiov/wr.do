@@ -165,6 +165,7 @@ export default function UserUrlsList({ user }: UrlListProps) {
                         className="text-slate-600 hover:text-blue-400 hover:underline"
                         href={short.target}
                         target="_blank"
+                        prefetch={false}
                       >
                         {short.target.startsWith("http")
                           ? short.target.split("//")[1]
@@ -177,6 +178,7 @@ export default function UserUrlsList({ user }: UrlListProps) {
                         className="text-slate-600 hover:text-blue-400 hover:underline"
                         href={`/s/${short.url}`}
                         target="_blank"
+                        prefetch={false}
                       >
                         {short.url}
                       </Link>
