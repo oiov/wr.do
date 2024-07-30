@@ -54,7 +54,7 @@ export async function GET(req: Request) {
               color: "transparent",
             }}
           >
-            Next Template
+            WR.DO
           </div>
 
           <div tw="flex flex-col flex-1 py-16">

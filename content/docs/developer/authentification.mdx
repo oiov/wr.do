@@ -31,34 +31,25 @@ Then add it to your `.env` file:
 AUTH_SECRET = secret;
 ```
 
-## Update google client variables
+## Google config
 
 In this section, you can update these variables:
 
-```js title=".env.local"
+```js title=".env"
 GOOGLE_CLIENT_ID = your_secret_client_id.apps.googleusercontent.com;
 GOOGLE_CLIENT_SECRET = your_secret_client;
 ```
 
-### Video explanation
+See config tutorial in [Authjs - Google OAuth](https://authjs.dev/getting-started/providers/google).
 
-Watch a youtube video from [CodeWithAntonio](https://www.youtube.com/@codewithantonio) on how to configure the environment variables for NextAuth with Google authentication.
+## Github config
 
-<iframe
-  className="mt-6 aspect-video w-full"
-  src="https://www.youtube.com/embed/1MTyCvS05V4"
-  title="Next Auth V5 - Advanced Guide (2024)"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
-  referrerPolicy="strict-origin-when-cross-origin"
-  allowFullScreen
-></iframe>
+In this section, you can update these variables:
 
-- GoogleAuth **local** config at [3:24:30](https://www.youtube.com/watch?v=1MTyCvS05V4&t=12270s)
-- Update GoogleAuth after **deployment** at [7:52:31](https://www.youtube.com/watch?v=1MTyCvS05V4&t=12270s)
+```js title=".env"
+GITHUB_ID = your_secret_client_id;
+GITHUB_SECRET = your_secret_client;
+```
 
-### Google config for this repo
+See config tutorial in [Authjs - Github OAuth](https://authjs.dev/getting-started/providers/github).
 
-<img
-  className="mt-4 overflow-hidden rounded-lg border"
-  src="/_static/docs/gg-auth-config.jpg"
-/>

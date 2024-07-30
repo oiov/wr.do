@@ -38,7 +38,7 @@ export async function generateMetadata({
   const { title, description } = doc;
 
   return constructMetadata({
-    title: `${title} – Next Template`,
+    title: `${title} – WR.DO`,
     description: description,
   });
 }

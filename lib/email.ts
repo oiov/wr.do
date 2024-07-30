@@ -16,7 +16,7 @@ export const resend = new Resend(env.RESEND_API_KEY);
 
 //     try {
 //       const { data, error } = await resend.emails.send({
-//         from: 'Next Template App <onboarding@resend.dev>',
+//         from: 'WR.DO App <onboarding@resend.dev>',
 //         to: process.env.NODE_ENV === "development" ? 'delivered@resend.dev' : identifier,
 //         subject: authSubject,
 //         react: MagicLinkEmail({

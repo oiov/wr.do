@@ -26,6 +26,16 @@ export const docsConfig: DocsConfig = {
           href: "/docs/short-urls",
           icon: "page",
         },
+        {
+          title: "Terms of Service",
+          href: "/terms",
+          icon: "page",
+        },
+        {
+          title: "Privacy Policy",
+          href: "/privacy",
+          icon: "page",
+        },
         // {
         //   title: "Newsletter",
         //   href: "/docs/newsletter",
@@ -47,13 +57,8 @@ export const docsConfig: DocsConfig = {
           icon: "page",
         },
         {
-          title: "Components",
-          href: "/docs/developer/components",
-          icon: "page",
-        },
-        {
-          title: "Config files",
-          href: "/docs/developer/config-files",
+          title: "Email",
+          href: "/docs/developer/email",
           icon: "page",
         },
         {
@@ -62,13 +67,13 @@ export const docsConfig: DocsConfig = {
           icon: "page",
         },
         {
-          title: "Email",
-          href: "/docs/developer/email",
+          title: "Components",
+          href: "/docs/developer/components",
           icon: "page",
         },
         {
-          title: "Layout Options",
-          href: "/docs/developer/layouts",
+          title: "Config files",
+          href: "/docs/developer/config-files",
           icon: "page",
         },
         {
