@@ -12,18 +12,22 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
   return (
     <footer className={cn("border-t", className)}>
       <div className="container grid max-w-6xl grid-cols-2 gap-6 py-14 md:grid-cols-5">
-        <div className="col-span-full ml-4 flex flex-col items-start sm:col-span-1 md:col-span-2">
+        <div className="col-span-full flex flex-col items-start sm:col-span-1 md:col-span-2">
           {/* <NewsletterForm /> */}
           <div className="flex items-center gap-6 md:gap-10">
             <Link href="/" className="flex items-center space-x-1.5">
               <Icons.logo />
-              <h1 style={{ fontFamily: "Bahamas Bold" }} className="text-2xl">
+              <h1
+                style={{ fontFamily: "Bahamas Bold" }}
+                className="text-2xl font-bold"
+              >
                 {siteConfig.name}
               </h1>
             </Link>
           </div>
           <div className="mt-4 text-sm">
-            Craft DNS Records, Make Short Links.
+            Craft DNS Records, Make Short Links. <br />
+            Open source.
           </div>
         </div>
         {footerLinks.map((section) => (

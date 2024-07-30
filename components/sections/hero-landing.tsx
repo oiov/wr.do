@@ -17,8 +17,10 @@ export default async function HeroLanding() {
           )}
         >
           <span className="mr-3">🎉</span>{" "}
-          <span style={{ fontFamily: "Bahamas Bold" }}>WR.DO </span>&nbsp;Beta
-          Launching Now!
+          <span className="font-bold" style={{ fontFamily: "Bahamas Bold" }}>
+            WR.DO
+          </span>
+          &nbsp;Beta Launching Now!
         </Link>
 
         <h1 className="text-balance font-satoshi text-[40px] font-black leading-[1.15] tracking-tight sm:text-5xl md:text-6xl md:leading-[1.15]">

@@ -21,6 +21,7 @@ import {
   Loader2,
   LucideIcon,
   LucideProps,
+  Mail,
   MessagesSquare,
   Moon,
   MoreVertical,
@@ -121,4 +122,5 @@ export const Icons = {
   warning: AlertTriangle,
   globeLock: GlobeLock,
   link: Link,
+  mail: Mail,
 };

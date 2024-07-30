@@ -147,7 +147,6 @@ ALTER TABLE "user_urls" ADD CONSTRAINT "user_urls_userId_fkey" FOREIGN KEY ("use
 CREATE TABLE "url_metas"
 (
     "id" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
     "urlId" TEXT NOT NULL,
     "click" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -157,8 +156,16 @@ CREATE TABLE "url_metas"
 );
 
 -- CreateIndex
-CREATE INDEX "url_metas_userId_urlId_idx" ON "url_metas" ("userId", "urlId");
+CREATE INDEX "url_metas_urlId_idx" ON "url_metas" ("urlId");
 
 -- AddForeignKey
-ALTER TABLE "url_metas" ADD CONSTRAINT "url_metas_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "url_metas" ADD CONSTRAINT "url_metas_urlId_fkey" FOREIGN KEY ("urlId") REFERENCES "user_urls"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE "url_metas" ADD COLUMN "ip" TEXT NOT NULL;
+CREATE UNIQUE INDEX "url_metas_ip_key" ON "url_metas" ("ip");
+
+ALTER TABLE "url_metas" ADD COLUMN "city" TEXT;
+ALTER TABLE "url_metas" ADD COLUMN "country" TEXT;
+ALTER TABLE "url_metas" ADD COLUMN "region" TEXT;
+ALTER TABLE "url_metas" ADD COLUMN "latitude" TEXT;
+ALTER TABLE "url_metas" ADD COLUMN "longitude" TEXT;

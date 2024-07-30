@@ -79,7 +79,7 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
                     <Link
                       href="/"
                       style={{ fontFamily: "Bahamas Bold" }}
-                      className="text-2xl"
+                      className="text-2xl font-bold"
                     >
                       {siteConfig.name}
                     </Link>
@@ -178,39 +178,38 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
                 ))}
               </nav>
 
-              {/* <div className="mt-auto xl:p-4">
-                {isSidebarExpanded ? <UpgradeCard /> : null}
-              </div> */}
-              <p className="mx-3 mb-3 mt-auto font-mono text-xs text-muted-foreground/70">
-                &copy; 2024{" "}
-                <Link
-                  href={siteConfig.links.github}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="font-medium text-primary underline underline-offset-2"
-                >
-                  oiov
-                </Link>
-                . <br /> Built with{" "}
-                <Link
-                  href="https://nextjs.org?ref=wrdo"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="font-medium text-primary underline underline-offset-2"
-                >
-                  Nextjs
-                </Link>{" "}
-                &{" "}
-                <Link
-                  href="https://www.cloudflare.com?ref=wrdo"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="font-medium text-primary underline underline-offset-2"
-                >
-                  Cloudflare
-                </Link>
-                .
-              </p>
+              {isSidebarExpanded && (
+                <p className="mx-3 mb-3 mt-auto font-mono text-xs text-muted-foreground/70">
+                  &copy; 2024{" "}
+                  <Link
+                    href={siteConfig.links.github}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-medium text-primary underline underline-offset-2"
+                  >
+                    oiov
+                  </Link>
+                  . <br /> Built with{" "}
+                  <Link
+                    href="https://nextjs.org?ref=wrdo"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-medium text-primary underline underline-offset-2"
+                  >
+                    Nextjs
+                  </Link>{" "}
+                  &{" "}
+                  <Link
+                    href="https://www.cloudflare.com?ref=wrdo"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-medium text-primary underline underline-offset-2"
+                  >
+                    Cloudflare
+                  </Link>
+                  .
+                </p>
+              )}
             </div>
           </aside>
         </ScrollArea>
@@ -249,7 +248,7 @@ export function MobileSheetSidebar({ links }: DashboardSidebarProps) {
                   <Image src="/favicon.ico" alt="logo" width={20} height={20} />
                   <span
                     style={{ fontFamily: "Bahamas Bold" }}
-                    className="pt-0.5 text-xl"
+                    className="pt-0.5 text-xl font-bold"
                   >
                     {siteConfig.name}
                   </span>

@@ -18,7 +18,6 @@ export async function POST(req: Request) {
     }
 
     const { record, recordId } = await req.json();
-    console.log(record, recordId);
 
     const data = await updateDNSRecord(
       CLOUDFLARE_ZONE_ID,

@@ -2,6 +2,8 @@ import { UserRole } from "@prisma/client";
 
 import { SidebarNavItem } from "types";
 
+import { siteConfig } from "./site";
+
 export const sidebarLinks: SidebarNavItem[] = [
   {
     title: "MENU",
@@ -44,11 +46,11 @@ export const sidebarLinks: SidebarNavItem[] = [
       { href: "/", icon: "home", title: "Homepage" },
       { href: "/docs", icon: "bookOpen", title: "Documentation" },
       {
-        href: "#",
-        icon: "messages",
+        href: "mailto:" + siteConfig.mailSupport,
+        icon: "mail",
         title: "Support",
-        authorizeOnly: UserRole.USER,
-        disabled: true,
+        // authorizeOnly: UserRole.USER,
+        // disabled: true,
       },
     ],
   },

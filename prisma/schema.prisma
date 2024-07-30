@@ -65,7 +65,6 @@ model User {
   sessions   Session[]
   UserRecord UserRecord[]
   UserUrl    UserUrl[]
-  UrlMeta    UrlMeta[]
 
   @@map(name: "users")
 }
@@ -122,17 +121,22 @@ model UserUrl {
 }
 
 model UrlMeta {
-  id     String @id @default(cuid())
-  userId String
-  urlId  String
-  click  Int
+  id    String @id @default(cuid())
+  urlId String
+  click Int
+
+  ip        String  @unique
+  city      String?
+  country   String?
+  region    String?
+  latitude  String?
+  longitude String?
 
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @default(now()) @map(name: "updated_at")
 
-  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userUrl UserUrl @relation(fields: [urlId], references: [id], onDelete: Cascade)
 
-  @@index([userId, urlId])
+  @@index([urlId])
   @@map(name: "url_metas")
 }

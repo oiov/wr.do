@@ -68,7 +68,10 @@ export function RecordForm({
       ttl: initData?.ttl || 1,
       proxied: initData?.proxied || false,
       comment: initData?.comment || "",
-      name: initData?.name || "",
+      name:
+        (initData?.name.endsWith(".wr.do")
+          ? initData?.name.slice(0, -6)
+          : initData?.name) || "",
       content: initData?.content || "",
     },
   });
@@ -164,8 +167,7 @@ export function RecordForm({
               setCurrentRecordType(value);
             }}
             name={"type"}
-            // disabled
-            defaultValue="CNAME"
+            defaultValue={initData?.type || "CNAME"}
           >
             <SelectTrigger className="w-full shadow-inner">
               <SelectValue placeholder="Select a type" />
@@ -187,12 +189,17 @@ export function RecordForm({
             <Label className="sr-only" htmlFor="name">
               Name (required)
             </Label>
-            <Input
-              id="name"
-              className="flex-1 shadow-inner"
-              size={32}
-              {...register("name")}
-            />
+            <div className="relative">
+              <Input
+                id="name"
+                className="flex-1 shadow-inner"
+                size={32}
+                {...register("name")}
+              />
+              <span className="absolute right-2 top-1/2 -translate-y-1/2 text-sm text-slate-500">
+                .wr.do
+              </span>
+            </div>
           </div>
           <div className="flex flex-col justify-between p-1">
             {errors?.name ? (
@@ -201,7 +208,7 @@ export function RecordForm({
               </p>
             ) : (
               <p className="pb-0.5 text-[13px] text-muted-foreground">
-                Required. Use @ for root
+                Required. Use @ for root.
               </p>
             )}
           </div>
@@ -251,7 +258,7 @@ export function RecordForm({
               setValue("ttl", Number(value));
             }}
             name="ttl"
-            defaultValue="1"
+            defaultValue={`${initData?.ttl}` || "1"}
           >
             <SelectTrigger className="w-full shadow-inner">
               <SelectValue placeholder="Select a time" />

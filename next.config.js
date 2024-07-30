@@ -28,6 +28,11 @@ const nextConfig = {
   redirects() {
     return [
       {
+        source: "/s",
+        destination: "/",
+        permanent: true,
+      },
+      {
         source: "/0",
         destination: "https://www.oiov.dev",
         permanent: true,

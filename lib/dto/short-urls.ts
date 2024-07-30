@@ -117,10 +117,9 @@ export async function deleteUserShortUrl(userId: string, urlId: string) {
   });
 }
 
-export async function getUserUrlMetaInfo(userId: string, urlId: string) {
+export async function getUserUrlMetaInfo(urlId: string) {
   return await prisma.urlMeta.findMany({
     where: {
-      userId,
       urlId,
     },
   });
@@ -130,11 +129,46 @@ export async function getUrlBySuffix(suffix: string) {
   return await prisma.userUrl.findFirst({
     where: {
       url: suffix,
-      active: 1,
     },
     select: {
       id: true,
       target: true,
+      active: true,
     },
   });
+}
+
+export async function createUserShortUrlMeta(
+  data: Omit<UrlMeta, "id" | "createdAt" | "updatedAt">,
+) {
+  try {
+    const meta = await prisma.urlMeta.count({
+      where: {
+        ip: data.ip,
+        urlId: data.urlId,
+      },
+    });
+
+    if (meta > 0) {
+      await prisma.urlMeta.update({
+        where: {
+          ip: data.ip,
+          urlId: data.urlId,
+        },
+        data: {
+          click: {
+            increment: 1,
+          },
+          updatedAt: new Date().toISOString(),
+        },
+      });
+    } else {
+      const res = await prisma.urlMeta.create({
+        data,
+      });
+      return { status: "success", data: res };
+    }
+  } catch (error) {
+    return { status: error };
+  }
 }
