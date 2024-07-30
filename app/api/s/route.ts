@@ -2,25 +2,29 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { createUserShortUrlMeta, getUrlBySuffix } from "@/lib/dto/short-urls";
 
-export async function GET(req: NextRequest) {
+export async function GET(req: Request) {
   try {
-    console.log("[api/s]", req.ip, req.geo);
-
     const url = new URL(req.url);
     const slug = url.searchParams.get("slug");
     if (!slug) return Response.json(null);
 
     const res = await getUrlBySuffix(slug);
     if (res?.target && res?.active === 1) {
+      let ip = req.headers.get("X-Forwarded-For");
+      if (ip) {
+        ip = ip.split(",")[0];
+      }
+      console.log("[api/s]", ip);
+
       await createUserShortUrlMeta({
         urlId: res.id,
         click: 1,
-        ip: req.ip ?? "127.0.0.0",
-        city: req.geo?.city ?? "",
-        region: req.geo?.region ?? "",
-        country: req.geo?.country ?? "",
-        latitude: req.geo?.latitude ?? "",
-        longitude: req.geo?.longitude ?? "",
+        ip: ip ?? "127.0.0.1",
+        city: "",
+        region: "",
+        country: "",
+        latitude: "",
+        longitude: "",
       });
       return Response.json(res.target);
     }

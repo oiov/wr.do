@@ -19,12 +19,12 @@ export default auth(async (req) => {
       });
 
       if (!res.ok) {
-        return NextResponse.redirect(`${siteConfig.url}`);
+        return NextResponse.redirect(`${siteConfig.url}/docs/short-urls`);
       }
 
       const target = await res.json();
       if (!target) {
-        return NextResponse.redirect(`${siteConfig.url}`);
+        return NextResponse.redirect(`${siteConfig.url}/docs/short-urls`);
       }
       return NextResponse.redirect(target);
     }
