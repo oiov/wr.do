@@ -10,7 +10,7 @@ import { Icons } from "../shared/icons";
 
 export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
   return (
-    <footer className={cn("border-t", className)}>
+    <footer className={cn("border-t bg-background", className)}>
       <div className="container grid max-w-6xl grid-cols-2 gap-6 py-14 md:grid-cols-5">
         <div className="col-span-full flex flex-col items-start sm:col-span-1 md:col-span-2">
           {/* <NewsletterForm /> */}
@@ -64,15 +64,6 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
               oiov
             </Link>
             . <br className="block sm:hidden" /> Built with{" "}
-            <Link
-              href="https://nextjs.org?ref=wrdo"
-              target="_blank"
-              rel="noreferrer"
-              className="font-medium text-primary underline underline-offset-2"
-            >
-              Nextjs
-            </Link>{" "}
-            &{" "}
             <Link
               href="https://www.cloudflare.com?ref=wrdo"
               target="_blank"

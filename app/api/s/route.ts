@@ -7,13 +7,12 @@ export async function GET(req: NextRequest) {
     const url = new URL(req.url);
     const slug = url.searchParams.get("slug");
     const ip = url.searchParams.get("ip");
-    if (!slug) return Response.json(null);
+    if (!slug || !ip) return Response.json(null);
 
     const res = await getUrlBySuffix(slug);
     if (res?.target && res?.active === 1) {
-      // const ip = req.headers.get("X-Forwarded-For");
       console.log("[api/s]", ip, res.id);
-
+      // TODO
       await createUserShortUrlMeta({
         urlId: res.id,
         click: 1,

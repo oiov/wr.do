@@ -5,7 +5,7 @@ export default function StatusDot({ status }: { status: number }) {
     <div
       className={cn(
         "h-[9px] w-[9px] rounded-full",
-        status === 1 ? "bg-green-500" : "bg-yellow-500",
+        status === 1 ? "animate-pulse bg-green-500" : "bg-yellow-500",
       )}
     />
   );

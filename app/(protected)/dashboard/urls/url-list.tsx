@@ -128,7 +128,7 @@ export default function UserUrlsList({ user }: UrlListProps) {
             />
           )}
           <Table>
-            <TableHeader>
+            <TableHeader className="bg-gray-100/50 dark:bg-primary-foreground">
               <TableRow className="grid grid-cols-3 items-center sm:grid-cols-7">
                 <TableHead className="col-span-1 flex items-center font-bold sm:col-span-2">
                   Target
@@ -162,7 +162,7 @@ export default function UserUrlsList({ user }: UrlListProps) {
                   >
                     <TableCell className="col-span-1 sm:col-span-2">
                       <Link
-                        className="text-slate-600 hover:text-blue-400 hover:underline"
+                        className="text-slate-600 hover:text-blue-400 hover:underline dark:text-slate-400"
                         href={short.target}
                         target="_blank"
                         prefetch={false}
@@ -175,7 +175,7 @@ export default function UserUrlsList({ user }: UrlListProps) {
                     </TableCell>
                     <TableCell className="col-span-1 flex items-center gap-1 sm:col-span-2">
                       <Link
-                        className="text-slate-600 hover:text-blue-400 hover:underline"
+                        className="text-slate-600 hover:text-blue-400 hover:underline dark:text-slate-400"
                         href={`/s/${short.url}`}
                         target="_blank"
                         prefetch={false}

@@ -138,7 +138,7 @@ export default function UserRecordsList({ user }: RecordListProps) {
             />
           )}
           <Table>
-            <TableHeader>
+            <TableHeader className="bg-gray-100/50 dark:bg-primary-foreground">
               <TableRow className="grid grid-cols-3 items-center sm:grid-cols-7">
                 <TableHead className="col-span-1 flex items-center font-bold">
                   Type
