@@ -2,7 +2,7 @@
   <h1>WR.DO</h1>
   <p><a href="https://discord.gg/d68kWCBDEs">Discord</a> · English | <a href="/README-zh.md">简体中文</a></p>
   <p>Craft DNS Records, Make Short Links</p>
-  <img src="https://f8dd841.webp.li/wrdo-og.png"/>
+  <img src="https://wr.do/_static/images/light-preview.png"/>
 </div>
 
 ## Features
@@ -28,7 +28,7 @@ See docs about [guide](https://wr.do/docs/quick-start) for quick start.
 - [Cloudflare](https://dash.cloudflare.com/) account  
 - A **domain** name hosted on Cloudflare
 
-See docs about [developer](https://wr.do/docs/developer).
+See docs about [developer](https://wr.do/docs/developer/installation).
 
 ## Local development
 

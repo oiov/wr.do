@@ -33,6 +33,11 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: "/docs/developer",
+        destination: "/docs/developer/installation",
+        permanent: true,
+      },
+      {
         source: "/0",
         destination: "https://www.oiov.dev",
         permanent: true,

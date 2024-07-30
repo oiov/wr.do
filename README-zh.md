@@ -2,7 +2,7 @@
   <h1>WR.DO</h1>
   <p><a href="https://discord.gg/d68kWCBDEs">Discord</a> · English | <a href="/README-zh.md">简体中文</a></p>
   <p>创建 DNS 记录，生成短链接</p>
-  <img src="https://f8dd841.webp.li/wrdo-og.png"/>
+  <img src="https://wr.do/_static/images/light-preview.png"/>
 </div>
 
 ## 功能
@@ -28,7 +28,7 @@
 - [Cloudflare](https://dash.cloudflare.com/) 账户  
 - 在 Cloudflare 托管的 **域名**
 
-查看有关[开发者](https://wr.do/docs/developer)的文档。
+查看有关[开发者](https://wr.do/docs/developer/installation)的文档。
 
 ## 本地开发
 
