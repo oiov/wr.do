@@ -10,6 +10,8 @@ import { Toaster } from "@/components/ui/sonner";
 import ModalProvider from "@/components/modals/providers";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
 
+import GoogleAnalytics from "./GoogleAnalytics";
+
 interface RootLayoutProps {
   children: React.ReactNode;
 }
@@ -48,6 +50,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
               <TailwindIndicator />
             </ThemeProvider>
           </SessionProvider>
+          <GoogleAnalytics />
         </body>
       </html>
     </ViewTransitions>

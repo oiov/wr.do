@@ -26,16 +26,16 @@ export const docsConfig: DocsConfig = {
           href: "/docs/short-urls",
           icon: "page",
         },
-        {
-          title: "Terms of Service",
-          href: "/terms",
-          icon: "page",
-        },
-        {
-          title: "Privacy Policy",
-          href: "/privacy",
-          icon: "page",
-        },
+        // {
+        //   title: "Terms of Service",
+        //   href: "/terms",
+        //   icon: "page",
+        // },
+        // {
+        //   title: "Privacy Policy",
+        //   href: "/privacy",
+        //   icon: "page",
+        // },
         // {
         //   title: "Newsletter",
         //   href: "/docs/newsletter",

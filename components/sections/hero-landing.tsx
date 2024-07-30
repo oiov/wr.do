@@ -45,6 +45,7 @@ export default async function HeroLanding() {
                 variant: "outline",
                 rounded: "xl",
                 size: "lg",
+                className: "bg-primary-foreground hover:opacity-70",
               }),
               "px-4 text-[15px]",
             )}
