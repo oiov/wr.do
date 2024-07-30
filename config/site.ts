@@ -48,6 +48,7 @@ export const footerLinks: SidebarNavItem[] = [
       { title: "Introduction", href: "/docs" },
       { title: "Guide", href: "/docs/quick-start" },
       { title: "Developer", href: "/docs/developer" },
+      { title: "Contact", href: "mailto:support@wr.do" },
     ],
   },
 ];
