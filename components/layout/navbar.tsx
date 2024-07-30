@@ -103,15 +103,17 @@ export function NavBar({ scroll = false }: NavBarProps) {
             </div>
           ) : null}
 
+          <Link
+            href="/dashboard"
+            className="hidden text-sm font-medium text-foreground/60 transition-colors hover:text-foreground/80 md:block"
+          >
+            Dashboard
+          </Link>
+          <div className="hidden md:flex">
+            <ModeToggle />
+          </div>
           {session ? (
-            <div className="hidden items-center gap-4 md:flex">
-              <Link
-                href="/dashboard"
-                className="hidden text-sm font-medium text-foreground/60 transition-colors hover:text-foreground/80 md:block"
-              >
-                Dashboard
-              </Link>
-              <ModeToggle />
+            <div className="hidden md:flex">
               <UserAccountNav />
             </div>
           ) : status === "unauthenticated" ? (
