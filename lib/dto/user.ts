@@ -1,4 +1,19 @@
+import { User } from "@prisma/client";
+
 import { prisma } from "@/lib/db";
+
+export interface UpdateUserForm extends Omit<User, "id" | "createdAt"> {}
+
+export const ROLE_ENUM = [
+  {
+    label: "User",
+    value: "USER",
+  },
+  {
+    label: "Admin",
+    value: "ADMIN",
+  },
+];
 
 export const getUserByEmail = async (email: string) => {
   try {
@@ -23,6 +38,16 @@ export const getUserById = async (id: string) => {
     const user = await prisma.user.findUnique({ where: { id } });
 
     return user;
+  } catch {
+    return null;
+  }
+};
+
+export const getAllUsers = async () => {
+  try {
+    // TODO: paginate
+    const users = await prisma.user.findMany();
+    return users;
   } catch {
     return null;
   }
