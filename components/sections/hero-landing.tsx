@@ -50,7 +50,7 @@ export default async function HeroLanding() {
               "px-4 text-[15px]",
             )}
           >
-            <Icons.gitHub className="mr-2 size-4" />
+            <Icons.github className="mr-2 size-4" />
             <p>
               <span className="hidden sm:inline-block">Star on</span> GitHub
             </p>

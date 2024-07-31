@@ -4,10 +4,10 @@ import { getCurrentUser } from "@/lib/session";
 import { constructMetadata } from "@/lib/utils";
 import { DashboardHeader } from "@/components/dashboard/header";
 
-import UserUrlsList from "./url-list";
+import UserRecordsList from "../../dashboard/records/record-list";
 
 export const metadata = constructMetadata({
-  title: "Short URLs - WR.DO",
+  title: "DNS Records - WR.DO",
   description: "List and manage records.",
 });
 
@@ -19,14 +19,14 @@ export default async function DashboardPage() {
   return (
     <>
       <DashboardHeader
-        heading="Manage&nbsp;Short&nbsp;URLs"
-        text="List and manage short urls."
-        link="/docs/short-urls"
-        linkText="Short urls."
+        heading="Manage&nbsp;&nbsp;DNS&nbsp;&nbsp;Records"
+        text="List and manage records."
+        link="/docs/dns-records"
+        linkText="DNS Records."
       />
-      <UserUrlsList
+      <UserRecordsList
         user={{ id: user.id, name: user.name || "" }}
-        action="/api/url"
+        action="/api/record/admin"
       />
     </>
   );

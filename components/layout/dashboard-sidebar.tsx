@@ -179,7 +179,7 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
               </nav>
 
               {isSidebarExpanded && (
-                <p className="mx-3 mb-3 mt-auto font-mono text-xs text-muted-foreground/70">
+                <p className="mx-3 mt-auto pb-3 pt-6 font-mono text-xs text-muted-foreground/70">
                   &copy; 2024{" "}
                   <Link
                     href={siteConfig.links.github}

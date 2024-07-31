@@ -121,7 +121,7 @@ export function NavMobile() {
 
         <div className="mt-5 flex items-center justify-end space-x-4">
           <Link href={siteConfig.links.github} target="_blank" rel="noreferrer">
-            <Icons.gitHub className="size-6" />
+            <Icons.github className="size-6" />
             <span className="sr-only">GitHub</span>
           </Link>
           <ModeToggle />

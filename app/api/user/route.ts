@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 
-import { prisma } from "@/lib/db";
+import { deleteUserById } from "@/lib/dto/user";
 
 export const DELETE = auth(async (req) => {
   if (!req.auth) {
@@ -8,16 +8,12 @@ export const DELETE = auth(async (req) => {
   }
 
   const currentUser = req.auth.user;
-  if (!currentUser) {
+  if (!currentUser || !currentUser?.id) {
     return new Response("Invalid user", { status: 401 });
   }
 
   try {
-    await prisma.user.delete({
-      where: {
-        id: currentUser.id,
-      },
-    });
+    await deleteUserById(currentUser.id);
   } catch (error) {
     return new Response("Internal server error", { status: 500 });
   }

@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Pagination } from "@nextui-org/pagination";
 import { User } from "@prisma/client";
-import { PenLine, RefreshCwIcon } from "lucide-react";
+import { ArrowLeft, ArrowRight, PenLine, RefreshCwIcon } from "lucide-react";
 import useSWR, { useSWRConfig } from "swr";
 
 import { siteConfig } from "@/config/site";
@@ -18,6 +19,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { PaginationWrapper } from "@/components/ui/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
@@ -73,10 +75,12 @@ export default function UsersList({ user }: UrlListProps) {
   const { isMobile } = useMediaQuery();
   const [isShowForm, setShowForm] = useState(false);
   const [currentEditUser, setcurrentEditUser] = useState<User | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   const { mutate } = useSWRConfig();
-  const { data, error, isLoading } = useSWR<User[]>(
-    "/api/user/admin",
+  const { data, error, isLoading } = useSWR<{ total: number; list: User[] }>(
+    `/api/user/admin?page=${currentPage}&size=${pageSize}`,
     fetcher,
     {
       revalidateOnFocus: false,
@@ -84,21 +88,19 @@ export default function UsersList({ user }: UrlListProps) {
   );
 
   const handleRefresh = () => {
-    mutate("/api/user/admin", undefined);
+    mutate(`/api/user/admin?page=${currentPage}&size=${pageSize}`, undefined);
   };
 
   return (
     <>
       <Card className="xl:col-span-2">
         <CardHeader className="flex flex-row items-center">
-          <div className="grid gap-2">
-            <CardDescription className="text-balance text-lg font-bold">
-              <span>Total Users:</span>{" "}
-              <span className="font-bold">
-                {data && <CountUpFn count={data.length} />}
-              </span>
-            </CardDescription>
-          </div>
+          <CardDescription className="text-balance text-lg font-bold">
+            <span>Total Users:</span>{" "}
+            <span className="font-bold">
+              {data && <CountUpFn count={data.total} />}
+            </span>
+          </CardDescription>
           <div className="ml-auto flex items-center justify-end gap-3">
             <Button
               variant={"outline"}
@@ -111,17 +113,6 @@ export default function UsersList({ user }: UrlListProps) {
                 <RefreshCwIcon className="size-4" />
               )}
             </Button>
-            {/* <Button
-              className="w-[120px] shrink-0 gap-1"
-              variant="default"
-              onClick={() => {
-                setcurrentEditUser(null);
-                setShowForm(false);
-                setShowForm(!isShowForm);
-              }}
-            >
-              Add user
-            </Button> */}
           </div>
         </CardHeader>
         <CardContent>
@@ -165,59 +156,53 @@ export default function UsersList({ user }: UrlListProps) {
                   <TableColumnSekleton />
                   <TableColumnSekleton />
                 </>
-              ) : data && data.length > 0 ? (
-                data
-                  .sort(
-                    (a, b) =>
-                      new Date(a.createdAt).getTime() -
-                      new Date(b.createdAt).getTime(),
-                  )
-                  .map((user) => (
-                    <TableRow
-                      key={user.id}
-                      className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-7"
-                    >
-                      <TableCell className="col-span-1">
-                        {user.name || "Anonymous"}
-                      </TableCell>
-                      <TableCell className="col-span-1 flex items-center gap-1 truncate sm:col-span-2">
-                        <TooltipProvider>
-                          <Tooltip delayDuration={200}>
-                            <TooltipTrigger className="truncate">
-                              {user.email}
-                            </TooltipTrigger>
-                            <TooltipContent>{user.email}</TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                      </TableCell>
-                      <TableCell className="col-span-1 hidden justify-center sm:flex">
-                        <Badge className="text-xs" variant="outline">
-                          {user.role}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="col-span-1 hidden justify-center sm:flex">
-                        <StatusDot status={user.active} />
-                      </TableCell>
-                      <TableCell className="col-span-1 hidden justify-center sm:flex">
-                        {timeAgo(user.createdAt || "")}
-                      </TableCell>
-                      <TableCell className="col-span-1 flex justify-center">
-                        <Button
-                          className="text-sm hover:bg-slate-100"
-                          size="sm"
-                          variant={"outline"}
-                          onClick={() => {
-                            setcurrentEditUser(user);
-                            setShowForm(false);
-                            setShowForm(!isShowForm);
-                          }}
-                        >
-                          <p>Edit</p>
-                          <PenLine className="ml-1 size-4" />
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))
+              ) : data && data.list ? (
+                data.list.map((user) => (
+                  <TableRow
+                    key={user.id}
+                    className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-7"
+                  >
+                    <TableCell className="col-span-1">
+                      {user.name || "Anonymous"}
+                    </TableCell>
+                    <TableCell className="col-span-1 flex items-center gap-1 truncate sm:col-span-2">
+                      <TooltipProvider>
+                        <Tooltip delayDuration={200}>
+                          <TooltipTrigger className="truncate">
+                            {user.email}
+                          </TooltipTrigger>
+                          <TooltipContent>{user.email}</TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </TableCell>
+                    <TableCell className="col-span-1 hidden justify-center sm:flex">
+                      <Badge className="text-xs" variant="outline">
+                        {user.role}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="col-span-1 hidden justify-center sm:flex">
+                      <StatusDot status={user.active} />
+                    </TableCell>
+                    <TableCell className="col-span-1 hidden justify-center sm:flex">
+                      {timeAgo(user.createdAt || "")}
+                    </TableCell>
+                    <TableCell className="col-span-1 flex justify-center">
+                      <Button
+                        className="text-sm hover:bg-slate-100"
+                        size="sm"
+                        variant={"outline"}
+                        onClick={() => {
+                          setcurrentEditUser(user);
+                          setShowForm(false);
+                          setShowForm(!isShowForm);
+                        }}
+                      >
+                        <p>Edit</p>
+                        <PenLine className="ml-1 size-4" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))
               ) : (
                 <EmptyPlaceholder>
                   <EmptyPlaceholder.Icon name="user" />
@@ -239,6 +224,13 @@ export default function UsersList({ user }: UrlListProps) {
                 </EmptyPlaceholder>
               )}
             </TableBody>
+            {data && Math.ceil(data.total / pageSize) > 1 && (
+              <PaginationWrapper
+                total={Math.ceil(data.total / pageSize)}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+              />
+            )}
           </Table>
         </CardContent>
       </Card>

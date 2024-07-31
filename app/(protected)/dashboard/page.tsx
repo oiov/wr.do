@@ -1,12 +1,17 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { siteConfig } from "@/config/site";
+import { getUserRecordCount } from "@/lib/dto/cloudflare-dns-record";
+import { getUserShortUrlCount } from "@/lib/dto/short-urls";
 import { getCurrentUser } from "@/lib/session";
 import { constructMetadata } from "@/lib/utils";
 import { DashboardHeader } from "@/components/dashboard/header";
-import InfoCard from "@/components/dashboard/info-card";
 
-import { DNSInfoCard, UrlsInfoCard } from "./info-card";
+import {
+  DashboardInfoCard,
+  HeroCard,
+} from "../../../components/dashboard/dashboard-info-card";
 import UserRecordsList from "./records/record-list";
 import UserUrlsList from "./urls/url-list";
 
@@ -20,6 +25,9 @@ export default async function DashboardPage() {
 
   if (!user?.id) redirect("/login");
 
+  const record_count = await getUserRecordCount(user.id);
+  const url_count = await getUserShortUrlCount(user.id);
+
   return (
     <>
       <DashboardHeader
@@ -28,26 +36,30 @@ export default async function DashboardPage() {
       />
       <div className="flex flex-col gap-5">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 xl:grid-cols-3">
-          <div className="group relative mb-4 h-full w-full shrink-0 origin-left overflow-hidden rounded-lg border bg-gray-50/70 p-4 text-left duration-500 before:absolute before:right-1 before:top-1 before:z-[2] before:h-12 before:w-12 before:rounded-full before:bg-violet-500 before:blur-lg before:duration-500 after:absolute after:right-8 after:top-3 after:z-[2] after:h-20 after:w-20 after:rounded-full after:bg-rose-300 after:blur-lg after:duration-500 hover:border-cyan-600 hover:decoration-2 hover:duration-500 hover:before:-bottom-8 hover:before:right-12 hover:before:blur hover:before:[box-shadow:_20px_20px_20px_30px_#a21caf] hover:after:-right-8 group-hover:before:duration-500 group-hover:after:duration-500 dark:bg-primary-foreground md:max-w-[350px]">
-            <h1 className="mb-7 text-lg font-bold duration-500 group-hover:text-blue-500">
-              Free Records & URLs
-            </h1>
-            <p className="text-sm">
-              Learn more from{" "}
-              <Link
-                className="text-blue-500 hover:underline"
-                href="/docs"
-                target="_blank"
-              >
-                documents.
-              </Link>{" "}
-            </p>
-          </div>
-          <DNSInfoCard userId={user.id} />
-          <UrlsInfoCard userId={user.id} />
+          <HeroCard />
+          <DashboardInfoCard
+            userId={user.id}
+            title="DNS Records"
+            count={record_count}
+            total={siteConfig.freeQuota.record}
+            link="/dashboard/records"
+          />
+          <DashboardInfoCard
+            userId={user.id}
+            title="Short URLs"
+            count={url_count}
+            total={siteConfig.freeQuota.url}
+            link="/dashboard/urls"
+          />
         </div>
-        <UserRecordsList user={{ id: user.id, name: user.name || "" }} />
-        <UserUrlsList user={{ id: user.id, name: user.name || "" }} />
+        <UserRecordsList
+          user={{ id: user.id, name: user.name || "" }}
+          action="/api/record"
+        />
+        <UserUrlsList
+          user={{ id: user.id, name: user.name || "" }}
+          action="/api/url"
+        />
       </div>
     </>
   );

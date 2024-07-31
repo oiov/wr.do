@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import { UrlMeta } from "@prisma/client";
+import { UrlMeta, UserRole } from "@prisma/client";
 
 import { prisma } from "@/lib/db";
 
@@ -20,22 +20,53 @@ export interface UserShortUrlInfo extends ShortUrlFormData {
   meta?: UrlMeta;
 }
 
-export async function getUserShortUrls(userId: string, active: number = 1) {
-  return await prisma.userUrl.findMany({
-    where: {
-      userId,
-      active,
-    },
-  });
+export async function getUserShortUrls(
+  userId: string,
+  active: number = 1,
+  page: number,
+  size: number,
+  role: UserRole = "USER",
+) {
+  const option =
+    role === "USER"
+      ? {
+          userId,
+          active,
+        }
+      : {};
+  const [total, list] = await prisma.$transaction([
+    prisma.userUrl.count({
+      where: option,
+    }),
+    prisma.userUrl.findMany({
+      where: option,
+      skip: (page - 1) * size,
+      take: size,
+      orderBy: {
+        updatedAt: "asc",
+      },
+    }),
+  ]);
+  return {
+    total,
+    list,
+  };
 }
 
-export async function getUserShortUrlCount(userId: string, active: number = 1) {
+export async function getUserShortUrlCount(
+  userId: string,
+  active: number = 1,
+  role: UserRole = "USER",
+) {
   try {
     return await prisma.userUrl.count({
-      where: {
-        userId,
-        active,
-      },
+      where:
+        role === "USER"
+          ? {
+              userId,
+              active,
+            }
+          : {},
     });
   } catch (error) {
     return -1;

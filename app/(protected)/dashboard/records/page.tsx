@@ -24,7 +24,10 @@ export default async function DashboardPage() {
         link="/docs/dns-records"
         linkText="DNS Records."
       />
-      <UserRecordsList user={{ id: user.id, name: user.name || "" }} />
+      <UserRecordsList
+        user={{ id: user.id, name: user.name || "" }}
+        action="/api/record"
+      />
     </>
   );
 }

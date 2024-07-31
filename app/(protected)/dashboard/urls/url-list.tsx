@@ -18,6 +18,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { PaginationWrapper } from "@/components/ui/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
@@ -27,6 +28,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import CountUpFn from "@/components/dashboard/count-up";
 import StatusDot from "@/components/dashboard/status-dot";
 import { FormType } from "@/components/forms/record-form";
 import { UrlForm } from "@/components/forms/url-form";
@@ -35,6 +37,7 @@ import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
 
 export interface UrlListProps {
   user: Pick<User, "id" | "name">;
+  action: string;
 }
 
 function TableColumnSekleton({ className }: { className?: string }) {
@@ -59,37 +62,47 @@ function TableColumnSekleton({ className }: { className?: string }) {
   );
 }
 
-export default function UserUrlsList({ user }: UrlListProps) {
+export default function UserUrlsList({ user, action }: UrlListProps) {
   const { isMobile } = useMediaQuery();
   const [isShowForm, setShowForm] = useState(false);
   const [formType, setFormType] = useState<FormType>("add");
   const [currentEditUrl, setCurrentEditUrl] = useState<ShortUrlFormData | null>(
     null,
   );
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   const { mutate } = useSWRConfig();
-  const { data, error, isLoading } = useSWR<ShortUrlFormData[]>(
-    "/api/url",
-    fetcher,
-    {
-      revalidateOnFocus: false,
-    },
-  );
+  const { data, error, isLoading } = useSWR<{
+    total: number;
+    list: ShortUrlFormData[];
+  }>(`${action}?page=${currentPage}&size=${pageSize}`, fetcher, {
+    revalidateOnFocus: false,
+  });
 
   const handleRefresh = () => {
-    mutate("/api/url", undefined);
+    mutate(`${action}?page=${currentPage}&size=${pageSize}`, undefined);
   };
 
   return (
     <>
       <Card className="xl:col-span-2">
         <CardHeader className="flex flex-row items-center">
-          <div className="grid gap-2">
-            <CardTitle>Short URLs</CardTitle>
-            <CardDescription className="text-balance">
-              All Short URLs
+          {action.includes("/admin") ? (
+            <CardDescription className="text-balance text-lg font-bold">
+              <span>Total URLs:</span>{" "}
+              <span className="font-bold">
+                {data && <CountUpFn count={data.total ?? 0} />}
+              </span>
             </CardDescription>
-          </div>
+          ) : (
+            <div className="grid gap-2">
+              <CardTitle>Short URLs</CardTitle>
+              <CardDescription className="text-balance">
+                Your Short URLs
+              </CardDescription>
+            </div>
+          )}
           <div className="ml-auto flex items-center justify-end gap-3">
             <Button
               variant={"outline"}
@@ -124,6 +137,7 @@ export default function UserUrlsList({ user }: UrlListProps) {
               setShowForm={setShowForm}
               type={formType}
               initData={currentEditUrl}
+              action={action}
               onRefresh={handleRefresh}
             />
           )}
@@ -154,8 +168,8 @@ export default function UserUrlsList({ user }: UrlListProps) {
                   <TableColumnSekleton />
                   <TableColumnSekleton />
                 </>
-              ) : data && data.length > 0 ? (
-                data.map((short) => (
+              ) : data && data.list ? (
+                data.list.map((short) => (
                   <TableRow
                     key={short.id}
                     className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-7"
@@ -170,7 +184,6 @@ export default function UserUrlsList({ user }: UrlListProps) {
                         {short.target.startsWith("http")
                           ? short.target.split("//")[1]
                           : short.target}
-                        {/* {isMobile ? short.target.split("//")[1] :short.target} */}
                       </Link>
                     </TableCell>
                     <TableCell className="col-span-1 flex items-center gap-1 sm:col-span-2">
@@ -236,6 +249,13 @@ export default function UserUrlsList({ user }: UrlListProps) {
                 </EmptyPlaceholder>
               )}
             </TableBody>
+            {data && Math.ceil(data.total / pageSize) > 1 && (
+              <PaginationWrapper
+                total={Math.ceil(data.total / pageSize)}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+              />
+            )}
           </Table>
         </CardContent>
       </Card>

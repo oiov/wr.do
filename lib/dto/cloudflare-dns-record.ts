@@ -1,6 +1,7 @@
 "use server";
 
 import { auth } from "@/auth";
+import { UserRole } from "@prisma/client";
 
 import { prisma } from "@/lib/db";
 import {
@@ -82,22 +83,53 @@ export async function createUserRecord(
   }
 }
 
-export async function getUserRecords(userId: string, active: number = 1) {
-  return await prisma.userRecord.findMany({
-    where: {
-      userId: userId,
-      active,
-    },
-  });
+export async function getUserRecords(
+  userId: string,
+  active: number = 1,
+  page: number,
+  size: number,
+  role: UserRole = "USER",
+) {
+  const option =
+    role === "USER"
+      ? {
+          userId,
+          active,
+        }
+      : {};
+  const [total, list] = await prisma.$transaction([
+    prisma.userRecord.count({
+      where: option,
+    }),
+    prisma.userRecord.findMany({
+      where: option,
+      skip: (page - 1) * size,
+      take: size,
+      orderBy: {
+        modified_on: "asc",
+      },
+    }),
+  ]);
+  return {
+    total,
+    list,
+  };
 }
 
-export async function getUserRecordCount(userId: string, active: number = 1) {
+export async function getUserRecordCount(
+  userId: string,
+  active: number = 1,
+  role: UserRole = "USER",
+) {
   try {
     return await prisma.userRecord.count({
-      where: {
-        userId: userId,
-        active,
-      },
+      where:
+        role === "USER"
+          ? {
+              userId: userId,
+              active,
+            }
+          : {},
     });
   } catch (error) {
     return -1;

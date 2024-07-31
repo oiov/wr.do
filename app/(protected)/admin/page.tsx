@@ -1,7 +1,12 @@
 import { redirect } from "next/navigation";
 
+import { siteConfig } from "@/config/site";
+import { getUserRecordCount } from "@/lib/dto/cloudflare-dns-record";
+import { getUserShortUrlCount } from "@/lib/dto/short-urls";
+import { getAllUsersCount } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";
 import { constructMetadata } from "@/lib/utils";
+import { DashboardInfoCard } from "@/components/dashboard/dashboard-info-card";
 import { DashboardHeader } from "@/components/dashboard/header";
 import InfoCard from "@/components/dashboard/info-card";
 import TransactionsList from "@/components/dashboard/transactions-list";
@@ -13,7 +18,11 @@ export const metadata = constructMetadata({
 
 export default async function AdminPage() {
   const user = await getCurrentUser();
-  if (!user || user.role !== "ADMIN") redirect("/login");
+  if (!user || !user.id || user.role !== "ADMIN") redirect("/login");
+
+  const user_count = await getAllUsersCount();
+  const record_count = await getUserRecordCount(user.id, 1, "ADMIN");
+  const url_count = await getUserShortUrlCount(user.id, 1, "ADMIN");
 
   return (
     <>
@@ -22,13 +31,26 @@ export default async function AdminPage() {
         text="Access only for users with ADMIN role."
       />
       <div className="flex flex-col gap-5">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <InfoCard />
-          <InfoCard />
-          <InfoCard />
-          <InfoCard />
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 xl:grid-cols-3">
+          <DashboardInfoCard
+            userId={user.id}
+            title="Users"
+            count={user_count}
+            link="/admin/users"
+          />
+          <DashboardInfoCard
+            userId={user.id}
+            title="DNS Records"
+            count={record_count}
+            link="/admin/records"
+          />
+          <DashboardInfoCard
+            userId={user.id}
+            title="Short URLs"
+            count={url_count}
+            link="/admin/urls"
+          />
         </div>
-        <TransactionsList />
         <TransactionsList />
       </div>
     </>

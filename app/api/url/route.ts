@@ -8,10 +8,17 @@ export async function GET(req: Request) {
     const user = checkUserStatus(await getCurrentUser());
     if (user instanceof Response) return user;
 
-    const user_urls = await getUserShortUrls(user.id, 1);
-    // TODO: get meta info
+    const url = new URL(req.url);
+    const page = url.searchParams.get("page");
+    const size = url.searchParams.get("size");
+    const data = await getUserShortUrls(
+      user.id,
+      1,
+      Number(page || "1"),
+      Number(size || "10"),
+    );
 
-    return Response.json(user_urls);
+    return Response.json(data);
   } catch (error) {
     return Response.json(error?.statusText || error, {
       status: error.status || 500,

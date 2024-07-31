@@ -38,6 +38,7 @@ export interface RecordFormProps {
   setShowForm: Dispatch<SetStateAction<boolean>>;
   type: FormType;
   initData?: UserRecordFormData | null;
+  action: string;
   onRefresh: () => void;
 }
 
@@ -47,6 +48,7 @@ export function RecordForm({
   setShowForm,
   type,
   initData,
+  action,
   onRefresh,
 }: RecordFormProps) {
   const [isPending, startTransition] = useTransition();
@@ -86,7 +88,7 @@ export function RecordForm({
 
   const handleCreateRecord = async (data: CreateDNSRecord) => {
     startTransition(async () => {
-      const response = await fetch("/api/record/add", {
+      const response = await fetch(`${action}/add`, {
         method: "POST",
         body: JSON.stringify({
           records: [data],
@@ -108,7 +110,7 @@ export function RecordForm({
   const handleUpdateRecord = async (data: CreateDNSRecord) => {
     startTransition(async () => {
       if (type === "edit") {
-        const response = await fetch("/api/record/update", {
+        const response = await fetch(`${action}/update`, {
           method: "POST",
           body: JSON.stringify({
             recordId: initData?.record_id,
@@ -132,7 +134,7 @@ export function RecordForm({
   const handleDeleteRecord = async () => {
     if (type === "edit") {
       startDeleteTransition(async () => {
-        const response = await fetch("/api/record/delete", {
+        const response = await fetch(`${action}/delete`, {
           method: "POST",
           body: JSON.stringify({
             record_id: initData?.record_id,

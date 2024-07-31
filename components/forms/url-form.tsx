@@ -28,6 +28,7 @@ export interface RecordFormProps {
   setShowForm: Dispatch<SetStateAction<boolean>>;
   type: FormType;
   initData?: ShortUrlFormData | null;
+  action: string;
   onRefresh: () => void;
 }
 
@@ -35,6 +36,7 @@ export function UrlForm({
   setShowForm,
   type,
   initData,
+  action,
   onRefresh,
 }: RecordFormProps) {
   const [isPending, startTransition] = useTransition();

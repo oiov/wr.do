@@ -96,7 +96,7 @@ export function NavBar({ scroll = false }: NavBarProps) {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <Icons.gitHub className="size-7" />
+                  <Icons.github className="size-7" />
                   <span className="sr-only">GitHub</span>
                 </Link>
               </div>

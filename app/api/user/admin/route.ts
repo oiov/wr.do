@@ -13,9 +13,12 @@ export async function GET(req: Request) {
       });
     }
 
-    const user_records = await getAllUsers();
+    const url = new URL(req.url);
+    const page = url.searchParams.get("page");
+    const size = url.searchParams.get("size");
+    const data = await getAllUsers(Number(page || "1"), Number(size || "10"));
 
-    return Response.json(user_records);
+    return Response.json(data);
   } catch (error) {
     return Response.json(error?.statusText || error, {
       status: error.status || 500,

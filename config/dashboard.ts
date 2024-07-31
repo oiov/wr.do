@@ -25,13 +25,19 @@ export const sidebarLinks: SidebarNavItem[] = [
       {
         href: "/admin/users",
         icon: "user",
-        title: "User Management",
+        title: "Users",
         authorizeOnly: UserRole.ADMIN,
       },
       {
-        href: "/dashboard/charts",
+        href: "/admin/records",
         icon: "lineChart",
-        title: "Charts",
+        title: "Records",
+        authorizeOnly: UserRole.ADMIN,
+      },
+      {
+        href: "/admin/urls",
+        icon: "post",
+        title: "URLs",
         authorizeOnly: UserRole.ADMIN,
       },
     ],
@@ -42,6 +48,7 @@ export const sidebarLinks: SidebarNavItem[] = [
       { href: "/dashboard/settings", icon: "settings", title: "Settings" },
       { href: "/", icon: "home", title: "Homepage" },
       { href: "/docs", icon: "bookOpen", title: "Documentation" },
+      { href: siteConfig.links.github, icon: "github", title: "Github" },
       {
         href: "mailto:" + siteConfig.mailSupport,
         icon: "mail",

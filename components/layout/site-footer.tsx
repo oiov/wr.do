@@ -82,7 +82,7 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
               rel="noreferrer"
               className="font-medium underline underline-offset-1"
             >
-              <Icons.gitHub className="size-5" />
+              <Icons.github className="size-5" />
             </Link>
             <ModeToggle />
           </div>

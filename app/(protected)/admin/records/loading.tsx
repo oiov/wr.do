@@ -1,13 +1,10 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { DashboardHeader } from "@/components/dashboard/header";
 
-export default function OrdersLoading() {
+export default function DashboardRecordsLoading() {
   return (
     <>
-      <DashboardHeader
-        heading="Orders"
-        text="Check and manage your latest orders."
-      />
+      <DashboardHeader heading="DNS Records" text="" />
       <Skeleton className="size-full rounded-lg" />
     </>
   );

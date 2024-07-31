@@ -4,7 +4,7 @@ import { getCurrentUser } from "@/lib/session";
 import { constructMetadata } from "@/lib/utils";
 import { DashboardHeader } from "@/components/dashboard/header";
 
-import UserUrlsList from "./url-list";
+import UserUrlsList from "../../dashboard/urls/url-list";
 
 export const metadata = constructMetadata({
   title: "Short URLs - WR.DO",
@@ -26,7 +26,7 @@ export default async function DashboardPage() {
       />
       <UserUrlsList
         user={{ id: user.id, name: user.name || "" }}
-        action="/api/url"
+        action="/api/url/admin"
       />
     </>
   );
