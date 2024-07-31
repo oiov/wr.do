@@ -14,7 +14,7 @@ import * as z from "zod";
 */
 const urlPattern = /^(?!-)[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*(?<!-)$/;
 const targetPattern =
-  /^(https?:\/\/)([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/[a-zA-Z0-9-]*)*\/?$/;
+  /^(https?:\/\/)([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/[a-zA-Z0-9-]*)*(\/|\?([a-zA-Z0-9-]+=[a-zA-Z0-9-]*(&[a-zA-Z0-9-]+=[a-zA-Z0-9-]*)*)?)?$/;
 
 export const createUrlSchema = z.object({
   id: z.string().optional(),
