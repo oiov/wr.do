@@ -43,7 +43,7 @@ export async function getUserShortUrls(
       skip: (page - 1) * size,
       take: size,
       orderBy: {
-        updatedAt: "asc",
+        updatedAt: "desc",
       },
     }),
   ]);

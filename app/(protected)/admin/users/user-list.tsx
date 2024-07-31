@@ -156,7 +156,7 @@ export default function UsersList({ user }: UrlListProps) {
                   <TableColumnSekleton />
                   <TableColumnSekleton />
                 </>
-              ) : data && data.list ? (
+              ) : data && data.list && data.list.length ? (
                 data.list.map((user) => (
                   <TableRow
                     key={user.id}

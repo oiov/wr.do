@@ -51,7 +51,7 @@ export const getAllUsers = async (page: number, size: number) => {
         skip: (page - 1) * size,
         take: size,
         orderBy: {
-          createdAt: "asc",
+          createdAt: "desc",
         },
       }),
     ]);

@@ -106,7 +106,7 @@ export async function getUserRecords(
       skip: (page - 1) * size,
       take: size,
       orderBy: {
-        modified_on: "asc",
+        modified_on: "desc",
       },
     }),
   ]);
