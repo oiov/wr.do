@@ -57,7 +57,7 @@ export const docsConfig: DocsConfig = {
           icon: "page",
         },
         {
-          title: "Other",
+          title: "Other Platforms",
           href: "/docs/examples/other",
           icon: "page",
         },
