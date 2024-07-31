@@ -2,22 +2,37 @@ import { NextResponse } from "next/server";
 import { auth } from "auth";
 
 import { siteConfig } from "./config/site";
-import { createUserShortUrlMeta, getUrlBySuffix } from "./lib/dto/short-urls";
 
 // export { auth as middleware } from "auth";
 
-// Or like this if you need to do something here.
 export default auth(async (req) => {
-  // console.log(req.auth); //  { session: { user: { ... } } }
+  // console.log(req.auth);
   const ip = req.headers.get("X-Forwarded-For");
-  // console.log("[middle/s]", ip);
 
   if (req.url.includes("/s/")) {
-    const slugRegex = /[^/]+$/;
-    const match = req.url.match(slugRegex);
+    const match = req.url.match(/[^/]+$/);
+    let geo = {
+      city: "",
+      region: "",
+      country: "",
+      latitude: "",
+      longitude: "",
+    };
+    const data = await fetch(`https://ip.wr.do/api?ip=${ip}`); // http://ip-api.com/json/42.48.83.141
+    if (data.ok) {
+      const geoData = await data.json();
+      geo = {
+        city: geoData.city,
+        region: geoData.region,
+        country: geoData.country,
+        latitude: geoData.latitude,
+        longitude: geoData.longitude,
+      };
+    }
+
     if (match) {
       const res = await fetch(
-        `${siteConfig.url}/api/s?slug=${match[0]}&ip=${ip}`,
+        `${siteConfig.url}/api/s?slug=${match[0]}&ip=${ip}&city=${geo.city}&region=${geo.region}&country=${geo.country}&latitude=${geo.latitude}&longitude=${geo.longitude}`,
         {
           method: "GET",
         },

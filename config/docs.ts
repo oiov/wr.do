@@ -44,6 +44,26 @@ export const docsConfig: DocsConfig = {
       ],
     },
     {
+      title: "Examples",
+      items: [
+        {
+          title: "Vercel Custom Domain",
+          href: "/docs/examples/vercel",
+          icon: "page",
+        },
+        {
+          title: "Zeabur Custom Domain",
+          href: "/docs/examples/zeabur",
+          icon: "page",
+        },
+        {
+          title: "Other",
+          href: "/docs/examples/other",
+          icon: "page",
+        },
+      ],
+    },
+    {
       title: "Developer",
       items: [
         {
