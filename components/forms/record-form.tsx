@@ -6,13 +6,9 @@ import { User } from "@prisma/client";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import {
-  CreateDNSRecord,
-  RECORD_TYPE_ENUMS,
-  RecordType,
-  TTL_ENUMS,
-} from "@/lib/cloudflare";
+import { CreateDNSRecord, RecordType } from "@/lib/cloudflare";
 import { UserRecordFormData } from "@/lib/dto/cloudflare-dns-record";
+import { RECORD_TYPE_ENUMS, TTL_ENUMS } from "@/lib/enums";
 import { createRecordSchema } from "@/lib/validations/record";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -260,7 +256,7 @@ export function RecordForm({
               setValue("ttl", Number(value));
             }}
             name="ttl"
-            defaultValue={`${initData?.ttl}` || "1"}
+            defaultValue={String(initData?.ttl || 1)}
           >
             <SelectTrigger className="w-full shadow-inner">
               <SelectValue placeholder="Select a time" />

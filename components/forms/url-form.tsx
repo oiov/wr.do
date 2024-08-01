@@ -7,7 +7,8 @@ import { Sparkles } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { EXPIRATION_ENUMS, ShortUrlFormData } from "@/lib/dto/short-urls";
+import { ShortUrlFormData } from "@/lib/dto/short-urls";
+import { EXPIRATION_ENUMS } from "@/lib/enums";
 import { generateUrlSuffix } from "@/lib/utils";
 import { createUrlSchema } from "@/lib/validations/url";
 import { Button } from "@/components/ui/button";

@@ -21,45 +21,6 @@ export interface UserShortUrlInfo extends ShortUrlFormData {
   meta?: UrlMeta;
 }
 
-export const EXPIRATION_ENUMS = [
-  {
-    value: "-1",
-    label: "Never",
-  },
-  {
-    value: "600", // 10 min
-    label: "10min",
-  },
-  {
-    value: "3600", // 1h
-    label: "1h",
-  },
-  {
-    value: "43200", // 12h
-    label: "12h",
-  },
-  {
-    value: "86400", // 1d
-    label: "1d",
-  },
-  {
-    value: "604800", // 7d
-    label: "7d",
-  },
-  {
-    value: "2592000", // 30d
-    label: "30d",
-  },
-  {
-    value: "7776000", // 90d
-    label: "90d",
-  },
-  {
-    value: "31536000", // 365d
-    label: "365d",
-  },
-];
-
 export async function getUserShortUrls(
   userId: string,
   active: number = 1,

@@ -6,7 +6,7 @@ import { User, UserRole } from "@prisma/client";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { ROLE_ENUM } from "@/lib/dto/user";
+import { ROLE_ENUM } from "@/lib/enums";
 import { updateUserSchema } from "@/lib/validations/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

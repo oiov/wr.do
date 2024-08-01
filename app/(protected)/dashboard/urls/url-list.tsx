@@ -7,7 +7,7 @@ import { PenLine, RefreshCwIcon } from "lucide-react";
 import useSWR, { useSWRConfig } from "swr";
 
 import { siteConfig } from "@/config/site";
-import { EXPIRATION_ENUMS, ShortUrlFormData } from "@/lib/dto/short-urls";
+import { ShortUrlFormData } from "@/lib/dto/short-urls";
 import { cn, expirationTime, fetcher, timeAgo } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "@/components/ui/button";

@@ -54,49 +54,6 @@ export interface ResultMeta {
 
 export type RecordType = "A" | "CNAME";
 
-export const RECORD_TYPE_ENUMS = [
-  {
-    value: "CNAME",
-    label: "CNAME",
-  },
-  {
-    value: "A",
-    label: "A",
-  },
-];
-export const TTL_ENUMS = [
-  {
-    value: "1",
-    label: "Auto",
-  },
-  {
-    value: "300",
-    label: "5min",
-  },
-  {
-    value: "3600",
-    label: "1h",
-  },
-  {
-    value: "18000",
-    label: "5h",
-  },
-  {
-    value: "86400",
-    label: "1d",
-  },
-];
-export const STATUS_ENUMS = [
-  {
-    value: 1,
-    label: "Active",
-  },
-  {
-    value: 0,
-    label: "Inactive",
-  },
-];
-
 export const createDNSRecord = async (
   zoneId: string,
   apiKey: string,
