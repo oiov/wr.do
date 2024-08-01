@@ -301,7 +301,7 @@ export function RecordForm({
       </div>
 
       {/* Action buttons */}
-      <div className="flex justify-end gap-3">
+      <div className="mt-3 flex justify-end gap-3">
         {type === "edit" && (
           <Button
             type="button"
