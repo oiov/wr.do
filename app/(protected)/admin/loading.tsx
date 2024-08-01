@@ -14,8 +14,7 @@ export default function AdminPanelLoading() {
           <Skeleton className="h-32 w-full rounded-lg" />
           <Skeleton className="h-32 w-full rounded-lg" />
         </div>
-        <Skeleton className="h-[500px] w-full rounded-lg" />
-        <Skeleton className="h-[500px] w-full rounded-lg" />
+        <Skeleton className="h-[400px] w-full rounded-lg" />
       </div>
     </>
   );

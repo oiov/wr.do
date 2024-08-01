@@ -107,7 +107,9 @@ export function NavBar({ scroll = false }: NavBarProps) {
             href="/dashboard"
             className="hidden text-sm font-medium text-foreground/60 transition-colors hover:text-foreground/80 md:block"
           >
-            Dashboard
+            <Button className="" variant="outline" size="sm" rounded="lg">
+              Dashboard
+            </Button>
           </Link>
           <div className="hidden md:flex">
             <ModeToggle />

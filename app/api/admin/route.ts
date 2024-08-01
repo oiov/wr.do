@@ -1,7 +1,20 @@
 import { prisma } from "@/lib/db";
+import { checkUserStatus } from "@/lib/dto/user";
+import { getCurrentUser } from "@/lib/session";
+
+export const revalidate = 60;
 
 export async function GET(req: Request) {
   try {
+    const user = checkUserStatus(await getCurrentUser());
+    if (user instanceof Response) return user;
+    if (user.role !== "ADMIN") {
+      return Response.json("Unauthorized", {
+        status: 401,
+        statusText: "Unauthorized",
+      });
+    }
+
     const threeMonthsAgo = new Date();
     threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
 
