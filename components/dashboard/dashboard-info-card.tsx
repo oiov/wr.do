@@ -12,16 +12,16 @@ export async function DashboardInfoCard({
   total,
   count,
   link,
-  // icon = "user",
+  icon = "users",
 }: {
   userId: string;
   title: string;
   total?: number;
   count: number;
   link: string;
-  // icon: keyof typeof Icons;
+  icon?: keyof typeof Icons;
 }) {
-  // const iconCpn = Icons[icon];
+  const Icon = Icons[icon || "arrowRight"];
   return (
     <Card className="grids group bg-gray-50/70 backdrop-blur-lg dark:bg-primary-foreground">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -33,8 +33,7 @@ export async function DashboardInfoCard({
             {title}
           </Link>
         </CardTitle>
-        {/* {icon && <iconCpn />} */}
-        <LinkIcon className="size-4 text-muted-foreground" />
+        <Icon className="size-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
         {[-1, undefined].includes(count) ? (

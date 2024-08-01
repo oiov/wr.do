@@ -1,15 +1,13 @@
 import { redirect } from "next/navigation";
 
-import { siteConfig } from "@/config/site";
 import { getUserRecordCount } from "@/lib/dto/cloudflare-dns-record";
 import { getUserShortUrlCount } from "@/lib/dto/short-urls";
 import { getAllUsersCount } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";
 import { constructMetadata } from "@/lib/utils";
+import { InteractiveBarChart } from "@/components/charts/interactive-bar-chart";
 import { DashboardInfoCard } from "@/components/dashboard/dashboard-info-card";
 import { DashboardHeader } from "@/components/dashboard/header";
-import InfoCard from "@/components/dashboard/info-card";
-import TransactionsList from "@/components/dashboard/transactions-list";
 
 export const metadata = constructMetadata({
   title: "Admin – WR.DO",
@@ -43,15 +41,17 @@ export default async function AdminPage() {
             title="DNS Records"
             count={record_count}
             link="/admin/records"
+            icon="globeLock"
           />
           <DashboardInfoCard
             userId={user.id}
             title="Short URLs"
             count={url_count}
             link="/admin/urls"
+            icon="link"
           />
         </div>
-        <TransactionsList />
+        <InteractiveBarChart />
       </div>
     </>
   );

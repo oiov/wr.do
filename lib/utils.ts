@@ -100,7 +100,7 @@ export const expirationTime = (
   const remainingTime = expirationTime - now;
   if (remainingTime <= 0) return "Expired";
 
-  const remainingTimeString = ms(remainingTime, { long: false });
+  const remainingTimeString = ms(remainingTime, { long: true });
   if (timeOnly) {
     return remainingTimeString;
   }

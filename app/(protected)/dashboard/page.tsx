@@ -43,6 +43,7 @@ export default async function DashboardPage() {
             count={record_count}
             total={siteConfig.freeQuota.record}
             link="/dashboard/records"
+            icon="globeLock"
           />
           <DashboardInfoCard
             userId={user.id}
@@ -50,6 +51,7 @@ export default async function DashboardPage() {
             count={url_count}
             total={siteConfig.freeQuota.url}
             link="/dashboard/urls"
+            icon="link"
           />
         </div>
         <UserRecordsList

@@ -79,8 +79,6 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
 
   const { mutate } = useSWRConfig();
 
-  console.log("base", action);
-
   const { data, error, isLoading } = useSWR<{
     total: number;
     list: UserRecordFormData[];
@@ -107,7 +105,15 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
             <div className="grid gap-2">
               <CardTitle>DNS Records</CardTitle>
               <CardDescription className="text-balance">
-                Your DNS Records
+                See{" "}
+                <Link
+                  target="_blank"
+                  className="text-blue-500 hover:underline"
+                  href="/docs/examples/vercel"
+                >
+                  examples
+                </Link>{" "}
+                about how to use it.
               </CardDescription>
             </div>
           )}
