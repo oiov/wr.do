@@ -5,7 +5,8 @@ export default function DashboardLoading() {
   return (
     <>
       <DashboardHeader heading="Dashboard" text="" />
-      <Skeleton className="size-full rounded-lg" />
+      <Skeleton className="h-[200px] w-full rounded-lg" />
+      <Skeleton className="h-[200px] w-full rounded-lg" />
     </>
   );
 }

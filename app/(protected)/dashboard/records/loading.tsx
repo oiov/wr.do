@@ -5,7 +5,7 @@ export default function DashboardRecordsLoading() {
   return (
     <>
       <DashboardHeader heading="DNS Records" text="" />
-      <Skeleton className="size-full rounded-lg" />
+      <Skeleton className="h-[400px] w-full rounded-lg" />
     </>
   );
 }

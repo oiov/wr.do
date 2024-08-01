@@ -8,7 +8,7 @@ export default function OrdersLoading() {
         heading="User Management"
         text="List and manage all users."
       />
-      <Skeleton className="size-full rounded-lg" />
+      <Skeleton className="h-[400px] w-full rounded-lg" />
     </>
   );
 }
