@@ -72,6 +72,11 @@ export const docsConfig: DocsConfig = {
           icon: "page",
         },
         {
+          title: "Cloudflare",
+          href: "/docs/developer/cloudflare",
+          icon: "page",
+        },
+        {
           title: "Authentification",
           href: "/docs/developer/authentification",
           icon: "page",
