@@ -11,14 +11,54 @@ export interface ShortUrlFormData {
   url: string;
   visible: number;
   active: number;
-  created_at?: string;
-  updated_at?: string;
+  expiration: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface UserShortUrlInfo extends ShortUrlFormData {
   // meta: Omit<UrlMeta, "id">;
   meta?: UrlMeta;
 }
+
+export const EXPIRATION_ENUMS = [
+  {
+    value: "-1",
+    label: "Never",
+  },
+  {
+    value: "600", // 10 min
+    label: "10min",
+  },
+  {
+    value: "3600", // 1h
+    label: "1h",
+  },
+  {
+    value: "43200", // 12h
+    label: "12h",
+  },
+  {
+    value: "86400", // 1d
+    label: "1d",
+  },
+  {
+    value: "604800", // 7d
+    label: "7d",
+  },
+  {
+    value: "2592000", // 30d
+    label: "30d",
+  },
+  {
+    value: "7776000", // 90d
+    label: "90d",
+  },
+  {
+    value: "31536000", // 365d
+    label: "365d",
+  },
+];
 
 export async function getUserShortUrls(
   userId: string,
@@ -88,6 +128,7 @@ export async function createUserShortUrl(data: ShortUrlFormData) {
         url: data.url,
         visible: data.visible,
         active: data.active,
+        expiration: data.expiration,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       },
@@ -110,6 +151,7 @@ export async function updateUserShortUrl(data: ShortUrlFormData) {
         url: data.url,
         visible: data.visible,
         active: data.active,
+        expiration: data.expiration,
         updatedAt: new Date().toISOString(),
       },
     });
@@ -165,6 +207,8 @@ export async function getUrlBySuffix(suffix: string) {
       id: true,
       target: true,
       active: true,
+      expiration: true,
+      updatedAt: true,
     },
   });
 }

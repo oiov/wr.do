@@ -20,6 +20,7 @@ export const createUrlSchema = z.object({
   id: z.string().optional(),
   target: z.string().min(6).regex(targetPattern, "Invalid target URL format"),
   url: z.string().min(2).regex(urlPattern, "Invalid URL format"),
+  expiration: z.string().default("-1"),
   visible: z.number().default(1),
   active: z.number().default(1),
 });

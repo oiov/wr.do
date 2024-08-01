@@ -52,7 +52,7 @@ export default auth(async (req) => {
 
     return NextResponse.next();
   } catch (error) {
-    return NextResponse.redirect(`/`);
+    return NextResponse.redirect(siteConfig.url);
   }
 });
 

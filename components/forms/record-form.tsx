@@ -158,7 +158,7 @@ export function RecordForm({
 
   return (
     <form
-      className="rounded-lg border border-dashed p-4 shadow-sm animate-in fade-in-50"
+      className="mb-4 rounded-lg border border-dashed p-4 shadow-sm animate-in fade-in-50"
       onSubmit={onSubmit}
     >
       <div className="items-center justify-start gap-4 md:flex">

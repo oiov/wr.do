@@ -7,7 +7,7 @@ import { Sparkles } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { ShortUrlFormData } from "@/lib/dto/short-urls";
+import { EXPIRATION_ENUMS, ShortUrlFormData } from "@/lib/dto/short-urls";
 import { generateUrlSuffix } from "@/lib/utils";
 import { createUrlSchema } from "@/lib/validations/url";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,13 @@ import { Label } from "@/components/ui/label";
 import { Icons } from "@/components/shared/icons";
 
 import { FormSectionColumns } from "../dashboard/form-section-columns";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 import { Switch } from "../ui/switch";
 
 export type FormData = ShortUrlFormData;
@@ -56,6 +63,7 @@ export function UrlForm({
       url: initData?.url || "",
       active: initData?.active || 1,
       visible: initData?.visible || 0,
+      expiration: initData?.expiration || "-1",
     },
   });
 
@@ -80,7 +88,7 @@ export function UrlForm({
           description: response.statusText,
         });
       } else {
-        const res = await response.json();
+        // const res = await response.json();
         toast.success(`Created successfully!`);
         setShowForm(false);
         onRefresh();
@@ -132,7 +140,7 @@ export function UrlForm({
 
   return (
     <form
-      className="rounded-lg border border-dashed p-4 shadow-sm animate-in fade-in-50"
+      className="mb-4 rounded-lg border border-dashed p-4 shadow-sm animate-in fade-in-50"
       onSubmit={onSubmit}
     >
       <div className="items-center justify-start gap-4 md:flex">
@@ -206,6 +214,29 @@ export function UrlForm({
       </div>
 
       <div className="items-center justify-start gap-4 md:flex">
+        <FormSectionColumns title="Expiration">
+          <Select
+            onValueChange={(value: string) => {
+              setValue("expiration", value);
+            }}
+            name="expiration"
+            defaultValue={initData?.expiration || "-1"}
+          >
+            <SelectTrigger className="w-full shadow-inner">
+              <SelectValue placeholder="Select a time" />
+            </SelectTrigger>
+            <SelectContent>
+              {EXPIRATION_ENUMS.map((e) => (
+                <SelectItem key={e.value} value={e.value}>
+                  {e.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <p className="p-1 text-[13px] text-muted-foreground">
+            Expiration time, default for never.
+          </p>
+        </FormSectionColumns>
         <FormSectionColumns title="Visible">
           <div className="flex w-full items-center gap-2">
             <Label className="sr-only" htmlFor="visible">
@@ -214,6 +245,7 @@ export function UrlForm({
             <Switch
               id="visible"
               {...register("visible")}
+              disabled
               defaultChecked={initData?.visible === 1 || false}
               onCheckedChange={(value) => setValue("visible", value ? 1 : 0)}
             />
@@ -222,7 +254,7 @@ export function UrlForm({
             Public or private short url.
           </p>
         </FormSectionColumns>
-        <FormSectionColumns title="Active">
+        {/* <FormSectionColumns title="Active">
           <div className="flex w-full items-center gap-2">
             <Label className="sr-only" htmlFor="active">
               Active
@@ -237,7 +269,7 @@ export function UrlForm({
           <p className="p-1 text-[13px] text-muted-foreground">
             Enable or disable short url.
           </p>
-        </FormSectionColumns>
+        </FormSectionColumns> */}
       </div>
 
       {/* Action buttons */}

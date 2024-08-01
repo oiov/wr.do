@@ -7,8 +7,8 @@ import { PenLine, RefreshCwIcon } from "lucide-react";
 import useSWR, { useSWRConfig } from "swr";
 
 import { siteConfig } from "@/config/site";
-import { ShortUrlFormData } from "@/lib/dto/short-urls";
-import { cn, fetcher } from "@/lib/utils";
+import { EXPIRATION_ENUMS, ShortUrlFormData } from "@/lib/dto/short-urls";
+import { cn, expirationTime, fetcher, timeAgo } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "@/components/ui/button";
 import {
@@ -40,14 +40,17 @@ export interface UrlListProps {
   action: string;
 }
 
-function TableColumnSekleton({ className }: { className?: string }) {
+function TableColumnSekleton() {
   return (
-    <TableRow className="grid grid-cols-3 items-center sm:grid-cols-7">
+    <TableRow className="grid grid-cols-3 items-center sm:grid-cols-8">
       <TableCell className="col-span-1 sm:col-span-2">
         <Skeleton className="h-5 w-20" />
       </TableCell>
       <TableCell className="col-span-1 sm:col-span-2">
         <Skeleton className="h-5 w-20" />
+      </TableCell>
+      <TableCell className="col-span-1 hidden justify-center sm:flex">
+        <Skeleton className="h-5 w-16" />
       </TableCell>
       <TableCell className="col-span-1 hidden justify-center sm:flex">
         <Skeleton className="h-5 w-16" />
@@ -143,18 +146,21 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
           )}
           <Table>
             <TableHeader className="bg-gray-100/50 dark:bg-primary-foreground">
-              <TableRow className="grid grid-cols-3 items-center sm:grid-cols-7">
-                <TableHead className="col-span-1 flex items-center font-bold sm:col-span-2">
-                  Target
-                </TableHead>
+              <TableRow className="grid grid-cols-3 items-center sm:grid-cols-8">
                 <TableHead className="col-span-1 flex items-center font-bold sm:col-span-2">
                   Url
                 </TableHead>
-                <TableHead className="col-span-1 hidden items-center justify-center font-bold sm:flex">
-                  Visible
+                <TableHead className="col-span-1 flex items-center font-bold sm:col-span-2">
+                  Target
                 </TableHead>
                 <TableHead className="col-span-1 hidden items-center justify-center font-bold sm:flex">
                   Status
+                </TableHead>
+                <TableHead className="col-span-1 hidden items-center justify-center font-bold sm:flex">
+                  Expiration
+                </TableHead>
+                <TableHead className="col-span-1 hidden items-center justify-center font-bold sm:flex">
+                  Update
                 </TableHead>
                 <TableHead className="col-span-1 flex items-center justify-center font-bold">
                   Actions
@@ -172,20 +178,8 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                 data.list.map((short) => (
                   <TableRow
                     key={short.id}
-                    className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-7"
+                    className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-8"
                   >
-                    <TableCell className="col-span-1 sm:col-span-2">
-                      <Link
-                        className="text-slate-600 hover:text-blue-400 hover:underline dark:text-slate-400"
-                        href={short.target}
-                        target="_blank"
-                        prefetch={false}
-                      >
-                        {short.target.startsWith("http")
-                          ? short.target.split("//")[1]
-                          : short.target}
-                      </Link>
-                    </TableCell>
                     <TableCell className="col-span-1 flex items-center gap-1 sm:col-span-2">
                       <Link
                         className="text-slate-600 hover:text-blue-400 hover:underline dark:text-slate-400"
@@ -203,11 +197,26 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                         )}
                       />
                     </TableCell>
-                    <TableCell className="col-span-1 hidden justify-center sm:flex">
-                      {short.visible === 1 ? "Public" : "Private"}
+                    <TableCell className="col-span-1 sm:col-span-2">
+                      <Link
+                        className="text-slate-600 hover:text-blue-400 hover:underline dark:text-slate-400"
+                        href={short.target}
+                        target="_blank"
+                        prefetch={false}
+                      >
+                        {short.target.startsWith("http")
+                          ? short.target.split("//")[1]
+                          : short.target}
+                      </Link>
                     </TableCell>
                     <TableCell className="col-span-1 hidden justify-center sm:flex">
                       <StatusDot status={short.active} />
+                    </TableCell>
+                    <TableCell className="col-span-1 hidden justify-center sm:flex">
+                      {expirationTime(short.expiration, short.updatedAt)}
+                    </TableCell>
+                    <TableCell className="col-span-1 hidden justify-center sm:flex">
+                      {timeAgo(short.updatedAt as Date)}
                     </TableCell>
                     <TableCell className="col-span-1 flex justify-center">
                       <Button

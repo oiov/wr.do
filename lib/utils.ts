@@ -82,6 +82,31 @@ export const timeAgo = (timestamp: Date, timeOnly?: boolean): string => {
   }`;
 };
 
+export const expirationTime = (
+  expiration: string,
+  updatedAt?: Date,
+  timeOnly?: boolean,
+): string => {
+  if (!expiration || !updatedAt) return "Invalid data";
+  if (expiration === "-1") return "Never";
+
+  const expirationSeconds = parseInt(expiration, 10);
+  if (isNaN(expirationSeconds)) return "Invalid expiration format";
+
+  const now = Date.now();
+  const updatedAtTimestamp = new Date(updatedAt).getTime();
+  const expirationMilliseconds = expirationSeconds * 1000;
+  const expirationTime = updatedAtTimestamp + expirationMilliseconds;
+  const remainingTime = expirationTime - now;
+  if (remainingTime <= 0) return "Expired";
+
+  const remainingTimeString = ms(remainingTime, { long: false });
+  if (timeOnly) {
+    return remainingTimeString;
+  }
+  return `${remainingTimeString}`;
+};
+
 export async function fetcher<JSON = any>(
   input: RequestInfo,
   init?: RequestInit,

@@ -103,15 +103,16 @@ model UserRecord {
 }
 
 model UserUrl {
-  id        String   @id @default(cuid())
-  userId    String
-  userName  String
-  target    String
-  url       String   @unique
-  visible   Int      @default(0)
-  active    Int      @default(1)
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @default(now()) @map(name: "updated_at")
+  id         String   @id @default(cuid())
+  userId     String
+  userName   String
+  target     String
+  url        String   @unique
+  visible    Int      @default(0)
+  active     Int      @default(1)
+  expiration String   @default("-1")
+  createdAt  DateTime @default(now()) @map(name: "created_at")
+  updatedAt  DateTime @default(now()) @map(name: "updated_at")
 
   user    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   UrlMeta UrlMeta[]
