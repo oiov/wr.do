@@ -2,7 +2,8 @@ import { User, UserRole } from "@prisma/client";
 
 import { prisma } from "@/lib/db";
 
-export interface UpdateUserForm extends Omit<User, "id" | "createdAt"> {}
+export interface UpdateUserForm
+  extends Omit<User, "id" | "createdAt" | "updatedAt" | "emailVerified"> {}
 
 export const getUserByEmail = async (email: string) => {
   try {
@@ -68,7 +69,7 @@ export const updateUser = async (userId: string, data: UpdateUserForm) => {
       where: {
         id: userId,
       },
-      data: data,
+      data,
     });
     return session;
   } catch (error) {

@@ -75,14 +75,13 @@ export function UserForm({
       if (type === "edit") {
         const response = await fetch("/api/user/admin/update", {
           method: "POST",
-          body: JSON.stringify({ data }),
+          body: JSON.stringify({ id: initData?.id, data }),
         });
         if (!response.ok || response.status !== 200) {
           toast.error("Update Failed", {
             description: response.statusText,
           });
         } else {
-          const res = await response.json();
           toast.success(`Update successfully!`);
           setShowForm(false);
           onRefresh();
@@ -103,7 +102,6 @@ export function UserForm({
             description: response.statusText,
           });
         } else {
-          await response.json();
           toast.success(`Success`);
           setShowForm(false);
           onRefresh();
