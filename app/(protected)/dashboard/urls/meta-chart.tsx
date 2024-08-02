@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { UrlMeta } from "@prisma/client";
-import { Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import {
   Card,
@@ -123,8 +123,6 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
         >
           <BarChart
             accessibilityLayer
-            // width={600}
-            // height={200}
             data={processedData}
             margin={{
               top: 20,
