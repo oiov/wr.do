@@ -12,34 +12,11 @@ export default auth(async (req) => {
     const ip = req.headers.get("X-Forwarded-For");
     if (req.url.includes("/s/")) {
       const match = req.url.match(/[^/]+$/);
-      let geo = {
-        city: "",
-        region: "",
-        country: "",
-        latitude: "",
-        longitude: "",
-      };
-      const data = await fetch(`https://ip.wr.do/api?ip=${ip}`); // http://ip-api.com/json/42.48.83.141
-      const geoInfo = geolocation(req);
-      console.log("[geoInfo]", geoInfo, geoInfo?.city);
-
-      if (data.ok) {
-        const geoData = await data.json();
-        geo = {
-          city: geoData.city,
-          region: geoData.region,
-          country: geoData.country,
-          latitude: geoData.latitude,
-          longitude: geoData.longitude,
-        };
-      }
+      const geo = geolocation(req);
 
       if (match) {
         const res = await fetch(
-          `${siteConfig.url}/api/s?slug=${match[0]}&ip=${ip}&city=${geo.city}&region=${geo.region}&country=${geo.country}&latitude=${geo.latitude}&longitude=${geo.longitude}`,
-          {
-            method: "GET",
-          },
+          `${siteConfig.url}/api/s?slug=${match[0]}&ip=${ip}&city=${geo?.city}&region=${geo?.region}&country=${geo?.country}&latitude=${geo?.latitude}&longitude=${geo?.longitude}&flag=${geo?.flag}`,
         );
 
         if (!res.ok) {
