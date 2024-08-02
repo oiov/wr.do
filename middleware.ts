@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { geolocation } from "@vercel/functions";
 import { auth } from "auth";
 
 import { siteConfig } from "./config/site";
@@ -19,6 +20,9 @@ export default auth(async (req) => {
         longitude: "",
       };
       const data = await fetch(`https://ip.wr.do/api?ip=${ip}`); // http://ip-api.com/json/42.48.83.141
+      const geoInfo = geolocation(req);
+      console.log("[geoInfo]", geoInfo, geoInfo?.city);
+
       if (data.ok) {
         const geoData = await data.json();
         geo = {

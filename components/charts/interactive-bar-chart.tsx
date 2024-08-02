@@ -27,15 +27,15 @@ const chartConfig = {
   },
   records: {
     label: "Records",
-    color: "hsl(var(--chart-1))",
+    color: "hsl(var(--chart-2))",
   },
   urls: {
     label: "URLs",
-    color: "hsl(var(--chart-2))",
+    color: "hsl(var(--chart-1))",
   },
   users: {
     label: "Users",
-    color: "hsl(var(--chart-2))",
+    color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig;
 
@@ -87,7 +87,7 @@ export function InteractiveBarChart() {
       <CardContent className="px-2 sm:p-6">
         <ChartContainer
           config={chartConfig}
-          className="aspect-auto h-[250px] w-full"
+          className="aspect-auto h-[200px] w-full"
         >
           <BarChart
             accessibilityLayer

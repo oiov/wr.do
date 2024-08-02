@@ -3,13 +3,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import { User } from "@prisma/client";
-import { PenLine, RefreshCwIcon } from "lucide-react";
+import { LineChart, PenLine, RefreshCwIcon } from "lucide-react";
 import useSWR, { useSWRConfig } from "swr";
 
 import { siteConfig } from "@/config/site";
 import { ShortUrlFormData } from "@/lib/dto/short-urls";
 import { cn, expirationTime, fetcher, timeAgo } from "@/lib/utils";
-import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -34,6 +33,8 @@ import { FormType } from "@/components/forms/record-form";
 import { UrlForm } from "@/components/forms/url-form";
 import { CopyButton } from "@/components/shared/copy-button";
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
+
+import UserUrlMetaInfo from "./meta";
 
 export interface UrlListProps {
   user: Pick<User, "id" | "name">;
@@ -66,7 +67,6 @@ function TableColumnSekleton() {
 }
 
 export default function UserUrlsList({ user, action }: UrlListProps) {
-  const { isMobile } = useMediaQuery();
   const [isShowForm, setShowForm] = useState(false);
   const [formType, setFormType] = useState<FormType>("add");
   const [currentEditUrl, setCurrentEditUrl] = useState<ShortUrlFormData | null>(
@@ -74,6 +74,8 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
   );
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [isShowStats, setShowStats] = useState(false);
+  const [selectedUrlId, setSelectedUrlId] = useState("");
 
   const { mutate } = useSWRConfig();
   const { data, error, isLoading } = useSWR<{
@@ -176,65 +178,88 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                 </>
               ) : data && data.list && data.list.length ? (
                 data.list.map((short) => (
-                  <TableRow
-                    key={short.id}
-                    className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-8"
-                  >
-                    <TableCell className="col-span-1 flex items-center gap-1 sm:col-span-2">
-                      <Link
-                        className="text-slate-600 hover:text-blue-400 hover:underline dark:text-slate-400"
-                        href={`/s/${short.url}`}
-                        target="_blank"
-                        prefetch={false}
-                      >
-                        {short.url}
-                      </Link>
-                      <CopyButton
-                        value={`${siteConfig.url}/s/${short.url}`}
-                        className={cn(
-                          "size-[25px]",
-                          "duration-250 transition-all group-hover:opacity-100",
-                        )}
+                  <>
+                    <TableRow
+                      key={short.id}
+                      className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-8"
+                    >
+                      <TableCell className="col-span-1 flex items-center gap-1 sm:col-span-2">
+                        <Link
+                          className="line-clamp-2 overflow-hidden overflow-ellipsis whitespace-normal text-slate-600 hover:text-blue-400 hover:underline dark:text-slate-400"
+                          href={`/s/${short.url}`}
+                          target="_blank"
+                          prefetch={false}
+                        >
+                          {short.url}
+                        </Link>
+                        <CopyButton
+                          value={`${siteConfig.url}/s/${short.url}`}
+                          className={cn(
+                            "size-[25px]",
+                            "duration-250 transition-all group-hover:opacity-100",
+                          )}
+                        />
+                      </TableCell>
+                      <TableCell className="col-span-1 sm:col-span-2">
+                        <Link
+                          className="line-clamp-2 overflow-hidden overflow-ellipsis whitespace-normal text-slate-600 hover:text-blue-400 hover:underline dark:text-slate-400"
+                          href={short.target}
+                          target="_blank"
+                          prefetch={false}
+                        >
+                          {short.target.startsWith("http")
+                            ? short.target.split("//")[1]
+                            : short.target}
+                        </Link>
+                      </TableCell>
+                      <TableCell className="col-span-1 hidden justify-center sm:flex">
+                        <StatusDot status={short.active} />
+                      </TableCell>
+                      <TableCell className="col-span-1 hidden justify-center sm:flex">
+                        {expirationTime(short.expiration, short.updatedAt)}
+                      </TableCell>
+                      <TableCell className="col-span-1 hidden justify-center sm:flex">
+                        {timeAgo(short.updatedAt as Date)}
+                      </TableCell>
+                      <TableCell className="col-span-1 flex items-center justify-center gap-2">
+                        <Button
+                          className="h-7 px-1 text-xs hover:bg-slate-100"
+                          size="sm"
+                          variant={"outline"}
+                          onClick={() => {
+                            setCurrentEditUrl(short);
+                            setShowForm(false);
+                            setFormType("edit");
+                            setShowForm(!isShowForm);
+                          }}
+                        >
+                          <p>Edit</p>
+                          <PenLine className="ml-1 size-3" />
+                        </Button>
+                        <Button
+                          className="h-7 px-1 text-xs hover:bg-slate-100"
+                          size="sm"
+                          variant={"outline"}
+                          onClick={() => {
+                            setSelectedUrlId(short.id!);
+                            if (isShowStats && selectedUrlId !== short.id) {
+                            } else {
+                              setShowStats(!isShowStats);
+                            }
+                          }}
+                        >
+                          <LineChart className="ml-1 size-4" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                    {isShowStats && selectedUrlId === short.id && (
+                      <UserUrlMetaInfo
+                        user={{ id: user.id, name: user.name || "" }}
+                        action="/api/url/meta"
+                        urlId={short.id!}
                       />
-                    </TableCell>
-                    <TableCell className="col-span-1 sm:col-span-2">
-                      <Link
-                        className="text-slate-600 hover:text-blue-400 hover:underline dark:text-slate-400"
-                        href={short.target}
-                        target="_blank"
-                        prefetch={false}
-                      >
-                        {short.target.startsWith("http")
-                          ? short.target.split("//")[1]
-                          : short.target}
-                      </Link>
-                    </TableCell>
-                    <TableCell className="col-span-1 hidden justify-center sm:flex">
-                      <StatusDot status={short.active} />
-                    </TableCell>
-                    <TableCell className="col-span-1 hidden justify-center sm:flex">
-                      {expirationTime(short.expiration, short.updatedAt)}
-                    </TableCell>
-                    <TableCell className="col-span-1 hidden justify-center sm:flex">
-                      {timeAgo(short.updatedAt as Date)}
-                    </TableCell>
-                    <TableCell className="col-span-1 flex justify-center">
-                      <Button
-                        className="text-sm hover:bg-slate-100"
-                        size="sm"
-                        variant={"outline"}
-                        onClick={() => {
-                          setCurrentEditUrl(short);
-                          setShowForm(false);
-                          setFormType("edit");
-                          setShowForm(!isShowForm);
-                        }}
-                      >
-                        <p>Edit</p>
-                        <PenLine className="ml-1 size-4" />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
+                    )}
+                  </>
                 ))
               ) : (
                 <EmptyPlaceholder>
