@@ -84,7 +84,7 @@ function generateStatsList(
   let totalClicks = 0;
 
   records.forEach((record) => {
-    const dimValue = record[dimension] ?? ("(None)" as any);
+    const dimValue = record[dimension] || ("(None)" as any);
     const click = record.click;
 
     if (!dimensionCounts[dimValue]) {
@@ -101,7 +101,7 @@ function generateStatsList(
   for (const [dimValue, clicks] of Object.entries(dimensionCounts)) {
     const percentage = (clicks / totalClicks) * 100;
     statsList.push({
-      dimension: dimValue,
+      dimension: dimValue ?? "(None)",
       clicks,
       percentage: percentage.toFixed(0) + "%",
     });
@@ -229,8 +229,12 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
         </ChartContainer>
 
         <div className="my-5 grid grid-cols-1 gap-6 sm:grid-cols-2">
-          <StatsList data={refererStats} title="Referrers" />
-          <StatsList data={countryStats} title="Regions" />
+          {refererStats.length > 0 && (
+            <StatsList data={refererStats} title="Referrers" />
+          )}
+          {countryStats.length > 0 && (
+            <StatsList data={countryStats} title="Regions" />
+          )}
         </div>
 
         <VisSingleContainer data={{ areas: areaData }}>

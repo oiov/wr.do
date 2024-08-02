@@ -2,17 +2,22 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { createUserShortUrlMeta, getUrlBySuffix } from "@/lib/dto/short-urls";
 
-export async function GET(req: NextRequest) {
+export async function POST(req: NextRequest) {
   try {
-    const url = new URL(req.url);
-    const slug = url.searchParams.get("slug");
-    const referer = url.searchParams.get("referer");
-    const ip = url.searchParams.get("ip");
-    const city = url.searchParams.get("city");
-    const region = url.searchParams.get("region");
-    const country = url.searchParams.get("country");
-    const latitude = url.searchParams.get("latitude");
-    const longitude = url.searchParams.get("longitude");
+    const {
+      slug,
+      referer,
+      ip,
+      city,
+      region,
+      country,
+      latitude,
+      longitude,
+      lang,
+      device,
+      browser,
+    } = await req.json();
+
     if (!slug || !ip) return Response.json(null);
 
     const res = await getUrlBySuffix(slug);
@@ -26,7 +31,7 @@ export async function GET(req: NextRequest) {
         return Response.json(null);
       }
 
-      // console.log("[api/s]", ip, res.id);
+      console.log("[api/s]", device, browser);
       await createUserShortUrlMeta({
         urlId: res.id,
         click: 1,
@@ -37,6 +42,9 @@ export async function GET(req: NextRequest) {
         latitude,
         longitude,
         referer,
+        lang,
+        device,
+        browser,
       });
       return Response.json(res.target);
     }

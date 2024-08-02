@@ -171,5 +171,8 @@ ALTER TABLE "url_metas" ADD COLUMN "region" TEXT;
 ALTER TABLE "url_metas" ADD COLUMN "latitude" TEXT;
 ALTER TABLE "url_metas" ADD COLUMN "longitude" TEXT;
 ALTER TABLE "url_metas" ADD COLUMN "referer" TEXT;
+ALTER TABLE "url_metas" ADD COLUMN "lang" TEXT;
+ALTER TABLE "url_metas" ADD COLUMN "device" TEXT;
+ALTER TABLE "url_metas" ADD COLUMN "browser" TEXT;
 
-ALTER TABLE "user_url" ADD COLUMN "expiration" TEXT NOT NULL DEFAULT '-1';
+ALTER TABLE "user_urls" ADD COLUMN "expiration" TEXT NOT NULL DEFAULT '-1';
