@@ -1,9 +1,14 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { UrlMeta } from "@prisma/client";
+import { VisSingleContainer, VisTooltip, VisTopoJSONMap } from "@unovis/react";
+import { Donut, MapData, TopoJSONMap } from "@unovis/ts";
+import { WorldMapTopoJSON } from "@unovis/ts/maps";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
+import { isLink } from "@/lib/utils";
 import {
   Card,
   CardContent,
@@ -20,11 +25,11 @@ import {
 const chartConfig = {
   pv: {
     label: "Views",
-    color: "hsl(var(--chart-1))",
+    color: "hsl(var(--chart-2))",
   },
   uv: {
     label: "Visitors",
-    color: "hsl(var(--chart-2))",
+    color: "hsl(var(--chart-1))",
   },
 };
 
@@ -64,6 +69,49 @@ function calculateUVAndPV(logs: UrlMeta[]) {
   };
 }
 
+interface Stat {
+  dimension: string;
+  clicks: number;
+  percentage: string;
+}
+
+function generateStatsList(
+  records: UrlMeta[],
+  dimension: keyof UrlMeta,
+): Stat[] {
+  // 统计每个维度的点击总数
+  const dimensionCounts: { [key: string]: number } = {};
+  let totalClicks = 0;
+
+  records.forEach((record) => {
+    const dimValue = record[dimension] ?? ("(None)" as any);
+    const click = record.click;
+
+    if (!dimensionCounts[dimValue]) {
+      dimensionCounts[dimValue] = 0;
+    }
+
+    dimensionCounts[dimValue] += click;
+    totalClicks += click;
+  });
+
+  // 计算百分比并生成列表
+  const statsList: Stat[] = [];
+
+  for (const [dimValue, clicks] of Object.entries(dimensionCounts)) {
+    const percentage = (clicks / totalClicks) * 100;
+    statsList.push({
+      dimension: dimValue,
+      clicks,
+      percentage: percentage.toFixed(0) + "%",
+    });
+  }
+
+  statsList.sort((a, b) => parseFloat(b.percentage) - parseFloat(a.percentage));
+
+  return statsList;
+}
+
 export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
   const [activeChart, setActiveChart] =
     React.useState<keyof typeof chartConfig>("pv");
@@ -85,6 +133,14 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
   ]
     .filter(Boolean)
     .join(" ");
+
+  const areaData = data.map((item) => ({
+    id: item.country,
+  }));
+  const triggers = { [TopoJSONMap.selectors.feature]: (d) => d.id };
+
+  const refererStats = generateStatsList(data, "referer");
+  const countryStats = generateStatsList(data, "region");
 
   return (
     <Card className="rounded-t-none">
@@ -161,10 +217,62 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
                 />
               }
             />
-            <Bar dataKey={activeChart} fill={`var(--color-${activeChart})`} />
+            <Bar dataKey="uv" fill={`var(--color-uv)`} stackId="a" />
+            <Bar dataKey="pv" fill={`var(--color-pv)`} stackId="a" />
+
+            {/* <Bar
+              dataKey={activeChart}
+              stackId="a"
+              fill={`var(--color-${activeChart})`}
+            /> */}
           </BarChart>
         </ChartContainer>
+
+        <div className="my-5 grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <StatsList data={refererStats} title="Referrers" />
+          <StatsList data={countryStats} title="Regions" />
+        </div>
+
+        <VisSingleContainer data={{ areas: areaData }}>
+          <VisTopoJSONMap topojson={WorldMapTopoJSON} />
+          <VisTooltip triggers={triggers} />
+        </VisSingleContainer>
       </CardContent>
     </Card>
+  );
+}
+
+export function StatsList({ data, title }: { data: Stat[]; title: string }) {
+  return (
+    <div className="rounded-lg border p-4">
+      <h1 className="text-lg font-bold">{title}</h1>
+      {data.slice(0, 10).map((ref) => (
+        <div className="mt-1" key={ref.dimension}>
+          <div className="mb-0.5 flex items-center justify-between text-sm">
+            {isLink(ref.dimension) ? (
+              <Link
+                className="font-medium hover:after:content-['↗']"
+                href={ref.dimension}
+              >
+                {ref.dimension}
+              </Link>
+            ) : (
+              <p className="font-medium">{ref.dimension}</p>
+            )}
+            <p className="text-slate-500">
+              {ref.clicks} ({ref.percentage})
+            </p>
+          </div>
+          <div className="w-full rounded-lg bg-neutral-200 dark:bg-neutral-600">
+            <div
+              className="rounded-lg bg-blue-400 p-0.5 text-center text-xs font-medium leading-none text-primary-foreground transition-all duration-300"
+              style={{ width: `${ref.percentage}` }}
+            >
+              {ref.percentage}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }

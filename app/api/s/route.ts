@@ -6,6 +6,7 @@ export async function GET(req: NextRequest) {
   try {
     const url = new URL(req.url);
     const slug = url.searchParams.get("slug");
+    const referer = url.searchParams.get("referer");
     const ip = url.searchParams.get("ip");
     const city = url.searchParams.get("city");
     const region = url.searchParams.get("region");
@@ -35,6 +36,7 @@ export async function GET(req: NextRequest) {
         country,
         latitude,
         longitude,
+        referer,
       });
       return Response.json(res.target);
     }

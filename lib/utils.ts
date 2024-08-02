@@ -207,3 +207,12 @@ export function generateUrlSuffix(length: number = 6): string {
 
   return result;
 }
+
+export function isLink(str: string): boolean {
+  try {
+    const url = new URL(str);
+    return true;
+  } catch (_) {
+    return false;
+  }
+}

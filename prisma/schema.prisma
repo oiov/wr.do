@@ -132,6 +132,7 @@ model UrlMeta {
   region    String?
   latitude  String?
   longitude String?
+  referer   String?
 
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @default(now()) @map(name: "updated_at")

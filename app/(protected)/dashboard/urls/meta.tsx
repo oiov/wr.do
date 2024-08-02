@@ -4,13 +4,6 @@ import { UrlMeta, User } from "@prisma/client";
 import useSWR from "swr";
 
 import { fetcher } from "@/lib/utils";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
 
@@ -23,7 +16,7 @@ export interface UrlMetaProps {
 }
 
 export default function UserUrlMetaInfo({ user, action, urlId }: UrlMetaProps) {
-  const { data, error, isLoading } = useSWR<UrlMeta[]>(
+  const { data, isLoading } = useSWR<UrlMeta[]>(
     `${action}?id=${urlId}`,
     fetcher,
   );
@@ -31,8 +24,7 @@ export default function UserUrlMetaInfo({ user, action, urlId }: UrlMetaProps) {
   if (isLoading)
     return (
       <div className="space-y-2 p-2">
-        <Skeleton className="h-28 w-full" />
-        <Skeleton className="h-24 w-full" />
+        <Skeleton className="h-40 w-full" />
       </div>
     );
 

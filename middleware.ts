@@ -15,8 +15,9 @@ export default auth(async (req) => {
       const geo = geolocation(req);
 
       if (match) {
+        const referer = req.headers.get("referer") || "(None)";
         const res = await fetch(
-          `${siteConfig.url}/api/s?slug=${match[0]}&ip=${ip}&city=${geo?.city}&region=${geo?.region}&country=${geo?.country}&latitude=${geo?.latitude}&longitude=${geo?.longitude}&flag=${geo?.flag}`,
+          `${siteConfig.url}/api/s?slug=${match[0]}&referer=${referer}&ip=${ip}&city=${geo?.city}&region=${geo?.region}&country=${geo?.country}&latitude=${geo?.latitude}&longitude=${geo?.longitude}&flag=${geo?.flag}`,
         );
 
         if (!res.ok) {
