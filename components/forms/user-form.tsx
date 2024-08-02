@@ -182,7 +182,7 @@ export function UserForm({
             <Switch
               id="active"
               {...register("active")}
-              defaultChecked={initData?.active === 1 || true}
+              defaultChecked={initData?.active === 1}
               onCheckedChange={(value) => setValue("active", value ? 1 : 0)}
             />
           </div>
