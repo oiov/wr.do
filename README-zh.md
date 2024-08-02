@@ -38,6 +38,10 @@
 git clone https://github.com/oiov/wr.do
 cd wr.do
 pnpm install
+# 生成数据库 schemas
+pnpm postinstall 
+# 部署数据库
+pnpm db:push
 
 # 在 localhost:3000 上运行
 pnpm dev
