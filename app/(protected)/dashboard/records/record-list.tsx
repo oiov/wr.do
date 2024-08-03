@@ -245,23 +245,11 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                 ))
               ) : (
                 <EmptyPlaceholder>
-                  {/* <EmptyPlaceholder.Icon name="globeLock" /> */}
+                  <EmptyPlaceholder.Icon name="globeLock" />
                   <EmptyPlaceholder.Title>No records</EmptyPlaceholder.Title>
                   <EmptyPlaceholder.Description>
                     You don&apos;t have any record yet. Start creating record.
                   </EmptyPlaceholder.Description>
-                  <Button
-                    className="w-[120px] shrink-0 gap-1"
-                    variant="default"
-                    onClick={() => {
-                      setCurrentEditRecord(null);
-                      setShowForm(false);
-                      setFormType("add");
-                      setShowForm(!isShowForm);
-                    }}
-                  >
-                    Add record
-                  </Button>
                 </EmptyPlaceholder>
               )}
             </TableBody>

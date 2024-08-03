@@ -108,7 +108,7 @@ export function UserRoleForm({ user }: UserNameFormProps) {
             />
             <Button
               type="submit"
-              variant={updated ? "default" : "disable"}
+              variant={updated ? "blue" : "disable"}
               disabled={isPending || !updated}
               className="w-[67px] shrink-0 px-0 sm:w-[130px]"
             >

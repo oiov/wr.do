@@ -140,7 +140,9 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
   const triggers = { [TopoJSONMap.selectors.feature]: (d) => d.id };
 
   const refererStats = generateStatsList(data, "referer");
-  const countryStats = generateStatsList(data, "region");
+  const cityStats = generateStatsList(data, "city");
+  const deviceStats = generateStatsList(data, "device");
+  const browserStats = generateStatsList(data, "browser");
 
   return (
     <Card className="rounded-t-none">
@@ -232,8 +234,14 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
           {refererStats.length > 0 && (
             <StatsList data={refererStats} title="Referrers" />
           )}
-          {countryStats.length > 0 && (
-            <StatsList data={countryStats} title="Regions" />
+          {cityStats.length > 0 && (
+            <StatsList data={cityStats} title="Cities" />
+          )}
+          {browserStats.length > 0 && (
+            <StatsList data={browserStats} title="Browsers" />
+          )}
+          {deviceStats.length > 0 && (
+            <StatsList data={deviceStats} title="Devices" />
           )}
         </div>
 
@@ -255,10 +263,12 @@ export function StatsList({ data, title }: { data: Stat[]; title: string }) {
           <div className="mb-0.5 flex items-center justify-between text-sm">
             {isLink(ref.dimension) ? (
               <Link
-                className="font-medium hover:after:content-['↗']"
+                className="truncate font-medium hover:opacity-70 hover:after:content-['↗']"
                 href={ref.dimension}
               >
-                {ref.dimension}
+                {ref.dimension.startsWith("http")
+                  ? ref.dimension.split("//")[1]
+                  : ref.dimension}
               </Link>
             ) : (
               <p className="font-medium">{ref.dimension}</p>
@@ -269,11 +279,9 @@ export function StatsList({ data, title }: { data: Stat[]; title: string }) {
           </div>
           <div className="w-full rounded-lg bg-neutral-200 dark:bg-neutral-600">
             <div
-              className="rounded-lg bg-blue-400 p-0.5 text-center text-xs font-medium leading-none text-primary-foreground transition-all duration-300"
+              className="rounded-lg bg-blue-500 px-0.5 py-1.5 leading-none transition-all duration-300"
               style={{ width: `${ref.percentage}` }}
-            >
-              {ref.percentage}
-            </div>
+            ></div>
           </div>
         </div>
       ))}

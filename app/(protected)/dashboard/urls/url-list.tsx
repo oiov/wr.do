@@ -263,23 +263,11 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                 ))
               ) : (
                 <EmptyPlaceholder>
-                  {/* <EmptyPlaceholder.Icon name="link" /> */}
+                  <EmptyPlaceholder.Icon name="link" />
                   <EmptyPlaceholder.Title>No urls</EmptyPlaceholder.Title>
                   <EmptyPlaceholder.Description>
                     You don&apos;t have any url yet. Start creating url.
                   </EmptyPlaceholder.Description>
-                  <Button
-                    className="w-[120px] shrink-0 gap-1"
-                    variant="default"
-                    onClick={() => {
-                      setCurrentEditUrl(null);
-                      setShowForm(false);
-                      setFormType("add");
-                      setShowForm(!isShowForm);
-                    }}
-                  >
-                    Add url
-                  </Button>
                 </EmptyPlaceholder>
               )}
             </TableBody>

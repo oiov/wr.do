@@ -10,6 +10,7 @@ import {
   File,
   FileText,
   Flame,
+  Globe,
   GlobeLock,
   HelpCircle,
   Home,
@@ -123,6 +124,7 @@ export const Icons = {
   users: Users,
   warning: AlertTriangle,
   globeLock: GlobeLock,
+  globe: Globe,
   link: Link,
   mail: Mail,
 };

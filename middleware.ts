@@ -18,18 +18,13 @@ export default auth(async (req) => {
         const geo = geolocation(req);
         const userLanguage = req.headers.get("accept-language")?.split(",")[0];
 
-        const ua = req.headers.get("user-agent");
+        const ua = req.headers.get("user-agent") || "";
         const parser = new UAParser();
         parser.setUA(ua);
         const browser = parser.getBrowser();
         const device = parser.getDevice();
 
-        console.log(device, browser);
-
         const referer = req.headers.get("referer") || "(None)";
-        // const res1 = await fetch(
-        //   `${siteConfig.url}/api/s?slug=${match[0]}&referer=${referer}&ip=${ip}&city=${geo?.city}&region=${geo?.region}&country=${geo?.country}&latitude=${geo?.latitude}&longitude=${geo?.longitude}&flag=${geo?.flag}`,
-        // );
 
         const res = await fetch(`${siteConfig.url}/api/s`, {
           method: "POST",

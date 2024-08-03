@@ -216,7 +216,7 @@ export function UserForm({
         </Button>
         <Button
           type="submit"
-          variant="default"
+          variant="blue"
           disabled={isPending}
           className="w-[80px] shrink-0 px-0"
         >

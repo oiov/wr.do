@@ -205,22 +205,11 @@ export default function UsersList({ user }: UrlListProps) {
                 ))
               ) : (
                 <EmptyPlaceholder>
-                  <EmptyPlaceholder.Icon name="user" />
+                  <EmptyPlaceholder.Icon name="users" />
                   <EmptyPlaceholder.Title>No users</EmptyPlaceholder.Title>
                   <EmptyPlaceholder.Description>
                     Here don&apos;t have any user yet.
                   </EmptyPlaceholder.Description>
-                  {/* <Button
-                    className="w-[120px] shrink-0 gap-1"
-                    variant="default"
-                    onClick={() => {
-                      setcurrentEditUser(null);
-                      setShowForm(false);
-                      setShowForm(!isShowForm);
-                    }}
-                  >
-                    Add user
-                  </Button> */}
                 </EmptyPlaceholder>
               )}
             </TableBody>

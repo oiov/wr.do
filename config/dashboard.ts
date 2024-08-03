@@ -30,13 +30,13 @@ export const sidebarLinks: SidebarNavItem[] = [
       },
       {
         href: "/admin/records",
-        icon: "lineChart",
+        icon: "globe",
         title: "Record List",
         authorizeOnly: UserRole.ADMIN,
       },
       {
         href: "/admin/urls",
-        icon: "post",
+        icon: "link",
         title: "URL List",
         authorizeOnly: UserRole.ADMIN,
       },
