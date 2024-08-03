@@ -38,6 +38,10 @@ copy `.env.example` to `.env` and fill in the necessary environment variables.
 git clone https://github.com/oiov/wr.do
 cd wr.do
 pnpm install
+# generate db schemas
+pnpm postinstall 
+# depoly db
+pnpm db:push
 
 # run on localhost:3000
 pnpm dev
