@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
         return Response.json(null);
       }
 
-      console.log("[api/s]", device, browser);
+      // console.log("[api/s]", device, browser);
       await createUserShortUrlMeta({
         urlId: res.id,
         click: 1,

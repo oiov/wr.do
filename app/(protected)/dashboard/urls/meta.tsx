@@ -28,7 +28,7 @@ export default function UserUrlMetaInfo({ user, action, urlId }: UrlMetaProps) {
       </div>
     );
 
-  if (!data) {
+  if (!data || data.length === 0) {
     return (
       <EmptyPlaceholder>
         <EmptyPlaceholder.Title>No Stats</EmptyPlaceholder.Title>
