@@ -37,7 +37,7 @@ function processUrlMeta(urlMetaArray: UrlMeta[]) {
   const dailyData: { [key: string]: { clicks: number; ips: Set<string> } } = {};
 
   urlMetaArray.forEach((meta) => {
-    const date = new Date(meta.createdAt).toISOString().split("T")[0];
+    const date = new Date(meta.updatedAt).toISOString().split("T")[0];
 
     if (!dailyData[date]) {
       dailyData[date] = { clicks: 0, ips: new Set<string>() };
@@ -84,7 +84,7 @@ function generateStatsList(
   let totalClicks = 0;
 
   records.forEach((record) => {
-    const dimValue = record[dimension] || ("(None)" as any);
+    const dimValue = record[dimension] || ("Unknown" as any);
     const click = record.click;
 
     if (!dimensionCounts[dimValue]) {
@@ -101,7 +101,7 @@ function generateStatsList(
   for (const [dimValue, clicks] of Object.entries(dimensionCounts)) {
     const percentage = (clicks / totalClicks) * 100;
     statsList.push({
-      dimension: dimValue ?? "(None)",
+      dimension: dimValue ?? "Unknown",
       clicks,
       percentage: percentage.toFixed(0) + "%",
     });
@@ -116,11 +116,13 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
   const [activeChart, setActiveChart] =
     React.useState<keyof typeof chartConfig>("pv");
 
-  const processedData = processUrlMeta(data).map((entry) => ({
-    date: entry.date,
-    pv: entry.clicks,
-    uv: new Set(entry.ips).size,
-  }));
+  const processedData = processUrlMeta(data)
+    .map((entry) => ({
+      date: entry.date,
+      pv: entry.clicks,
+      uv: new Set(entry.ips).size,
+    }))
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
   const dataTotal = calculateUVAndPV(data);
 
