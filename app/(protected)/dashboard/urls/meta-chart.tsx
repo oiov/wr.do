@@ -8,7 +8,7 @@ import { Donut, MapData, TopoJSONMap } from "@unovis/ts";
 import { WorldMapTopoJSON } from "@unovis/ts/maps";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
-import { isLink } from "@/lib/utils";
+import { isLink, timeAgo } from "@/lib/utils";
 import {
   Card,
   CardContent,
@@ -37,19 +37,30 @@ function processUrlMeta(urlMetaArray: UrlMeta[]) {
   const dailyData: { [key: string]: { clicks: number; ips: Set<string> } } = {};
 
   urlMetaArray.forEach((meta) => {
-    const date = new Date(meta.updatedAt).toISOString().split("T")[0];
+    const createdDate = new Date(meta.createdAt).toISOString().split("T")[0];
+    const updatedDate = new Date(meta.updatedAt).toISOString().split("T")[0];
 
-    if (!dailyData[date]) {
-      dailyData[date] = { clicks: 0, ips: new Set<string>() };
+    // Record for created date
+    if (!dailyData[createdDate]) {
+      dailyData[createdDate] = { clicks: 0, ips: new Set<string>() };
     }
+    dailyData[createdDate].clicks += 1;
+    dailyData[createdDate].ips.add(meta.ip);
 
-    dailyData[date].clicks += meta.click;
-    dailyData[date].ips.add(meta.ip);
+    // If updated date is different, record additional clicks on that date
+    if (createdDate !== updatedDate) {
+      if (!dailyData[updatedDate]) {
+        dailyData[updatedDate] = { clicks: 0, ips: new Set<string>() };
+      }
+      dailyData[updatedDate].clicks += meta.click - 1; // Subtract the initial click
+      dailyData[updatedDate].ips.add(meta.ip);
+    }
   });
 
   return Object.entries(dailyData).map(([date, data]) => ({
     date,
     clicks: data.clicks,
+    uniqueIPs: data.ips.size,
     ips: Array.from(data.ips),
   }));
 }
@@ -127,11 +138,10 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
   const dataTotal = calculateUVAndPV(data);
 
   const latestEntry = data[data.length - 1];
-  const latestDate = new Date(latestEntry.updatedAt).toLocaleString("en-US");
+  const latestDate = timeAgo(latestEntry.updatedAt);
   const latestFrom = [
-    latestEntry.region ? latestEntry.region : "",
-    latestEntry.country ? `(${latestEntry.country})` : "",
     latestEntry.city ? latestEntry.city : "",
+    latestEntry.country ? `(${latestEntry.country})` : "",
   ]
     .filter(Boolean)
     .join(" ");
@@ -152,7 +162,7 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-2 sm:py-3">
           <CardTitle>Daily Stats</CardTitle>
           <CardDescription>
-            Last visitor: {latestDate} from {latestFrom}.
+            Last visitor from {latestFrom} about {latestDate}.
           </CardDescription>
         </div>
         <div className="flex">
@@ -273,7 +283,7 @@ export function StatsList({ data, title }: { data: Stat[]; title: string }) {
                   : ref.dimension}
               </Link>
             ) : (
-              <p className="font-medium">{ref.dimension}</p>
+              <p className="font-medium">{decodeURIComponent(ref.dimension)}</p>
             )}
             <p className="text-slate-500">
               {ref.clicks} ({ref.percentage})
