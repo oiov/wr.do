@@ -49,13 +49,12 @@ const nextConfig = {
       },
       {
         source: "/ai",
-        destination: "https://oi.sorapi.dev/?ref=wrdo",
+        destination: "https://wr.do/s/ai?ref=wrdo",
         permanent: true,
       },
       {
         source: "/cps",
-        destination:
-          "https://u3b6zhbgfp.feishu.cn/docx/OfHyd7LG5o0UJFx0xIdc0FYjnSf?from=wrdo",
+        destination: "https://wr.do/s/cps",
         permanent: true,
       },
       {
