@@ -76,15 +76,10 @@ export async function getUserShortUrlCount(
 
 export async function createUserShortUrl(data: ShortUrlFormData) {
   try {
-    const session = await auth();
-    if (!session?.user) {
-      throw new Error("Unauthorized");
-    }
-
     const res = await prisma.userUrl.create({
       data: {
-        userId: session.user?.id!,
-        userName: session.user?.name || "Anonymous",
+        userId: data.userId,
+        userName: data.userName || "Anonymous",
         target: data.target,
         url: data.url,
         visible: data.visible,

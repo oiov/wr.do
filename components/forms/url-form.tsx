@@ -78,7 +78,7 @@ export function UrlForm({
 
   const handleCreateUrl = async (data: ShortUrlFormData) => {
     startTransition(async () => {
-      const response = await fetch("/api/url/add", {
+      const response = await fetch(`${action}/add`, {
         method: "POST",
         body: JSON.stringify({
           data,
@@ -100,9 +100,9 @@ export function UrlForm({
   const handleUpdateUrl = async (data: ShortUrlFormData) => {
     startTransition(async () => {
       if (type === "edit") {
-        const response = await fetch("/api/url/update", {
+        const response = await fetch(`${action}/update`, {
           method: "POST",
-          body: JSON.stringify({ data }),
+          body: JSON.stringify({ data, userId: initData?.userId }),
         });
         if (!response.ok || response.status !== 200) {
           toast.error("Update Failed", {
@@ -121,9 +121,12 @@ export function UrlForm({
   const handleDeleteUrl = async () => {
     if (type === "edit") {
       startDeleteTransition(async () => {
-        const response = await fetch("/api/url/delete", {
+        const response = await fetch(`${action}/delete`, {
           method: "POST",
-          body: JSON.stringify({ url_id: initData?.id }),
+          body: JSON.stringify({
+            url_id: initData?.id,
+            userId: initData?.userId,
+          }),
         });
         if (!response.ok || response.status !== 200) {
           toast.error("Delete Failed", {

@@ -33,11 +33,6 @@ export async function createUserRecord(
   data: UserRecordFormData,
 ) {
   try {
-    const session = await auth();
-    if (!session?.user || session?.user.id !== userId) {
-      throw new Error("Unauthorized");
-    }
-
     const {
       record_id,
       zone_id,
@@ -57,7 +52,7 @@ export async function createUserRecord(
 
     const res = await prisma.userRecord.create({
       data: {
-        userId: session.user.id,
+        userId,
         record_id,
         zone_id,
         zone_name,
@@ -175,11 +170,6 @@ export async function updateUserRecord(
   data: UserRecordFormData,
 ) {
   try {
-    const session = await auth();
-    if (!session?.user || session?.user.id !== userId) {
-      throw new Error("Unauthorized");
-    }
-
     const {
       record_id,
       zone_id,

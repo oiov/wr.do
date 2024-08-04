@@ -57,6 +57,10 @@ export const RECORD_TYPE_ENUMS = [
     value: "A",
     label: "A",
   },
+  {
+    value: "TXT",
+    label: "TXT",
+  },
 ];
 export const TTL_ENUMS = [
   {

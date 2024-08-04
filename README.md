@@ -43,6 +43,15 @@ pnpm install
 pnpm dev
 ```
 
+## Legitimacy review
+
+- To avoid abuse, applications without website content will be rejected
+- To avoid domain name conflicts, please check before applying
+- Completed website construction or released open source project (ready to build website for open source project)
+- Political sensitivity, violence, pornography, link jumping, VPN, reverse proxy services, and other illegal or sensitive content must not appear on the website
+
+**Administrators will conduct domain name checks periodically to clean up domain names that violate the above rules, have no content, and are not open source related**
+
 ## Community Group
 
 - Discord: https://discord.gg/d68kWCBDEs

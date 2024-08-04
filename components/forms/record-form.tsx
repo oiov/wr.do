@@ -111,6 +111,7 @@ export function RecordForm({
           body: JSON.stringify({
             recordId: initData?.record_id,
             record: data,
+            userId: initData?.userId,
           }),
         });
         if (!response.ok || response.status !== 200) {
@@ -136,6 +137,7 @@ export function RecordForm({
             record_id: initData?.record_id,
             zone_id: initData?.zone_id,
             active: initData?.active,
+            userId: initData?.userId,
           }),
         });
         if (!response.ok || response.status !== 200) {
@@ -217,7 +219,7 @@ export function RecordForm({
               ? "Content"
               : currentRecordType === "A"
                 ? "IPv4 address"
-                : "Not support"
+                : "Content"
           }
         >
           <div className="flex w-full items-center gap-2">
@@ -242,7 +244,7 @@ export function RecordForm({
                   ? "Required. E.g. www.example.com"
                   : currentRecordType === "A"
                     ? "Required. E.g. 8.8.8.8"
-                    : "Not support"}
+                    : "Required."}
               </p>
             )}
           </div>
