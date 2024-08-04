@@ -31,8 +31,8 @@ export default async function HeroLanding() {
         </h1>
 
         <p className="max-w-2xl text-balance text-muted-foreground sm:text-lg">
-          Intuitive interface, powerful features. Get started
-          <br /> with DNS and short linking in minutes.
+          Free domain name distribution and short url generation <br />{" "}
+          platform, build with cloudflare.
         </p>
 
         <div className="flex justify-center space-x-2">
