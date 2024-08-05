@@ -105,15 +105,15 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
             <div className="grid gap-2">
               <CardTitle>DNS Records</CardTitle>
               <CardDescription className="hidden text-balance sm:block">
-                Before starting, please read the{" "}
+                Please read the{" "}
                 <Link
                   target="_blank"
                   className="font-semibold text-yellow-600 after:content-['↗'] hover:underline"
                   href="/docs/dns-records#legitimacy-review"
                 >
                   Legitimacy review
-                </Link>
-                . See{" "}
+                </Link>{" "}
+                before using. See{" "}
                 <Link
                   target="_blank"
                   className="text-blue-500 hover:underline"
@@ -121,7 +121,7 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                 >
                   examples
                 </Link>{" "}
-                for more.
+                for more usage.
               </CardDescription>
             </div>
           )}
