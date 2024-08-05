@@ -180,9 +180,7 @@ export function RecordForm({
               ))}
             </SelectContent>
           </Select>
-          <p className="p-1 text-[13px] text-muted-foreground">
-            Only supports CNAME.
-          </p>
+          <p className="p-1 text-[13px] text-muted-foreground">Required.</p>
         </FormSectionColumns>
         <FormSectionColumns title="Name">
           <div className="flex w-full items-center gap-2">
