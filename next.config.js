@@ -39,12 +39,12 @@ const nextConfig = {
       },
       {
         source: "/0",
-        destination: "https://www.oiov.dev",
+        destination: "https://wr.do/s/0",
         permanent: true,
       },
       {
         source: "/9",
-        destination: "https://f8dd841.webp.li/IMG20240703084254.jpg",
+        destination: "https://wr.do/s/9",
         permanent: true,
       },
       {
@@ -59,22 +59,22 @@ const nextConfig = {
       },
       {
         source: "/x",
-        destination: "https://x.com/yesmoree",
+        destination: "https://wr.do/s/x",
         permanent: true,
       },
       {
         source: "/solo",
-        destination: "https://solo.oiov.dev",
+        destination: "https://wr.do/s/solo",
         permanent: true,
       },
       {
         source: "/rmbg",
-        destination: "https://remover.wr.do",
+        destination: "https://wr.do/s/rmbg",
         permanent: true,
       },
       {
         source: "/llk",
-        destination: "https://www.oiov.dev/blog/llk",
+        destination: "https://wr.do/s/llk",
         permanent: true,
       },
     ];

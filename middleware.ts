@@ -12,7 +12,7 @@ export default auth(async (req) => {
   try {
     const ip = req.headers.get("X-Forwarded-For");
     if (req.url.includes("/s/")) {
-      const match = req.url.match(/[^/]+$/);
+      const match = req.url.match(/([^/?]+)(?:\?.*)?$/);
 
       if (match) {
         const geo = geolocation(req);
@@ -32,7 +32,7 @@ export default auth(async (req) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            slug: match[0],
+            slug: match[1],
             referer,
             ip,
             city: geo?.city,
