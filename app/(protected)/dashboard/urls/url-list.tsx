@@ -27,6 +27,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import CountUpFn from "@/components/dashboard/count-up";
 import StatusDot from "@/components/dashboard/status-dot";
 import { FormType } from "@/components/forms/record-form";
@@ -43,12 +49,15 @@ export interface UrlListProps {
 
 function TableColumnSekleton() {
   return (
-    <TableRow className="grid grid-cols-3 items-center sm:grid-cols-8">
+    <TableRow className="grid grid-cols-3 items-center sm:grid-cols-9">
       <TableCell className="col-span-1 sm:col-span-2">
         <Skeleton className="h-5 w-20" />
       </TableCell>
       <TableCell className="col-span-1 sm:col-span-2">
         <Skeleton className="h-5 w-20" />
+      </TableCell>
+      <TableCell className="col-span-1 hidden justify-center sm:flex">
+        <Skeleton className="h-5 w-16" />
       </TableCell>
       <TableCell className="col-span-1 hidden justify-center sm:flex">
         <Skeleton className="h-5 w-16" />
@@ -148,12 +157,15 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
           )}
           <Table>
             <TableHeader className="bg-gray-100/50 dark:bg-primary-foreground">
-              <TableRow className="grid grid-cols-3 items-center sm:grid-cols-8">
+              <TableRow className="grid grid-cols-3 items-center sm:grid-cols-9">
                 <TableHead className="col-span-1 flex items-center font-bold sm:col-span-2">
                   Url
                 </TableHead>
                 <TableHead className="col-span-1 flex items-center font-bold sm:col-span-2">
                   Target
+                </TableHead>
+                <TableHead className="col-span-1 hidden items-center justify-center font-bold sm:flex">
+                  User
                 </TableHead>
                 <TableHead className="col-span-1 hidden items-center justify-center font-bold sm:flex">
                   Status
@@ -181,7 +193,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                   <>
                     <TableRow
                       key={short.id}
-                      className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-8"
+                      className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-9"
                     >
                       <TableCell className="col-span-1 flex items-center gap-1 sm:col-span-2">
                         <Link
@@ -211,6 +223,18 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                             ? short.target.split("//")[1]
                             : short.target}
                         </Link>
+                      </TableCell>
+                      <TableCell className="col-span-1 hidden justify-center sm:flex">
+                        <TooltipProvider>
+                          <Tooltip delayDuration={200}>
+                            <TooltipTrigger className="truncate">
+                              {short.userName ?? "Anonymous"}
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              {short.userName ?? "Anonymous"}
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
                       </TableCell>
                       <TableCell className="col-span-1 hidden justify-center sm:flex">
                         <StatusDot status={short.active} />
