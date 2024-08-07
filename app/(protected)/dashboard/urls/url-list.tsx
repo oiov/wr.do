@@ -222,9 +222,6 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                         <TooltipProvider>
                           <Tooltip delayDuration={200}>
                             <TooltipTrigger className="truncate">
-                              {short.target}
-                            </TooltipTrigger>
-                            <TooltipContent>
                               <Link
                                 className="line-clamp-2 overflow-hidden overflow-ellipsis whitespace-normal text-slate-600 hover:text-blue-400 hover:underline dark:text-slate-400"
                                 href={short.target}
@@ -233,7 +230,8 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                               >
                                 {removeUrlSuffix(short.target)}
                               </Link>
-                            </TooltipContent>
+                            </TooltipTrigger>
+                            <TooltipContent>{short.target}</TooltipContent>
                           </Tooltip>
                         </TooltipProvider>
                       </TableCell>
