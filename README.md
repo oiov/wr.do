@@ -18,9 +18,9 @@
 
 ![screenshot](https://wr.do/_static/images/light-preview.png)
 
-![screenshot](https://wr.do/_static/images/example_01.png)
-
 ![screenshot](https://wr.do/_static/images/example_02.png)
+
+![screenshot](https://wr.do/_static/images/example_01.png)
 
 ![screenshot](https://wr.do/_static/images/example_03.png)
 
