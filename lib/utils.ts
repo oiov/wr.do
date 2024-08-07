@@ -216,3 +216,7 @@ export function isLink(str: string): boolean {
     return false;
   }
 }
+
+export function removeUrlSuffix(url: string): string {
+  return url.startsWith("http") ? url.split("//")[1] : url;
+}

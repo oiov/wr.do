@@ -8,7 +8,13 @@ import useSWR, { useSWRConfig } from "swr";
 
 import { siteConfig } from "@/config/site";
 import { ShortUrlFormData } from "@/lib/dto/short-urls";
-import { cn, expirationTime, fetcher, timeAgo } from "@/lib/utils";
+import {
+  cn,
+  expirationTime,
+  fetcher,
+  removeUrlSuffix,
+  timeAgo,
+} from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -49,8 +55,8 @@ export interface UrlListProps {
 
 function TableColumnSekleton() {
   return (
-    <TableRow className="grid grid-cols-3 items-center sm:grid-cols-9">
-      <TableCell className="col-span-1 sm:col-span-2">
+    <TableRow className="grid grid-cols-3 items-center sm:grid-cols-8">
+      <TableCell className="col-span-1">
         <Skeleton className="h-5 w-20" />
       </TableCell>
       <TableCell className="col-span-1 sm:col-span-2">
@@ -157,8 +163,8 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
           )}
           <Table>
             <TableHeader className="bg-gray-100/50 dark:bg-primary-foreground">
-              <TableRow className="grid grid-cols-3 items-center sm:grid-cols-9">
-                <TableHead className="col-span-1 flex items-center font-bold sm:col-span-2">
+              <TableRow className="grid grid-cols-3 items-center sm:grid-cols-8">
+                <TableHead className="col-span-1 flex items-center font-bold">
                   Url
                 </TableHead>
                 <TableHead className="col-span-1 flex items-center font-bold sm:col-span-2">
@@ -193,9 +199,9 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                   <>
                     <TableRow
                       key={short.id}
-                      className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-9"
+                      className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-8"
                     >
-                      <TableCell className="col-span-1 flex items-center gap-1 sm:col-span-2">
+                      <TableCell className="col-span-1 flex items-center gap-1">
                         <Link
                           className="line-clamp-2 overflow-hidden overflow-ellipsis whitespace-normal text-slate-600 hover:text-blue-400 hover:underline dark:text-slate-400"
                           href={`/s/${short.url}`}
@@ -212,19 +218,26 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                           )}
                         />
                       </TableCell>
-                      <TableCell className="col-span-1 sm:col-span-2">
-                        <Link
-                          className="line-clamp-2 overflow-hidden overflow-ellipsis whitespace-normal text-slate-600 hover:text-blue-400 hover:underline dark:text-slate-400"
-                          href={short.target}
-                          target="_blank"
-                          prefetch={false}
-                        >
-                          {short.target.startsWith("http")
-                            ? short.target.split("//")[1]
-                            : short.target}
-                        </Link>
+                      <TableCell className="col-span-1 truncate sm:col-span-2">
+                        <TooltipProvider>
+                          <Tooltip delayDuration={200}>
+                            <TooltipTrigger className="truncate">
+                              {short.target}
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <Link
+                                className="line-clamp-2 overflow-hidden overflow-ellipsis whitespace-normal text-slate-600 hover:text-blue-400 hover:underline dark:text-slate-400"
+                                href={short.target}
+                                target="_blank"
+                                prefetch={false}
+                              >
+                                {removeUrlSuffix(short.target)}
+                              </Link>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
                       </TableCell>
-                      <TableCell className="col-span-1 hidden justify-center sm:flex">
+                      <TableCell className="col-span-1 hidden justify-center truncate sm:flex">
                         <TooltipProvider>
                           <Tooltip delayDuration={200}>
                             <TooltipTrigger className="truncate">

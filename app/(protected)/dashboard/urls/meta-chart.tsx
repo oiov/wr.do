@@ -8,7 +8,7 @@ import { Donut, MapData, TopoJSONMap } from "@unovis/ts";
 import { WorldMapTopoJSON } from "@unovis/ts/maps";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
-import { isLink, timeAgo } from "@/lib/utils";
+import { isLink, removeUrlSuffix, timeAgo } from "@/lib/utils";
 import {
   Card,
   CardContent,
@@ -278,9 +278,7 @@ export function StatsList({ data, title }: { data: Stat[]; title: string }) {
                 className="truncate font-medium hover:opacity-70 hover:after:content-['↗']"
                 href={ref.dimension}
               >
-                {ref.dimension.startsWith("http")
-                  ? ref.dimension.split("//")[1]
-                  : ref.dimension}
+                {removeUrlSuffix(ref.dimension)}
               </Link>
             ) : (
               <p className="font-medium">{decodeURIComponent(ref.dimension)}</p>
