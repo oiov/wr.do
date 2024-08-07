@@ -23,7 +23,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import BlurImage from "@/components/shared/blur-image";
 
 export default function MetaScraping() {
   const { theme } = useTheme();
@@ -41,13 +40,6 @@ export default function MetaScraping() {
   });
   const [isScraping, setIsScraping] = useState(false);
 
-  const [currentScreenshotLink, setCurrentScreenshotLink] = useState("wr.do");
-  const [screenshotInfo, setScreenshotInfo] = useState({
-    data: "",
-    url: "",
-    timestamp: "",
-  });
-
   const handleScrapingMeta = async () => {
     if (currentLink) {
       setIsScraping(true);
@@ -55,7 +47,7 @@ export default function MetaScraping() {
         `/api/scraping/meta?url=${protocol}://${currentLink}`,
       );
       if (!res.ok || res.status !== 200) {
-        toast.error(res.statusText);
+        toast.error(res.statusText || "Error");
       } else {
         const data = await res.json();
         setMetaInfo(data);
@@ -65,22 +57,6 @@ export default function MetaScraping() {
     }
   };
 
-  const handleScrapingScreenshot = async () => {
-    if (currentScreenshotLink) {
-      setIsScraping(true);
-      const res = await fetch(
-        `/api/scraping/screenshot?url=${protocol}://${currentScreenshotLink}`,
-      );
-      if (!res.ok || res.status !== 200) {
-        toast.error(res.statusText);
-      } else {
-        const data = await res.json();
-        setScreenshotInfo(data);
-        toast.success("Success!");
-      }
-      setIsScraping(false);
-    }
-  };
   return (
     <>
       <Card>
@@ -134,76 +110,6 @@ export default function MetaScraping() {
               displayObjectSize={false}
               displayDataTypes={false}
             />
-          </div>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>Screenshot</CardTitle>
-          <CardDescription>
-            Automate your website screenshots and turn them into stunning
-            visuals for your applications.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center">
-            <Select
-              onValueChange={(value: string) => {
-                setProtocol(value);
-              }}
-              name="protocol"
-              defaultValue={"https"}
-            >
-              <SelectTrigger className="h-10 w-24 rounded-r-none shadow-inner">
-                <SelectValue placeholder="Protocol" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem key="https" value="https">
-                  https
-                </SelectItem>
-                <SelectItem key="http" value="http">
-                  http
-                </SelectItem>
-              </SelectContent>
-            </Select>
-            <Input
-              type="text"
-              placeholder="www.example.com"
-              className="h-10 rounded-none border focus:border-primary active:border-primary"
-              value={currentScreenshotLink}
-              size={100}
-              onChange={(e) => setCurrentScreenshotLink(e.target.value)}
-            />
-            <Button
-              variant="blue"
-              onClick={handleScrapingScreenshot}
-              disabled={isScraping}
-              className="rounded-l-none"
-            >
-              {isScraping ? "Scraping..." : "Send"}
-            </Button>
-          </div>
-
-          <div className="mt-4 rounded-md border p-3">
-            <JsonView
-              className="max-w-[400px] overflow-hidden"
-              style={theme === "dark" ? vscodeTheme : githubLightTheme}
-              value={screenshotInfo}
-              displayObjectSize={false}
-              displayDataTypes={false}
-              // shortenTextAfterLength={50}
-            />
-            {screenshotInfo.data && (
-              <BlurImage
-                src={screenshotInfo.data}
-                alt="ligth preview landing"
-                className="my-4 flex rounded-md border object-contain object-center shadow-md dark:hidden"
-                width={1500}
-                height={750}
-                priority
-                // placeholder="blur"
-              />
-            )}
           </div>
         </CardContent>
       </Card>
