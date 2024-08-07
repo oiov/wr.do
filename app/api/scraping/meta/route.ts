@@ -56,9 +56,6 @@ export async function GET(req: Request) {
     const author =
       $("meta[name='author']").attr("content") ||
       $("meta[property='author']").attr("content");
-    const publisher =
-      $("meta[name='publisher']").attr("content") ||
-      $("meta[property='publisher']").attr("content");
 
     return Response.json({
       title,
@@ -68,7 +65,6 @@ export async function GET(req: Request) {
       url: link,
       lang,
       author,
-      publisher,
       timestamp: Date.now(),
     });
   } catch (error) {
