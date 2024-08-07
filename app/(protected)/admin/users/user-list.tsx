@@ -130,10 +130,10 @@ export default function UsersList({ user }: UrlListProps) {
             <TableHeader className="bg-gray-100/50 dark:bg-primary-foreground">
               <TableRow className="grid grid-cols-3 items-center sm:grid-cols-7">
                 <TableHead className="col-span-1 flex items-center font-bold">
-                  Email
+                  Name
                 </TableHead>
                 <TableHead className="col-span-1 flex items-center font-bold sm:col-span-2">
-                  Name
+                  Email
                 </TableHead>
                 <TableHead className="col-span-1 hidden items-center justify-center font-bold sm:flex">
                   Role
@@ -163,14 +163,21 @@ export default function UsersList({ user }: UrlListProps) {
                     className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-7"
                   >
                     <TableCell className="col-span-1">
-                      {user.name || "Anonymous"}
+                      <TooltipProvider>
+                        <Tooltip delayDuration={200}>
+                          <TooltipTrigger>
+                            {user.name || "Anonymous"}
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            {user.name || "Anonymous"}
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                     </TableCell>
                     <TableCell className="col-span-1 flex items-center gap-1 truncate sm:col-span-2">
                       <TooltipProvider>
                         <Tooltip delayDuration={200}>
-                          <TooltipTrigger className="truncate">
-                            {user.email}
-                          </TooltipTrigger>
+                          <TooltipTrigger>{user.email}</TooltipTrigger>
                           <TooltipContent>{user.email}</TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
