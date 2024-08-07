@@ -1,9 +1,15 @@
 import cheerio from "cheerio";
 
+import { checkUserStatus } from "@/lib/dto/user";
+import { getCurrentUser } from "@/lib/session";
+
 export const revalidate = 60;
 
 export async function GET(req: Request) {
   try {
+    const user = checkUserStatus(await getCurrentUser());
+    if (user instanceof Response) return user;
+
     const url = new URL(req.url);
     const link = url.searchParams.get("link");
     if (!link) {

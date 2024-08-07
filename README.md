@@ -2,19 +2,27 @@
   <h1>WR.DO</h1>
   <p><a href="https://discord.gg/d68kWCBDEs">Discord</a> · English | <a href="/README-zh.md">简体中文</a></p>
   <p>Craft DNS Records, Make Short Links</p>
-  <img src="https://wr.do/_static/images/light-preview.png"/>
+  <!-- <img src="https://wr.do/_static/images/light-preview.png"/> -->
 </div>
 
 ## Features
 
 - 🌐 **Multi-Tenant Support:** Manage multiple DNS records seamlessly
 - ⚡ **Instant Record Creation:** Set up CNAME, A, and other records quickly
-- 🔗 **URL Shortening:** Generate short links effortlessly
-- 💻 **User-Friendly Interface:** Intuitive and easy to navigate
+- 🔗 **URL Shortening:** Generate short links with visitor statistics attached
+- 😀 **Permission Management:** A convenient admin panel for auditing
 - 🔒 **Secure & Reliable:** Built on Cloudflare's robust DNS API
 - 💰 **Free Registration:** No cost to create and manage records
-- 🔄 **Real-Time Updates:** Instant propagation of DNS changes
-- 🚀 **Open Source:** Fully transparent, customizable code base
+
+## Screenshots
+
+![screenshot](https://wr.do/_static/images/light-preview.png)
+
+![screenshot](https://wr.do/_static/images/example_01.png)
+
+![screenshot](https://wr.do/_static/images/example_02.png)
+
+![screenshot](https://wr.do/_static/images/example_03.png)
 
 ## Quick Start
 

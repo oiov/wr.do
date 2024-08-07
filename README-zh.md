@@ -2,19 +2,27 @@
   <h1>WR.DO</h1>
   <p><a href="https://discord.gg/d68kWCBDEs">Discord</a> · English | <a href="/README-zh.md">简体中文</a></p>
   <p>创建 DNS 记录，生成短链接</p>
-  <img src="https://wr.do/_static/images/light-preview.png"/>
+  <!-- <img src="https://wr.do/_static/images/light-preview.png"/> -->
 </div>
 
 ## 功能
 
-- 🌐 **多租户支持：** 无缝管理多个 DNS 记录
-- ⚡ **即时记录创建：** 快速设置 CNAME 和 A 记录
-- 🔗 **URL 缩短：** 轻松生成短链接
-- 💻 **用户友好界面：** 直观且易于导航
-- 🔒 **安全可靠：** 构建于 Cloudflare 强大的 DNS API 上
-- 💰 **免费注册：** 创建和管理记录无需费用
-- 🔄 **实时更新：** DNS 变化即时传播
-- 🚀 **开源：** 完全透明，可定制的代码库
+- 🌐 **多租户支持**：无缝管理多个 DNS 记录
+- ⚡ **即时记录创建**：快速设置 CNAME、A 等记录
+- 🔗 **短链生成**：生成附有访问者统计信息的短链接
+- 😀 **权限管理**：方便审核的管理员面板
+- 🔒 **安全可靠**：基于 Cloudflare 强大的 DNS API
+- 💰 **免费注册**：创建和管理记录无需付费
+
+## Screenshots
+
+![screenshot](https://wr.do/_static/images/light-preview.png)
+
+![screenshot](https://wr.do/_static/images/example_01.png)
+
+![screenshot](https://wr.do/_static/images/example_02.png)
+
+![screenshot](https://wr.do/_static/images/example_03.png)
 
 ## 快速开始
 
