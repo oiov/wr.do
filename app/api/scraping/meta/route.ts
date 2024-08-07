@@ -69,7 +69,7 @@ export async function GET(req: Request) {
       lang,
       author,
       publisher,
-      date: new Date(),
+      timestamp: Date.now(),
     });
   } catch (error) {
     console.log(error);

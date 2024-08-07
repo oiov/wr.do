@@ -37,7 +37,7 @@ export default function MetaScraping() {
     lang: "",
     author: "",
     publisher: "",
-    date: "",
+    timestamp: "",
   });
   const [isScraping, setIsScraping] = useState(false);
 
