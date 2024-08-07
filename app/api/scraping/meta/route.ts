@@ -73,7 +73,7 @@ export async function GET(req: Request) {
     });
   } catch (error) {
     console.log(error);
-    return Response.json(error?.statusText || error, {
+    return Response.json("An error occurred", {
       status: error.status || 500,
       statusText: error.statusText || "Server error",
     });
