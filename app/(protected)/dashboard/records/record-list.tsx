@@ -225,7 +225,9 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                     <TableCell className="col-span-2 hidden truncate text-nowrap sm:inline-block">
                       <TooltipProvider>
                         <Tooltip delayDuration={200}>
-                          <TooltipTrigger>{record.content}</TooltipTrigger>
+                          <TooltipTrigger className="truncate">
+                            {record.content}
+                          </TooltipTrigger>
                           <TooltipContent>{record.content}</TooltipContent>
                         </Tooltip>
                       </TooltipProvider>

@@ -165,7 +165,7 @@ export default function UsersList({ user }: UrlListProps) {
                     <TableCell className="col-span-1">
                       <TooltipProvider>
                         <Tooltip delayDuration={200}>
-                          <TooltipTrigger>
+                          <TooltipTrigger className="truncate">
                             {user.name || "Anonymous"}
                           </TooltipTrigger>
                           <TooltipContent>
@@ -177,7 +177,9 @@ export default function UsersList({ user }: UrlListProps) {
                     <TableCell className="col-span-1 flex items-center gap-1 truncate sm:col-span-2">
                       <TooltipProvider>
                         <Tooltip delayDuration={200}>
-                          <TooltipTrigger>{user.email}</TooltipTrigger>
+                          <TooltipTrigger className="truncate">
+                            {user.email}
+                          </TooltipTrigger>
                           <TooltipContent>{user.email}</TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
