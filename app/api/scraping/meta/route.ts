@@ -2,6 +2,7 @@ import cheerio from "cheerio";
 
 import { checkUserStatus } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";
+import { isLink } from "@/lib/utils";
 
 export const revalidate = 60;
 
@@ -11,11 +12,11 @@ export async function GET(req: Request) {
     if (user instanceof Response) return user;
 
     const url = new URL(req.url);
-    const link = url.searchParams.get("link");
-    if (!link) {
-      return Response.json("link is required", {
+    const link = url.searchParams.get("url");
+    if (!link || !isLink(link)) {
+      return Response.json("Url is required", {
         status: 400,
-        statusText: "link is required",
+        statusText: "Url is required",
       });
     }
 
@@ -28,7 +29,7 @@ export async function GET(req: Request) {
     }
 
     const html = await res.text();
-    console.log(html);
+    // console.log(html);
 
     const $ = cheerio.load(html);
     const title =
@@ -44,8 +45,32 @@ export async function GET(req: Request) {
       $("meta[name='og:image']").attr("content") ||
       $("meta[property='twitter:image']").attr("content") ||
       $("meta[name='twitter:image']").attr("content");
+    const icon =
+      $("link[rel='icon']").attr("href") ||
+      $("link[rel='apple-touch-icon']").attr("href");
+    const lang =
+      $("html").attr("lang") ||
+      $("html").attr("xml:lang") ||
+      $("body").attr("lang") ||
+      $("body").attr("xml:lang");
+    const author =
+      $("meta[name='author']").attr("content") ||
+      $("meta[property='author']").attr("content");
+    const publisher =
+      $("meta[name='publisher']").attr("content") ||
+      $("meta[property='publisher']").attr("content");
 
-    return Response.json({ title, description, image });
+    return Response.json({
+      title,
+      description,
+      image,
+      icon,
+      url: link,
+      lang,
+      author,
+      publisher,
+      date: new Date(),
+    });
   } catch (error) {
     console.log(error);
     return Response.json(error?.statusText || error, {

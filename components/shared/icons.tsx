@@ -3,6 +3,7 @@ import {
   ArrowRight,
   ArrowUpRight,
   BookOpen,
+  Bug,
   Check,
   ChevronLeft,
   ChevronRight,
@@ -127,4 +128,5 @@ export const Icons = {
   globe: Globe,
   link: Link,
   mail: Mail,
+  bug: Bug,
 };
