@@ -80,6 +80,7 @@
     "next-view-transitions": "^0.3.0",
     "nodemailer": "^6.9.14",
     "prop-types": "^15.8.1",
+    "puppeteer": "^23.0.1",
     "react": "18.3.1",
     "react-countup": "^6.5.3",
     "react-day-picker": "^8.10.1",

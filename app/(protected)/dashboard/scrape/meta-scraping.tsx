@@ -5,6 +5,7 @@ import JsonView from "@uiw/react-json-view";
 import { githubLightTheme } from "@uiw/react-json-view/githubLight";
 import { vscodeTheme } from "@uiw/react-json-view/vscode";
 import { useTheme } from "next-themes";
+import puppeteer from "puppeteer";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -23,11 +24,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import BlurImage from "@/components/shared/blur-image";
 
 export default function MetaScraping() {
   const { theme } = useTheme();
   const [currentLink, setCurrentLink] = useState("wr.do");
-  const [protocol, setProtocol] = useState("https");
+  const [protocol, setProtocol] = useState("https://");
   const [metaInfo, setMetaInfo] = useState({
     title: "",
     description: "",
@@ -40,11 +42,19 @@ export default function MetaScraping() {
   });
   const [isScraping, setIsScraping] = useState(false);
 
+  const [isShoting, setIsShoting] = useState(false);
+  const [currentScreenshotLink, setCurrentScreenshotLink] = useState("wr.do");
+  const [screenshotInfo, setScreenshotInfo] = useState({
+    data: "",
+    url: "",
+    timestamp: "",
+  });
+
   const handleScrapingMeta = async () => {
     if (currentLink) {
       setIsScraping(true);
       const res = await fetch(
-        `/api/scraping/meta?url=${protocol}://${currentLink}`,
+        `/api/scraping/meta?url=${protocol}${currentLink}`,
       );
       if (!res.ok || res.status !== 200) {
         toast.error(res.statusText || "Error");
@@ -54,6 +64,26 @@ export default function MetaScraping() {
         toast.success("Success!");
       }
       setIsScraping(false);
+    }
+  };
+
+  const handleScrapingScreenshot = async () => {
+    if (currentScreenshotLink) {
+      setIsShoting(true);
+      const res = await fetch(
+        `/api/scraping/screenshot?url=${protocol}${currentScreenshotLink}`,
+      );
+      console.log(res);
+
+      if (!res.ok || res.status !== 200) {
+        toast.error(res.statusText);
+      } else {
+        const data = await res.json();
+        console.log(data);
+        setScreenshotInfo(data);
+        toast.success("Success!");
+      }
+      setIsShoting(false);
     }
   };
 
@@ -71,17 +101,17 @@ export default function MetaScraping() {
                 setProtocol(value);
               }}
               name="protocol"
-              defaultValue={"https"}
+              defaultValue={"https://"}
             >
               <SelectTrigger className="h-10 w-24 rounded-r-none shadow-inner">
                 <SelectValue placeholder="Protocol" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem key="https" value="https">
-                  https
+                <SelectItem key="https" value="https://">
+                  https://
                 </SelectItem>
-                <SelectItem key="http" value="http">
-                  http
+                <SelectItem key="http" value="http://">
+                  http://
                 </SelectItem>
               </SelectContent>
             </Select>
@@ -110,6 +140,76 @@ export default function MetaScraping() {
               displayObjectSize={false}
               displayDataTypes={false}
             />
+          </div>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Screenshot</CardTitle>
+          <CardDescription>
+            Automate your website screenshots and turn them into stunning
+            visuals for your applications.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center">
+            <Select
+              onValueChange={(value: string) => {
+                setProtocol(value);
+              }}
+              name="protocol"
+              defaultValue="https://"
+            >
+              <SelectTrigger className="h-10 w-24 rounded-r-none shadow-inner">
+                <SelectValue placeholder="Protocol" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem key="https" value="https://">
+                  https://
+                </SelectItem>
+                <SelectItem key="http" value="http://">
+                  http://
+                </SelectItem>
+              </SelectContent>
+            </Select>
+            <Input
+              type="text"
+              placeholder="www.example.com"
+              className="h-10 rounded-none border focus:border-primary active:border-primary"
+              value={currentScreenshotLink}
+              size={100}
+              onChange={(e) => setCurrentScreenshotLink(e.target.value)}
+            />
+            <Button
+              variant="blue"
+              onClick={handleScrapingScreenshot}
+              disabled={isShoting}
+              className="rounded-l-none"
+            >
+              {isShoting ? "Scraping..." : "Send"}
+            </Button>
+          </div>
+
+          <div className="mt-4 rounded-md border p-3">
+            <JsonView
+              className="max-w-[400px] overflow-hidden"
+              style={theme === "dark" ? vscodeTheme : githubLightTheme}
+              value={screenshotInfo}
+              displayObjectSize={false}
+              displayDataTypes={false}
+              // shortenTextAfterLength={50}
+            />
+            {screenshotInfo.data && (
+              <BlurImage
+                src={screenshotInfo.data}
+                alt="ligth preview landing"
+                className="my-4 flex rounded-md border object-contain object-center shadow-md dark:hidden"
+                width={1500}
+                height={750}
+                priority
+                // placeholder="blur"
+              />
+            )}
           </div>
         </CardContent>
       </Card>
