@@ -12,7 +12,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
-import BlurImage from "./blur-image";
+import BlurImage, { BlurImg } from "./blur-image";
 
 export function LinkPreviewer({
   url,
@@ -75,8 +75,8 @@ export function LinkPreviewer({
             </div>
           ) : metaInfo?.title !== "" ? (
             <div className="relative flex h-full w-full items-end justify-start rounded-lg border bg-primary-foreground p-3 group-hover:opacity-80">
-              <BlurImage
-                className="absolute left-1/2 top-24 h-2/3 w-2/3 -translate-x-1/2 -translate-y-1/2 transform rounded-lg group-hover:scale-105"
+              <BlurImg
+                className="absolute left-1/2 top-24 h-2/3 -translate-x-1/2 -translate-y-1/2 transform rounded-lg group-hover:scale-105"
                 src={metaInfo?.image || BlogPost}
                 alt={metaInfo?.title || ""}
               />

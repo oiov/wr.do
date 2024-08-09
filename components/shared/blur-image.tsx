@@ -22,3 +22,20 @@ export default function BlurImage(props: ComponentProps<typeof Image>) {
     />
   );
 }
+
+export function BlurImg(props) {
+  const [isLoading, setLoading] = useState(true);
+
+  return (
+    <img
+      {...props}
+      alt={props.alt}
+      className={cn(
+        props.className,
+        "duration-500 ease-in-out",
+        isLoading ? "blur-sm" : "blur-0",
+      )}
+      onLoad={() => setLoading(false)}
+    />
+  );
+}
