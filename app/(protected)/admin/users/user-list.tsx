@@ -162,7 +162,7 @@ export default function UsersList({ user }: UrlListProps) {
                     key={user.id}
                     className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-7"
                   >
-                    <TableCell className="col-span-1">
+                    <TableCell className="col-span-1 truncate">
                       <TooltipProvider>
                         <Tooltip delayDuration={200}>
                           <TooltipTrigger className="truncate">

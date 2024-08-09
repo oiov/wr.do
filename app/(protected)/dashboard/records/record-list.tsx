@@ -38,6 +38,7 @@ import CountUpFn from "@/components/dashboard/count-up";
 import StatusDot from "@/components/dashboard/status-dot";
 import { FormType, RecordForm } from "@/components/forms/record-form";
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
+import { LinkPreviewer } from "@/components/shared/link-previewer";
 
 export interface RecordListProps {
   user: Pick<User, "id" | "name">;
@@ -211,16 +212,14 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                       </Badge>
                     </TableCell>
                     <TableCell className="col-span-1">
-                      <Link
-                        className="text-slate-600 hover:text-blue-400 hover:underline dark:text-slate-400"
-                        href={"https://" + record.name}
-                        target="_blank"
-                        prefetch={false}
-                      >
-                        {record.name.endsWith(".wr.do")
-                          ? record.name.slice(0, -6)
-                          : record.name}
-                      </Link>
+                      <LinkPreviewer
+                        url={"https://" + record.name}
+                        formatUrl={
+                          "https://" + record.name.endsWith(".wr.do")
+                            ? record.name.slice(0, -6)
+                            : record.name
+                        }
+                      />
                     </TableCell>
                     <TableCell className="col-span-2 hidden truncate text-nowrap sm:inline-block">
                       <TooltipProvider>

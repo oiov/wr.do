@@ -4,7 +4,7 @@ import { checkUserStatus } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";
 import { isLink } from "@/lib/utils";
 
-export const revalidate = 60;
+export const revalidate = 600;
 
 export async function GET(req: Request) {
   try {

@@ -26,11 +26,22 @@ import {
 } from "@/components/ui/select";
 import BlurImage from "@/components/shared/blur-image";
 
+export interface MetaScrapingProps {
+  title: string;
+  description: string;
+  image: string;
+  icon: string;
+  url: string;
+  lang: string;
+  author: string;
+  timestamp: string;
+}
+
 export default function MetaScraping() {
   const { theme } = useTheme();
   const [currentLink, setCurrentLink] = useState("wr.do");
   const [protocol, setProtocol] = useState("https://");
-  const [metaInfo, setMetaInfo] = useState({
+  const [metaInfo, setMetaInfo] = useState<MetaScrapingProps>({
     title: "",
     description: "",
     image: "",
@@ -68,23 +79,21 @@ export default function MetaScraping() {
   };
 
   const handleScrapingScreenshot = async () => {
-    if (currentScreenshotLink) {
-      setIsShoting(true);
-      const res = await fetch(
-        `/api/scraping/screenshot?url=${protocol}${currentScreenshotLink}`,
-      );
-      console.log(res);
-
-      if (!res.ok || res.status !== 200) {
-        toast.error(res.statusText);
-      } else {
-        const data = await res.json();
-        console.log(data);
-        setScreenshotInfo(data);
-        toast.success("Success!");
-      }
-      setIsShoting(false);
-    }
+    // if (currentScreenshotLink) {
+    //   setIsShoting(true);
+    //   const res = await fetch(
+    //     `/api/scraping/screenshot?url=${protocol}${currentScreenshotLink}`,
+    //   );
+    //   if (!res.ok || res.status !== 200) {
+    //     toast.error(res.statusText);
+    //   } else {
+    //     const data = await res.json();
+    //     console.log(data);
+    //     setScreenshotInfo(data);
+    //     toast.success("Success!");
+    //   }
+    //   setIsShoting(false);
+    // }
   };
 
   return (

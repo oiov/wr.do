@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/table";
 import {
   Tooltip,
+  TooltipArrow,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
@@ -45,6 +46,7 @@ import { FormType } from "@/components/forms/record-form";
 import { UrlForm } from "@/components/forms/url-form";
 import { CopyButton } from "@/components/shared/copy-button";
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
+import { LinkPreviewer } from "@/components/shared/link-previewer";
 
 import UserUrlMetaInfo from "./meta";
 
@@ -219,21 +221,10 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                         />
                       </TableCell>
                       <TableCell className="col-span-1 truncate sm:col-span-2">
-                        <TooltipProvider>
-                          <Tooltip delayDuration={200}>
-                            <TooltipTrigger className="truncate">
-                              <Link
-                                className="line-clamp-2 overflow-hidden overflow-ellipsis whitespace-normal text-slate-600 hover:text-blue-400 hover:underline dark:text-slate-400"
-                                href={short.target}
-                                target="_blank"
-                                prefetch={false}
-                              >
-                                {removeUrlSuffix(short.target)}
-                              </Link>
-                            </TooltipTrigger>
-                            <TooltipContent>{short.target}</TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
+                        <LinkPreviewer
+                          url={short.target}
+                          formatUrl={removeUrlSuffix(short.target)}
+                        />
                       </TableCell>
                       <TableCell className="col-span-1 hidden justify-center truncate sm:flex">
                         <TooltipProvider>
