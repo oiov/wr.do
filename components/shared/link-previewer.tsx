@@ -44,7 +44,7 @@ export function LinkPreviewer({
 
   const renderLink = (text: string) => (
     <Link
-      className="mt-2 line-clamp-2 max-w-64 overflow-hidden truncate overflow-ellipsis whitespace-normal text-slate-600 after:content-['↗'] hover:underline group-hover:text-blue-400 dark:text-slate-400"
+      className="line-clamp-1 max-w-64 overflow-hidden truncate overflow-ellipsis whitespace-normal text-slate-600 after:content-['↗'] hover:underline group-hover:text-blue-400 dark:text-slate-400"
       href={url}
       target="_blank"
       prefetch={false}
@@ -63,33 +63,39 @@ export function LinkPreviewer({
           {formatUrl}
         </TooltipTrigger>
         <TooltipContent
-          className="group flex h-64 w-72 flex-col items-center justify-center py-3 shadow-inner transition-all duration-200 hover:bg-gray-50"
+          className="group flex h-full max-h-56 w-72 flex-col items-center justify-center py-3 shadow-inner transition-all duration-200 hover:bg-gray-50"
           onPointerDownOutside={() => setOpen(false)}
           onMouseLeave={() => setOpen(false)}
         >
           <TooltipArrow className="fill-gray-400" />
           {isScraping ? (
-            <div className="relative flex h-full w-full items-center justify-center">
+            <div className="relative flex h-full min-h-48 w-full items-center justify-center">
               <Skeleton className="absolute h-full w-full rounded-lg" />
               <p>Previewing...</p>
             </div>
-          ) : metaInfo?.title !== "" ? (
-            <div className="relative flex h-full w-full items-end justify-start rounded-lg border bg-primary-foreground p-3 group-hover:opacity-80">
+          ) : metaInfo?.title ? (
+            <div className="flex h-full w-full flex-col items-center justify-start rounded-lg border bg-primary-foreground group-hover:opacity-80">
               <BlurImg
-                className="absolute left-1/2 top-24 h-2/3 -translate-x-1/2 -translate-y-1/2 transform rounded-lg group-hover:scale-105"
-                src={metaInfo?.image || BlogPost}
+                className={
+                  "w-full rounded-t-lg group-hover:scale-105" + metaInfo?.image
+                    ? "h-32"
+                    : ""
+                }
+                src={
+                  metaInfo?.image || "/_static/illustrations/rocket-crashed.svg"
+                }
                 alt={metaInfo?.title || ""}
               />
-              <div className="max-w-64 space-y-1 truncate">
+              <div className="mr-auto max-w-64 truncate p-2">
                 {renderLink(metaInfo?.title ?? url)}
-                <p className="max-w-64 truncate text-xs">
+                <p className="max-w-64 truncate text-xs text-slate-500">
                   {metaInfo?.description}
                 </p>
               </div>
             </div>
           ) : (
             <>
-              <p className="text-lg font-bold text-slate-600">
+              <p className="mb-2 text-lg font-bold text-slate-600">
                 Faild to preview link
               </p>
               {renderLink(formatUrl ?? url)}
