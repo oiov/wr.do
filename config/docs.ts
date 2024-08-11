@@ -26,6 +26,11 @@ export const docsConfig: DocsConfig = {
           href: "/docs/short-urls",
           icon: "page",
         },
+        {
+          title: "Scraping API",
+          href: "/docs/scraping-api",
+          icon: "page",
+        },
         // {
         //   title: "Terms of Service",
         //   href: "/terms",
