@@ -65,7 +65,7 @@ export function LinkPreviewer({
         <TooltipContent
           className="group flex h-full max-h-56 w-72 flex-col items-center justify-center py-3 shadow-inner transition-all duration-200 hover:bg-gray-50"
           onPointerDownOutside={() => setOpen(false)}
-          // onMouseLeave={() => setOpen(false)}
+          onMouseLeave={() => setOpen(false)}
         >
           <TooltipArrow className="fill-gray-400" />
           {isScraping ? (
