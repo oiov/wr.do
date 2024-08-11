@@ -140,7 +140,7 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
   const latestEntry = data[data.length - 1];
   const latestDate = timeAgo(latestEntry.updatedAt);
   const latestFrom = [
-    latestEntry.city ? latestEntry.city : "",
+    latestEntry.city ? decodeURIComponent(latestEntry.city) : "",
     latestEntry.country ? `(${latestEntry.country})` : "",
   ]
     .filter(Boolean)

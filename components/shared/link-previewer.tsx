@@ -44,7 +44,7 @@ export function LinkPreviewer({
 
   const renderLink = (text: string) => (
     <Link
-      className="line-clamp-1 max-w-64 overflow-hidden truncate overflow-ellipsis whitespace-normal text-slate-600 after:content-['↗'] hover:underline group-hover:text-blue-400 dark:text-slate-400"
+      className="line-clamp-1 max-w-64 overflow-hidden truncate overflow-ellipsis whitespace-normal text-slate-600 transition-colors duration-300 after:content-['↗'] hover:underline group-hover:text-blue-400 dark:text-slate-400"
       href={url}
       target="_blank"
       prefetch={false}
@@ -65,7 +65,7 @@ export function LinkPreviewer({
         <TooltipContent
           className="group flex h-full max-h-56 w-72 flex-col items-center justify-center py-3 shadow-inner transition-all duration-200 hover:bg-gray-50"
           onPointerDownOutside={() => setOpen(false)}
-          onMouseLeave={() => setOpen(false)}
+          // onMouseLeave={() => setOpen(false)}
         >
           <TooltipArrow className="fill-gray-400" />
           {isScraping ? (
@@ -77,8 +77,8 @@ export function LinkPreviewer({
             <div className="flex h-full w-full flex-col items-center justify-start rounded-lg border bg-primary-foreground group-hover:opacity-80">
               <BlurImg
                 className={
-                  "w-full rounded-t-lg group-hover:scale-105" + metaInfo?.image
-                    ? "h-32"
+                  "w-full rounded-t-lg " + metaInfo?.image
+                    ? "h-32 group-hover:scale-110 group-hover:opacity-95"
                     : ""
                 }
                 src={
@@ -94,12 +94,12 @@ export function LinkPreviewer({
               </div>
             </div>
           ) : (
-            <>
+            <div className="flex h-full min-h-48 w-full flex-col items-center justify-center rounded-lg border bg-primary-foreground group-hover:opacity-80">
               <p className="mb-2 text-lg font-bold text-slate-600">
                 Faild to preview link
               </p>
               {renderLink(formatUrl ?? url)}
-            </>
+            </div>
           )}
         </TooltipContent>
       </Tooltip>
