@@ -51,7 +51,7 @@ export async function POST(req: Request) {
     const user_record = await getUserRecordByTypeNameContent(
       user.id,
       record.type,
-      record.name,
+      record.name.endsWith(".wr.do") ? record.name : record.name + ".wr.do",
       record.content,
       1,
     );

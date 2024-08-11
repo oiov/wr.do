@@ -143,7 +143,7 @@ export async function getUserRecordByTypeNameContent(
       userId,
       type,
       content,
-      // name,
+      name,
       active,
     },
   });
