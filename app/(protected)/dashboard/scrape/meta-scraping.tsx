@@ -152,7 +152,7 @@ export default function MetaScraping() {
           </div>
         </CardContent>
       </Card>
-      <Card>
+      {/* <Card>
         <CardHeader>
           <CardTitle>Screenshot</CardTitle>
           <CardDescription>
@@ -221,7 +221,7 @@ export default function MetaScraping() {
             )}
           </div>
         </CardContent>
-      </Card>
+      </Card> */}
     </>
   );
 }

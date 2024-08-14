@@ -6,7 +6,7 @@ import { UrlMeta } from "@prisma/client";
 import { VisSingleContainer, VisTooltip, VisTopoJSONMap } from "@unovis/react";
 import { Donut, MapData, TopoJSONMap } from "@unovis/ts";
 import { WorldMapTopoJSON } from "@unovis/ts/maps";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import { isLink, removeUrlSuffix, timeAgo } from "@/lib/utils";
 import {
@@ -191,7 +191,7 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
           config={chartConfig}
           className="aspect-auto h-[225px] w-full"
         >
-          <BarChart
+          <AreaChart
             accessibilityLayer
             data={processedData}
             margin={{
@@ -201,6 +201,32 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
               bottom: 5,
             }}
           >
+            <defs>
+              <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                <stop
+                  offset="5%"
+                  stopColor={`var(--color-uv)`}
+                  stopOpacity={0.8}
+                />
+                <stop
+                  offset="95%"
+                  stopColor={`var(--color-uv)`}
+                  stopOpacity={0}
+                />
+              </linearGradient>
+              <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
+                <stop
+                  offset="5%"
+                  stopColor={`var(--color-pv)`}
+                  stopOpacity={0.8}
+                />
+                <stop
+                  offset="95%"
+                  stopColor={`var(--color-pv)`}
+                  stopOpacity={0}
+                />
+              </linearGradient>
+            </defs>
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="date"
@@ -231,16 +257,30 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
                 />
               }
             />
-            <Bar dataKey="uv" fill={`var(--color-uv)`} stackId="a" />
-            <Bar dataKey="pv" fill={`var(--color-pv)`} stackId="a" />
+            {/* <Bar dataKey="uv" fill={`var(--color-uv)`} stackId="a" />
+            <Bar dataKey="pv" fill={`var(--color-pv)`} stackId="a" /> */}
 
-            {/* <Bar
-              dataKey={activeChart}
-              stackId="a"
-              fill={`var(--color-${activeChart})`}
-            /> */}
-          </BarChart>
+            <Area
+              type="monotone"
+              dataKey="uv"
+              stroke={`var(--color-uv)`}
+              fillOpacity={1}
+              fill="url(#colorUv)"
+            />
+            <Area
+              type="monotone"
+              dataKey="pv"
+              stroke={`var(--color-pv)`}
+              fillOpacity={1}
+              fill="url(#colorPv)"
+            />
+          </AreaChart>
         </ChartContainer>
+
+        <VisSingleContainer data={{ areas: areaData }}>
+          <VisTopoJSONMap topojson={WorldMapTopoJSON} />
+          <VisTooltip triggers={triggers} />
+        </VisSingleContainer>
 
         <div className="my-5 grid grid-cols-1 gap-6 sm:grid-cols-2">
           {refererStats.length > 0 && (
@@ -256,11 +296,6 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
             <StatsList data={deviceStats} title="Devices" />
           )}
         </div>
-
-        <VisSingleContainer data={{ areas: areaData }}>
-          <VisTopoJSONMap topojson={WorldMapTopoJSON} />
-          <VisTooltip triggers={triggers} />
-        </VisSingleContainer>
       </CardContent>
     </Card>
   );
@@ -289,8 +324,11 @@ export function StatsList({ data, title }: { data: Stat[]; title: string }) {
           </div>
           <div className="w-full rounded-lg bg-neutral-200 dark:bg-neutral-600">
             <div
-              className="rounded-lg bg-blue-500 px-0.5 py-1.5 leading-none transition-all duration-300"
-              style={{ width: `${ref.percentage}` }}
+              className="rounded-lg bg-blue-500/90 px-0.5 py-1 leading-none transition-all duration-300"
+              style={{
+                width: `${ref.percentage}`,
+                opacity: parseFloat(ref.percentage) / 10,
+              }}
             ></div>
           </div>
         </div>
