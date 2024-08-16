@@ -2,7 +2,7 @@ import cheerio from "cheerio";
 
 import { checkUserStatus } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";
-import { isLink } from "@/lib/utils";
+import { isLink, removeUrlSuffix } from "@/lib/utils";
 
 export const revalidate = 600;
 
@@ -47,7 +47,8 @@ export async function GET(req: Request) {
       $("meta[name='twitter:image']").attr("content");
     const icon =
       $("link[rel='icon']").attr("href") ||
-      $("link[rel='apple-touch-icon']").attr("href");
+      $("link[rel='apple-touch-icon']").attr("href") ||
+      `https://icon.wr.do/${removeUrlSuffix(link)}.ico`;
     const lang =
       $("html").attr("lang") ||
       $("html").attr("xml:lang") ||
