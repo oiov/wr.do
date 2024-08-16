@@ -48,20 +48,26 @@ export default auth(async (req) => {
         });
 
         if (!res.ok) {
-          return NextResponse.redirect(`${siteConfig.url}/docs/short-urls`);
+          return NextResponse.redirect(
+            `${siteConfig.url}/docs/short-urls`,
+            302,
+          );
         }
 
         const target = await res.json();
         if (!target) {
-          return NextResponse.redirect(`${siteConfig.url}/docs/short-urls`);
+          return NextResponse.redirect(
+            `${siteConfig.url}/docs/short-urls`,
+            302,
+          );
         }
-        return NextResponse.redirect(target);
+        return NextResponse.redirect(target, 302);
       }
     }
 
     return NextResponse.next();
   } catch (error) {
-    return NextResponse.redirect(siteConfig.url);
+    return NextResponse.redirect(siteConfig.url, 302);
   }
 });
 
