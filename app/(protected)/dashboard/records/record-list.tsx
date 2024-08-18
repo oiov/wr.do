@@ -245,7 +245,7 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                     </TableCell>
                     <TableCell className="col-span-1 flex justify-center">
                       <Button
-                        className="text-sm hover:bg-slate-100"
+                        className="text-sm hover:bg-slate-100 dark:hover:text-primary-foreground"
                         size="sm"
                         variant={"outline"}
                         onClick={() => {

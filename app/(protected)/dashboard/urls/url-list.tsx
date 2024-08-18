@@ -249,7 +249,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                       </TableCell>
                       <TableCell className="col-span-1 flex items-center justify-center gap-2">
                         <Button
-                          className="h-7 px-1 text-xs hover:bg-slate-100"
+                          className="h-7 px-1 text-xs hover:bg-slate-100 dark:hover:text-primary-foreground"
                           size="sm"
                           variant={"outline"}
                           onClick={() => {
@@ -263,7 +263,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                           <PenLine className="ml-1 size-3" />
                         </Button>
                         <Button
-                          className="h-7 px-1 text-xs hover:bg-slate-100"
+                          className="h-7 px-1 text-xs hover:bg-slate-100 dark:hover:text-primary-foreground"
                           size="sm"
                           variant={"outline"}
                           onClick={() => {
