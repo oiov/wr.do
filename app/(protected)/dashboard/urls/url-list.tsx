@@ -23,7 +23,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { PaginationWrapper } from "@/components/ui/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
@@ -35,7 +34,6 @@ import {
 } from "@/components/ui/table";
 import {
   Tooltip,
-  TooltipArrow,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
@@ -47,6 +45,7 @@ import { UrlForm } from "@/components/forms/url-form";
 import { CopyButton } from "@/components/shared/copy-button";
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
 import { LinkPreviewer } from "@/components/shared/link-previewer";
+import { PaginationWrapper } from "@/components/shared/pagination";
 
 import UserUrlMetaInfo from "./meta";
 

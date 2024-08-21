@@ -1,10 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { Pagination } from "@nextui-org/pagination";
 import { User } from "@prisma/client";
-import { ArrowLeft, ArrowRight, PenLine, RefreshCwIcon } from "lucide-react";
+import { PenLine, RefreshCwIcon } from "lucide-react";
 import useSWR, { useSWRConfig } from "swr";
 
 import { siteConfig } from "@/config/site";
@@ -19,7 +17,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { PaginationWrapper } from "@/components/ui/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
@@ -39,6 +36,7 @@ import StatusDot from "@/components/dashboard/status-dot";
 import { FormType } from "@/components/forms/record-form";
 import { UserForm } from "@/components/forms/user-form";
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
+import { PaginationWrapper } from "@/components/shared/pagination";
 
 import CountUpFn from "../../../../components/dashboard/count-up";
 

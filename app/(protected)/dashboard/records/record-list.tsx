@@ -18,7 +18,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { PaginationWrapper } from "@/components/ui/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
@@ -39,6 +38,7 @@ import StatusDot from "@/components/dashboard/status-dot";
 import { FormType, RecordForm } from "@/components/forms/record-form";
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
 import { LinkPreviewer } from "@/components/shared/link-previewer";
+import { PaginationWrapper } from "@/components/shared/pagination";
 
 export interface RecordListProps {
   user: Pick<User, "id" | "name">;
