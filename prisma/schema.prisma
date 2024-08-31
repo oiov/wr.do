@@ -146,3 +146,30 @@ model UrlMeta {
   @@index([urlId])
   @@map(name: "url_metas")
 }
+
+model HanEvent {
+  id              String    @id @default(cuid()) // 唯一标识符
+  name            String // 事件名称
+  code            String // 事件代号
+  firstOccurredAt DateTime // 事件第一次发生时间
+  lastOccurredAt  DateTime? // 事件最近一次发生时间
+  type            String // 事件类型
+  notes           String? // 备注
+  location        String? // 事件发生地点
+  participants    String // 事件参与者
+  photos          String? // 事件照片链接
+  status          Int       @default(-1) // 事件状态
+  importance      Int       @default(-1) // 事件重要性等级
+  reminder        Boolean // 是否设置提醒
+  reminderTime    DateTime? // 提醒时间
+  recurrent       Boolean // 是否为重复事件
+  frequency       String? // 重复频率
+  count           Int       @default(-1) // 发生次数
+  tags            String? // 标签
+
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @default(now()) @map(name: "updated_at")
+}
+
+// 粉白主题
+// 简洁可爱、冒粉色泡泡
