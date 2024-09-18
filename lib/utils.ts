@@ -226,6 +226,7 @@ export const isSameDate = (date1: Date, date2: string) => {
   return (
     d1.getUTCFullYear() === d2.getUTCFullYear() &&
     d1.getUTCMonth() === d2.getUTCMonth() &&
-    d1.getUTCDate() === d2.getUTCDate() + 1
+    d1.getUTCDate() ===
+      d2.getUTCDate() + (process.env.NODE_ENV === "development" ? 1 : 0)
   );
 };
