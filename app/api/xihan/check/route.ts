@@ -18,15 +18,6 @@ export async function POST(req: Request) {
         statusText: "event not found",
       });
     }
-    console.log(
-      "日期",
-      res.firstOccurredAt.getFullYear() +
-        "." +
-        (res.firstOccurredAt.getMonth() + 1) +
-        "." +
-        res.firstOccurredAt.getDate(),
-      answer,
-    );
 
     if (isSameDate(res.firstOccurredAt, answer)) {
       return Response.json(202);
