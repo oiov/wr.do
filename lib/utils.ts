@@ -220,8 +220,9 @@ export function removeUrlSuffix(url: string): string {
 }
 
 export const isSameDate = (date1: Date, date2: string) => {
-  const d1 = new Date(date1); // 解析数据库中的日期
-  const d2 = new Date(date2.replace(/\./g, "-")); // 将选项中的 `.` 替换为 `-`，并解析为日期
+  const d1 = new Date(date1);
+  const d2 = new Date(date2.replace(/\./g, "-"));
+  console.log(d1, d2);
 
   return (
     d1.getUTCFullYear() === d2.getUTCFullYear() &&
