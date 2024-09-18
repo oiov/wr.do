@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "XiHan",
     short_name: "XiHan",
     description: "我们的故事",
-    start_url: "/xihan",
+    start_url: "/",
     display: "standalone",
     background_color: "#fff",
     theme_color: "#fff",
