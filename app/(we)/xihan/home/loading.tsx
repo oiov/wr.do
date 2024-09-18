@@ -7,7 +7,7 @@ export default function XihanLoading() {
     <div className="flex h-screen w-screen animate-fade-in flex-col items-center justify-center">
       <BlurImage
         className="size-12"
-        src="/_static/lover.png"
+        src="/_static/lover-c.png"
         alt="lover"
         width={48}
         height={48}

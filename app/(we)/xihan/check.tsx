@@ -63,7 +63,7 @@ export default function CheckEvent({
         className={
           "mx-auto mb-16 mt-auto size-12 " + (isChecking ? "animate-pulse" : "")
         }
-        src="/_static/lover.png"
+        src="/_static/lover-c.png"
         alt="lover"
         width={48}
         height={48}

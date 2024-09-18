@@ -16,7 +16,7 @@ export default function manifest(): MetadataRoute.Manifest {
         type: "image/x-icon",
       },
       {
-        src: "/_static/lover.png",
+        src: "/_static/lover-c.png",
         sizes: "256x256",
         type: "image/png",
       },
