@@ -1,5 +1,4 @@
 import { auth } from "@/auth";
-import { UrlMeta, UserRole } from "@prisma/client";
 
 import { prisma } from "@/lib/db";
 
@@ -10,6 +9,7 @@ export async function getCheckEventNames() {
     },
     select: {
       name: true,
+      notes: true,
     },
   });
 }
@@ -18,6 +18,9 @@ export async function getEventByName(name: string) {
   return await prisma.hanEvent.findFirst({
     where: {
       name,
+    },
+    select: {
+      firstOccurredAt: true,
     },
   });
 }

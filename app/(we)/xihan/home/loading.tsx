@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { DashboardHeader } from "@/components/dashboard/header";
-import BlurImage from "@/components/shared/blur-image";
+import BlurImage, { BlurImg } from "@/components/shared/blur-image";
 
 export default function XihanLoading() {
   return (

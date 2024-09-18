@@ -5,23 +5,13 @@ import { siteConfig } from "@/config/site";
 import { getCheckEventNames } from "@/lib/dto/han-event";
 import { constructMetadata } from "@/lib/utils";
 
-import CheckEvent from "./check";
 import XihanLoading from "./loading";
 
 export const metadata = constructMetadata({
-  title: "我熙菡你",
+  title: "我熙菡你 | 主页",
   description: "关于我们的故事",
 });
 
 export default async function XiHanPage() {
-  const events = await getCheckEventNames();
-
-  if (!events) return <XihanLoading />;
-
-  const event = events[Math.floor(Math.random() * events.length)];
-  return (
-    <>
-      <CheckEvent event={event} />
-    </>
-  );
+  return <div>1</div>;
 }

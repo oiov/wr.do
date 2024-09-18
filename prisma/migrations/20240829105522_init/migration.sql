@@ -44,3 +44,50 @@ CREATE TABLE "han_events"
 
   CONSTRAINT "han_events_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateTable
+CREATE TABLE "xi_hans"
+(
+  "id" TEXT NOT NULL,
+  -- 唯一标识符
+  "name" TEXT NOT NULL,
+  -- 姓名
+  "nickName" TEXT NOT NULL,
+  -- 小名
+  "code" TEXT NOT NULL,
+  -- 代号
+  "email" TEXT NOT NULL,
+  -- 邮箱
+  "phone" TEXT NOT NULL,
+  -- 电话
+  "address" TEXT NOT NULL,
+  -- 地址
+  "avatar" TEXT,
+  -- 头像
+  "sex" INTEGER NOT NULL DEFAULT 0,
+  -- 性别
+  "age" INTEGER NOT NULL DEFAULT 0,
+  -- 年龄
+  "birthday" TIMESTAMP(3),
+  -- 生日
+  "hobby" TEXT,
+  -- 爱好
+  "games" TEXT,
+  -- 游戏
+  "tags" TEXT,
+  -- 标签
+  "food" TEXT,
+  -- 食物
+  "sport" TEXT,
+  -- 运动
+  "job" TEXT,
+  -- 工作
+  "notes" TEXT,
+  -- 备注
+  "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  -- 记录创建时间
+  "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  -- 记录最后更新时间
+
+  CONSTRAINT "xi_hans_pkey" PRIMARY KEY ("id")
+);

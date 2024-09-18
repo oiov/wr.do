@@ -169,7 +169,35 @@ model HanEvent {
 
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @default(now()) @map(name: "updated_at")
+
+  @@map(name: "han_events")
 }
 
 // 粉白主题
 // 简洁可爱、冒粉色泡泡
+
+model XiHan {
+  id       String    @id @default(cuid()) // 唯一标识符
+  name     String // 姓名
+  nickName String // 小名
+  code     String // 代号
+  email    String // 邮箱
+  phone    String // 电话
+  address  String // 地址
+  avatar   String? // 头像
+  sex      Int       @default(0) // 性别
+  age      Int       @default(0) // 年龄
+  birthday DateTime? // 生日
+  hobby    String? // 爱好
+  games    String? // 游戏
+  tags     String? // 标签
+  food     String? // 食物
+  sport    String? // 运动
+  job      String? // 工作
+  notes    String? // 备注
+
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @default(now()) @map(name: "updated_at")
+
+  @@map(name: "xi_hans")
+}
