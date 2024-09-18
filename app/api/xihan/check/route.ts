@@ -22,8 +22,9 @@ export async function POST(req: Request) {
     if (isSameDate(res.firstOccurredAt, answer)) {
       return Response.json(202);
     }
-
-    return Response.json(401);
+    const d1 = res.firstOccurredAt.toLocaleString().slice(0, 9);
+    const d2 = answer.replace(/\./g, "/");
+    return Response.json({ d1, d2 });
   } catch (error) {
     return Response.json(error?.statusText || error, {
       status: error.status || 500,
