@@ -32,10 +32,11 @@ export default function CheckEvent({
         router.push("/xihan/home");
       } else if (data === 401) {
         toast.error("答案错误");
+        setChecking(false);
       }
+    } else {
+      setChecking(false);
     }
-
-    setChecking(false);
   };
 
   return (
@@ -47,7 +48,7 @@ export default function CheckEvent({
           {event.notes.split(",").map((ans, index) => (
             <Button
               key={index}
-              className="justify-start rounded-lg border px-4 py-3"
+              className="justify-start rounded-lg border px-4 py-4"
               onClick={() => handleCheck(ans)}
               variant="ghost"
               disabled={isChecking}
@@ -61,12 +62,12 @@ export default function CheckEvent({
 
       <BlurImage
         className={
-          "mx-auto mb-16 mt-auto size-12 " + (isChecking ? "animate-pulse" : "")
+          "mx-auto mb-16 mt-auto size-16 " + (isChecking ? "animate-pulse" : "")
         }
         src="/_static/lover-c.png"
         alt="lover"
-        width={48}
-        height={48}
+        width={64}
+        height={64}
       />
     </div>
   );

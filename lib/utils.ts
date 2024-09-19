@@ -222,9 +222,9 @@ export function removeUrlSuffix(url: string): string {
 export const isSameDate = (date1: Date, date2: string) => {
   return (
     date1.getFullYear() +
-      "." +
+      "-" +
       (date1.getMonth() + 1) +
-      "." +
+      "-" +
       date1.getDate() ===
     date2
   );

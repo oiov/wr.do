@@ -94,3 +94,73 @@ export const STATUS_ENUMS = [
     label: "Inactive",
   },
 ];
+
+export const HAN_EVENT_TYPE_ENUMS = [
+  {
+    value: "check",
+    label: "锁屏提问",
+  },
+  {
+    value: "record",
+    label: "日常记录",
+  },
+];
+
+export const HAN_EVENT_STATUS_ENUMS = [
+  {
+    value: "-1",
+    label: "未计划",
+  },
+  {
+    value: "1",
+    label: "计划中",
+  },
+  {
+    value: "2",
+    label: "已完成",
+  },
+  {
+    value: "3",
+    label: "已取消",
+  },
+  {
+    value: "4",
+    label: "已失效",
+  },
+  {
+    value: "5",
+    label: "已忽略",
+  },
+];
+
+// 事件重要性等级
+export const EVENT_IMPORTANCE_ENUMS = [
+  {
+    value: "1",
+    label: "不急",
+  },
+  {
+    value: "2",
+    label: "不太急",
+  },
+  {
+    value: "3",
+    label: "有点急",
+  },
+  {
+    value: "4",
+    label: "急了",
+  },
+  {
+    value: "5",
+    label: "急急急",
+  },
+  {
+    value: "6",
+    label: "先吃饭",
+  },
+  {
+    value: "-1",
+    label: "未设置",
+  },
+];

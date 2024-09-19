@@ -157,7 +157,7 @@ model HanEvent {
   notes           String? // 备注
   location        String? // 事件发生地点
   participants    String // 事件参与者
-  photos          String? // 事件照片链接
+  photos          String? // 事件照片\视频链接
   status          Int       @default(-1) // 事件状态
   importance      Int       @default(-1) // 事件重要性等级
   reminder        Boolean // 是否设置提醒

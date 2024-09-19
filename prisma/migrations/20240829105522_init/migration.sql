@@ -37,9 +37,9 @@ CREATE TABLE "han_events"
   -- 发生次数
   "tags" TEXT,
   -- 标签
-  "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   -- 记录创建时间
-  "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   -- 记录最后更新时间
 
   CONSTRAINT "han_events_pkey" PRIMARY KEY ("id")

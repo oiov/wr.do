@@ -5,6 +5,7 @@ import { siteConfig } from "@/config/site";
 import { getCheckEventNames } from "@/lib/dto/han-event";
 import { constructMetadata } from "@/lib/utils";
 
+import EventList from "./event-list";
 import XihanLoading from "./loading";
 
 export const metadata = constructMetadata({
@@ -13,5 +14,9 @@ export const metadata = constructMetadata({
 });
 
 export default async function XiHanPage() {
-  return <div>1</div>;
+  return (
+    <div>
+      <EventList />
+    </div>
+  );
 }

@@ -6,11 +6,11 @@ export default function XihanLoading() {
   return (
     <div className="flex h-screen w-screen animate-fade-in flex-col items-center justify-center">
       <BlurImage
-        className="size-12"
+        className="size-16"
         src="/_static/lover-c.png"
         alt="lover"
-        width={48}
-        height={48}
+        width={64}
+        height={64}
       />
       <p className="mt-3 font-semibold text-slate-500">熙菡你...</p>
     </div>
