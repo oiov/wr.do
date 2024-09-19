@@ -154,12 +154,15 @@ export function EventForm({
 
   return (
     <form className="mb-4 rounded-lg p-4" onSubmit={onSubmit}>
+      <h1 className="mb-4 text-2xl font-semibold">
+        {type === "edit" ? "更新" : "添加"}事件
+      </h1>
       <div className="items-center justify-start gap-4 md:flex">
         <FormSectionColumns title="事件名称">
           <div className="flex items-center gap-2">
             <Input
               id="name"
-              className="bg-[#fff3fd] text-sm shadow-inner"
+              className="h-10 bg-[#fff3fd] text-sm shadow-inner"
               size={74}
               placeholder="输入事件名称"
               {...register("name")}
@@ -170,7 +173,7 @@ export function EventForm({
           <div className="flex items-center gap-2">
             <Input
               id="code"
-              className="bg-[#fff3fd] text-sm shadow-inner"
+              className="h-10 bg-[#fff3fd] text-sm shadow-inner"
               size={74}
               placeholder="输入事件代号"
               {...register("code")}
@@ -181,7 +184,7 @@ export function EventForm({
           <div className="flex items-center gap-2">
             <Input
               id="firstOccurredAt"
-              className="bg-[#fff3fd] text-sm shadow-inner"
+              className="h-10 bg-[#fff3fd] text-sm shadow-inner"
               size={74}
               placeholder="如 2024-09-15"
               {...register("firstOccurredAt")}
@@ -192,7 +195,7 @@ export function EventForm({
           <div className="flex items-center gap-2">
             <Input
               id="lastOccurredAt"
-              className="bg-[#fff3fd] text-sm shadow-inner"
+              className="h-10 bg-[#fff3fd] text-sm shadow-inner"
               size={74}
               placeholder="如 2024-09-15"
               {...register("lastOccurredAt")}
@@ -203,7 +206,7 @@ export function EventForm({
           <div className="flex items-center gap-2">
             <Input
               id="notes"
-              className="bg-[#fff3fd] text-sm shadow-inner"
+              className="h-10 bg-[#fff3fd] text-sm shadow-inner"
               size={74}
               placeholder="输入备注或描述"
               {...register("notes")}
@@ -214,7 +217,7 @@ export function EventForm({
           <div className="flex items-center gap-2">
             <Input
               id="location"
-              className="bg-[#fff3fd] text-sm shadow-inner"
+              className="h-10 bg-[#fff3fd] text-sm shadow-inner"
               size={74}
               placeholder="输入事件发生地点"
               {...register("location")}
@@ -225,7 +228,7 @@ export function EventForm({
           <div className="flex items-center gap-2">
             <Input
               id="participants"
-              className="bg-[#fff3fd] text-sm shadow-inner"
+              className="h-10 bg-[#fff3fd] text-sm shadow-inner"
               size={74}
               placeholder="输入事件参与者"
               {...register("participants")}
@@ -236,7 +239,7 @@ export function EventForm({
           <div className="flex items-center gap-2">
             <Input
               id="photos"
-              className="bg-[#fff3fd] text-sm shadow-inner"
+              className="h-10 bg-[#fff3fd] text-sm shadow-inner"
               size={74}
               placeholder="输入照片或视频链接"
               {...register("photos")}
@@ -247,7 +250,7 @@ export function EventForm({
           <div className="flex items-center gap-2">
             <Input
               id="tags"
-              className="bg-[#fff3fd] text-sm shadow-inner"
+              className="h-10 bg-[#fff3fd] text-sm shadow-inner"
               size={74}
               placeholder="输入标签, 用逗号间隔"
               {...register("tags")}
@@ -258,7 +261,7 @@ export function EventForm({
           <div className="flex items-center gap-2">
             <Input
               id="participants"
-              className="bg-[#fff3fd] text-sm shadow-inner"
+              className="h-10 bg-[#fff3fd] text-sm shadow-inner"
               size={74}
               placeholder="输入事件参与者"
               {...register("participants")}
@@ -269,7 +272,7 @@ export function EventForm({
           <div className="flex items-center gap-2">
             <Input
               id="count"
-              className="bg-[#fff3fd] text-sm shadow-inner"
+              className="h-10 bg-[#fff3fd] text-sm shadow-inner"
               size={74}
               placeholder="次数"
               {...register("count")}
@@ -287,7 +290,7 @@ export function EventForm({
             name="type"
             defaultValue={initData?.type || "record"}
           >
-            <SelectTrigger className="w-full bg-[#fff3fd] text-sm shadow-inner">
+            <SelectTrigger className="h-10 w-full bg-[#fff3fd] text-sm shadow-inner">
               <SelectValue placeholder="选择事件类型" />
             </SelectTrigger>
             <SelectContent>
@@ -307,7 +310,7 @@ export function EventForm({
             name="status"
             defaultValue={String(initData?.status || -1)}
           >
-            <SelectTrigger className="w-full bg-[#fff3fd] text-sm shadow-inner">
+            <SelectTrigger className="h-10 w-full bg-[#fff3fd] text-sm shadow-inner">
               <SelectValue placeholder="选择事件状态" />
             </SelectTrigger>
             <SelectContent>
@@ -327,7 +330,7 @@ export function EventForm({
             name="importance"
             defaultValue={String(initData?.importance || -1)}
           >
-            <SelectTrigger className="w-full bg-[#fff3fd] text-sm shadow-inner">
+            <SelectTrigger className="h-10 w-full bg-[#fff3fd] text-sm shadow-inner">
               <SelectValue placeholder="选择事件重要性" />
             </SelectTrigger>
             <SelectContent>
@@ -352,7 +355,7 @@ export function EventForm({
           <div className="flex items-center gap-2">
             <Input
               id="reminderTime"
-              className="bg-[#fff3fd] text-sm shadow-inner"
+              className="h-10 bg-[#fff3fd] text-sm shadow-inner"
               size={74}
               placeholder="如 2024-09-15"
               {...register("reminderTime")}

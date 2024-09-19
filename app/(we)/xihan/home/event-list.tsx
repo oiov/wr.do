@@ -45,7 +45,7 @@ export default function EventList() {
           setShowModal={setShowModal}
           showBlur={false}
         >
-          <div className="h-full">
+          <div className="h-full overflow-y-scroll">
             <EventForm
               isShowForm={showModal}
               setShowForm={setShowModal}
