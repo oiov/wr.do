@@ -20,6 +20,7 @@ const buttonVariants = cva(
         disable:
           "border border-input bg-transparent text-neutral-600 cursor-not-allowed",
         blue: "bg-bluer text-white hover:bg-blue/90",
+        ipink: "bg-ipink text-pink-500 hover:bg-pink/90",
       },
       size: {
         default: "h-10 py-2 px-4",

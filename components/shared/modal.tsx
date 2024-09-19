@@ -1,7 +1,5 @@
 "use client";
 
-import useWindowSize from "@/lib/hooks/use-window-size";
-import { AnimatePresence, motion } from "framer-motion";
 import {
   Dispatch,
   SetStateAction,
@@ -9,6 +7,10 @@ import {
   useEffect,
   useRef,
 } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+
+import useWindowSize from "@/hooks/use-window-size";
+
 import Leaflet from "./leaflet";
 
 export default function Modal({
@@ -30,7 +32,7 @@ export default function Modal({
         setShowModal(false);
       }
     },
-    [setShowModal]
+    [setShowModal],
   );
 
   useEffect(() => {
@@ -62,7 +64,8 @@ export default function Modal({
                   if (desktopModalRef.current === e.target) {
                     setShowModal(false);
                   }
-                }}>
+                }}
+              >
                 {children}
               </motion.div>
 

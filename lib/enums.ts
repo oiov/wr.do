@@ -104,6 +104,10 @@ export const HAN_EVENT_TYPE_ENUMS = [
     value: "record",
     label: "日常记录",
   },
+  {
+    value: "talk",
+    label: "悄悄话",
+  },
 ];
 
 export const HAN_EVENT_STATUS_ENUMS = [

@@ -57,6 +57,7 @@ export function EventForm({
   } = useForm<FormData>({
     // resolver: zodResolver(createRecordSchema),
     defaultValues: {
+      id: initData?.id,
       type: initData?.type || "record",
       name: initData?.name || "",
       code: initData?.code || "",
@@ -116,12 +117,12 @@ export function EventForm({
           }),
         });
         if (!response.ok || response.status !== 200) {
-          toast.error("Update Failed", {
+          toast.error("更新失败", {
             description: response.statusText,
           });
         } else {
           const res = await response.json();
-          toast.success(`Update successfully!`);
+          toast.success(`更新成功`);
           setShowForm(false);
           onRefresh();
         }
@@ -139,12 +140,12 @@ export function EventForm({
           }),
         });
         if (!response.ok || response.status !== 200) {
-          toast.error("Delete Failed", {
+          toast.error("删除失败", {
             description: response.statusText,
           });
         } else {
           await response.json();
-          toast.success(`Success`);
+          toast.success(`已删除`);
           setShowForm(false);
           onRefresh();
         }
@@ -154,15 +155,22 @@ export function EventForm({
 
   return (
     <form className="mb-4 rounded-lg p-4" onSubmit={onSubmit}>
-      <h1 className="mb-4 text-2xl font-semibold">
-        {type === "edit" ? "更新" : "添加"}事件
-      </h1>
+      <div className="mb-4 flex items-center justify-between">
+        <h1 className="text-2xl font-semibold">
+          {type === "edit" ? "更新" : "添加"}事件
+        </h1>
+        <Icons.close
+          className="cursor-pointer text-slate-500"
+          onClick={() => setShowForm(false)}
+        />
+      </div>
+
       <div className="items-center justify-start gap-4 md:flex">
         <FormSectionColumns title="事件名称">
           <div className="flex items-center gap-2">
             <Input
               id="name"
-              className="h-10 bg-[#fff3fd] text-sm shadow-inner"
+              className="h-12 bg-[#fff3fd] text-sm"
               size={74}
               placeholder="输入事件名称"
               {...register("name")}
@@ -173,7 +181,7 @@ export function EventForm({
           <div className="flex items-center gap-2">
             <Input
               id="code"
-              className="h-10 bg-[#fff3fd] text-sm shadow-inner"
+              className="h-12 bg-[#fff3fd] text-sm shadow-inner"
               size={74}
               placeholder="输入事件代号"
               {...register("code")}
@@ -184,7 +192,7 @@ export function EventForm({
           <div className="flex items-center gap-2">
             <Input
               id="firstOccurredAt"
-              className="h-10 bg-[#fff3fd] text-sm shadow-inner"
+              className="h-10 bg-[#fff3fd] text-sm"
               size={74}
               placeholder="如 2024-09-15"
               {...register("firstOccurredAt")}

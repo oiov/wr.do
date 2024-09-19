@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { SparklesCore } from "@/components/ui/sparkles";
 import BlurImage from "@/components/shared/blur-image";
 
 export default function CheckEvent({
@@ -68,6 +69,15 @@ export default function CheckEvent({
         alt="lover"
         width={64}
         height={64}
+      />
+
+      <SparklesCore
+        background="transparent"
+        minSize={0.4}
+        maxSize={1}
+        particleDensity={1200}
+        className="absolute left-0 top-0 -z-10 h-[100vh] w-full"
+        particleColor="#ff8383"
       />
     </div>
   );

@@ -75,9 +75,13 @@ export function absoluteUrl(path: string) {
 }
 
 // Utils from precedent.dev
-export const timeAgo = (timestamp: Date, timeOnly?: boolean): string => {
+export const timeAgo = (
+  timestamp: Date,
+  timeOnly?: boolean,
+  long: boolean = false,
+): string => {
   if (!timestamp) return "never";
-  return `${ms(Date.now() - new Date(timestamp).getTime())}${
+  return `${ms(Date.now() - new Date(timestamp).getTime(), { long })}${
     timeOnly ? "" : " ago"
   }`;
 };

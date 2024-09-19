@@ -4,11 +4,15 @@ import { useState } from "react";
 import { HanEvent } from "@prisma/client";
 import useSWR, { useSWRConfig } from "swr";
 
-import { fetcher } from "@/lib/utils";
+import { cn, fetcher, timeAgo } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { CardStack, Highlight } from "@/components/ui/card-stack";
+import { Skeleton } from "@/components/ui/skeleton";
 import Modal from "@/components/shared/modal";
 
+import XihanLoading from "../loading";
 import { EventForm, FormType } from "./event-form";
+import { ExpandableCard } from "./expandable-event";
 
 export default function EventList() {
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -23,7 +27,8 @@ export default function EventList() {
 
   const { data, error, isLoading } = useSWR<{
     total: number;
-    list: HanEvent[];
+    records: HanEvent[];
+    talks: HanEvent[];
   }>(`/api/xihan/event?page=${currentPage}&size=${pageSize}`, fetcher, {
     revalidateOnFocus: false,
   });
@@ -33,9 +38,41 @@ export default function EventList() {
   };
 
   return (
-    <>
+    <div className="p-4">
+      <ExpandableCard />
+
+      {data?.talks ? (
+        <CardStack
+          onEdit={(id) => {
+            setCurrentEditEvent(data?.talks.find((event) => event.id === id)!);
+            setFormType("edit");
+            setShowModal(true);
+          }}
+          items={data?.talks.map((talk, index) => ({
+            id: talk.id,
+            name: talk.name,
+            anthor: talk.participants || "匿名",
+            designation: timeAgo(talk.firstOccurredAt, false, true),
+            content: (
+              <p>
+                <Highlight>{talk.notes || "默认留言"}</Highlight>
+              </p>
+            ),
+          }))}
+        />
+      ) : (
+        <Skeleton className="h-48 w-full rounded-lg" />
+      )}
+
       {!showModal && (
-        <Button onClick={() => setShowModal(true)}>
+        <Button
+          variant="ipink"
+          onClick={() => {
+            setCurrentEditEvent(null);
+            setFormType("add");
+            setShowModal(true);
+          }}
+        >
           {formType === "add" ? "添加" : "编辑"}
         </Button>
       )}
@@ -56,6 +93,6 @@ export default function EventList() {
           </div>
         </Modal>
       )}
-    </>
+    </div>
   );
 }

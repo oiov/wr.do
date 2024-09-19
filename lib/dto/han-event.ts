@@ -7,7 +7,7 @@ export interface HanEventFormData
   extends Omit<HanEvent, "id" | "createdAt" | "updatedAt"> {}
 
 export async function getRecordEvents(page: number, size: number) {
-  const [total, list] = await prisma.$transaction([
+  const [total, records, talks] = await prisma.$transaction([
     prisma.hanEvent.count({
       where: {
         type: "record",
@@ -21,8 +21,16 @@ export async function getRecordEvents(page: number, size: number) {
         updatedAt: "desc",
       },
     }),
+    prisma.hanEvent.findMany({
+      where: { type: "talk" },
+      skip: (page - 1) * size,
+      take: size,
+      orderBy: {
+        updatedAt: "desc",
+      },
+    }),
   ]);
-  return { total, list };
+  return { total, records, talks };
 }
 
 export async function getCheckEventNames() {
@@ -133,6 +141,14 @@ export async function updateEventCount(id: string) {
         increment: 1,
       },
       updatedAt: new Date().toISOString(),
+    },
+  });
+}
+
+export async function deleteEvent(id: string) {
+  return await prisma.hanEvent.delete({
+    where: {
+      id,
     },
   });
 }
