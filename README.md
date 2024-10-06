@@ -36,7 +36,7 @@ See docs about [guide](https://wr.do/docs/quick-start) for quick start.
 - [Cloudflare](https://dash.cloudflare.com/) account  
 - A **domain** name hosted on Cloudflare
 
-See docs about [developer](https://wr.do/docs/developer/installation).
+See more docs about [developer](https://wr.do/docs/developer/installation).
 
 ## Local development
 
