@@ -114,7 +114,7 @@ export function NavBar({ scroll = false }: NavBarProps) {
           <div className="hidden md:flex">
             <ModeToggle />
           </div>
-          {session ? (
+          {/* {session ? (
             <div className="hidden md:flex">
               <UserAccountNav />
             </div>
@@ -132,7 +132,7 @@ export function NavBar({ scroll = false }: NavBarProps) {
             </Link>
           ) : (
             <Skeleton className="hidden h-9 w-24 rounded-xl lg:flex" />
-          )}
+          )} */}
         </div>
       </MaxWidthWrapper>
     </header>

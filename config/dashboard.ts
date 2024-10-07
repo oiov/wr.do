@@ -26,19 +26,19 @@ export const sidebarLinks: SidebarNavItem[] = [
       {
         href: "/admin/users",
         icon: "users",
-        title: "User List",
+        title: "Users",
         authorizeOnly: UserRole.ADMIN,
       },
       {
         href: "/admin/records",
         icon: "globe",
-        title: "Record List",
+        title: "Records",
         authorizeOnly: UserRole.ADMIN,
       },
       {
         href: "/admin/urls",
         icon: "link",
-        title: "URL List",
+        title: "URLs",
         authorizeOnly: UserRole.ADMIN,
       },
     ],
