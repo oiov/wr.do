@@ -38,7 +38,7 @@ export default function LoginPage() {
             </span>
           </div>
           <p className="text-sm text-muted-foreground">
-            Enter your email to sign in to your account
+            Choose your login method to continue
           </p>
         </div>
         <Suspense>

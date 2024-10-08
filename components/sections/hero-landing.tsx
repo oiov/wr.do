@@ -16,17 +16,17 @@ export default async function HeroLanding() {
             "px-4",
           )}
         >
-          <span className="mr-3">🎉</span>{" "}
+          <span className="mr-3">🎉</span>Apply to join&nbsp;
           <span className="font-bold" style={{ fontFamily: "Bahamas Bold" }}>
             WR.DO
           </span>
-          &nbsp;Beta Launching Now!
+          &nbsp;now!
         </Link>
 
         <h1 className="text-balance font-satoshi text-[40px] font-black leading-[1.15] tracking-tight sm:text-5xl md:text-6xl md:leading-[1.15]">
-          Craft DNS Records,{" "}
+          Create Your Short Domains{" "}
           <span className="bg-gradient-to-r from-violet-600 via-blue-600 to-cyan-500 bg-clip-text text-transparent">
-            Make Short Links
+            In Seconds
           </span>
         </h1>
 
@@ -37,7 +37,7 @@ export default async function HeroLanding() {
 
         <div className="flex justify-center space-x-2">
           <Link
-            href={siteConfig.links.github}
+            href="/docs"
             target="_blank"
             rel="noreferrer"
             className={cn(
@@ -50,10 +50,8 @@ export default async function HeroLanding() {
               "px-4 text-[15px]",
             )}
           >
-            <Icons.github className="mr-2 size-4" />
-            <p>
-              <span className="hidden sm:inline-block">Star on</span> GitHub
-            </p>
+            <Icons.bookOpen className="mr-2 size-4" />
+            <p>Documents</p>
           </Link>
           <Link
             href="/dashboard"
@@ -63,7 +61,7 @@ export default async function HeroLanding() {
               "gap-2 px-5 text-[15px]",
             )}
           >
-            <span>Dashboard</span>
+            <span>Apply</span>
             <Icons.arrowRight className="size-4" />
           </Link>
         </div>
