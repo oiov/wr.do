@@ -16,6 +16,7 @@ export const env = createEnv({
     CLOUDFLARE_ZONE_ID: z.string().min(1),
     CLOUDFLARE_API_KEY: z.string().min(1),
     CLOUDFLARE_EMAIL: z.string().min(1),
+    SCREENSHOTONE_BASE_URL: z.string().min(1),
   },
   client: {
     NEXT_PUBLIC_APP_URL: z.string().min(1),
@@ -39,5 +40,6 @@ export const env = createEnv({
     CLOUDFLARE_ZONE_ID: process.env.CLOUDFLARE_ZONE_ID,
     CLOUDFLARE_API_KEY: process.env.CLOUDFLARE_API_KEY,
     CLOUDFLARE_EMAIL: process.env.CLOUDFLARE_EMAIL,
+    SCREENSHOTONE_BASE_URL: process.env.SCREENSHOTONE_BASE_URL,
   },
 });

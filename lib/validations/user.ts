@@ -8,3 +8,5 @@ export const userNameSchema = z.object({
 export const userRoleSchema = z.object({
   role: z.nativeEnum(UserRole),
 });
+
+export const userApiKeySchema = z.object({});

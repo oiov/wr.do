@@ -1,5 +1,6 @@
 import cheerio from "cheerio";
 
+import { checkApiKey } from "@/lib/dto/api-key";
 import { checkUserStatus } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";
 import { isLink, removeUrlSuffix } from "@/lib/utils";
@@ -8,15 +9,30 @@ export const revalidate = 600;
 
 export async function GET(req: Request) {
   try {
-    const user = checkUserStatus(await getCurrentUser());
-    if (user instanceof Response) return user;
-
     const url = new URL(req.url);
     const link = url.searchParams.get("url");
     if (!link || !isLink(link)) {
       return Response.json("Url is required", {
         status: 400,
         statusText: "Url is required",
+      });
+    }
+
+    // Get the API key from the request
+    const custom_apiKey = url.searchParams.get("key");
+    if (!custom_apiKey) {
+      return Response.json("API key is required", {
+        status: 400,
+        statusText: "API key is required",
+      });
+    }
+
+    // Check if the API key is valid
+    const user_apiKey = await checkApiKey(custom_apiKey);
+    if (!user_apiKey?.id) {
+      return Response.json("Invalid API key", {
+        status: 403,
+        statusText: "Invalid API key",
       });
     }
 
@@ -69,7 +85,7 @@ export async function GET(req: Request) {
       timestamp: Date.now(),
     });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return Response.json("An error occurred", {
       status: error.status || 500,
       statusText: error.statusText || "Server error",

@@ -176,3 +176,5 @@ ALTER TABLE "url_metas" ADD COLUMN "device" TEXT;
 ALTER TABLE "url_metas" ADD COLUMN "browser" TEXT;
 
 ALTER TABLE "user_urls" ADD COLUMN "expiration" TEXT NOT NULL DEFAULT '-1';
+
+ALTER TABLE "users" ADD COLUMN "apiKey" TEXT;

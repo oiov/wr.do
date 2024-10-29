@@ -57,6 +57,7 @@ model User {
   image         String?
   active        Int       @default(1) // 0 封禁，1 正常
   team          String?
+  apiKey        String?
   createdAt     DateTime  @default(now()) @map(name: "created_at")
   updatedAt     DateTime  @default(now()) @map(name: "updated_at")
   role          UserRole  @default(USER)

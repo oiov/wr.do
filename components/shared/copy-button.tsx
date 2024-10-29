@@ -27,6 +27,7 @@ export function CopyButton({ value, className, ...props }: CopyButtonProps) {
 
   return (
     <Button
+      type="button"
       size="sm"
       variant="ghost"
       className={cn(

@@ -24,7 +24,7 @@ export default async function DashboardPage() {
         link="/docs/scraping-api"
         linkText="Scraping API."
       />
-      <MetaScraping />
+      <MetaScraping user={{ id: user.id, apiKey: user.apiKey }} />
     </>
   );
 }

@@ -13,6 +13,7 @@ declare module "next-auth" {
       role: UserRole;
       team: string;
       active: number;
+      apiKey: string;
     } & DefaultSession["user"];
   }
 }
@@ -46,6 +47,7 @@ export const {
         session.user.image = token.picture;
         session.user.active = token.active as number;
         session.user.team = token.team as string;
+        session.user.apiKey = token.apiKey as string;
       }
 
       return session;
@@ -64,6 +66,7 @@ export const {
       token.role = dbUser.role;
       token.active = dbUser.active;
       token.team = dbUser.team;
+      token.apiKey = dbUser.apiKey;
 
       return token;
     },

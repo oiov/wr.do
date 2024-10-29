@@ -28,9 +28,10 @@ export async function POST(req: Request) {
       });
     }
 
-    // check quota
+    // Check quota: 若是管理员则不检查，否则检查
     const user_records_count = await getUserRecordCount(user.id);
     if (
+      user.role !== "ADMIN" &&
       Number(NEXT_PUBLIC_FREE_RECORD_QUOTA) > 0 &&
       user_records_count >= Number(NEXT_PUBLIC_FREE_RECORD_QUOTA)
     ) {

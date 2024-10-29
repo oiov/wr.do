@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { User } from "@prisma/client";
 import JsonView from "@uiw/react-json-view";
 import { githubLightTheme } from "@uiw/react-json-view/githubLight";
 import { vscodeTheme } from "@uiw/react-json-view/vscode";
 import { useTheme } from "next-themes";
-import puppeteer from "puppeteer";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -37,7 +37,11 @@ export interface MetaScrapingProps {
   timestamp: string;
 }
 
-export default function MetaScraping() {
+export default function MetaScraping({
+  user,
+}: {
+  user: { id: string; apiKey: string };
+}) {
   const { theme } = useTheme();
   const [currentLink, setCurrentLink] = useState("wr.do");
   const [protocol, setProtocol] = useState("https://");
@@ -56,16 +60,14 @@ export default function MetaScraping() {
   const [isShoting, setIsShoting] = useState(false);
   const [currentScreenshotLink, setCurrentScreenshotLink] = useState("wr.do");
   const [screenshotInfo, setScreenshotInfo] = useState({
-    data: "",
     url: "",
-    timestamp: "",
   });
 
   const handleScrapingMeta = async () => {
     if (currentLink) {
       setIsScraping(true);
       const res = await fetch(
-        `/api/scraping/meta?url=${protocol}${currentLink}`,
+        `/api/scraping/meta?url=${protocol}${currentLink}&key=${user.apiKey}`,
       );
       if (!res.ok || res.status !== 200) {
         toast.error(res.statusText || "Error");
@@ -79,21 +81,21 @@ export default function MetaScraping() {
   };
 
   const handleScrapingScreenshot = async () => {
-    // if (currentScreenshotLink) {
-    //   setIsShoting(true);
-    //   const res = await fetch(
-    //     `/api/scraping/screenshot?url=${protocol}${currentScreenshotLink}`,
-    //   );
-    //   if (!res.ok || res.status !== 200) {
-    //     toast.error(res.statusText);
-    //   } else {
-    //     const data = await res.json();
-    //     console.log(data);
-    //     setScreenshotInfo(data);
-    //     toast.success("Success!");
-    //   }
-    //   setIsShoting(false);
-    // }
+    if (currentScreenshotLink) {
+      setIsShoting(true);
+      const res = await fetch(
+        `/api/scraping/screenshot?url=${protocol}${currentScreenshotLink}&key=${user.apiKey}`,
+      );
+      if (!res.ok || res.status !== 200) {
+        toast.error(res.statusText);
+      } else {
+        const blob = await res.blob();
+        const imageUrl = URL.createObjectURL(blob);
+        setScreenshotInfo({ url: imageUrl });
+        toast.success("Success!");
+      }
+      setIsShoting(false);
+    }
   };
 
   return (
@@ -152,7 +154,7 @@ export default function MetaScraping() {
           </div>
         </CardContent>
       </Card>
-      {/* <Card>
+      <Card>
         <CardHeader>
           <CardTitle>Screenshot</CardTitle>
           <CardDescription>
@@ -208,9 +210,9 @@ export default function MetaScraping() {
               displayDataTypes={false}
               // shortenTextAfterLength={50}
             />
-            {screenshotInfo.data && (
+            {screenshotInfo.url && (
               <BlurImage
-                src={screenshotInfo.data}
+                src={screenshotInfo.url}
                 alt="ligth preview landing"
                 className="my-4 flex rounded-md border object-contain object-center shadow-md dark:hidden"
                 width={1500}
@@ -221,7 +223,7 @@ export default function MetaScraping() {
             )}
           </div>
         </CardContent>
-      </Card> */}
+      </Card>
     </>
   );
 }
