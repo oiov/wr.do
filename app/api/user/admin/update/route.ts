@@ -21,6 +21,7 @@ export async function POST(req: Request) {
       active: data.active,
       team: data.team,
       image: data.image,
+      apiKey: data.apiKey,
     });
     if (!res?.id) {
       return Response.json("An error occurred", {
