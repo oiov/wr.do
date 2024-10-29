@@ -7,6 +7,86 @@ description: Quickly extract valuable structured website data.
 
 The Scraping API allows you to quickly extract valuable structured website data. It is a powerful tool that can be used to extract information from websites and convert it into a structured format.
 
+WR.DO provides two simple and easy-to-use APIs for scraping website data:
+
+- [Meta Scraping API](/docs/scraping-api#meta-scraping-api-usage)
+- [Screenshot API](/docs/scraping-api#screenshot-api-usage)
+
 ## How to use the Scraping API?
 
 Follow the [Dashboard/Scraping-API](/dashboard/scrape) to get started.
+
+## API Key
+
+The API key is required for all usage. You can generate your API key from the [Dashboard/Settings](/dashboard/settings).
+
+## API Rate Limit
+
+The API has no rate limit.
+
+## Screenshot API Usage
+
+API URL:
+```bash
+https://wr.do/api/scraping/screenshot?url=https://vmail.dev&key=your_api_key
+```
+
+### Query Parameters​
+- `url` (required): The valid URL to be captured.
+- `width` (optional): The width of the output screenshot. Default is `250`.
+- `height` (optional): The height of the output screenshot. Default is `250`.
+- `viewportWidth` (optional): The width of the render viewport. Default is `1080`.
+- `viewportHeight` (optional): The height of the render viewport. Default is `1080`.
+- `forceReload` (optional): Forces a reload of the cached image. Default is `false`.
+- `isMobile` (optional): Adds a mobile flag to the user agent. Default is `false`.
+- `isFullPage` (optional): Renders the full page instead of the viewport crop. Default is `false`.
+- `isDarkMode` (optional): Prefers the dark color scheme. Default is `false`.
+- `deviceScaleFactor` (optional): Specifies the device scale factor (can be thought of as DPR). Default is `1`.
+
+### Example:
+
+[https://wr.do/api/scraping/screenshot?url=https://vmail.dev&key=example_key](https://wr.do/api/scraping/screenshot?url=https://vmail.dev&key=b6e1c218-c090-434d-ba3f-97fb48fbccd9)
+
+Here are some example combinations of query parameters:
+
+```bash
+https://wr.do/api/scraping/screenshot?url=https://vmail.dev&key=example_key
+https://wr.do/api/scraping/screenshot?url=https://vmail.dev&key=example_key&width=500&height=500
+https://wr.do/api/scraping/screenshot?url=https://vmail.dev&key=example_key&viewportWidth=1920&viewportHeight=1080&isFullPage=true
+https://wr.do/api/scraping/screenshot?url=https://vmail.dev&key=example_key&viewportWidth=1920&viewportHeight=1080&isFullPage=true&isDarkMode=true
+```
+
+Use in your HTML
+
+```html
+<img
+  src="https://wr.do/api/scraping/screenshot?url=https://oiov.dev&key=example_key"
+  alt="Oiov's personal home page screenshot"
+/>
+```
+
+## Meta Scraping API Usage
+
+API URL:
+```bash
+https://wr.do/api/scraping/meta?url=https://www.example.com&key=your_api_key
+```
+
+API Response:
+```json
+{
+  title: "",
+  description: "",
+  image: "",
+  icon: "",
+  url: "",
+  lang: "",
+  author: "",
+  timestamp: "",
+  payload: "",
+}
+```
+
+Example:
+
+[https://wr.do/api/scraping/meta?url=https://vmail.dev&key=example_key](https://wr.do/api/scraping/meta?url=https://vmail.dev&key=b6e1c218-c090-434d-ba3f-97fb48fbccd9)

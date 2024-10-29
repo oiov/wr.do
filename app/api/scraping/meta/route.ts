@@ -83,6 +83,7 @@ export async function GET(req: Request) {
       lang,
       author,
       timestamp: Date.now(),
+      payload: `https://wr.do/api/scraping/meta?url=${link}&key=${custom_apiKey}`,
     });
   } catch (error) {
     // console.log(error);

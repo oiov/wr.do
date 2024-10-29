@@ -35,6 +35,7 @@ export interface MetaScrapingProps {
   lang: string;
   author: string;
   timestamp: string;
+  payload: string;
 }
 
 export default function MetaScraping({
@@ -46,6 +47,7 @@ export default function MetaScraping({
   const [currentLink, setCurrentLink] = useState("wr.do");
   const [protocol, setProtocol] = useState("https://");
   const [metaInfo, setMetaInfo] = useState<MetaScrapingProps>({
+    payload: "",
     title: "",
     description: "",
     image: "",
@@ -58,9 +60,11 @@ export default function MetaScraping({
   const [isScraping, setIsScraping] = useState(false);
 
   const [isShoting, setIsShoting] = useState(false);
-  const [currentScreenshotLink, setCurrentScreenshotLink] = useState("wr.do");
+  const [currentScreenshotLink, setCurrentScreenshotLink] =
+    useState("vmail.dev");
   const [screenshotInfo, setScreenshotInfo] = useState({
     url: "",
+    payload: "",
   });
 
   const handleScrapingMeta = async () => {
@@ -83,15 +87,17 @@ export default function MetaScraping({
   const handleScrapingScreenshot = async () => {
     if (currentScreenshotLink) {
       setIsShoting(true);
-      const res = await fetch(
-        `/api/scraping/screenshot?url=${protocol}${currentScreenshotLink}&key=${user.apiKey}`,
-      );
+      const payload = `/api/scraping/screenshot?url=${protocol}${currentScreenshotLink}&key=${user.apiKey}`;
+      const res = await fetch(payload);
       if (!res.ok || res.status !== 200) {
         toast.error(res.statusText);
       } else {
         const blob = await res.blob();
         const imageUrl = URL.createObjectURL(blob);
-        setScreenshotInfo({ url: imageUrl });
+        setScreenshotInfo({
+          url: imageUrl,
+          payload: `${window.location.origin}${payload}`,
+        });
         toast.success("Success!");
       }
       setIsShoting(false);
@@ -100,60 +106,6 @@ export default function MetaScraping({
 
   return (
     <>
-      <Card>
-        <CardHeader>
-          <CardTitle>Website Meta Scrape</CardTitle>
-          <CardDescription>Scrape the meta data of a website.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center">
-            <Select
-              onValueChange={(value: string) => {
-                setProtocol(value);
-              }}
-              name="protocol"
-              defaultValue={"https://"}
-            >
-              <SelectTrigger className="h-10 w-24 rounded-r-none shadow-inner">
-                <SelectValue placeholder="Protocol" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem key="https" value="https://">
-                  https://
-                </SelectItem>
-                <SelectItem key="http" value="http://">
-                  http://
-                </SelectItem>
-              </SelectContent>
-            </Select>
-            <Input
-              type="text"
-              placeholder="www.example.com"
-              className="h-10 rounded-none border focus:border-primary active:border-primary"
-              value={currentLink}
-              size={100}
-              onChange={(e) => setCurrentLink(e.target.value)}
-            />
-            <Button
-              variant="blue"
-              onClick={handleScrapingMeta}
-              disabled={isScraping}
-              className="rounded-l-none"
-            >
-              {isScraping ? "Scraping..." : "Send"}
-            </Button>
-          </div>
-
-          <div className="mt-4 rounded-md border p-3">
-            <JsonView
-              style={theme === "dark" ? vscodeTheme : githubLightTheme}
-              value={metaInfo}
-              displayObjectSize={false}
-              displayDataTypes={false}
-            />
-          </div>
-        </CardContent>
-      </Card>
       <Card>
         <CardHeader>
           <CardTitle>Screenshot</CardTitle>
@@ -221,6 +173,60 @@ export default function MetaScraping({
                 // placeholder="blur"
               />
             )}
+          </div>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Website Meta Scrape</CardTitle>
+          <CardDescription>Scrape the meta data of a website.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center">
+            <Select
+              onValueChange={(value: string) => {
+                setProtocol(value);
+              }}
+              name="protocol"
+              defaultValue={"https://"}
+            >
+              <SelectTrigger className="h-10 w-24 rounded-r-none shadow-inner">
+                <SelectValue placeholder="Protocol" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem key="https" value="https://">
+                  https://
+                </SelectItem>
+                <SelectItem key="http" value="http://">
+                  http://
+                </SelectItem>
+              </SelectContent>
+            </Select>
+            <Input
+              type="text"
+              placeholder="www.example.com"
+              className="h-10 rounded-none border focus:border-primary active:border-primary"
+              value={currentLink}
+              size={100}
+              onChange={(e) => setCurrentLink(e.target.value)}
+            />
+            <Button
+              variant="blue"
+              onClick={handleScrapingMeta}
+              disabled={isScraping}
+              className="rounded-l-none"
+            >
+              {isScraping ? "Scraping..." : "Send"}
+            </Button>
+          </div>
+
+          <div className="mt-4 rounded-md border p-3">
+            <JsonView
+              style={theme === "dark" ? vscodeTheme : githubLightTheme}
+              value={metaInfo}
+              displayObjectSize={false}
+              displayDataTypes={false}
+            />
           </div>
         </CardContent>
       </Card>
