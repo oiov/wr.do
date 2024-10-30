@@ -60,10 +60,10 @@ export default async function HeroLanding() {
             prefetch={true}
             className={cn(
               buttonVariants({ rounded: "xl", size: "lg" }),
-              "gap-2 px-5 text-[15px]",
+              "gap-2 px-5 text-[15px] font-semibold",
             )}
           >
-            <span>Apply</span>
+            <span>Sign in for free</span>
             <Icons.arrowRight className="size-4" />
           </Link>
         </div>

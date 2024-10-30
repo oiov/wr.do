@@ -38,7 +38,7 @@ export const footerLinks: SidebarNavItem[] = [
     items: [
       { title: "Vmail", href: "https://vmail.dev" },
       { title: "Moise", href: "https://moise.oiov.dev" },
-      { title: "Inke", href: "https://inke.app" },
+      { title: "Inke", href: "https://inke.wr.do" },
       { title: "Iconce", href: "https://iconce.com" },
     ],
   },
