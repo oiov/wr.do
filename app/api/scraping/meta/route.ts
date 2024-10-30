@@ -22,11 +22,11 @@ export async function GET(req: Request) {
     const custom_apiKey = url.searchParams.get("key");
     if (!custom_apiKey) {
       return Response.json(
-        "API key is required. You can get your API key from your Dashboard-Settings.",
+        "API key is required. You can get your API key from Dashboard->Settings.",
         {
           status: 400,
           statusText:
-            "API key is required. You can get your API key from your Dashboard-Settings.",
+            "API key is required. You can get your API key from Dashboard->Settings.",
         },
       );
     }
@@ -34,9 +34,10 @@ export async function GET(req: Request) {
     // Check if the API key is valid
     const user_apiKey = await checkApiKey(custom_apiKey);
     if (!user_apiKey?.id) {
-      return Response.json("Invalid API key", {
-        status: 403,
-        statusText: "Invalid API key",
+      return Response.json("error", {
+        status: 401,
+        statusText:
+          "Invalid API key. You can get your API key from Dashboard->Settings.",
       });
     }
 
