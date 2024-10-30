@@ -47,12 +47,11 @@ export async function GET(req: Request) {
     const user_apiKey = await checkApiKey(custom_apiKey);
     if (!user_apiKey?.id) {
       return Response.json(
-        { error: "Invalid API key" },
         {
-          status: 401,
           statusText:
-            "Invalid API key. You can get your API key from Dashboard->Settings.",
+            "API key is required. You can get your API key from Dashboard->Settings.",
         },
+        { status: 401 },
       );
     }
 

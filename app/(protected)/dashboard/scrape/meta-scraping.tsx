@@ -74,7 +74,8 @@ export default function MetaScraping({
         `/api/scraping/meta?url=${protocol}${currentLink}&key=${user.apiKey}`,
       );
       if (!res.ok || res.status !== 200) {
-        toast.error(res.statusText || "Something went wrong");
+        const data = await res.json();
+        toast.error(data.statusText);
       } else {
         const data = await res.json();
         setMetaInfo(data);
@@ -89,9 +90,9 @@ export default function MetaScraping({
       setIsShoting(true);
       const payload = `/api/scraping/screenshot?url=${protocol}${currentScreenshotLink}&key=${user.apiKey}`;
       const res = await fetch(payload);
-      console.log(res);
       if (!res.ok || res.status !== 200) {
-        toast.error(res.statusText || "Something went wrong");
+        const data = await res.json();
+        toast.error(data.statusText);
       } else {
         const blob = await res.blob();
         const imageUrl = URL.createObjectURL(blob);
