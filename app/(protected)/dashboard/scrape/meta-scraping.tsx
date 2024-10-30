@@ -166,7 +166,7 @@ export default function MetaScraping({
               <BlurImage
                 src={screenshotInfo.tmp_url}
                 alt="ligth preview landing"
-                className="my-4 flex rounded-md border object-contain object-center shadow-md dark:hidden"
+                className="my-4 flex rounded-md border object-contain object-center shadow-md"
                 width={1500}
                 height={750}
                 priority
