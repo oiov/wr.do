@@ -12,22 +12,23 @@ export async function GET(req: Request) {
     const url = new URL(req.url);
     const link = url.searchParams.get("url");
     if (!link || !isLink(link)) {
-      return Response.json("Url is required", {
-        status: 400,
-        statusText: "Url is required",
-      });
+      return Response.json(
+        { statusText: "Url is required" },
+        {
+          status: 400,
+        },
+      );
     }
 
     // Get the API key from the request
     const custom_apiKey = url.searchParams.get("key");
     if (!custom_apiKey) {
       return Response.json(
-        "API key is required. You can get your API key from Dashboard->Settings.",
         {
-          status: 400,
           statusText:
             "API key is required. You can get your API key from Dashboard->Settings.",
         },
+        { status: 400 },
       );
     }
 
@@ -37,7 +38,7 @@ export async function GET(req: Request) {
       return Response.json(
         {
           statusText:
-            "API key is required. You can get your API key from Dashboard->Settings.",
+            "Invalid API key. You can get your API key from Dashboard->Settings.",
         },
         { status: 401 },
       );
@@ -45,10 +46,12 @@ export async function GET(req: Request) {
 
     const res = await fetch(link);
     if (!res.ok) {
-      return Response.json("Failed to fetch url", {
-        status: 405,
-        statusText: "Failed to fetch url",
-      });
+      return Response.json(
+        { statusText: "Failed to fetch url" },
+        {
+          status: 405,
+        },
+      );
     }
 
     const html = await res.text();
@@ -93,10 +96,12 @@ export async function GET(req: Request) {
       payload: `https://wr.do/api/scraping/meta?url=${link}&key=${custom_apiKey}`,
     });
   } catch (error) {
-    // console.log(error);
-    return Response.json("An error occurred", {
-      status: error.status || 500,
-      statusText: error.statusText || "Server error",
-    });
+    console.log(error);
+    return Response.json(
+      { statusText: "Server error" },
+      {
+        status: 500,
+      },
+    );
   }
 }

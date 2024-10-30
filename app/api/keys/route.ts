@@ -12,14 +12,8 @@ export async function POST(req: Request) {
     if (res) {
       return Response.json(res.apiKey);
     }
-    return Response.json(res, {
-      status: 501,
-      statusText: "Server error",
-    });
+    return Response.json({ statusText: "Server error" }, { status: 501 });
   } catch (error) {
-    return Response.json("An error occurred", {
-      status: error.status || 500,
-      statusText: error.statusText || "Server error",
-    });
+    return Response.json({ statusText: "Server error" }, { status: 500 });
   }
 }

@@ -97,9 +97,6 @@ export async function GET(req: Request) {
 
     return Response.json({ list: combinedData.reverse(), total });
   } catch (error) {
-    return Response.json(error?.statusText || error, {
-      status: error.status || 500,
-      statusText: error.statusText || "Server error",
-    });
+    return Response.json({ statusText: "Server error" }, { status: 500 });
   }
 }

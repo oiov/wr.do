@@ -24,22 +24,23 @@ export async function GET(req: Request) {
 
     // Check if the url is valid
     if (!link || !isLink(link)) {
-      return Response.json("Invalid url", {
-        status: 400,
-        statusText: "Invalid url",
-      });
+      return Response.json(
+        { statusText: "Url is required" },
+        {
+          status: 400,
+        },
+      );
     }
 
     // Get the API key from the request
     const custom_apiKey = url.searchParams.get("key");
     if (!custom_apiKey) {
       return Response.json(
-        "API key is required. You can get your API key from Dashboard->Settings.",
         {
-          status: 400,
           statusText:
             "API key is required. You can get your API key from Dashboard->Settings.",
         },
+        { status: 400 },
       );
     }
 
@@ -49,7 +50,7 @@ export async function GET(req: Request) {
       return Response.json(
         {
           statusText:
-            "API key is required. You can get your API key from Dashboard->Settings.",
+            "Invalid API key. You can get your API key from Dashboard->Settings.",
         },
         { status: 401 },
       );
@@ -61,10 +62,12 @@ export async function GET(req: Request) {
 
     const res = await fetch(scrape_url);
     if (!res.ok) {
-      return Response.json("Failed to get screenshot", {
-        status: 406,
-        statusText: "Failed to get screenshot",
-      });
+      return Response.json(
+        { statusText: "Failed to get screenshot" },
+        {
+          status: 406,
+        },
+      );
     }
 
     const imageBuffer = await res.arrayBuffer();
@@ -76,9 +79,6 @@ export async function GET(req: Request) {
       },
     });
   } catch (error) {
-    return Response.json("Server error", {
-      status: error.status || 500,
-      statusText: "Server error",
-    });
+    return Response.json({ statusText: "Server error" }, { status: 500 });
   }
 }

@@ -8,7 +8,6 @@ export async function POST(req: Request) {
     if (user.role !== "ADMIN") {
       return Response.json("Unauthorized", {
         status: 401,
-        statusText: "Unauthorized",
       });
     }
 
@@ -26,14 +25,10 @@ export async function POST(req: Request) {
     if (!res?.id) {
       return Response.json("An error occurred", {
         status: 400,
-        statusText: "An error occurred",
       });
     }
     return Response.json("success");
   } catch (error) {
-    return Response.json(error?.statusText || error, {
-      status: error.status || 500,
-      statusText: error.statusText || "Server error",
-    });
+    return Response.json({ statusText: "Server error" }, { status: 500 });
   }
 }
