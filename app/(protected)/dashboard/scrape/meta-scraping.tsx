@@ -89,8 +89,8 @@ export default function MetaScraping({
       setIsShoting(true);
       const payload = `/api/scraping/screenshot?url=${protocol}${currentScreenshotLink}&key=${user.apiKey}`;
       const res = await fetch(payload);
+      console.log(res);
       if (!res.ok || res.status !== 200) {
-        console.log(res);
         toast.error(res.statusText || "Something went wrong");
       } else {
         const blob = await res.blob();

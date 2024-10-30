@@ -46,11 +46,14 @@ export async function GET(req: Request) {
     // Check if the API key is valid
     const user_apiKey = await checkApiKey(custom_apiKey);
     if (!user_apiKey?.id) {
-      return Response.json("error", {
-        status: 401,
-        statusText:
-          "Invalid API key. You can get your API key from Dashboard->Settings.",
-      });
+      return Response.json(
+        { error: "Invalid API key" },
+        {
+          status: 401,
+          statusText:
+            "Invalid API key. You can get your API key from Dashboard->Settings.",
+        },
+      );
     }
 
     const { SCREENSHOTONE_BASE_URL } = env;
@@ -74,7 +77,6 @@ export async function GET(req: Request) {
       },
     });
   } catch (error) {
-    console.log(error);
     return Response.json("Server error", {
       status: error.status || 500,
       statusText: "Server error",
