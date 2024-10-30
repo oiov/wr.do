@@ -132,7 +132,14 @@ export function LandingImages() {
             </h3>
             <p className="text-lg">
               📷 Capture any webpage instantly with our Screenshot API. Access
-              to third party services.
+              to third party services.{" "}
+              <a
+                className="underline"
+                href="/dashboard/settings"
+                target="_blank"
+              >
+                Apply your api key--&gt;
+              </a>
             </p>
           </div>
         </div>
@@ -153,7 +160,14 @@ export function LandingImages() {
             </h3>
             <p className="text-lg">
               🍥 Smart web data extraction for seamless integration.Access to
-              third party services.
+              third party services.{" "}
+              <a
+                className="underline"
+                href="/dashboard/settings"
+                target="_blank"
+              >
+                Apply your api key--&gt;
+              </a>
             </p>
           </div>
         </div>
@@ -166,7 +180,7 @@ export function LandingImages() {
           icon={"✏️"}
         />
         <CardItem bgColor="bg-orange-400" rotate="rotate-45" icon="👻" />
-        <CardItem rotate="rotate-12 origin-top-left" icon={"💯"} />
+        <CardItem rotate="rotate-12 origin-top-left" icon={"📷"} />
         <CardItem bgColor="bg-pink-400" rotate="-rotate-12" icon="🎓" />
       </div>
     </>

@@ -27,7 +27,8 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
           </div>
           <div className="mt-4 text-sm">
             Craft DNS Records, Make Short Links. <br />
-            Open source.
+            Powerful Screenshot and Meta Scraping API.
+            <br /> Open source.
           </div>
         </div>
         {footerLinks.map((section) => (

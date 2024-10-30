@@ -10,6 +10,8 @@
 - 🌐 **Multi-Tenant Support:** Manage multiple DNS records seamlessly
 - ⚡ **Instant Record Creation:** Set up CNAME, A, and other records quickly
 - 🔗 **URL Shortening:** Generate short links with visitor statistics attached
+- 📸 **Screenshot API:** Access to screenshot API.
+- 💯 **Meta Scraping API:** Access to meta scraping API.
 - 😀 **Permission Management:** A convenient admin panel for auditing
 - 🔒 **Secure & Reliable:** Built on Cloudflare's robust DNS API
 - 💰 **Free Registration:** No cost to create and manage records
