@@ -33,10 +33,14 @@ export async function GET(req: Request) {
     // Get the API key from the request
     const custom_apiKey = url.searchParams.get("key");
     if (!custom_apiKey) {
-      return Response.json("API key is required", {
-        status: 400,
-        statusText: "API key is required",
-      });
+      return Response.json(
+        "API key is required. You can get your API key from your Dashboard-Settings.",
+        {
+          status: 400,
+          statusText:
+            "API key is required. You can get your API key from your Dashboard-Settings.",
+        },
+      );
     }
 
     // Check if the API key is valid
@@ -50,7 +54,7 @@ export async function GET(req: Request) {
 
     const { SCREENSHOTONE_BASE_URL } = env;
     const scrape_url = `${SCREENSHOTONE_BASE_URL}?url=${link}&isFullPage=${full}&width=${width}&height=${height}&viewportWidth=${viewportWidth}&viewportHeight=${viewportHeight}&forceReload=${forceReload}&isMobile=${isMobile}&isDarkMode=${isDarkMode}&deviceScaleFactor=${deviceScaleFactor}`;
-    console.log("[Scrape Url]", scrape_url);
+    // console.log("[Scrape Url]", scrape_url);
 
     const res = await fetch(scrape_url);
     if (!res.ok) {

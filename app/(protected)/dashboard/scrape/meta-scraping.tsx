@@ -47,7 +47,6 @@ export default function MetaScraping({
   const [currentLink, setCurrentLink] = useState("wr.do");
   const [protocol, setProtocol] = useState("https://");
   const [metaInfo, setMetaInfo] = useState<MetaScrapingProps>({
-    payload: "",
     title: "",
     description: "",
     image: "",
@@ -56,6 +55,7 @@ export default function MetaScraping({
     lang: "",
     author: "",
     timestamp: "",
+    payload: "",
   });
   const [isScraping, setIsScraping] = useState(false);
 
@@ -63,7 +63,7 @@ export default function MetaScraping({
   const [currentScreenshotLink, setCurrentScreenshotLink] =
     useState("vmail.dev");
   const [screenshotInfo, setScreenshotInfo] = useState({
-    url: "",
+    tmp_url: "",
     payload: "",
   });
 
@@ -95,7 +95,7 @@ export default function MetaScraping({
         const blob = await res.blob();
         const imageUrl = URL.createObjectURL(blob);
         setScreenshotInfo({
-          url: imageUrl,
+          tmp_url: imageUrl,
           payload: `${window.location.origin}${payload}`,
         });
         toast.success("Success!");
@@ -106,9 +106,9 @@ export default function MetaScraping({
 
   return (
     <>
-      <Card>
+      <Card className="bg-gray-50 dark:bg-gray-900">
         <CardHeader>
-          <CardTitle>Screenshot</CardTitle>
+          <CardTitle>Url to Screenshot</CardTitle>
           <CardDescription>
             Automate your website screenshots and turn them into stunning
             visuals for your applications.
@@ -123,7 +123,7 @@ export default function MetaScraping({
               name="protocol"
               defaultValue="https://"
             >
-              <SelectTrigger className="h-10 w-24 rounded-r-none shadow-inner">
+              <SelectTrigger className="h-10 w-24 rounded-r-none bg-transparent shadow-inner">
                 <SelectValue placeholder="Protocol" />
               </SelectTrigger>
               <SelectContent>
@@ -162,9 +162,9 @@ export default function MetaScraping({
               displayDataTypes={false}
               // shortenTextAfterLength={50}
             />
-            {screenshotInfo.url && (
+            {screenshotInfo.tmp_url && (
               <BlurImage
-                src={screenshotInfo.url}
+                src={screenshotInfo.tmp_url}
                 alt="ligth preview landing"
                 className="my-4 flex rounded-md border object-contain object-center shadow-md dark:hidden"
                 width={1500}
@@ -176,7 +176,7 @@ export default function MetaScraping({
           </div>
         </CardContent>
       </Card>
-      <Card>
+      <Card className="bg-gray-50 dark:bg-gray-900">
         <CardHeader>
           <CardTitle>Website Meta Scrape</CardTitle>
           <CardDescription>Scrape the meta data of a website.</CardDescription>
@@ -190,7 +190,7 @@ export default function MetaScraping({
               name="protocol"
               defaultValue={"https://"}
             >
-              <SelectTrigger className="h-10 w-24 rounded-r-none shadow-inner">
+              <SelectTrigger className="h-10 w-24 rounded-r-none bg-transparent shadow-inner">
                 <SelectValue placeholder="Protocol" />
               </SelectTrigger>
               <SelectContent>
