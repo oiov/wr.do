@@ -86,7 +86,7 @@ export function LandingImages() {
             width={450}
             height={280}
           />
-          <div className="grids px-2 py-4">
+          <div className="grids grids-dark px-2 py-4">
             <h3 className="mb-6 text-xl font-bold md:text-3xl">
               Free Subdomain Hosting
             </h3>
@@ -106,7 +106,7 @@ export function LandingImages() {
             width={430}
             height={280}
           />
-          <div className="grids px-2 py-4">
+          <div className="grids grids-dark px-2 py-4">
             <h3 className="mb-6 text-xl font-bold md:text-3xl">
               URL Shortening
             </h3>
@@ -126,7 +126,7 @@ export function LandingImages() {
             width={460}
             height={280}
           />
-          <div className="grids px-2 py-4">
+          <div className="grids grids-dark px-2 py-4">
             <h3 className="mb-6 text-xl font-bold md:text-3xl">
               Website Screenshot API
             </h3>
@@ -154,7 +154,7 @@ export function LandingImages() {
             width={430}
             height={280}
           />
-          <div className="grids px-2 py-4">
+          <div className="grids grids-dark px-2 py-4">
             <h3 className="mb-6 text-xl font-bold md:text-3xl">
               Meta Information API
             </h3>
@@ -173,7 +173,7 @@ export function LandingImages() {
         </div>
       </div>
 
-      <div className="grids my-10 flex w-full max-w-6xl items-center justify-center gap-8 pb-6 pt-6 md:gap-14 md:pb-10 md:pt-10">
+      <div className="grids grids-dark my-10 flex w-full max-w-6xl items-center justify-center gap-8 pb-6 pt-6 md:gap-14 md:pb-10 md:pt-10">
         <CardItem
           bgColor="bg-cyan-400"
           rotate="rotate-12 origin-top-left"

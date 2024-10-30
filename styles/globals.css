@@ -120,6 +120,17 @@
   background-size: 20px 20px;
 }
 
+.grids-dark:is(.dark *) {
+  background-image: linear-gradient(
+      0deg,
+      rgba(100, 100, 100, 0.278) 1px,
+      transparent 0
+    ),
+    linear-gradient(90deg, rgba(100, 100, 100, 0.278) 1px, transparent 0);
+  background-position: 50%;
+  background-size: 20px 20px;
+}
+
 @font-face {
   font-family: "Bahamas Normal";
   /* font-style: normal;
