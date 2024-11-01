@@ -50,7 +50,7 @@ import { PaginationWrapper } from "@/components/shared/pagination";
 import UserUrlMetaInfo from "./meta";
 
 export interface UrlListProps {
-  user: Pick<User, "id" | "name">;
+  user: Pick<User, "id" | "name" | "apiKey">;
   action: string;
 }
 
@@ -221,6 +221,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                       </TableCell>
                       <TableCell className="col-span-1 truncate sm:col-span-2">
                         <LinkPreviewer
+                          apiKey={user.apiKey ?? ""}
                           url={short.target}
                           formatUrl={removeUrlSuffix(short.target)}
                         />

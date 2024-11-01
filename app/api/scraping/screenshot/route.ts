@@ -1,7 +1,5 @@
 import { env } from "@/env.mjs";
 import { checkApiKey } from "@/lib/dto/api-key";
-import { checkUserStatus } from "@/lib/dto/user";
-import { getCurrentUser } from "@/lib/session";
 import { isLink } from "@/lib/utils";
 
 export const revalidate = 60;
@@ -13,10 +11,10 @@ export async function GET(req: Request) {
     const url = new URL(req.url);
     const link = url.searchParams.get("url");
     const full = url.searchParams.get("full") || "false";
-    const width = url.searchParams.get("width") || "1600";
-    const height = url.searchParams.get("height") || "1200";
-    const viewportWidth = url.searchParams.get("viewportWidth") || "1080";
-    const viewportHeight = url.searchParams.get("viewportHeight") || "1080";
+    const width = url.searchParams.get("width") || "1200";
+    const height = url.searchParams.get("height") || "750";
+    const viewportWidth = url.searchParams.get("viewportWidth") || "1200";
+    const viewportHeight = url.searchParams.get("viewportHeight") || "750";
     const forceReload = url.searchParams.get("forceReload") || "false";
     const isMobile = url.searchParams.get("isMobile") || "false";
     const isDarkMode = url.searchParams.get("isDarkMode") || "false";
