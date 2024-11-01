@@ -55,7 +55,11 @@ export default async function DashboardPage() {
           />
         </div>
         <UserRecordsList
-          user={{ id: user.id, name: user.name || "" }}
+          user={{
+            id: user.id,
+            name: user.name || "",
+            apiKey: user.apiKey || "",
+          }}
           action="/api/record"
         />
         <UserUrlsList

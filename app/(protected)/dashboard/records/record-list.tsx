@@ -41,7 +41,7 @@ import { LinkPreviewer } from "@/components/shared/link-previewer";
 import { PaginationWrapper } from "@/components/shared/pagination";
 
 export interface RecordListProps {
-  user: Pick<User, "id" | "name">;
+  user: Pick<User, "id" | "name" | "apiKey">;
   action: string;
 }
 
@@ -213,6 +213,7 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                     </TableCell>
                     <TableCell className="col-span-1">
                       <LinkPreviewer
+                        apiKey={user.apiKey ?? ""}
                         url={"https://" + record.name}
                         formatUrl={
                           "https://" + record.name.endsWith(".wr.do")
