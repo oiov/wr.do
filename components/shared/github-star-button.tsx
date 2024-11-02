@@ -60,12 +60,6 @@ const GitHubStarsButton: React.FC<GitHubStarsButtonProps> = ({
     }
   }, [owner, repo, initialStars]);
 
-  if (error) {
-    return (
-      <span className="text-sm text-red-500">Unable to load GitHub stars</span>
-    );
-  }
-
   return (
     <Link
       href={`https://github.com/${owner}/${repo}`}

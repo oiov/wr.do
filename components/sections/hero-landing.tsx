@@ -39,7 +39,7 @@ export default async function HeroLanding() {
           you need to build better.
         </p>
 
-        <div className="flex justify-center space-x-2">
+        <div className="flex flex-col items-center justify-center gap-2 md:flex-row">
           <GitHubStarsWithSuspense
             owner="oiov"
             repo="wr.do"
