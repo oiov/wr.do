@@ -7,6 +7,8 @@ import { cn, nFormatter } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/shared/icons";
 
+import GitHubStarsWithSuspense from "../shared/github-star-wrapper";
+
 export default async function HeroLanding() {
   return (
     <section className="space-y-6 py-12 sm:py-20 lg:py-24">
@@ -38,23 +40,11 @@ export default async function HeroLanding() {
         </p>
 
         <div className="flex justify-center space-x-2">
-          <Link
-            href="/docs"
-            target="_blank"
-            rel="noreferrer"
-            className={cn(
-              buttonVariants({
-                variant: "outline",
-                rounded: "xl",
-                size: "lg",
-                className: "bg-primary-foreground hover:opacity-70",
-              }),
-              "px-4 text-[15px]",
-            )}
-          >
-            <Icons.bookOpen className="mr-2 size-4" />
-            <p>Documents</p>
-          </Link>
+          <GitHubStarsWithSuspense
+            owner="oiov"
+            repo="wr.do"
+            className="shadow-sm"
+          />
           <Link
             href="/dashboard"
             prefetch={true}
