@@ -118,7 +118,7 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
     if (res.ok) {
       const data = await res.json();
       if (data === "Target is accessible!") {
-        if (!originalState) {
+        if (originalState) {
           setChecked(originalState);
         }
         toast.success(data);
