@@ -2,11 +2,13 @@ import {
   AlertTriangle,
   ArrowRight,
   ArrowUpRight,
+  BadgeHelp,
   BookOpen,
   Bug,
   Check,
   ChevronLeft,
   ChevronRight,
+  CircleHelp,
   Copy,
   File,
   FileText,
@@ -129,6 +131,7 @@ export const Icons = {
   link: Link,
   mail: Mail,
   bug: Bug,
+  // help: CircleHelp,
   outLink: ({ ...props }: LucideProps) => (
     <svg
       width="0.95em"

@@ -1,9 +1,13 @@
 import { env } from "@/env.mjs";
 import { updateDNSRecord } from "@/lib/cloudflare";
-import { updateUserRecord } from "@/lib/dto/cloudflare-dns-record";
+import {
+  updateUserRecord,
+  updateUserRecordState,
+} from "@/lib/dto/cloudflare-dns-record";
 import { checkUserStatus } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";
 
+// update record
 export async function POST(req: Request) {
   try {
     const user = checkUserStatus(await getCurrentUser());
@@ -11,10 +15,10 @@ export async function POST(req: Request) {
 
     const { CLOUDFLARE_ZONE_ID, CLOUDFLARE_API_KEY, CLOUDFLARE_EMAIL } = env;
     if (!CLOUDFLARE_ZONE_ID || !CLOUDFLARE_API_KEY || !CLOUDFLARE_EMAIL) {
-      return Response.json("API key、zone iD and email are required", {
-        status: 400,
-        statusText: "API key、zone iD and email are required",
-      });
+      return Response.json(
+        { statusText: "API key andzone id are required." },
+        { status: 401 },
+      );
     }
 
     const { record, recordId } = await req.json();
@@ -61,5 +65,52 @@ export async function POST(req: Request) {
       status: error?.status || 500,
       statusText: error?.statusText || "Server error",
     });
+  }
+}
+
+// update record state
+export async function PUT(req: Request) {
+  try {
+    const user = checkUserStatus(await getCurrentUser());
+    if (user instanceof Response) return user;
+
+    const { CLOUDFLARE_ZONE_ID, CLOUDFLARE_API_KEY, CLOUDFLARE_EMAIL } = env;
+    if (!CLOUDFLARE_ZONE_ID || !CLOUDFLARE_API_KEY || !CLOUDFLARE_EMAIL) {
+      return Response.json(
+        { statusText: "API key and zone id are required." },
+        { status: 401 },
+      );
+    }
+
+    const { zone_id, record_id, target, active } = await req.json();
+
+    let isTargetAccessible = false;
+    try {
+      const target_res = await fetch(`https://${target}`);
+      isTargetAccessible = target_res.status === 200;
+    } catch (fetchError) {
+      isTargetAccessible = false;
+      // console.log(`Failed to access target: ${fetchError}`);
+    }
+
+    const res = await updateUserRecordState(
+      user.id,
+      record_id,
+      zone_id,
+      isTargetAccessible ? 1 : 0,
+    );
+
+    if (!res) {
+      return Response.json(
+        { statusText: "An error occurred." },
+        { status: 502 },
+      );
+    }
+    return Response.json(
+      isTargetAccessible ? "Target is accessible!" : "Target is unaccessible!",
+    );
+  } catch (error) {
+    console.error(error);
+    return Response.json({ statusText: "Server error" }, { status: 500 });
   }
 }

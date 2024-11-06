@@ -95,7 +95,7 @@ export function RecordForm({
           description: response.statusText,
         });
       } else {
-        const res = await response.json();
+        // const res = await response.json();
         toast.success(`Created successfully!`);
         setShowForm(false);
         onRefresh();

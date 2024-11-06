@@ -89,7 +89,7 @@ export async function POST(req: Request) {
         tags: data.result.tags?.join("") ?? "",
         created_on: data.result.created_on,
         modified_on: data.result.modified_on,
-        active: 1,
+        active: 0,
       });
       if (res.status !== "success") {
         return Response.json(res.status, {

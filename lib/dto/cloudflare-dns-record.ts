@@ -89,7 +89,7 @@ export async function getUserRecords(
     role === "USER"
       ? {
           userId,
-          active,
+          // active,
         }
       : {};
   const [total, list] = await prisma.$transaction([
@@ -217,7 +217,7 @@ export async function updateUserRecordState(
 ) {
   return await prisma.userRecord.update({
     where: {
-      userId,
+      // userId,
       record_id,
       zone_id,
     },

@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { User } from "@prisma/client";
 import { PenLine, RefreshCwIcon } from "lucide-react";
+import { toast } from "sonner";
 import useSWR, { useSWRConfig } from "swr";
 
 import { UserRecordFormData } from "@/lib/dto/cloudflare-dns-record";
@@ -19,6 +20,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Switch } from "@/components/ui/switch";
 import {
   Table,
   TableBody,
@@ -37,6 +39,7 @@ import CountUpFn from "@/components/dashboard/count-up";
 import StatusDot from "@/components/dashboard/status-dot";
 import { FormType, RecordForm } from "@/components/forms/record-form";
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
+import { Icons } from "@/components/shared/icons";
 import { LinkPreviewer } from "@/components/shared/link-previewer";
 import { PaginationWrapper } from "@/components/shared/pagination";
 
@@ -92,6 +95,38 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
 
   const handleRefresh = () => {
     mutate(`${action}?page=${currentPage}&size=${pageSize}`, undefined);
+  };
+
+  const handleChangeStatu = async (
+    checked: boolean,
+    record: UserRecordFormData,
+    setChecked: (value: boolean) => void,
+  ) => {
+    const originalState = record.active === 1;
+    setChecked(checked); // 立即更新 UI
+
+    const res = await fetch(`/api/record/update`, {
+      method: "PUT",
+      body: JSON.stringify({
+        zone_id: record.zone_id,
+        record_id: record.record_id,
+        active: checked ? 1 : 0,
+        target: record.name,
+      }),
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      if (data === "Target is accessible!") {
+        toast.success(data);
+      } else {
+        setChecked(originalState);
+        toast.warning(data);
+      }
+    } else {
+      setChecked(originalState);
+      toast.error("Failed to update status");
+    }
   };
 
   return (
@@ -186,7 +221,7 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                   Status
                 </TableHead>
                 <TableHead className="col-span-1 hidden items-center justify-center font-bold sm:flex">
-                  Update
+                  Updated
                 </TableHead>
                 <TableHead className="col-span-1 flex items-center justify-center font-bold">
                   Actions
@@ -238,8 +273,36 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                           ?.label
                       }
                     </TableCell>
-                    <TableCell className="col-span-1 hidden justify-center sm:flex">
-                      <StatusDot status={record.active} />
+                    <TableCell className="col-span-1 hidden items-center justify-center gap-1 sm:flex">
+                      <SwitchWrapper
+                        record={record}
+                        onChangeStatu={handleChangeStatu}
+                      />
+                      {!record.active && (
+                        <TooltipProvider>
+                          <Tooltip delayDuration={200}>
+                            <TooltipTrigger className="truncate">
+                              <Icons.help className="size-4 cursor-pointer text-yellow-500 opacity-90" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <ul className="list-disc px-3">
+                                {/* 无序列表的dot */}
+                                <li>The target is currently inaccessible.</li>
+                                <li>Please check the target and try again.</li>
+                                <li>
+                                  If the target is not activated within 3 days,{" "}
+                                  <br />
+                                  the administrator will{" "}
+                                  <strong className="text-red-500">
+                                    delete this record
+                                  </strong>
+                                  .
+                                </li>
+                              </ul>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      )}
                     </TableCell>
                     <TableCell className="col-span-1 hidden justify-center sm:flex">
                       {timeAgo(record.modified_on as unknown as Date)}
@@ -285,3 +348,24 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
     </>
   );
 }
+
+const SwitchWrapper = ({
+  record,
+  onChangeStatu,
+}: {
+  record: UserRecordFormData;
+  onChangeStatu: (
+    checked: boolean,
+    record: UserRecordFormData,
+    setChecked: (value: boolean) => void,
+  ) => Promise<void>;
+}) => {
+  const [checked, setChecked] = useState(record.active === 1);
+
+  return (
+    <Switch
+      checked={checked}
+      onCheckedChange={(value) => onChangeStatu(value, record, setChecked)}
+    />
+  );
+};
