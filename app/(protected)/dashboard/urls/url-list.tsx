@@ -181,7 +181,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                   Expiration
                 </TableHead>
                 <TableHead className="col-span-1 hidden items-center justify-center font-bold sm:flex">
-                  Update
+                  Updated
                 </TableHead>
                 <TableHead className="col-span-1 flex items-center justify-center font-bold">
                   Actions

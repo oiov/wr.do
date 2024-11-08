@@ -26,11 +26,7 @@ export const docsConfig: DocsConfig = {
           href: "/docs/short-urls",
           icon: "page",
         },
-        {
-          title: "Scraping API",
-          href: "/docs/scraping-api",
-          icon: "page",
-        },
+
         // {
         //   title: "Terms of Service",
         //   href: "/terms",
@@ -46,6 +42,36 @@ export const docsConfig: DocsConfig = {
         //   href: "/docs/newsletter",
         //   icon: "page",
         // },
+      ],
+    },
+    {
+      title: "Open API",
+      items: [
+        {
+          title: "Overview",
+          href: "/docs/open-api",
+          icon: "page",
+        },
+        {
+          title: "Screenshot API",
+          href: "/docs/open-api/screenshot",
+          icon: "page",
+        },
+        {
+          title: "Meta Scraping API",
+          href: "/docs/open-api/meta-info",
+          icon: "page",
+        },
+        {
+          title: "Url to Markdown API",
+          href: "/docs/open-api/markdown",
+          icon: "page",
+        },
+        {
+          title: "Url to Text API",
+          href: "/docs/open-api/text",
+          icon: "page",
+        },
       ],
     },
     {

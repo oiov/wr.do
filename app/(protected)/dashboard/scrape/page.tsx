@@ -21,8 +21,8 @@ export default async function DashboardPage() {
       <DashboardHeader
         heading="Scraping&nbsp;&nbsp;API"
         text="Quickly extract valuable structured website data. It's free and unlimited to use!"
-        link="/docs/scraping-api"
-        linkText="Scraping API."
+        link="/docs/open-api"
+        linkText="Open API."
       />
       <MetaScraping user={{ id: user.id, apiKey: user.apiKey }} />
     </>
