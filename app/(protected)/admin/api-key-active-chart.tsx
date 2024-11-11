@@ -13,8 +13,8 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 
 const chartConfig = {
-  visitors: {
-    label: "Visitors",
+  actived: {
+    label: "Actived",
   },
   safari: {
     label: "Safari",
@@ -42,7 +42,7 @@ export function RadialShapeChart({
         >
           <RadialBarChart
             data={chartData}
-            endAngle={100}
+            endAngle={total}
             innerRadius={80}
             outerRadius={140}
           >

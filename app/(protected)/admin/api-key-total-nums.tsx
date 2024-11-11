@@ -43,7 +43,7 @@ export function RadialTextChart({ total }: { total: number }) {
           <RadialBarChart
             data={chartData}
             startAngle={0}
-            endAngle={250}
+            endAngle={total}
             innerRadius={80}
             outerRadius={110}
           >
