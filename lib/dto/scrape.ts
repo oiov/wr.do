@@ -38,3 +38,13 @@ async function incrementClick(id: string) {
     },
   });
 }
+
+export async function getApiKeyCallCount() {
+  try {
+    return await prisma.scrapeMeta
+      .aggregate({ _sum: { click: true } })
+      .then((result) => result._sum.click || 0);
+  } catch (error) {
+    return -1;
+  }
+}

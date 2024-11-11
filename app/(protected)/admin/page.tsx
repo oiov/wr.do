@@ -1,13 +1,17 @@
 import { redirect } from "next/navigation";
 
 import { getUserRecordCount } from "@/lib/dto/cloudflare-dns-record";
+import { getApiKeyCallCount } from "@/lib/dto/scrape";
 import { getUserShortUrlCount } from "@/lib/dto/short-urls";
-import { getAllUsersCount } from "@/lib/dto/user";
+import { getAllUsersActiveApiKeyCount, getAllUsersCount } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";
 import { constructMetadata } from "@/lib/utils";
 import { InteractiveBarChart } from "@/components/charts/interactive-bar-chart";
 import { DashboardInfoCard } from "@/components/dashboard/dashboard-info-card";
 import { DashboardHeader } from "@/components/dashboard/header";
+
+import { RadialShapeChart } from "./api-key-active-chart";
+import { RadialTextChart } from "./api-key-total-nums";
 
 export const metadata = constructMetadata({
   title: "Admin – WR.DO",
@@ -19,8 +23,11 @@ export default async function AdminPage() {
   if (!user || !user.id || user.role !== "ADMIN") redirect("/login");
 
   const user_count = await getAllUsersCount();
+  const user_api_key_count = await getAllUsersActiveApiKeyCount();
   const record_count = await getUserRecordCount(user.id, 1, "ADMIN");
   const url_count = await getUserShortUrlCount(user.id, 1, "ADMIN");
+  const api_key_call_count = await getApiKeyCallCount();
+  console.log(api_key_call_count);
 
   return (
     <>
@@ -51,6 +58,11 @@ export default async function AdminPage() {
             icon="link"
           />
         </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <RadialShapeChart totalUser={user_count} total={user_api_key_count} />
+          <RadialTextChart total={api_key_call_count} />
+        </div>
+
         <InteractiveBarChart />
       </div>
     </>

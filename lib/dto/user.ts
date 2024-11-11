@@ -63,6 +63,14 @@ export async function getAllUsersCount() {
   }
 }
 
+export async function getAllUsersActiveApiKeyCount() {
+  try {
+    return await prisma.user.count({ where: { apiKey: { not: null } } });
+  } catch (error) {
+    return -1;
+  }
+}
+
 export const updateUser = async (userId: string, data: UpdateUserForm) => {
   try {
     const session = await prisma.user.update({
