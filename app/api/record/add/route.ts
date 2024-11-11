@@ -6,6 +6,7 @@ import {
   getUserRecordCount,
 } from "@/lib/dto/cloudflare-dns-record";
 import { checkUserStatus } from "@/lib/dto/user";
+import { reservedDomains } from "@/lib/enums";
 import { getCurrentUser } from "@/lib/session";
 import { generateSecret } from "@/lib/utils";
 
@@ -48,6 +49,16 @@ export async function POST(req: Request) {
       type: "CNAME",
       proxied: false,
     };
+
+    const record_name = record.name.endsWith(".wr.do")
+      ? record.name
+      : record.name + ".wr.do";
+    if (reservedDomains.includes(record_name)) {
+      return Response.json("Domain name is reserved", {
+        status: 403,
+        statusText: "Domain name is reserved",
+      });
+    }
 
     const user_record = await getUserRecordByTypeNameContent(
       user.id,
