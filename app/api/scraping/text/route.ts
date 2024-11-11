@@ -1,7 +1,8 @@
 import cheerio from "cheerio";
 
 import { checkApiKey } from "@/lib/dto/api-key";
-import { isLink, removeUrlSuffix } from "@/lib/utils";
+import { createScrapeMeta } from "@/lib/dto/scrape";
+import { getIpInfo, isLink, removeUrlSuffix } from "@/lib/utils";
 
 export const revalidate = 600;
 
@@ -60,6 +61,25 @@ export async function GET(req: Request) {
     $("script").remove();
     $("style").remove();
     const text = $("body").text().trim();
+
+    const stats = getIpInfo(req);
+    await createScrapeMeta({
+      ip: stats.ip,
+      type: "text",
+      referer: stats.referer,
+      city: stats.city,
+      region: stats.region,
+      country: stats.country,
+      latitude: stats.latitude,
+      longitude: stats.longitude,
+      lang: stats.lang,
+      device: stats.device,
+      browser: stats.browser,
+      click: 1,
+      userId: user_apiKey.id,
+      apiKey: custom_apiKey,
+      link,
+    });
 
     return Response.json({
       url: link,

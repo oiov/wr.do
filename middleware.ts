@@ -63,10 +63,6 @@ export default auth(async (req) => {
         }
         return NextResponse.redirect(target, 302);
       }
-    } else if (req.url.includes("/api/scraping")) {
-      const geo = geolocation(req);
-
-      console.log("[URL From]", req.url, geo);
     }
 
     return NextResponse.next();

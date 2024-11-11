@@ -1,9 +1,9 @@
+import { geolocation } from "@vercel/functions";
 import cheerio from "cheerio";
 
 import { checkApiKey } from "@/lib/dto/api-key";
-import { checkUserStatus } from "@/lib/dto/user";
-import { getCurrentUser } from "@/lib/session";
-import { isLink, removeUrlSuffix } from "@/lib/utils";
+import { createScrapeMeta } from "@/lib/dto/scrape";
+import { getIpInfo, isLink, removeUrlSuffix } from "@/lib/utils";
 
 export const revalidate = 600;
 
@@ -83,6 +83,25 @@ export async function GET(req: Request) {
     const author =
       $("meta[name='author']").attr("content") ||
       $("meta[property='author']").attr("content");
+
+    const stats = getIpInfo(req);
+    await createScrapeMeta({
+      ip: stats.ip,
+      type: "meta-info",
+      referer: stats.referer,
+      city: stats.city,
+      region: stats.region,
+      country: stats.country,
+      latitude: stats.latitude,
+      longitude: stats.longitude,
+      lang: stats.lang,
+      device: stats.device,
+      browser: stats.browser,
+      click: 1,
+      userId: user_apiKey.id,
+      apiKey: custom_apiKey,
+      link,
+    });
 
     return Response.json({
       title,

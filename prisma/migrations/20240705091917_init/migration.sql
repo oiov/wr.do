@@ -178,3 +178,38 @@ ALTER TABLE "url_metas" ADD COLUMN "browser" TEXT;
 ALTER TABLE "user_urls" ADD COLUMN "expiration" TEXT NOT NULL DEFAULT '-1';
 
 ALTER TABLE "users" ADD COLUMN "apiKey" TEXT;
+
+-- CreateTable
+CREATE TABLE "scrape_metas"
+(
+    "id" TEXT NOT NULL,
+    "type" TEXT NOT NULL,
+    "click" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
+    "apiKey" TEXT NOT NULL,
+    "ip" TEXT NOT NULL DEFAULT '127.0.0.1',
+    "city" TEXT,
+    "country" TEXT,
+    "region" TEXT,
+    "latitude" TEXT,
+    "longitude" TEXT,
+    "referer" TEXT,
+    "lang" TEXT,
+    "device" TEXT,
+    "browser" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "scrape_metas_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateIndex
+CREATE INDEX "scrape_metas_userId_type_apiKey_idx" ON "scrape_metas" ("userId", "type", "apiKey");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "scrape_metas_type_ip_key" ON "scrape_metas" ("type", "ip");
+
+-- AddForeignKey
+ALTER TABLE "scrape_metas" ADD CONSTRAINT "scrape_metas_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE "scrape_metas" ADD COLUMN "link" TEXT NOT NULL DEFAULT '';

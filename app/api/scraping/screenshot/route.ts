@@ -1,6 +1,7 @@
 import { env } from "@/env.mjs";
 import { checkApiKey } from "@/lib/dto/api-key";
-import { isLink } from "@/lib/utils";
+import { createScrapeMeta } from "@/lib/dto/scrape";
+import { getIpInfo, isLink } from "@/lib/utils";
 
 export const revalidate = 60;
 
@@ -67,6 +68,25 @@ export async function GET(req: Request) {
         },
       );
     }
+
+    const stats = getIpInfo(req);
+    await createScrapeMeta({
+      ip: stats.ip,
+      type: "screenshot",
+      referer: stats.referer,
+      city: stats.city,
+      region: stats.region,
+      country: stats.country,
+      latitude: stats.latitude,
+      longitude: stats.longitude,
+      lang: stats.lang,
+      device: stats.device,
+      browser: stats.browser,
+      click: 1,
+      userId: user_apiKey.id,
+      apiKey: custom_apiKey,
+      link,
+    });
 
     const imageBuffer = await res.arrayBuffer();
     return new Response(imageBuffer, {

@@ -1,8 +1,10 @@
 import crypto from "crypto";
 import { Metadata } from "next";
+import { geolocation } from "@vercel/functions";
 import { clsx, type ClassValue } from "clsx";
 import ms from "ms";
 import { twMerge } from "tailwind-merge";
+import UAParser from "ua-parser-js";
 
 import { env } from "@/env.mjs";
 import { siteConfig } from "@/config/site";
@@ -217,4 +219,31 @@ export function isLink(str: string): boolean {
 
 export function removeUrlSuffix(url: string): string {
   return url.startsWith("http") ? url.split("//")[1] : url;
+}
+
+export function getIpInfo(req: Request) {
+  const geo = geolocation(req);
+  const ua = req.headers.get("user-agent") || "";
+  const parser = new UAParser();
+  parser.setUA(ua);
+  const browser = parser.getBrowser();
+  const device = parser.getDevice();
+  const referer = req.headers.get("referer") || "(None)";
+  const ip = req.headers.get("X-Forwarded-For") || "127.0.0.1";
+  const userLanguage =
+    req.headers.get("accept-language")?.split(",")[0] || "en-US";
+
+  return {
+    referer,
+    ip,
+    city: geo?.city || "",
+    region: geo?.region || "",
+    country: geo?.country || "",
+    latitude: geo?.latitude || "",
+    longitude: geo?.longitude || "",
+    flag: geo?.flag,
+    lang: userLanguage,
+    device: device.model || "Unknown",
+    browser: browser.name || "Unknown",
+  };
 }

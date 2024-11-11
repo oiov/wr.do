@@ -66,6 +66,7 @@ model User {
   sessions   Session[]
   UserRecord UserRecord[]
   UserUrl    UserUrl[]
+  ScrapeMeta ScrapeMeta[]
 
   @@map(name: "users")
 }
@@ -146,4 +147,34 @@ model UrlMeta {
   @@unique([urlId, ip])
   @@index([urlId])
   @@map(name: "url_metas")
+}
+
+model ScrapeMeta {
+  id    String @id @default(cuid())
+  type  String
+  link  String
+  click Int
+
+  userId String
+  apiKey String
+
+  ip        String  @default("127.0.0.1")
+  city      String?
+  country   String?
+  region    String?
+  latitude  String?
+  longitude String?
+  referer   String?
+  lang      String?
+  device    String?
+  browser   String?
+
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @default(now()) @map(name: "updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([type, ip])
+  @@index([userId, type, apiKey])
+  @@map(name: "scrape_metas")
 }

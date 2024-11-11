@@ -1,0 +1,40 @@
+import { ScrapeMeta } from "@prisma/client";
+
+import { prisma } from "@/lib/db";
+
+export async function createScrapeMeta(
+  data: Omit<ScrapeMeta, "id" | "createdAt" | "updatedAt">,
+) {
+  try {
+    const meta = await findOrCreateScrapeMeta(data);
+    return { status: "success", data: meta };
+  } catch (error) {
+    console.error("create meta error", error);
+    return { status: "error", message: error.message };
+  }
+}
+
+async function findOrCreateScrapeMeta(data) {
+  const meta = await prisma.scrapeMeta.findFirst({
+    where: {
+      ip: data.ip,
+      type: data.type,
+    },
+  });
+
+  if (meta) {
+    return await incrementClick(meta.id);
+  } else {
+    return await prisma.scrapeMeta.create({ data });
+  }
+}
+
+async function incrementClick(id: string) {
+  return await prisma.scrapeMeta.update({
+    where: { id },
+    data: {
+      click: { increment: 1 },
+      updatedAt: new Date(), // Prisma will handle the ISO string conversion
+    },
+  });
+}
