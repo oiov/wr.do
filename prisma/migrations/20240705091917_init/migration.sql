@@ -197,6 +197,7 @@ CREATE TABLE "scrape_metas"
     "lang" TEXT,
     "device" TEXT,
     "browser" TEXT,
+    "link" TEXT NOT NULL DEFAULT '',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -207,9 +208,8 @@ CREATE TABLE "scrape_metas"
 CREATE INDEX "scrape_metas_userId_type_apiKey_idx" ON "scrape_metas" ("userId", "type", "apiKey");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "scrape_metas_type_ip_key" ON "scrape_metas" ("type", "ip");
+CREATE UNIQUE INDEX "scrape_metas_type_ip_link_key" ON "scrape_metas" ("type", "ip", "link");
 
 -- AddForeignKey
 ALTER TABLE "scrape_metas" ADD CONSTRAINT "scrape_metas_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE "scrape_metas" ADD COLUMN "link" TEXT NOT NULL DEFAULT '';

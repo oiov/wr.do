@@ -174,7 +174,7 @@ model ScrapeMeta {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([type, ip])
+  @@unique([type, ip, link])
   @@index([userId, type, apiKey])
   @@map(name: "scrape_metas")
 }
