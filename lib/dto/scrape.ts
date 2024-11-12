@@ -19,6 +19,7 @@ async function findOrCreateScrapeMeta(data) {
     where: {
       ip: data.ip,
       type: data.type,
+      link: data.link,
     },
   });
 

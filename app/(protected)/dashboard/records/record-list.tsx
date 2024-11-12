@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { User } from "@prisma/client";
 import { PenLine, RefreshCwIcon } from "lucide-react";
@@ -36,7 +36,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import CountUpFn from "@/components/dashboard/count-up";
-import StatusDot from "@/components/dashboard/status-dot";
 import { FormType, RecordForm } from "@/components/forms/record-form";
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
 import { Icons } from "@/components/shared/icons";
