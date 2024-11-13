@@ -49,3 +49,11 @@ export async function getApiKeyCallCount() {
     return -1;
   }
 }
+
+export async function getScrapeStatsByType(type: string) {
+  return await prisma.scrapeMeta.findMany({
+    where: {
+      type,
+    },
+  });
+}

@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { getUserRecordCount } from "@/lib/dto/cloudflare-dns-record";
-import { getApiKeyCallCount } from "@/lib/dto/scrape";
+import { getApiKeyCallCount, getScrapeStatsByType } from "@/lib/dto/scrape";
 import { getUserShortUrlCount } from "@/lib/dto/short-urls";
 import { getAllUsersActiveApiKeyCount, getAllUsersCount } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";
@@ -12,6 +12,7 @@ import { DashboardHeader } from "@/components/dashboard/header";
 
 import { RadialShapeChart } from "./api-key-active-chart";
 import { RadialTextChart } from "./api-key-total-nums";
+import { LineChartMultiple } from "./line-chart-multiple";
 
 export const metadata = constructMetadata({
   title: "Admin – WR.DO",
@@ -27,7 +28,10 @@ export default async function AdminPage() {
   const record_count = await getUserRecordCount(user.id, 1, "ADMIN");
   const url_count = await getUserShortUrlCount(user.id, 1, "ADMIN");
   const api_key_call_count = await getApiKeyCallCount();
-  console.log(api_key_call_count);
+  const screenshot_stats = await getScrapeStatsByType("screenshot");
+  const meta_stats = await getScrapeStatsByType("meta-info");
+  const md_stats = await getScrapeStatsByType("markdown");
+  const text_stats = await getScrapeStatsByType("text");
 
   return (
     <>
@@ -58,12 +62,23 @@ export default async function AdminPage() {
             icon="link"
           />
         </div>
+        <InteractiveBarChart />
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <RadialShapeChart totalUser={user_count} total={user_api_key_count} />
           <RadialTextChart total={api_key_call_count} />
         </div>
-
-        <InteractiveBarChart />
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <LineChartMultiple
+            chartData={screenshot_stats.concat(meta_stats)}
+            type1="screenshot"
+            type2="meta-info"
+          />
+          <LineChartMultiple
+            chartData={md_stats.concat(text_stats)}
+            type1="markdown"
+            type2="text"
+          />
+        </div>
       </div>
     </>
   );
