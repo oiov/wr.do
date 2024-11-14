@@ -17,7 +17,7 @@ export async function GET(req: Request) {
     const margin = parseInt(url.searchParams.get("margin") || "4");
     const dark = url.searchParams.get("dark") || "#000000";
     const light = url.searchParams.get("light") || "#ffffff";
-    const type = url.searchParams.get("type") || "svg";
+    const type = url.searchParams.get("type") || "png"; // png  | jpeg | webp | string
 
     // Check if the url is valid
     if (!link || !isLink(link)) {
@@ -53,21 +53,31 @@ export async function GET(req: Request) {
       );
     }
 
-    const options = {
-      width,
-      margin,
-      color: {
-        dark,
-        light,
-      },
-      errorCorrectionLevel: "H", // 可选值: L, M, Q, H
-      type: type === "svg" ? "svg" : "image/png",
-    };
+    let qrResult: any;
+    if (type === "string") {
+      qrResult = QRCode.toString(link);
+    } else {
+      qrResult = await QRCode.toDataURL(link, {
+        width,
+        margin,
+        color: {
+          dark,
+          light,
+        },
+        errorCorrectionLevel: "H", // Optional: L, M, Q, H
+        type:
+          type === "png"
+            ? "image/png"
+            : type === "jepg"
+              ? "image/jpeg"
+              : "image/webp",
+      });
+    }
 
     const stats = getIpInfo(req);
     await createScrapeMeta({
       ip: stats.ip,
-      type: "screenshot",
+      type: "qrcode",
       referer: stats.referer,
       city: stats.city,
       region: stats.region,
@@ -83,21 +93,7 @@ export async function GET(req: Request) {
       link,
     });
 
-    let qrResult;
-    // if (type === 'svg') {
-    //   // 生成 SVG 格式的二维码
-    //   qrResult = await QRCode.toString(link, options);
-    //   return new Response(qrResult, {
-    //     status: 200,
-    //     headers: {
-    //       "Content-Type": "image/svg+xml",
-    //     },
-    //   });
-    // } else {
-    //   // 生成 Base64 格式的二维码
-    //   qrResult = await QRCode.toDataURL(link, options);
-    //   return new Response(qrResult);
-    // }
+    return new Response(qrResult);
   } catch (error) {
     return Response.json({ statusText: "Server error" }, { status: 500 });
   }

@@ -134,7 +134,7 @@ export function ScreenshotScraping({
 
           <div className="mt-4 rounded-md border p-3">
             <JsonView
-              className="max-w-[400px] overflow-hidden"
+              className="max-w-2xl overflow-auto p-2"
               style={theme === "dark" ? vscodeTheme : githubLightTheme}
               value={screenshotInfo}
               displayObjectSize={false}
@@ -471,13 +471,12 @@ export function QrCodeScraping({
       const payload = `/api/scraping/qrcode?url=${protocol}${currentScreenshotLink}&key=${user.apiKey}`;
       const res = await fetch(payload);
       if (!res.ok || res.status !== 200) {
-        const data = await res.json();
-        toast.error(data.statusText);
+        toast.error(res.statusText);
       } else {
-        const blob = await res.blob();
-        const imageUrl = URL.createObjectURL(blob);
+        // const blob = await res.blob();
+        // const imageUrl = URL.createObjectURL(blob);
         setScreenshotInfo({
-          tmp_url: imageUrl,
+          tmp_url: await res.text(),
           payload: `${window.location.origin}${payload}`,
         });
         toast.success("Success!");
@@ -538,7 +537,7 @@ export function QrCodeScraping({
 
           <div className="mt-4 rounded-md border p-3">
             <JsonView
-              className="max-w-[400px] overflow-hidden"
+              className="max-w-2xl overflow-auto p-2"
               style={theme === "dark" ? vscodeTheme : githubLightTheme}
               value={screenshotInfo}
               displayObjectSize={false}
@@ -550,8 +549,8 @@ export function QrCodeScraping({
                 src={screenshotInfo.tmp_url}
                 alt="ligth preview landing"
                 className="my-4 flex rounded-md border object-contain object-center shadow-md"
-                width={1500}
-                height={750}
+                width={150}
+                height={150}
                 priority
                 // placeholder="blur"
               />

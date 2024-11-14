@@ -99,12 +99,12 @@ const LogsTable = ({ userId }) => {
             onChange={(e) => handleFilterChange("type", e.target.value)}
             className="max-w-xs"
           />
-          <Input
+          {/* <Input
             placeholder="Filter by IP..."
             value={filters.ip}
             onChange={(e) => handleFilterChange("ip", e.target.value)}
             className="max-w-xs"
-          />
+          /> */}
           <Button
             variant="outline"
             size="icon"
