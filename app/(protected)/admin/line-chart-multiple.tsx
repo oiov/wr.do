@@ -25,7 +25,6 @@ const processChartData = (data: ScrapeMeta[], type1: string, type2: string) => {
     { date: string; source1: number; source2: number }
   > = {};
 
-  // 遍历 ScrapeMeta 数据并按日期分组
   data.forEach((item) => {
     const date = new Date(item.updatedAt).toISOString().split("T")[0]; // 获取日期部分 (yyyy-mm-dd)
 
