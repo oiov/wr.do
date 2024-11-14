@@ -20,7 +20,7 @@ export default async function DashboardPage() {
   return (
     <>
       <DashboardHeader
-        heading="Url&nbsp;&nbsp;to&nbsp;&nbsp;Markdown&nbsp;&nbsp;API"
+        heading="Url&nbsp;&nbsp;to&nbsp;&nbsp;Markdown"
         text="Quickly extract website content and convert it to Markdown format. It's free and unlimited to use!"
         link="/docs/open-api/markdown"
         linkText="Markdown API."

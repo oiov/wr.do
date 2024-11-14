@@ -20,7 +20,7 @@ export default async function DashboardPage() {
   return (
     <>
       <DashboardHeader
-        heading="Scraping&nbsp;&nbsp;API"
+        heading="Scraping&nbsp;&nbsp;API&nbsp;&nbsp;Overview"
         text="Quickly extract valuable structured website data. It's free and unlimited to use!"
         link="/docs/open-api"
         linkText="Open API."

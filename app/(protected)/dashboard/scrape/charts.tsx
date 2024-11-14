@@ -20,8 +20,12 @@ export default async function DashboardScrapeCharts({ id }: { id: string }) {
 
   return (
     <>
-      <h2 className="my-1 text-xl font-semibold">Request Statistics</h2>
-      {all_logs && all_logs.length > 0 && <DailyPVUVChart data={all_logs} />}
+      {all_logs && all_logs.length > 0 && (
+        <>
+          <h2 className="my-1 text-xl font-semibold">Request Statistics</h2>
+          <DailyPVUVChart data={all_logs} />
+        </>
+      )}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {(screenshot_stats.length > 0 || meta_stats.length > 0) && (
           <LineChartMultiple
@@ -38,8 +42,12 @@ export default async function DashboardScrapeCharts({ id }: { id: string }) {
           />
         )}
       </div>
-      <h2 className="my-1 text-xl font-semibold">Request Logs</h2>
-      {all_logs && all_logs.length > 0 && <LogsTable userId={id} />}
+      {all_logs && all_logs.length > 0 && (
+        <>
+          <h2 className="my-1 text-xl font-semibold">Request Logs</h2>
+          <LogsTable userId={id} />
+        </>
+      )}
     </>
   );
 }

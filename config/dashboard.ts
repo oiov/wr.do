@@ -19,7 +19,7 @@ export const sidebarLinks: SidebarNavItem[] = [
       {
         href: "/dashboard/scrape",
         icon: "bug",
-        title: "Scraping API",
+        title: "Overview",
       },
       {
         href: "/dashboard/scrape/screenshot",

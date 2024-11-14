@@ -21,7 +21,7 @@ export default async function DashboardPage() {
   return (
     <>
       <DashboardHeader
-        heading="Url&nbsp;&nbsp;to&nbsp;&nbsp;Screenshot&nbsp;&nbsp;API"
+        heading="Url&nbsp;&nbsp;to&nbsp;&nbsp;Screenshot"
         text="Quickly extract website screenshots. It's free and unlimited to use!"
         link="/docs/open-api/screenshot"
         linkText="Screenshot API."

@@ -449,6 +449,120 @@ export function TextScraping({
   );
 }
 
+export function QrCodeScraping({
+  user,
+}: {
+  user: { id: string; apiKey: string };
+}) {
+  const { theme } = useTheme();
+  const [protocol, setProtocol] = useState("https://");
+
+  const [isShoting, setIsShoting] = useState(false);
+  const [currentScreenshotLink, setCurrentScreenshotLink] =
+    useState("vmail.dev");
+  const [screenshotInfo, setScreenshotInfo] = useState({
+    tmp_url: "",
+    payload: "",
+  });
+
+  const handleScrapingScreenshot = async () => {
+    if (currentScreenshotLink) {
+      setIsShoting(true);
+      const payload = `/api/scraping/qrcode?url=${protocol}${currentScreenshotLink}&key=${user.apiKey}`;
+      const res = await fetch(payload);
+      if (!res.ok || res.status !== 200) {
+        const data = await res.json();
+        toast.error(data.statusText);
+      } else {
+        const blob = await res.blob();
+        const imageUrl = URL.createObjectURL(blob);
+        setScreenshotInfo({
+          tmp_url: imageUrl,
+          payload: `${window.location.origin}${payload}`,
+        });
+        toast.success("Success!");
+      }
+      setIsShoting(false);
+    }
+  };
+
+  return (
+    <>
+      <CodeLight content={`https://wr.do/api/scraping/qrcode`} />
+      <Card className="bg-gray-50 dark:bg-gray-900">
+        <CardHeader>
+          <CardTitle>Playground</CardTitle>
+          <CardDescription>
+            Automate your website screenshots and turn them into stunning
+            visuals for your applications.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center">
+            <Select
+              onValueChange={(value: string) => {
+                setProtocol(value);
+              }}
+              name="protocol"
+              defaultValue="https://"
+            >
+              <SelectTrigger className="h-10 w-24 rounded-r-none bg-transparent shadow-inner">
+                <SelectValue placeholder="Protocol" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem key="https" value="https://">
+                  https://
+                </SelectItem>
+                <SelectItem key="http" value="http://">
+                  http://
+                </SelectItem>
+              </SelectContent>
+            </Select>
+            <Input
+              type="text"
+              placeholder="www.example.com"
+              className="h-10 rounded-none border focus:border-primary active:border-primary"
+              value={currentScreenshotLink}
+              size={100}
+              onChange={(e) => setCurrentScreenshotLink(e.target.value)}
+            />
+            <Button
+              variant="blue"
+              onClick={handleScrapingScreenshot}
+              disabled={isShoting}
+              className="rounded-l-none"
+            >
+              {isShoting ? "Scraping..." : "Send"}
+            </Button>
+          </div>
+
+          <div className="mt-4 rounded-md border p-3">
+            <JsonView
+              className="max-w-[400px] overflow-hidden"
+              style={theme === "dark" ? vscodeTheme : githubLightTheme}
+              value={screenshotInfo}
+              displayObjectSize={false}
+              displayDataTypes={false}
+              // shortenTextAfterLength={50}
+            />
+            {screenshotInfo.tmp_url && (
+              <BlurImage
+                src={screenshotInfo.tmp_url}
+                alt="ligth preview landing"
+                className="my-4 flex rounded-md border object-contain object-center shadow-md"
+                width={1500}
+                height={750}
+                priority
+                // placeholder="blur"
+              />
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    </>
+  );
+}
+
 export const CodeLight = ({ content }: { content: string }) => {
   const code = content.trim();
 
