@@ -11,7 +11,36 @@ export const sidebarLinks: SidebarNavItem[] = [
       { href: "/dashboard", icon: "dashboard", title: "Dashboard" },
       { href: "/dashboard/records", icon: "globeLock", title: "DNS Records" },
       { href: "/dashboard/urls", icon: "link", title: "Short Urls" },
-      { href: "/dashboard/scrape", icon: "bug", title: "Scraping API" },
+    ],
+  },
+  {
+    title: "SCRAPE",
+    items: [
+      {
+        href: "/dashboard/scrape",
+        icon: "bug",
+        title: "Scraping API",
+      },
+      {
+        href: "/dashboard/scrape/screenshot",
+        icon: "camera",
+        title: "Screenshot",
+      },
+      {
+        href: "/dashboard/scrape/meta-info",
+        icon: "globe",
+        title: "Meta Info",
+      },
+      {
+        href: "/dashboard/scrape/markdown",
+        icon: "fileText",
+        title: "Markdown & Text",
+      },
+      {
+        href: "/dashboard/scrape/qrcode",
+        icon: "qrcode",
+        title: "QR Code",
+      },
     ],
   },
   {

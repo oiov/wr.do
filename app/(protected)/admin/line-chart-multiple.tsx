@@ -73,6 +73,11 @@ export function LineChartMultiple({
 
   return (
     <Card>
+      <CardHeader>
+        <CardDescription>
+          Total requests of {type1} and {type2}.
+        </CardDescription>
+      </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
           <LineChart
@@ -90,9 +95,15 @@ export function LineChartMultiple({
               tickLine={false}
               axisLine={true}
               tickMargin={2}
-              // tickFormatter={(value) => value.slice(5, -1)}
+              tickFormatter={(value) => {
+                const date = new Date(value);
+                return date.toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                });
+              }}
             />
-            <YAxis axisLine={false} tickLine={false} />
+            <YAxis width={20} axisLine={false} tickLine={false} />
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
             <Line
               dataKey="source1"
@@ -111,11 +122,6 @@ export function LineChartMultiple({
           </LineChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-pretty text-center text-sm">
-        <div className="leading-none text-muted-foreground">
-          Showing total requests of {type1} and {type2}.
-        </div>
-      </CardFooter>
     </Card>
   );
 }

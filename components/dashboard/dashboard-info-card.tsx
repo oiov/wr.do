@@ -73,3 +73,37 @@ export function HeroCard() {
     </div>
   );
 }
+
+export async function ScrapeInfoCard({
+  userId,
+  title,
+  desc,
+  link,
+  icon = "users",
+}: {
+  userId: string;
+  title: string;
+  desc?: string;
+  link: string;
+  icon?: keyof typeof Icons;
+}) {
+  const Icon = Icons[icon || "arrowRight"];
+  return (
+    <Card className="grids group bg-gray-50/70 backdrop-blur-lg dark:bg-primary-foreground">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-sm font-medium">
+          <Link
+            className="font-semibold text-slate-500 duration-500 group-hover:text-blue-500 group-hover:underline"
+            href={link}
+          >
+            {title}
+          </Link>
+        </CardTitle>
+        <Icon className="size-4 text-muted-foreground" />
+      </CardHeader>
+      <CardContent>
+        <p className="text-xs text-muted-foreground">{desc}</p>
+      </CardContent>
+    </Card>
+  );
+}

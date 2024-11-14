@@ -2,11 +2,8 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { UrlMeta } from "@prisma/client";
-import { VisSingleContainer, VisTooltip, VisTopoJSONMap } from "@unovis/react";
-import { TopoJSONMap } from "@unovis/ts";
-import { WorldMapTopoJSON } from "@unovis/ts/maps";
-import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { ScrapeMeta } from "@prisma/client";
+import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
 import { isLink, removeUrlSuffix, timeAgo } from "@/lib/utils";
 import {
@@ -23,17 +20,17 @@ import {
 } from "@/components/ui/chart";
 
 const chartConfig = {
-  pv: {
-    label: "Views",
+  request: {
+    label: "Requests",
     color: "hsl(var(--chart-2))",
   },
-  uv: {
-    label: "Visitors",
+  ip: {
+    label: "IP",
     color: "hsl(var(--chart-1))",
   },
 };
 
-function processUrlMeta(urlMetaArray: UrlMeta[]) {
+function processUrlMeta(urlMetaArray: ScrapeMeta[]) {
   const dailyData: { [key: string]: { clicks: number; ips: Set<string> } } = {};
 
   urlMetaArray.forEach((meta) => {
@@ -65,7 +62,7 @@ function processUrlMeta(urlMetaArray: UrlMeta[]) {
   }));
 }
 
-function calculateUVAndPV(logs: UrlMeta[]) {
+function calculateUVAndPV(logs: ScrapeMeta[]) {
   const uniqueIps = new Set<string>();
   let totalClicks = 0;
 
@@ -75,8 +72,8 @@ function calculateUVAndPV(logs: UrlMeta[]) {
   });
 
   return {
-    uv: uniqueIps.size,
-    pv: totalClicks,
+    ip: uniqueIps.size,
+    request: totalClicks,
   };
 }
 
@@ -86,52 +83,15 @@ interface Stat {
   percentage: string;
 }
 
-function generateStatsList(
-  records: UrlMeta[],
-  dimension: keyof UrlMeta,
-): Stat[] {
-  // 统计每个维度的点击总数
-  const dimensionCounts: { [key: string]: number } = {};
-  let totalClicks = 0;
-
-  records.forEach((record) => {
-    const dimValue = record[dimension] || ("Unknown" as any);
-    const click = record.click;
-
-    if (!dimensionCounts[dimValue]) {
-      dimensionCounts[dimValue] = 0;
-    }
-
-    dimensionCounts[dimValue] += click;
-    totalClicks += click;
-  });
-
-  // 计算百分比并生成列表
-  const statsList: Stat[] = [];
-
-  for (const [dimValue, clicks] of Object.entries(dimensionCounts)) {
-    const percentage = (clicks / totalClicks) * 100;
-    statsList.push({
-      dimension: dimValue ?? "Unknown",
-      clicks,
-      percentage: percentage.toFixed(0) + "%",
-    });
-  }
-
-  statsList.sort((a, b) => parseFloat(b.percentage) - parseFloat(a.percentage));
-
-  return statsList;
-}
-
-export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
+export function DailyPVUVChart({ data }: { data: ScrapeMeta[] }) {
   const [activeChart, setActiveChart] =
-    React.useState<keyof typeof chartConfig>("pv");
+    React.useState<keyof typeof chartConfig>("request");
 
   const processedData = processUrlMeta(data)
     .map((entry) => ({
       date: entry.date,
-      pv: entry.clicks,
-      uv: new Set(entry.ips).size,
+      request: entry.clicks,
+      ip: new Set(entry.ips).size,
     }))
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
@@ -139,34 +99,20 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
 
   const latestEntry = data[data.length - 1];
   const latestDate = timeAgo(latestEntry.updatedAt);
-  const latestFrom = [
-    latestEntry.city ? decodeURIComponent(latestEntry.city) : "",
-    latestEntry.country ? `(${latestEntry.country})` : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
-
-  const areaData = data.map((item) => ({
-    id: item.country,
-  }));
-  const triggers = { [TopoJSONMap.selectors.feature]: (d) => d.id };
-
-  const refererStats = generateStatsList(data, "referer");
-  const cityStats = generateStatsList(data, "city");
-  const deviceStats = generateStatsList(data, "device");
-  const browserStats = generateStatsList(data, "browser");
+  const latestFrom = latestEntry.type;
 
   return (
-    <Card className="rounded-t-none border-t-0">
+    <Card className="">
       <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-2 sm:py-3">
-          <CardTitle>Daily Stats</CardTitle>
+          <CardTitle>Total Requests of APIs</CardTitle>
           <CardDescription>
-            Last visitor from {latestFrom} about {latestDate}.
+            Last request from <strong>{latestFrom}</strong> api about{" "}
+            {latestDate}.
           </CardDescription>
         </div>
         <div className="flex">
-          {["pv", "uv"].map((key) => {
+          {["request", "ip"].map((key) => {
             const chart = key as keyof typeof chartConfig;
             return (
               <button
@@ -205,24 +151,24 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
               <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
-                  stopColor={`var(--color-uv)`}
+                  stopColor={`var(--color-ip)`}
                   stopOpacity={0.8}
                 />
                 <stop
                   offset="95%"
-                  stopColor={`var(--color-uv)`}
+                  stopColor={`var(--color-ip)`}
                   stopOpacity={0}
                 />
               </linearGradient>
               <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
-                  stopColor={`var(--color-pv)`}
+                  stopColor={`var(--color-request)`}
                   stopOpacity={0.8}
                 />
                 <stop
                   offset="95%"
-                  stopColor={`var(--color-pv)`}
+                  stopColor={`var(--color-request)`}
                   stopOpacity={0}
                 />
               </linearGradient>
@@ -257,31 +203,31 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
                 />
               }
             />
-            {/* <Bar dataKey="uv" fill={`var(--color-uv)`} stackId="a" />
-            <Bar dataKey="pv" fill={`var(--color-pv)`} stackId="a" /> */}
+            {/* <Bar dataKey="ip" fill={`var(--color-ip)`} stackId="a" />
+            <Bar dataKey="request" fill={`var(--color-request)`} stackId="a" /> */}
 
             <Area
               type="monotone"
-              dataKey="uv"
-              stroke={`var(--color-uv)`}
+              dataKey="ip"
+              stroke={`var(--color-ip)`}
               fillOpacity={1}
               fill="url(#colorUv)"
             />
             <Area
               type="monotone"
-              dataKey="pv"
-              stroke={`var(--color-pv)`}
+              dataKey="request"
+              stroke={`var(--color-request)`}
               fillOpacity={1}
               fill="url(#colorPv)"
             />
           </AreaChart>
         </ChartContainer>
 
-        <VisSingleContainer data={{ areas: areaData }}>
+        {/* <VisSingleContainer data={{ areas: areaData }}>
           <VisTopoJSONMap topojson={WorldMapTopoJSON} />
           <VisTooltip triggers={triggers} />
-        </VisSingleContainer>
-
+        </VisSingleContainer> */}
+        {/* 
         <div className="my-5 grid grid-cols-1 gap-6 sm:grid-cols-2">
           {refererStats.length > 0 && (
             <StatsList data={refererStats} title="Referrers" />
@@ -295,7 +241,7 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
           {deviceStats.length > 0 && (
             <StatsList data={deviceStats} title="Devices" />
           )}
-        </div>
+        </div> */}
       </CardContent>
     </Card>
   );

@@ -57,3 +57,70 @@ export async function getScrapeStatsByType(type: string) {
     },
   });
 }
+
+export async function getScrapeStatsByTypeAndUserId(type: string, id: string) {
+  return await prisma.scrapeMeta.findMany({
+    where: {
+      type,
+      userId: id,
+    },
+  });
+}
+
+export async function getScrapeStatsByUserId({
+  userId,
+  page = 1,
+  limit = 20,
+  type,
+  ip,
+}: {
+  userId: string;
+  page?: number;
+  limit?: number;
+  type?: string;
+  ip?: string;
+}) {
+  const skip = (page - 1) * limit;
+
+  const where = {
+    userId,
+    ...(type && { type }),
+    ...(ip && { ip }),
+  };
+
+  const [total, logs] = await Promise.all([
+    prisma.scrapeMeta.count({ where }),
+    prisma.scrapeMeta.findMany({
+      where,
+      orderBy: {
+        createdAt: "desc",
+      },
+      skip,
+      take: limit,
+      select: {
+        id: true,
+        type: true,
+        ip: true,
+        link: true,
+        createdAt: true,
+      },
+    }),
+  ]);
+
+  return {
+    logs,
+    total,
+    hasMore: total > skip + logs.length,
+  };
+}
+
+export async function getScrapeStatsByUserId1(userId: string) {
+  return await prisma.scrapeMeta.findMany({
+    where: {
+      userId,
+    },
+    orderBy: {
+      updatedAt: "asc",
+    },
+  });
+}

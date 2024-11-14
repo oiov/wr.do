@@ -288,7 +288,6 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                             </TooltipTrigger>
                             <TooltipContent>
                               <ul className="list-disc px-3">
-                                {/* 无序列表的dot */}
                                 <li>The target is currently inaccessible.</li>
                                 <li>Please check the target and try again.</li>
                                 <li>
