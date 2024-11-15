@@ -105,7 +105,7 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
         )}{" "}
         Github
       </button>
-      {/* <button
+      <button
         type="button"
         className={cn(buttonVariants({ variant: "outline" }))}
         onClick={() => {
@@ -126,7 +126,7 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
           <img src="/_static/images/linuxdo.webp" className="mr-2 size-4" />
         )}{" "}
         LinuxDo
-      </button> */}
+      </button>
 
       <div className="relative my-3">
         <div className="absolute inset-0 flex items-center">

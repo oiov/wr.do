@@ -19,12 +19,13 @@ const linuxDoProvider: any = {
   profile: (profile: any) => {
     console.log("profile", profile);
     return {
-      id: profile.id,
-      username: profile.username,
-      name: profile.name,
-      trust_level: profile.trust_level,
-      image: profile.avatar_template,
-      // active: profile.user.active,
+      id: profile.id.toString(),
+      name: profile.username,
+      image: profile.avatar_url,
+      email: profile.email,
+      active: profile.active ? 1 : 0,
+      // username: profile.username,
+      // trust_level: profile.trust_level,
       // silenced: profile.user.silenced,
       // email: profile.user.email,
     };
@@ -45,6 +46,6 @@ export default {
       apiKey: env.RESEND_API_KEY,
       from: "wrdo <support@wr.do>",
     }),
-    // linuxDoProvider,
+    linuxDoProvider,
   ],
 } satisfies NextAuthConfig;
