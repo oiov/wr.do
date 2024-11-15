@@ -8,7 +8,7 @@ import { env } from "@/env.mjs";
 const linuxDoProvider: any = {
   id: "linuxdo",
   name: "Linux Do",
-  version: "1.0",
+  version: "2.0",
   type: "oauth",
   authorization: "https://connect.linux.do/oauth2/authorize",
   token: "https://connect.linux.do/oauth2/token",
@@ -17,15 +17,16 @@ const linuxDoProvider: any = {
   clientSecret: env.LinuxDo_CLIENT_SECRET,
   checks: ["state"],
   profile: (profile: any) => {
-    // console.log("profile", profile);
+    console.log("profile", profile);
     return {
-      id: profile.user.id.toString(),
-      username: profile.user.username,
-      name: profile.user.username,
-      active: profile.user.active,
-      trust_level: profile.user.trust_level,
-      silenced: profile.user.silenced,
-      email: profile.user.email,
+      id: profile.id,
+      username: profile.username,
+      name: profile.name,
+      trust_level: profile.trust_level,
+      image: profile.avatar_template,
+      // active: profile.user.active,
+      // silenced: profile.user.silenced,
+      // email: profile.user.email,
     };
   },
 };
@@ -44,6 +45,6 @@ export default {
       apiKey: env.RESEND_API_KEY,
       from: "wrdo <support@wr.do>",
     }),
-    linuxDoProvider,
+    // linuxDoProvider,
   ],
 } satisfies NextAuthConfig;
