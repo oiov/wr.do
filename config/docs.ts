@@ -74,7 +74,7 @@ export const docsConfig: DocsConfig = {
         },
         {
           title: "Url to QR Code API",
-          href: "/docs/open-api/qr-code",
+          href: "/docs/open-api/qrcode",
           icon: "page",
         },
       ],

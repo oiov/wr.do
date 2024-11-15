@@ -21,7 +21,7 @@ export default async function DashboardPage() {
       <DashboardHeader
         heading="Url&nbsp;&nbsp;to&nbsp;&nbsp;QR&nbsp;&nbsp;Code"
         text="Generate QR Code from URL"
-        link="/docs/open-api/qr-code"
+        link="/docs/open-api/qrcode"
         linkText="QR Code API."
       />
       <QrCodeScraping user={{ id: user.id, apiKey: user.apiKey }} />
