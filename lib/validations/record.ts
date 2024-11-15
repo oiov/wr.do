@@ -9,7 +9,7 @@ export const createRecordSchema = z.object({
     .default("CNAME"),
   name: z
     .string()
-    .regex(/^[a-zA-Z0-9-]+$/, "Invalid characters")
+    .regex(/^[a-zA-Z0-9-_]+$/, "Invalid characters")
     .min(2)
     .max(32),
   content: z
@@ -34,7 +34,7 @@ export const createUserRecordSchema = z.object({
     .default("CNAME"),
   name: z
     .string()
-    .regex(/^[a-zA-Z0-9-.]+$/, "Invalid characters")
+    .regex(/^[a-zA-Z0-9-_.]+$/, "Invalid characters")
     .min(1)
     .max(32),
   content: z

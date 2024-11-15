@@ -194,9 +194,12 @@ export function RecordForm({
                 size={32}
                 {...register("name")}
               />
-              <span className="absolute right-2 top-1/2 -translate-y-1/2 text-sm text-slate-500">
-                .wr.do
-              </span>
+              {currentRecordType === "CNAME" ||
+                (currentRecordType === "A" && (
+                  <span className="absolute right-2 top-1/2 -translate-y-1/2 text-sm text-slate-500">
+                    .wr.do
+                  </span>
+                ))}
             </div>
           </div>
           <div className="flex flex-col justify-between p-1">

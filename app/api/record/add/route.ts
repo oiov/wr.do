@@ -46,7 +46,7 @@ export async function POST(req: Request) {
     const record = {
       ...records[0],
       id: generateSecret(16),
-      type: "CNAME",
+      // type: "CNAME",
       proxied: false,
     };
 
@@ -111,7 +111,7 @@ export async function POST(req: Request) {
       return Response.json(res.data);
     }
   } catch (error) {
-    console.error(error);
+    console.error("[错误]", error);
     return Response.json(error?.statusText || error, {
       status: error?.status || 500,
       statusText: error?.statusText || "Server error",

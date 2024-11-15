@@ -97,7 +97,10 @@ export function DailyPVUVChart({ data }: { data: ScrapeMeta[] }) {
 
   const dataTotal = calculateUVAndPV(data);
 
-  const latestEntry = data[data.length - 1];
+  const sort_data = data.sort(
+    (a, b) => new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime(),
+  );
+  const latestEntry = sort_data[sort_data.length - 1];
   const latestDate = timeAgo(latestEntry.updatedAt);
   const latestFrom = latestEntry.type;
 
