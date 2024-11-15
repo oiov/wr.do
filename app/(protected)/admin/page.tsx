@@ -10,6 +10,7 @@ import { InteractiveBarChart } from "@/components/charts/interactive-bar-chart";
 import { DashboardInfoCard } from "@/components/dashboard/dashboard-info-card";
 import { DashboardHeader } from "@/components/dashboard/header";
 
+import { DailyPVUVChart } from "../dashboard/scrape/daily-chart";
 import { RadialShapeChart } from "./api-key-active-chart";
 import { RadialTextChart } from "./api-key-total-nums";
 import { LineChartMultiple } from "./line-chart-multiple";
@@ -27,11 +28,12 @@ export default async function AdminPage() {
   const user_api_key_count = await getAllUsersActiveApiKeyCount();
   const record_count = await getUserRecordCount(user.id, 1, "ADMIN");
   const url_count = await getUserShortUrlCount(user.id, 1, "ADMIN");
-  const api_key_call_count = await getApiKeyCallCount();
+  // const api_key_call_count = await getApiKeyCallCount();
   const screenshot_stats = await getScrapeStatsByType("screenshot");
   const meta_stats = await getScrapeStatsByType("meta-info");
   const md_stats = await getScrapeStatsByType("markdown");
   const text_stats = await getScrapeStatsByType("text");
+  const qr_stats = await getScrapeStatsByType("qrcode");
 
   return (
     <>
@@ -63,9 +65,28 @@ export default async function AdminPage() {
           />
         </div>
         <InteractiveBarChart />
+        {(screenshot_stats.length > 0 ||
+          meta_stats.length > 0 ||
+          md_stats.length > 0 ||
+          text_stats.length > 0) && (
+          <>
+            <h2 className="my-1 text-xl font-semibold">Request Statistics</h2>
+            <DailyPVUVChart
+              data={screenshot_stats
+                .concat(meta_stats)
+                .concat(md_stats)
+                .concat(text_stats)
+                .concat(qr_stats)}
+            />
+          </>
+        )}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <RadialShapeChart totalUser={user_count} total={user_api_key_count} />
-          <RadialTextChart total={api_key_call_count} />
+          <LineChartMultiple
+            chartData={qr_stats.concat(screenshot_stats)}
+            type1="qrcode"
+            type2="screenshot"
+          />
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <LineChartMultiple

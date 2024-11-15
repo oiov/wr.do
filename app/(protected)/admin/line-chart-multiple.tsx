@@ -26,7 +26,7 @@ const processChartData = (data: ScrapeMeta[], type1: string, type2: string) => {
   > = {};
 
   data.forEach((item) => {
-    const date = new Date(item.updatedAt).toISOString().split("T")[0]; // 获取日期部分 (yyyy-mm-dd)
+    const date = new Date(item.createdAt).toISOString().split("T")[0]; // 获取日期部分 (yyyy-mm-dd)
 
     if (!aggregatedData[date]) {
       aggregatedData[date] = { date, source1: 0, source2: 0 };
@@ -74,7 +74,8 @@ export function LineChartMultiple({
     <Card>
       <CardHeader>
         <CardDescription>
-          Total requests of {type1} and {type2}.
+          Total requests of {type1}
+          {type2 && ` and ${type2}`}.
         </CardDescription>
       </CardHeader>
       <CardContent>

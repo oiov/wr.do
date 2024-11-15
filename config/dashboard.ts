@@ -34,7 +34,7 @@ export const sidebarLinks: SidebarNavItem[] = [
       {
         href: "/dashboard/scrape/markdown",
         icon: "fileText",
-        title: "Markdown & Text",
+        title: "Markdown",
       },
       {
         href: "/dashboard/scrape/qrcode",

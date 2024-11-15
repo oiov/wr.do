@@ -20,7 +20,7 @@ export default async function DashboardPage() {
   return (
     <>
       <DashboardHeader
-        heading="Url&nbsp;&nbsp;to&nbsp;&nbsp;MetaInfo"
+        heading="Url&nbsp;&nbsp;to&nbsp;&nbsp;Meta&nbsp;&nbsp;Info"
         text="Quickly extract valuable structured website data. It's free and unlimited to use!"
         link="/docs/open-api/meta-info"
         linkText="Meta Info API."

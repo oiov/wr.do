@@ -16,14 +16,14 @@ export default async function DashboardScrapeCharts({ id }: { id: string }) {
   const meta_stats = await getScrapeStatsByTypeAndUserId("meta-info", id);
   const md_stats = await getScrapeStatsByTypeAndUserId("markdown", id);
   const text_stats = await getScrapeStatsByTypeAndUserId("text", id);
-  const all_logs = await getScrapeStatsByUserId1(id);
+  const all_user_logs = await getScrapeStatsByUserId1(id);
 
   return (
     <>
-      {all_logs && all_logs.length > 0 && (
+      {all_user_logs && all_user_logs.length > 0 && (
         <>
           <h2 className="my-1 text-xl font-semibold">Request Statistics</h2>
-          <DailyPVUVChart data={all_logs} />
+          <DailyPVUVChart data={all_user_logs} />
         </>
       )}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -42,7 +42,7 @@ export default async function DashboardScrapeCharts({ id }: { id: string }) {
           />
         )}
       </div>
-      {all_logs && all_logs.length > 0 && (
+      {all_user_logs && all_user_logs.length > 0 && (
         <>
           <h2 className="my-1 text-xl font-semibold">Request Logs</h2>
           <LogsTable userId={id} />

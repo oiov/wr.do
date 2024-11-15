@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { RefreshCwIcon } from "lucide-react";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -48,21 +48,13 @@ const LogsTable = ({ userId }) => {
     type: "",
     ip: "",
   });
-
-  const { data, error, isLoading, mutate } = useSWR(
+  const { mutate } = useSWRConfig();
+  const { data, error, isLoading } = useSWR(
     getLogsUrl(userId, page, filters),
     fetcher,
     {
       keepPreviousData: true,
-      revalidateOnFocus: false,
-    },
-  );
-
-  const { data: nextPageData } = useSWR(
-    data?.hasMore ? getLogsUrl(userId, page + 1, filters) : null,
-    fetcher,
-    {
-      revalidateOnFocus: false,
+      revalidateOnFocus: true,
     },
   );
 
@@ -74,7 +66,7 @@ const LogsTable = ({ userId }) => {
       [key]: value,
     }));
     setPage(1);
-    mutate();
+    handleRefresh();
   };
 
   if (error) {
@@ -86,7 +78,7 @@ const LogsTable = ({ userId }) => {
   }
 
   const handleRefresh = () => {
-    mutate();
+    mutate(getLogsUrl(userId, page, filters));
   };
 
   return (
@@ -105,12 +97,12 @@ const LogsTable = ({ userId }) => {
             onChange={(e) => handleFilterChange("ip", e.target.value)}
             className="max-w-xs"
           /> */}
+          <p className="ml-auto text-sm">{data?.total || 0} logs</p>
           <Button
             variant="outline"
-            size="icon"
             onClick={handleRefresh}
             disabled={isLoading}
-            className="ml-auto"
+            className="ml-2"
           >
             {isLoading ? (
               <RefreshCwIcon className={`size-4 animate-spin`} />
