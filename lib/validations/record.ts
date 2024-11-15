@@ -39,7 +39,7 @@ export const createUserRecordSchema = z.object({
     .max(32),
   content: z
     .string()
-    .regex(/^[a-zA-Z0-9-.]+$/, "Invalid characters")
+    // .regex(/^[a-zA-Z0-9-.]+$/, "Invalid characters")
     .min(1)
     .max(32),
   ttl: z.number().min(1).max(36000).default(1),
@@ -64,12 +64,12 @@ export const updateUserRecordSchema = z.object({
     .default("CNAME"),
   name: z
     .string()
-    .regex(/^[a-zA-Z0-9-.]+$/, "Invalid characters")
+    .regex(/^[a-zA-Z0-9-_.]+$/, "Invalid characters")
     .min(1)
     .max(32),
   content: z
     .string()
-    .regex(/^[a-zA-Z0-9-.]+$/, "Invalid characters")
+    // .regex(/^[a-zA-Z0-9-.]+$/, "Invalid characters")
     .min(1)
     .max(32),
   ttl: z.number().min(1).max(36000).default(1),
