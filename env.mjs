@@ -11,6 +11,8 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: z.string().min(1),
     GITHUB_ID: z.string().min(1),
     GITHUB_SECRET: z.string().min(1),
+    LinuxDo_CLIENT_ID: z.string().min(1),
+    LinuxDo_CLIENT_SECRET: z.string().min(1),
     DATABASE_URL: z.string().min(1),
     RESEND_API_KEY: z.string().min(1),
     CLOUDFLARE_ZONE_ID: z.string().min(1),
@@ -43,5 +45,7 @@ export const env = createEnv({
     CLOUDFLARE_EMAIL: process.env.CLOUDFLARE_EMAIL,
     SCREENSHOTONE_BASE_URL: process.env.SCREENSHOTONE_BASE_URL,
     GITHUB_TOKEN: process.env.GITHUB_TOKEN,
+    LinuxDo_CLIENT_ID: process.env.LinuxDo_CLIENT_ID,
+    LinuxDo_CLIENT_SECRET: process.env.LinuxDo_CLIENT_SECRET,
   },
 });

@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { siteConfig } from "@/config/site";
+import { getCurrentUser } from "@/lib/session";
 import { cn, nFormatter } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/shared/icons";
@@ -10,6 +11,7 @@ import { Icons } from "@/components/shared/icons";
 import GitHubStarsWithSuspense from "../shared/github-star-wrapper";
 
 export default async function HeroLanding() {
+  const user = await getCurrentUser();
   return (
     <section className="space-y-6 py-12 sm:py-20 lg:py-24">
       <div className="container flex max-w-screen-md flex-col items-center gap-5 text-center">
@@ -53,7 +55,7 @@ export default async function HeroLanding() {
               "gap-2 px-5 text-[15px] font-semibold",
             )}
           >
-            <span>Sign in for free</span>
+            <span>{user?.id ? "Dashboard" : "Sign in for free"}</span>
             <Icons.arrowRight className="size-4" />
           </Link>
         </div>

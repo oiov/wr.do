@@ -33,6 +33,8 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [isGoogleLoading, setIsGoogleLoading] = React.useState<boolean>(false);
   const [isGithubLoading, setIsGithubLoading] = React.useState<boolean>(false);
+  const [isLinuxDoLoading, setIsLinuxDoLoading] =
+    React.useState<boolean>(false);
   const searchParams = useSearchParams();
 
   async function onSubmit(data: FormData) {
@@ -70,7 +72,8 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
           !siteConfig.openSignup ||
           isLoading ||
           isGoogleLoading ||
-          isGithubLoading
+          isGithubLoading ||
+          isLinuxDoLoading
         }
       >
         {isGoogleLoading ? (
@@ -91,7 +94,8 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
           !siteConfig.openSignup ||
           isLoading ||
           isGithubLoading ||
-          isGoogleLoading
+          isGoogleLoading ||
+          isLinuxDoLoading
         }
       >
         {isGithubLoading ? (
@@ -100,6 +104,28 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
           <Icons.github className="mr-2 size-4" />
         )}{" "}
         Github
+      </button>
+      <button
+        type="button"
+        className={cn(buttonVariants({ variant: "outline" }))}
+        onClick={() => {
+          setIsLinuxDoLoading(true);
+          signIn("linuxdo");
+        }}
+        disabled={
+          !siteConfig.openSignup ||
+          isLoading ||
+          isGithubLoading ||
+          isGoogleLoading ||
+          isLinuxDoLoading
+        }
+      >
+        {isLinuxDoLoading ? (
+          <Icons.spinner className="mr-2 size-4 animate-spin" />
+        ) : (
+          <img src="/_static/images/linuxdo.webp" className="mr-2 size-4" />
+        )}{" "}
+        LinuxDo
       </button>
 
       <div className="relative my-3">
