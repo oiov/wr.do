@@ -32,6 +32,7 @@ const getLogsUrl = (
   userId: string,
   page: number,
   filters: { type: string; ip: string },
+  target: string,
 ) => {
   const params = new URLSearchParams({
     userId,
@@ -39,10 +40,10 @@ const getLogsUrl = (
     ...(filters.type && { type: filters.type }),
     ...(filters.ip && { ip: filters.ip }),
   });
-  return `/api/scraping/logs?${params}`;
+  return `${target}?${params}`;
 };
 
-const LogsTable = ({ userId }) => {
+const LogsTable = ({ userId, target }) => {
   const [page, setPage] = useState(1);
   const [filters, setFilters] = useState({
     type: "",
@@ -50,7 +51,7 @@ const LogsTable = ({ userId }) => {
   });
   const { mutate } = useSWRConfig();
   const { data, error, isLoading } = useSWR(
-    getLogsUrl(userId, page, filters),
+    getLogsUrl(userId, page, filters, target),
     fetcher,
     {
       keepPreviousData: true,
@@ -78,7 +79,7 @@ const LogsTable = ({ userId }) => {
   }
 
   const handleRefresh = () => {
-    mutate(getLogsUrl(userId, page, filters));
+    mutate(getLogsUrl(userId, page, filters, target));
   };
 
   return (

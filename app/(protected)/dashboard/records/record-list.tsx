@@ -35,7 +35,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import CountUpFn from "@/components/dashboard/count-up";
 import { FormType, RecordForm } from "@/components/forms/record-form";
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
 import { Icons } from "@/components/shared/icons";
@@ -138,9 +137,7 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
           {action.includes("/admin") ? (
             <CardDescription className="text-balance text-lg font-bold">
               <span>Total Records:</span>{" "}
-              <span className="font-bold">
-                {data && <CountUpFn count={data.total ?? 0} />}
-              </span>
+              <span className="font-bold">{data && data.total}</span>
             </CardDescription>
           ) : (
             <div className="grid gap-2">

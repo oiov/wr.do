@@ -11,6 +11,7 @@ import { DashboardInfoCard } from "@/components/dashboard/dashboard-info-card";
 import { DashboardHeader } from "@/components/dashboard/header";
 
 import { DailyPVUVChart } from "../dashboard/scrape/daily-chart";
+import LogsTable from "../dashboard/scrape/logs";
 import { RadialShapeChart } from "./api-key-active-chart";
 import { RadialTextChart } from "./api-key-total-nums";
 import { LineChartMultiple } from "./line-chart-multiple";
@@ -100,6 +101,9 @@ export default async function AdminPage() {
             type2="text"
           />
         </div>
+
+        <h2 className="my-1 text-xl font-semibold">Request Logs</h2>
+        <LogsTable userId={user.id} target={"/api/scraping/admin/logs"} />
       </div>
     </>
   );

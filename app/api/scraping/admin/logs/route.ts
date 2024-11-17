@@ -1,7 +1,7 @@
 // app/api/logs/route.ts
 import { NextRequest } from "next/server";
 
-import { getScrapeStatsByUserId } from "@/lib/dto/scrape";
+import { getScrapeStats } from "@/lib/dto/scrape";
 
 export interface LogsResponse {
   logs: {
@@ -16,7 +16,6 @@ export interface LogsResponse {
 }
 
 export interface LogsQueryParams {
-  userId: string;
   page?: number;
   type?: string;
   ip?: string;
@@ -65,22 +64,16 @@ export async function GET(request: NextRequest) {
 
     const searchParams = request.nextUrl.searchParams;
     const queryParams: LogsQueryParams = {
-      userId: searchParams.get("userId") || "",
       page: searchParams.get("page") ? parseInt(searchParams.get("page")!) : 1,
       type: searchParams.get("type") || undefined,
       ip: searchParams.get("ip") || undefined,
     };
 
-    // 参数验证
-    if (!queryParams.userId) {
-      return Response.json({ error: "userId is required" }, { status: 400 });
-    }
-
     if (queryParams.page && (isNaN(queryParams.page) || queryParams.page < 1)) {
       return Response.json({ error: "Invalid page number" }, { status: 400 });
     }
 
-    const data = await getScrapeStatsByUserId(queryParams);
+    const data = await getScrapeStats(queryParams);
 
     // 构造响应
     const response: LogsResponse = {

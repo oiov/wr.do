@@ -112,9 +112,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
           {action.includes("/admin") ? (
             <CardDescription className="text-balance text-lg font-bold">
               <span>Total URLs:</span>{" "}
-              <span className="font-bold">
-                {data && <CountUpFn count={data.total ?? 0} />}
-              </span>
+              <span className="font-bold">{data && data.total}</span>
             </CardDescription>
           ) : (
             <div className="grid gap-2">
