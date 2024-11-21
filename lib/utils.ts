@@ -29,7 +29,14 @@ export function constructMetadata({
   return {
     title,
     description,
-    keywords: ["Cloudflare", "DNS"],
+    keywords: [
+      "Cloudflare",
+      "DNS",
+      "DNS Records",
+      "Short Link",
+      "Open API",
+      "Screenshot API",
+    ],
     authors: [
       {
         name: "oiov",

@@ -255,6 +255,12 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                             setShowForm(false);
                             setFormType("edit");
                             setShowForm(!isShowForm);
+                            if (!isShowForm) {
+                              window.scrollTo({
+                                top: 0,
+                                behavior: "smooth",
+                              });
+                            }
                           }}
                         >
                           <p>Edit</p>

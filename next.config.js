@@ -86,4 +86,4 @@ const withPWA = require("next-pwa")({
   disable: false,
 });
 
-module.exports = withPWA(withContentlayer(nextConfig));
+module.exports = withContentlayer(withPWA(nextConfig));
