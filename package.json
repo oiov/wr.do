@@ -1,10 +1,10 @@
 {
-  "name": "next-auth-roles-template",
-  "version": "0.0.1",
+  "name": "wr.do",
+  "version": "0.2.1",
   "private": true,
   "author": {
-    "name": "mickasmt",
-    "url": "https://twitter.com/mickasmt"
+    "name": "oiov",
+    "url": "https://github.com/oiov"
   },
   "scripts": {
     "dev": "next dev",
