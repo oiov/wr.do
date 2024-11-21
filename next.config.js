@@ -81,4 +81,9 @@ const nextConfig = {
   },
 };
 
-module.exports = withContentlayer(nextConfig);
+const withPWA = require("next-pwa")({
+  dest: "public",
+  disable: false,
+});
+
+module.exports = withPWA(withContentlayer(nextConfig));

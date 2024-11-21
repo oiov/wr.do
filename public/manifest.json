@@ -1,0 +1,24 @@
+{
+  "name": "WR.DO",
+  "short_name": "WR.DO",
+  "description": "A DNS record distribution system",
+  "appid": "com.wr.do",
+  "versionName": "1.0.0",
+  "versionCode": "1",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "./_static/logo.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "./_static/logo.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ],
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "display": "standalone"
+}
