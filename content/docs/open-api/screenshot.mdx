@@ -7,7 +7,7 @@ description: Capture website screenshots
 
 API URL:
 ```bash
-https://wr.do/api/scraping/screenshot?url=https://vmail.dev&key=your_api_key
+https://wr.do/api/v1/scraping/screenshot?url=https://vmail.dev&key=your_api_key
 ```
 
 ### Query Parameters​
@@ -24,22 +24,22 @@ https://wr.do/api/scraping/screenshot?url=https://vmail.dev&key=your_api_key
 
 ### Example:
 
-[https://wr.do/api/scraping/screenshot?url=https://vmail.dev&key=example_key](https://wr.do/api/scraping/screenshot?url=https://vmail.dev&key=b6e1c218-c090-434d-ba3f-97fb48fbccd9)
+[https://wr.do/api/v1/scraping/screenshot?url=https://vmail.dev&key=example_key](https://wr.do/api/v1/scraping/screenshot?url=https://vmail.dev&key=b6e1c218-c090-434d-ba3f-97fb48fbccd9)
 
 Here are some example combinations of query parameters:
 
 ```bash
-https://wr.do/api/scraping/screenshot?url=https://vmail.dev&key=example_key
-https://wr.do/api/scraping/screenshot?url=https://vmail.dev&key=example_key&width=500&height=500
-https://wr.do/api/scraping/screenshot?url=https://vmail.dev&key=example_key&viewportWidth=1920&viewportHeight=1080&isFullPage=true
-https://wr.do/api/scraping/screenshot?url=https://vmail.dev&key=example_key&viewportWidth=1920&viewportHeight=1080&isFullPage=true&isDarkMode=true
+https://wr.do/api/v1/scraping/screenshot?url=https://vmail.dev&key=example_key
+https://wr.do/api/v1/scraping/screenshot?url=https://vmail.dev&key=example_key&width=500&height=500
+https://wr.do/api/v1/scraping/screenshot?url=https://vmail.dev&key=example_key&viewportWidth=1920&viewportHeight=1080&isFullPage=true
+https://wr.do/api/v1/scraping/screenshot?url=https://vmail.dev&key=example_key&viewportWidth=1920&viewportHeight=1080&isFullPage=true&isDarkMode=true
 ```
 
 Use in your HTML
 
 ```html
 <img
-  src="https://wr.do/api/scraping/screenshot?url=https://oiov.dev&key=example_key"
+  src="https://wr.do/api/v1/scraping/screenshot?url=https://oiov.dev&key=example_key"
   alt="Oiov's personal home page screenshot"
 />
 ```

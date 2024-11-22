@@ -1,13 +1,10 @@
 import cheerio from "cheerio";
-import TurndownService from "turndown";
 
 import { checkApiKey } from "@/lib/dto/api-key";
 import { createScrapeMeta } from "@/lib/dto/scrape";
 import { getIpInfo, isLink, removeUrlSuffix } from "@/lib/utils";
 
 export const revalidate = 600;
-
-const turndownService = new TurndownService();
 
 export async function GET(req: Request) {
   try {
@@ -60,19 +57,15 @@ export async function GET(req: Request) {
 
     const $ = cheerio.load(html);
 
+    // 移除所有 HTML 标签，只保留文本
     $("script").remove();
     $("style").remove();
-    $("nav").remove();
-    $("footer").remove();
-
-    const mainContent = $("main").length ? $("main").html() : $("body").html();
-
-    const markdown = turndownService.turndown(mainContent || "");
+    const text = $("body").text().trim();
 
     const stats = getIpInfo(req);
     await createScrapeMeta({
       ip: stats.ip,
-      type: "markdown",
+      type: "text",
       referer: stats.referer,
       city: stats.city,
       region: stats.region,
@@ -90,10 +83,10 @@ export async function GET(req: Request) {
 
     return Response.json({
       url: link,
-      content: markdown,
-      format: "markdown",
+      content: text,
+      format: "text",
       timestamp: Date.now(),
-      payload: `https://wr.do/api/scraping/markdown?url=${link}&key=${custom_apiKey}`,
+      payload: `https://wr.do/api/v1/scraping/text?url=${link}&key=${custom_apiKey}`,
     });
   } catch (error) {
     console.log(error);

@@ -254,3 +254,10 @@ export function getIpInfo(req: Request) {
     browser: browser.name || "Unknown",
   };
 }
+
+export function toCamelCase(str: string) {
+  return str
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join("");
+}

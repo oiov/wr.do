@@ -1,0 +1,57 @@
+---
+title: Svg Icon API
+description: Simple way to generate your svg icon
+---
+
+## Usage
+
+```bash
+https://wr.do/api/v1/icon
+```
+
+### Query Parameters
+
+- `type` (optional): The type of the icon. Default is `text`.
+- `w` (optional): The width of the icon. Default is `128`.
+- `h` (optional): The height of the icon. Default is `64`.
+- `value`: The value of the icon.
+- `animate` (optional): Whether to animate the icon. Default is `false`.
+- `fillType` (optional): The fill type of the icon. Default is `Linear`.
+- `primaryColor` (optional): The primary color of the icon. Default is `#FC466B`.
+- `secondaryColor` (optional): The secondary color of the icon. Default is `#3F5EFB`.
+- `angle` (optional): The angle of the icon. Default is `45`.
+- `radialGlare` (optional): Whether to apply radial glare to the icon. Default is `false`.
+- `radius` (optional): The radius of the icon. Default is `12`.
+- `strokeSize` (optional): The stroke size of the icon. Default is `0`.
+- `strokeColor` (optional): The stroke color of the icon. Default is `#FFFFFF`.
+- `strokeOpacity` (optional): The stroke opacity of the icon. Default is `100`.
+- `color` (optional): The color of the icon. Default is `#FFFFFF`.
+- `size` (optional): The size of the icon. Default is `15`.
+- `family` (optional): The font family of the icon. Default is `sans-serif`.
+
+### Example
+
+Use in markdown:
+
+![example](/api/v1/icon?type=text&w=400&h=35&value=🥰你做出一个很酷的东西出来，想给他起什么名都可以&animate=true&fillType=Linear&primaryColor=%23FC466B&secondaryColor=%233F5EFB&angle=45&radialGlare=false&radius=8&strokeSize=0&strokeColor=%23FFFFFF&strokeOpacity=100&color=%23FFFFFF&size=15&family=cursive)
+
+```bash 
+![example](/api/v1/icon?type=text&w=400&h=35&value=🥰你做出一个很酷的东西出来，想给他起什么名都可以&animate=true&fillType=Linear&primaryColor=%23FC466B&secondaryColor=%233F5EFB&angle=45&radialGlare=false&radius=8&strokeSize=0&strokeColor=%23FFFFFF&strokeOpacity=100&color=%23FFFFFF&size=15&family=cursive)
+```
+
+![example](/api/v1/icon?type=text&w=100&h=100&value=WR.DO&animate=true&fillType=Linear&primaryColor=%2300B4DB&secondaryColor=%23003357&angle=45&radialGlare=false&radius=40&strokeSize=0&strokeColor=%23FFFFFF&strokeOpacity=100&color=%23FFFFFF&size=15&family=cursive)
+
+```bash
+![example](/api/v1/icon?type=text&w=100&h=100&value=WR.DO&animate=true&fillType=Linear&primaryColor=%2300B4DB&secondaryColor=%23003357&angle=45&radialGlare=false&radius=40&strokeSize=0&strokeColor=%23FFFFFF&strokeOpacity=100&color=%23FFFFFF&size=15&family=cursive)
+```
+
+Use in your HTML:
+
+```html
+<img
+  src="https://wr.do/api/v1/icon?type=text&w=400&h=35&value=🥰你做出一个很酷的东西出来，想给他起什么名都可以&animate=true&fillType=Linear&primaryColor=%23FC466B&secondaryColor=%233F5EFB&angle=45&radialGlare=false&radius=8&strokeSize=0&strokeColor=%23FFFFFF&strokeOpacity=100&color=%23FFFFFF&size=15&family=cursive"
+  alt="Your SVG Icon"
+/>
+```
+
+

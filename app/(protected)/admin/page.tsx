@@ -103,7 +103,7 @@ export default async function AdminPage() {
         </div>
 
         <h2 className="my-1 text-xl font-semibold">Request Logs</h2>
-        <LogsTable userId={user.id} target={"/api/scraping/admin/logs"} />
+        <LogsTable userId={user.id} target={"/api/v1/scraping/admin/logs"} />
       </div>
     </>
   );

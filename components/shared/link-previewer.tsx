@@ -28,7 +28,7 @@ export function LinkPreviewer({
   const handleScrapingScreenshot = async () => {
     if (url) {
       const res = await fetch(
-        `/api/scraping/screenshot?url=${url}&key=${apiKey}&width=1200&height=750&viewportWidth=1200&viewportHeight=750`,
+        `/api/v1/scraping/screenshot?url=${url}&key=${apiKey}&width=1200&height=750&viewportWidth=1200&viewportHeight=750`,
       );
       if (!res.ok || res.status !== 200) {
       } else {

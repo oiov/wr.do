@@ -44,7 +44,7 @@ export default async function DashboardScrapeCharts({ id }: { id: string }) {
       </div>
 
       <h2 className="my-1 text-xl font-semibold">Request Logs</h2>
-      <LogsTable userId={id} target={"/api/scraping/logs"} />
+      <LogsTable userId={id} target={"/api/v1/scraping/logs"} />
     </>
   );
 }

@@ -77,6 +77,11 @@ export const docsConfig: DocsConfig = {
           href: "/docs/open-api/qrcode",
           icon: "page",
         },
+        {
+          title: "Svg Icon API",
+          href: "/docs/open-api/icon",
+          icon: "page",
+        },
       ],
     },
     {

@@ -64,7 +64,7 @@ export function ScreenshotScraping({
   const handleScrapingScreenshot = async () => {
     if (currentScreenshotLink) {
       setIsShoting(true);
-      const payload = `/api/scraping/screenshot?url=${protocol}${currentScreenshotLink}&key=${user.apiKey}`;
+      const payload = `/api/v1/scraping/screenshot?url=${protocol}${currentScreenshotLink}&key=${user.apiKey}`;
       const res = await fetch(payload);
       if (!res.ok || res.status !== 200) {
         const data = await res.json();
@@ -84,7 +84,7 @@ export function ScreenshotScraping({
 
   return (
     <>
-      <CodeLight content={`https://wr.do/api/scraping/screenshot`} />
+      <CodeLight content={`https://wr.do/api/v1/scraping/screenshot`} />
       <Card className="bg-gray-50 dark:bg-gray-900">
         <CardHeader>
           <CardTitle>Playground</CardTitle>
@@ -184,7 +184,7 @@ export function MetaScraping({
     if (currentLink) {
       setIsScraping(true);
       const res = await fetch(
-        `/api/scraping/meta?url=${protocol}${currentLink}&key=${user.apiKey}`,
+        `/api/v1/scraping/meta?url=${protocol}${currentLink}&key=${user.apiKey}`,
       );
       if (!res.ok || res.status !== 200) {
         const data = await res.json();
@@ -200,7 +200,7 @@ export function MetaScraping({
 
   return (
     <>
-      <CodeLight content={`https://wr.do/api/scraping/meta`} />
+      <CodeLight content={`https://wr.do/api/v1/scraping/meta`} />
       <Card className="bg-gray-50 dark:bg-gray-900">
         <CardHeader>
           <CardTitle>Playground</CardTitle>
@@ -280,7 +280,7 @@ export function MarkdownScraping({
     if (currentLink) {
       setIsScraping(true);
       const res = await fetch(
-        `/api/scraping/markdown?url=${protocol}${currentLink}&key=${user.apiKey}`,
+        `/api/v1/scraping/markdown?url=${protocol}${currentLink}&key=${user.apiKey}`,
       );
       if (!res.ok || res.status !== 200) {
         const data = await res.json();
@@ -296,7 +296,7 @@ export function MarkdownScraping({
 
   return (
     <>
-      <CodeLight content={`https://wr.do/api/scraping/markdown`} />
+      <CodeLight content={`https://wr.do/api/v1/scraping/markdown`} />
       <Card className="bg-gray-50 dark:bg-gray-900">
         <CardHeader>
           <CardTitle>Markdown</CardTitle>
@@ -375,7 +375,7 @@ export function TextScraping({
     if (currentLink) {
       setIsScraping(true);
       const res = await fetch(
-        `/api/scraping/text?url=${protocol}${currentLink}&key=${user.apiKey}`,
+        `/api/v1/scraping/text?url=${protocol}${currentLink}&key=${user.apiKey}`,
       );
       if (!res.ok || res.status !== 200) {
         const data = await res.json();
@@ -391,7 +391,7 @@ export function TextScraping({
 
   return (
     <>
-      <CodeLight content={`https://wr.do/api/scraping/text`} />
+      <CodeLight content={`https://wr.do/api/v1/scraping/text`} />
       <Card className="bg-gray-50 dark:bg-gray-900">
         <CardHeader>
           <CardTitle>Text</CardTitle>
@@ -468,7 +468,7 @@ export function QrCodeScraping({
   const handleScrapingScreenshot = async () => {
     if (currentScreenshotLink) {
       setIsShoting(true);
-      const payload = `/api/scraping/qrcode?url=${protocol}${currentScreenshotLink}&key=${user.apiKey}`;
+      const payload = `/api/v1/scraping/qrcode?url=${protocol}${currentScreenshotLink}&key=${user.apiKey}`;
       const res = await fetch(payload);
       if (!res.ok || res.status !== 200) {
         toast.error(res.statusText);
@@ -487,7 +487,7 @@ export function QrCodeScraping({
 
   return (
     <>
-      <CodeLight content={`https://wr.do/api/scraping/qrcode`} />
+      <CodeLight content={`https://wr.do/api/v1/scraping/qrcode`} />
       <Card className="bg-gray-50 dark:bg-gray-900">
         <CardHeader>
           <CardTitle>Playground</CardTitle>
@@ -576,7 +576,7 @@ export const CodeLight = ({ content }: { content: string }) => {
                 {i + 1}
               </span>
               {/* Code content */}
-              <span className="text-green-400">
+              <span className="text-blue-400">
                 {line
                   .replace(
                     /function/,
