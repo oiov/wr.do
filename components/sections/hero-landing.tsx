@@ -16,7 +16,8 @@ export default async function HeroLanding() {
     <section className="space-y-6 py-12 sm:py-20 lg:py-24">
       <div className="container flex max-w-screen-md flex-col items-center gap-5 text-center">
         <Link
-          href="https://wr.do"
+          href="/docs/open-api/screenshot"
+          target="_blank"
           className={cn(
             buttonVariants({ variant: "outline", size: "sm", rounded: "xl" }),
             "px-4",

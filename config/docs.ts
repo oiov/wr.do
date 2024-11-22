@@ -83,6 +83,11 @@ export const docsConfig: DocsConfig = {
       title: "Examples",
       items: [
         {
+          title: "Cloudflare Custom Domain",
+          href: "/docs/examples/cloudflare",
+          icon: "page",
+        },
+        {
           title: "Vercel Custom Domain",
           href: "/docs/examples/vercel",
           icon: "page",

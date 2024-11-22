@@ -20,3 +20,11 @@ Waiting for DNS records to take effect on vercel:
 ![](/_static/examples/vercel_03.png)
 
 Done!
+
+### Domain verification
+
+You need add a `TXT` record to verify the domain ownership on `dashboard/records` when you first apply a custom domain.
+
+The `TXT` record's `name` is `_vercel` and `value` is `vs-domain-verify=xxxxxx`, you can find them in `https://vercel.com/[account]/[project]/settings/domains`.
+
+
