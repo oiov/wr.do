@@ -1,16 +1,13 @@
 "use client";
 
 import { ScrapeMeta } from "@prisma/client";
-import { TrendingUp } from "lucide-react";
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import {
   ChartConfig,
@@ -80,7 +77,7 @@ export function LineChartMultiple({
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <LineChart
+          <AreaChart
             className="mt-6"
             accessibilityLayer
             data={processedData}
@@ -89,6 +86,32 @@ export function LineChartMultiple({
               right: 12,
             }}
           >
+            <defs>
+              <linearGradient id="source1" x1="0" y1="0" x2="0" y2="1">
+                <stop
+                  offset="5%"
+                  stopColor={`var(--color-source1)`}
+                  stopOpacity={0.8}
+                />
+                <stop
+                  offset="95%"
+                  stopColor={`var(--color-source1)`}
+                  stopOpacity={0}
+                />
+              </linearGradient>
+              <linearGradient id="source2" x1="0" y1="0" x2="0" y2="1">
+                <stop
+                  offset="5%"
+                  stopColor={`var(--color-source2)`}
+                  stopOpacity={0.8}
+                />
+                <stop
+                  offset="95%"
+                  stopColor={`var(--color-source2)`}
+                  stopOpacity={0}
+                />
+              </linearGradient>
+            </defs>
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="date"
@@ -105,21 +128,22 @@ export function LineChartMultiple({
             />
             <YAxis width={20} axisLine={false} tickLine={false} />
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-            <Line
+
+            <Area
+              type="monotone"
               dataKey="source1"
-              type="monotone"
-              stroke="var(--color-source1)"
-              strokeWidth={2}
-              dot={false}
+              stroke={`var(--color-source1)`}
+              fillOpacity={1}
+              fill="url(#source1)"
             />
-            <Line
+            <Area
+              type="monotone"
               dataKey="source2"
-              type="monotone"
-              stroke="var(--color-source2)"
-              strokeWidth={2}
-              dot={false}
+              stroke={`var(--color-source2)`}
+              fillOpacity={1}
+              fill="url(#source2)"
             />
-          </LineChart>
+          </AreaChart>
         </ChartContainer>
       </CardContent>
     </Card>
