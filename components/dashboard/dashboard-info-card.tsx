@@ -41,7 +41,7 @@ export async function DashboardInfoCard({
         ) : (
           <div className="flex items-end gap-2 text-2xl font-bold">
             <CountUp count={count} />
-            {total && (
+            {total !== undefined && (
               <span className="align-top text-base text-slate-500">
                 / {total}
               </span>
