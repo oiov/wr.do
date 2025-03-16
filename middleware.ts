@@ -4,6 +4,7 @@ import { auth } from "auth";
 import UAParser from "ua-parser-js";
 
 import { siteConfig } from "./config/site";
+import { trackUmamiEvent } from "./lib/umami";
 
 // export { auth as middleware } from "auth";
 
@@ -25,6 +26,7 @@ export default auth(async (req) => {
         const device = parser.getDevice();
 
         const referer = req.headers.get("referer") || "(None)";
+        const slug = match[1];
 
         const res = await fetch(`${siteConfig.url}/api/s`, {
           method: "POST",
@@ -32,7 +34,7 @@ export default auth(async (req) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            slug: match[1],
+            slug,
             referer,
             ip,
             city: geo?.city,
@@ -53,6 +55,15 @@ export default auth(async (req) => {
             302,
           );
         }
+
+        await trackUmamiEvent(req, "short_link_redirect", {
+          slug,
+          referer,
+          country: geo?.country,
+          browser: browser.name || "Unknown",
+          device: device.model || "Unknown",
+          language: userLanguage,
+        });
 
         const target = await res.json();
         if (!target) {
