@@ -173,16 +173,15 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
                   >
                     oiov
                   </Link>
-                  . <br /> Built with{" "}
-                  <Link
+                  .{/* <br /> Built with{" "} */}
+                  {/* <Link
                     href="https://www.cloudflare.com?ref=wrdo"
                     target="_blank"
                     rel="noreferrer"
                     className="font-medium text-primary underline underline-offset-2"
                   >
                     Cloudflare
-                  </Link>
-                  .
+                  </Link> */}
                 </p>
               )}
             </div>

@@ -14,6 +14,7 @@ export const siteConfig: SiteConfig = {
   links: {
     twitter: "https://twitter.com/yesmoree",
     github: "https://github.com/oiov/wr.do",
+    discord: "https://discord.gg/AHPQYuZu3m",
   },
   mailSupport: "support@wr.do",
   freeQuota: {
