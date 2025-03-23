@@ -150,7 +150,9 @@ export default function LiveLog({ admin }: { admin: boolean }) {
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-base text-gray-800">Live Log</CardTitle>
+            <CardTitle className="text-base text-gray-800 dark:text-gray-100">
+              Live Log
+            </CardTitle>
             <CardDescription>
               Real-time updates of short URL visits.
             </CardDescription>
@@ -161,7 +163,9 @@ export default function LiveLog({ admin }: { admin: boolean }) {
             variant={"outline"}
             size="sm"
             className={`ml-auto gap-2 transition-colors hover:border-blue-600 hover:text-blue-600 ${
-              isLive ? "border-blue-600 text-blue-500" : ""
+              isLive
+                ? "animate-pulse border-dashed border-blue-600 text-blue-500"
+                : ""
             }`}
           >
             <Icons.CirclePlay className="h-4 w-4" /> {isLive ? "Stop" : "Live"}
@@ -171,7 +175,7 @@ export default function LiveLog({ admin }: { admin: boolean }) {
             variant={"outline"}
             size="sm"
             onClick={() => handleRefresh()}
-            disabled={isLoading}
+            disabled={!isLive}
           >
             {isLoading ? (
               <RefreshCwIcon className="size-4 animate-spin" />
@@ -190,17 +194,17 @@ export default function LiveLog({ admin }: { admin: boolean }) {
             }`}
             disabled={logs.length === 0}
           >
-            <Icons.trash className="h-4 w-4" />
+            <Icons.paintbrush className="h-4 w-4" />
           </Button>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className={"pb-0" + (logs.length > 0 ? " pb-6" : "")}>
         {error ? (
           <div className="text-center text-red-500">{error.message}</div>
         ) : logs.length === 0 && !newLogs ? (
-          <Skeleton className="h-8 w-full" />
+          // <Skeleton className="h-8 w-full" />
+          <></>
         ) : (
-          // <></>
           <div className="scrollbar-hidden h-96 overflow-y-auto">
             <Table>
               <TableHeader>
@@ -213,7 +217,7 @@ export default function LiveLog({ admin }: { admin: boolean }) {
                   <TableHead className="h-8 w-1/12 px-1">Clicks</TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody className="">
+              <TableBody>
                 <AnimatePresence initial={false}>
                   {logs.map((log, index) => (
                     <motion.tr

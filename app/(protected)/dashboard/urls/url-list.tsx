@@ -23,6 +23,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
@@ -49,7 +50,7 @@ import { PaginationWrapper } from "@/components/shared/pagination";
 import UserUrlMetaInfo from "./meta";
 
 export interface UrlListProps {
-  user: Pick<User, "id" | "name" | "apiKey">;
+  user: Pick<User, "id" | "name" | "apiKey" | "role">;
   action: string;
 }
 
@@ -91,17 +92,29 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
   const [pageSize, setPageSize] = useState(10);
   const [isShowStats, setShowStats] = useState(false);
   const [selectedUrlId, setSelectedUrlId] = useState("");
+  const [searchParams, setSearchParams] = useState({
+    slug: "",
+    target: "",
+    userName: "",
+  });
 
   const { mutate } = useSWRConfig();
   const { data, error, isLoading } = useSWR<{
     total: number;
     list: ShortUrlFormData[];
-  }>(`${action}?page=${currentPage}&size=${pageSize}`, fetcher, {
-    revalidateOnFocus: false,
-  });
+  }>(
+    `${action}?page=${currentPage}&size=${pageSize}&slug=${searchParams.slug}&userName=${searchParams.userName}&target=${searchParams.target}`,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    },
+  );
 
   const handleRefresh = () => {
-    mutate(`${action}?page=${currentPage}&size=${pageSize}`, undefined);
+    mutate(
+      `${action}?page=${currentPage}&size=${pageSize}&slug=${searchParams.slug}&userName=${searchParams.userName}&target=${searchParams.target}`,
+      undefined,
+    );
   };
 
   return (
@@ -148,6 +161,41 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
           </div>
         </CardHeader>
         <CardContent>
+          <div className="mb-2 flex-row items-center sm:flex sm:gap-2">
+            <Input
+              className=""
+              placeholder="Search by slug..."
+              value={searchParams.slug}
+              onChange={(e) => {
+                setSearchParams({
+                  ...searchParams,
+                  slug: e.target.value,
+                });
+              }}
+            />
+            <Input
+              placeholder="Search by target..."
+              value={searchParams.target}
+              onChange={(e) => {
+                setSearchParams({
+                  ...searchParams,
+                  target: e.target.value,
+                });
+              }}
+            />
+            {user.role === "ADMIN" && (
+              <Input
+                placeholder="Search by user name..."
+                value={searchParams.userName}
+                onChange={(e) => {
+                  setSearchParams({
+                    ...searchParams,
+                    userName: e.target.value,
+                  });
+                }}
+              />
+            )}
+          </div>
           {isShowForm && (
             <UrlForm
               user={{ id: user.id, name: user.name || "" }}
@@ -188,6 +236,8 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
             <TableBody>
               {isLoading ? (
                 <>
+                  <TableColumnSekleton />
+                  <TableColumnSekleton />
                   <TableColumnSekleton />
                   <TableColumnSekleton />
                   <TableColumnSekleton />

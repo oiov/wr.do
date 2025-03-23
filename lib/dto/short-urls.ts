@@ -27,14 +27,29 @@ export async function getUserShortUrls(
   page: number,
   size: number,
   role: UserRole = "USER",
+  userName: string = "",
+  url: string = "",
+  target: string = "",
 ) {
-  const option =
+  let option: any =
     role === "USER"
       ? {
           userId,
           active,
         }
       : {};
+
+  if (userName) {
+    option.userName = userName;
+  }
+  if (url) {
+    option.url = url;
+  }
+  if (target) {
+    option.target = target;
+  }
+  console.log(option);
+
   const [total, list] = await prisma.$transaction([
     prisma.userUrl.count({
       where: option,

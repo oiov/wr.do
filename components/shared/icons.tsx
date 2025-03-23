@@ -33,6 +33,7 @@ import {
   Moon,
   MoreVertical,
   Package,
+  Paintbrush,
   Plus,
   QrCode,
   Search,
@@ -62,6 +63,7 @@ export const Icons = {
   fileText: FileText,
   dashboard: LayoutPanelLeft,
   ellipsis: MoreVertical,
+  paintbrush: Paintbrush,
   github: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"

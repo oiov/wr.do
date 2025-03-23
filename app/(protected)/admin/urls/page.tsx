@@ -27,7 +27,12 @@ export default async function DashboardPage() {
       />
       <LiveLog admin={true} />
       <UserUrlsList
-        user={{ id: user.id, name: user.name || "", apiKey: user.apiKey || "" }}
+        user={{
+          id: user.id,
+          name: user.name || "",
+          apiKey: user.apiKey || "",
+          role: user.role,
+        }}
         action="/api/url/admin"
       />
     </>
