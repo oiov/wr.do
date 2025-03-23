@@ -39,14 +39,21 @@ export async function getUserShortUrls(
         }
       : {};
 
+  // 这三个参数都是模糊查询
   if (userName) {
-    option.userName = userName;
+    option.userName = {
+      contains: userName,
+    };
   }
   if (url) {
-    option.url = url;
+    option.url = {
+      contains: url,
+    };
   }
   if (target) {
-    option.target = target;
+    option.target = {
+      contains: target,
+    };
   }
 
   const [total, list] = await prisma.$transaction([
