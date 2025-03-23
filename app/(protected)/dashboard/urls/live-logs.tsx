@@ -32,12 +32,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { Icons } from "@/components/shared/icons";
 
 export interface LogEntry {
@@ -206,82 +200,64 @@ export default function LiveLog({ admin }: { admin: boolean }) {
         ) : logs.length === 0 && !newLogs ? (
           <Skeleton className="h-8 w-full" />
         ) : (
-          <>
-            <div className="h-96">
-              <Table>
-                <TableHeader className="">
-                  <TableRow className="bg-gray-100/50 text-sm dark:bg-primary-foreground">
-                    <TableHead className="h-8 w-1/6 px-1">Time</TableHead>
-                    <TableHead className="h-8 w-1/12 px-1">Url</TableHead>
-                    <TableHead className="h-8 px-1">Target</TableHead>
-                    <TableHead className="h-8 w-1/12 px-1">IP</TableHead>
-                    <TableHead className="h-8 w-1/6 px-1">Location</TableHead>
-                    <TableHead className="h-8 w-1/12 px-1">Clicks</TableHead>
-                  </TableRow>
-                </TableHeader>
-              </Table>
-              <div className="scrollbar-hidden h-[calc(100%-2rem)] overflow-y-auto">
-                <Table>
-                  <TableBody className="">
-                    <AnimatePresence initial={false}>
-                      {logs.map((log, index) => (
-                        <motion.tr
-                          key={`${log.ip}-${log.slug}-${log.updatedAt}`}
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{
-                            opacity: 1,
-                            height: "auto",
-                            backgroundColor: getRowBackground(index, log.isNew),
-                          }}
-                          exit={{ opacity: 0, height: 0 }}
-                          transition={{
-                            duration: 0,
-                            backgroundColor: {
-                              duration: 0.5,
-                              ease: "linear",
-                            },
-                          }}
-                          className="font-mono text-xs hover:bg-gray-200 dark:border-gray-800"
-                        >
-                          <TableCell className="w-1/6 whitespace-nowrap px-1 py-1.5">
-                            {new Date(log.updatedAt).toLocaleString()}
-                          </TableCell>
-                          <TableCell className="font-midium w-1/12 px-1 py-1.5 text-green-700">
-                            {log.slug}
-                          </TableCell>
-                          <TableCell className="px-1 py-1.5">
-                            <TooltipProvider>
-                              <Tooltip delayDuration={200}>
-                                <TooltipTrigger className="max-w-96 truncate hover:underline">
-                                  <a href={log.target} target="_blank">
-                                    {log.target}
-                                  </a>
-                                </TooltipTrigger>
-                                <TooltipContent className="w-1/2 text-wrap">
-                                  {log.target}
-                                </TooltipContent>
-                              </Tooltip>
-                            </TooltipProvider>
-                          </TableCell>
-                          <TableCell className="w-1/12 px-1 py-1.5">
-                            {log.ip}
-                          </TableCell>
-                          <TableCell className="w-1/6 max-w-6 truncate px-1 py-1.5">
-                            {decodeURIComponent(
-                              log.city ? `${log.city}, ${log.country}` : "-",
-                            )}
-                          </TableCell>
-                          <TableCell className="w-1/12 px-1 py-1.5">
-                            {log.click}
-                          </TableCell>
-                        </motion.tr>
-                      ))}
-                    </AnimatePresence>
-                  </TableBody>
-                </Table>
-              </div>
-            </div>
-          </>
+          // <></>
+          <div className="scrollbar-hidden h-96 overflow-y-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-gray-100/50 text-sm dark:bg-primary-foreground">
+                  <TableHead className="h-8 w-1/6 px-1">Time</TableHead>
+                  <TableHead className="h-8 w-1/12 px-1">Url</TableHead>
+                  <TableHead className="h-8 px-1">Target</TableHead>
+                  <TableHead className="h-8 w-1/12 px-1">IP</TableHead>
+                  <TableHead className="h-8 w-1/6 px-1">Location</TableHead>
+                  <TableHead className="h-8 w-1/12 px-1">Clicks</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody className="">
+                <AnimatePresence initial={false}>
+                  {logs.map((log, index) => (
+                    <motion.tr
+                      key={`${log.ip}-${log.slug}-${log.updatedAt}`}
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{
+                        opacity: 1,
+                        height: "auto",
+                        backgroundColor: getRowBackground(index, log.isNew),
+                      }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{
+                        duration: 0,
+                        backgroundColor: {
+                          duration: 0.5,
+                          ease: "linear",
+                        },
+                      }}
+                      className="font-mono text-xs hover:bg-gray-200 dark:border-gray-800"
+                    >
+                      <TableCell className="whitespace-nowrap px-1 py-1.5">
+                        {new Date(log.updatedAt).toLocaleString()}
+                      </TableCell>
+                      <TableCell className="font-midium px-1 py-1.5 text-green-700">
+                        {log.slug}
+                      </TableCell>
+                      <TableCell className="max-w-10 truncate px-1 py-1.5 hover:underline">
+                        <a href={log.target} target="_blank" title={log.target}>
+                          {log.target}
+                        </a>
+                      </TableCell>
+                      <TableCell className="px-1 py-1.5">{log.ip}</TableCell>
+                      <TableCell className="max-w-6 truncate px-1 py-1.5">
+                        {decodeURIComponent(
+                          log.city ? `${log.city}, ${log.country}` : "-",
+                        )}
+                      </TableCell>
+                      <TableCell className="px-1 py-1.5">{log.click}</TableCell>
+                    </motion.tr>
+                  ))}
+                </AnimatePresence>
+              </TableBody>
+            </Table>
+          </div>
         )}
         {isLive && (
           <div className="flex w-full items-center justify-end gap-2 border-t border-dashed pt-4 text-sm text-gray-500">
