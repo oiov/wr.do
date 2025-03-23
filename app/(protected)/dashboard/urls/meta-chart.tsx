@@ -4,10 +4,11 @@ import * as React from "react";
 import Link from "next/link";
 import { UrlMeta } from "@prisma/client";
 import { VisSingleContainer, VisTooltip, VisTopoJSONMap } from "@unovis/react";
-import { TopoJSONMap } from "@unovis/ts";
+import { MapData, TopoJSONMap } from "@unovis/ts";
 import { WorldMapTopoJSON } from "@unovis/ts/maps";
-import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
+import { getCountryName } from "@/lib/contries";
 import { isLink, removeUrlSuffix, timeAgo } from "@/lib/utils";
 import {
   Card,
@@ -149,7 +150,16 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
   const areaData = data.map((item) => ({
     id: item.country,
   }));
-  const triggers = { [TopoJSONMap.selectors.feature]: (d) => d.id };
+  const pointData = data.map((item) => ({
+    id: item.id,
+    city: item.city,
+    latitude: item.latitude,
+    longitude: item.longitude,
+  }));
+  const pointLabel = (d: any) => d.city;
+  const triggers = {
+    [TopoJSONMap.selectors.feature]: (d) => getCountryName(d.id),
+  };
 
   const refererStats = generateStatsList(data, "referer");
   const cityStats = generateStatsList(data, "city");
@@ -277,8 +287,13 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
           </AreaChart>
         </ChartContainer>
 
-        <VisSingleContainer data={{ areas: areaData }}>
-          <VisTopoJSONMap topojson={WorldMapTopoJSON} />
+        <VisSingleContainer data={{ areas: areaData, points: pointData }}>
+          <VisTopoJSONMap
+            topojson={WorldMapTopoJSON}
+            // mapFitToPoints={true}
+            // pointLabel={pointLabel}
+            pointRadius={1.5}
+          />
           <VisTooltip triggers={triggers} />
         </VisSingleContainer>
 
