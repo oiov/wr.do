@@ -146,7 +146,7 @@ export default function LiveLog({ admin }: { admin: boolean }) {
   };
 
   return (
-    <Card className="mx-auto w-full">
+    <Card className="grids mx-auto w-full">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
@@ -198,14 +198,14 @@ export default function LiveLog({ admin }: { admin: boolean }) {
           </Button>
         </div>
       </CardHeader>
-      <CardContent className={"pb-0" + (logs.length > 0 ? " pb-6" : "")}>
+      <CardContent className={"pb-0" + (isLive ? " pb-6" : "")}>
         {error ? (
           <div className="text-center text-red-500">{error.message}</div>
         ) : logs.length === 0 && !newLogs ? (
           // <Skeleton className="h-8 w-full" />
           <></>
         ) : (
-          <div className="scrollbar-hidden h-96 overflow-y-auto">
+          <div className="scrollbar-hidden h-96 overflow-y-auto bg-primary-foreground">
             <Table>
               <TableHeader>
                 <TableRow className="bg-gray-100/50 text-sm dark:bg-primary-foreground">
