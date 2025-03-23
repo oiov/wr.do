@@ -189,3 +189,26 @@ export const reservedDomains = [
   "test1.wr.do",
   "demo1.wr.do",
 ];
+
+export const LOGS_LIMITEs_ENUMS = [
+  {
+    value: "50",
+    label: "50",
+  },
+  {
+    value: "100",
+    label: "100",
+  },
+  {
+    value: "200",
+    label: "200",
+  },
+  {
+    value: "500",
+    label: "500",
+  },
+  {
+    value: "1000",
+    label: "1000",
+  },
+];

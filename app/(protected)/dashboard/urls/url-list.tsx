@@ -38,7 +38,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import CountUpFn from "@/components/dashboard/count-up";
 import StatusDot from "@/components/dashboard/status-dot";
 import { FormType } from "@/components/forms/record-form";
 import { UrlForm } from "@/components/forms/url-form";

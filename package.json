@@ -69,6 +69,7 @@
     "contentlayer2": "^0.5.0",
     "crypto": "^1.0.1",
     "date-fns": "^3.6.0",
+    "framer-motion": "^12.5.0",
     "lucide-react": "^0.414.0",
     "lucide-static": "^0.460.0",
     "minimist": "^1.2.8",

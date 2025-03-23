@@ -10,6 +10,7 @@ import {
   ChevronLeft,
   ChevronRight,
   CircleHelp,
+  CirclePlay,
   Copy,
   File,
   FileText,
@@ -59,7 +60,6 @@ export const Icons = {
   copy: Copy,
   camera: Camera,
   fileText: FileText,
-
   dashboard: LayoutPanelLeft,
   ellipsis: MoreVertical,
   github: ({ ...props }: LucideProps) => (
@@ -139,6 +139,7 @@ export const Icons = {
   link: Link,
   mail: Mail,
   bug: Bug,
+  CirclePlay: CirclePlay,
   // help: CircleHelp,
   outLink: ({ ...props }: LucideProps) => (
     <svg
@@ -176,10 +177,10 @@ export const Icons = {
         r="32.252"
         gradientUnits="userSpaceOnUse"
       >
-        <stop offset="0" stop-color="#8c9eff"></stop>
-        <stop offset=".368" stop-color="#889af8"></stop>
-        <stop offset=".889" stop-color="#7e8fe6"></stop>
-        <stop offset="1" stop-color="#7b8ce1"></stop>
+        <stop offset="0" stopColor="#8c9eff"></stop>
+        <stop offset=".368" stopColor="#889af8"></stop>
+        <stop offset=".889" stopColor="#7e8fe6"></stop>
+        <stop offset="1" stopColor="#7b8ce1"></stop>
       </radialGradient>
       <path
         fill="url(#La9SoowKGoEUHOnYdJMSEa_2mIgusGquJFz_gr1)"

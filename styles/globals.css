@@ -109,6 +109,15 @@
   background: hsla(0, 0%, 59%, 0.524);
 }
 
+.scrollbar-hidden {
+  -ms-overflow-style: none; /* IE 和 Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, 和 Opera */
+}
+
 .grids {
   background-image: linear-gradient(
       0deg,

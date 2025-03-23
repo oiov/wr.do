@@ -4,6 +4,7 @@ import { getCurrentUser } from "@/lib/session";
 import { constructMetadata } from "@/lib/utils";
 import { DashboardHeader } from "@/components/dashboard/header";
 
+import LiveLog from "../../dashboard/urls/live-logs";
 import UserUrlsList from "../../dashboard/urls/url-list";
 
 export const metadata = constructMetadata({
@@ -24,6 +25,7 @@ export default async function DashboardPage() {
         link="/docs/short-urls"
         linkText="Short urls."
       />
+      <LiveLog admin={true} />
       <UserUrlsList
         user={{ id: user.id, name: user.name || "", apiKey: user.apiKey || "" }}
         action="/api/url/admin"

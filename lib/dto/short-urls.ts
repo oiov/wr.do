@@ -206,3 +206,35 @@ async function incrementClick(id) {
     },
   });
 }
+
+export async function getUrlMetaLiveLog(userId?: string) {
+  const whereClause = userId ? { userUrl: { userId } } : {};
+
+  const logs = await prisma.urlMeta.findMany({
+    take: 10,
+    where: whereClause,
+    orderBy: { updatedAt: "desc" },
+    select: {
+      ip: true,
+      click: true,
+      updatedAt: true,
+      createdAt: true,
+      city: true,
+      country: true,
+      userUrl: {
+        select: {
+          url: true,
+          target: true,
+        },
+      },
+    },
+  });
+
+  const formattedLogs = logs.map((log) => ({
+    ...log,
+    slug: log.userUrl.url,
+    target: log.userUrl.target,
+  }));
+
+  return formattedLogs;
+}
