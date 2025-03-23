@@ -48,7 +48,6 @@ export async function getUserShortUrls(
   if (target) {
     option.target = target;
   }
-  console.log(option);
 
   const [total, list] = await prisma.$transaction([
     prisma.userUrl.count({
