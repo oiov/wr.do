@@ -161,7 +161,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="mb-2 flex-row items-center sm:flex sm:gap-2">
+          <div className="mb-2 flex-row items-center gap-2 space-y-2 sm:flex sm:space-y-0">
             <Input
               className=""
               placeholder="Search by slug..."
