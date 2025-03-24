@@ -1,6 +1,5 @@
 import QRCode from "qrcode";
 
-import { env } from "@/env.mjs";
 import { checkApiKey } from "@/lib/dto/api-key";
 import { createScrapeMeta } from "@/lib/dto/scrape";
 import { getIpInfo, isLink } from "@/lib/utils";

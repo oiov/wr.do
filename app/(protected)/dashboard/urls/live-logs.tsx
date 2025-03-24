@@ -6,6 +6,7 @@ import { RefreshCwIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 import useSWR, { useSWRConfig } from "swr";
 
+import { getCountryName } from "@/lib/contries";
 import { LOGS_LIMITEs_ENUMS } from "@/lib/enums";
 import { fetcher } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -212,16 +213,16 @@ export default function LiveLog({ admin }: { admin: boolean }) {
                   <TableHead className="h-8 w-1/6 px-1">Time</TableHead>
                   <TableHead className="h-8 w-1/12 px-1">Url</TableHead>
                   <TableHead className="h-8 px-1">Target</TableHead>
+                  <TableHead className="h-8 w-1/12 px-1">Clicks</TableHead>
                   <TableHead className="h-8 w-1/12 px-1">IP</TableHead>
                   <TableHead className="h-8 w-1/6 px-1">Location</TableHead>
-                  <TableHead className="h-8 w-1/12 px-1">Clicks</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 <AnimatePresence initial={false}>
                   {logs.map((log, index) => (
                     <motion.tr
-                      key={`${log.ip}-${log.slug}-${log.updatedAt}`}
+                      key={`${log.ip}-${log.slug}`}
                       initial={{ opacity: 0, height: 0 }}
                       animate={{
                         opacity: 1,
@@ -249,13 +250,15 @@ export default function LiveLog({ admin }: { admin: boolean }) {
                           {log.target}
                         </a>
                       </TableCell>
+                      <TableCell className="px-1 py-1.5">{log.click}</TableCell>
                       <TableCell className="px-1 py-1.5">{log.ip}</TableCell>
                       <TableCell className="max-w-6 truncate px-1 py-1.5">
                         {decodeURIComponent(
-                          log.city ? `${log.city}, ${log.country}` : "-",
+                          log.city
+                            ? `${log.city}, ${getCountryName(log.country || "")}`
+                            : "-",
                         )}
                       </TableCell>
-                      <TableCell className="px-1 py-1.5">{log.click}</TableCell>
                     </motion.tr>
                   ))}
                 </AnimatePresence>

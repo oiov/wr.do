@@ -142,7 +142,7 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
   const latestDate = timeAgo(latestEntry.updatedAt);
   const latestFrom = [
     latestEntry.city ? decodeURIComponent(latestEntry.city) : "",
-    latestEntry.country ? `(${latestEntry.country})` : "",
+    latestEntry.country ? `(${getCountryName(latestEntry.country)})` : "",
   ]
     .filter(Boolean)
     .join(" ");
@@ -156,10 +156,15 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
     latitude: item.latitude,
     longitude: item.longitude,
   }));
-  const pointLabel = (d: any) => d.city;
+  // const pointLabel = (d: any) => d.city;
   const triggers = {
-    [TopoJSONMap.selectors.feature]: (d) => getCountryName(d.id),
+    [TopoJSONMap.selectors.feature]: (d) => `${getCountryName(d.id)}`,
+    [TopoJSONMap.selectors.point]: (d) => decodeURIComponent(d.city),
   };
+  // const mapEvents = {
+  //   [TopoJSONMap.selectors.point]: {},
+  //   [TopoJSONMap.selectors.feature]: {},
+  // };
 
   const refererStats = generateStatsList(data, "referer");
   const cityStats = generateStatsList(data, "city");
@@ -290,9 +295,10 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
         <VisSingleContainer data={{ areas: areaData, points: pointData }}>
           <VisTopoJSONMap
             topojson={WorldMapTopoJSON}
+            // events={mapEvents}
             // mapFitToPoints={true}
             // pointLabel={pointLabel}
-            pointRadius={1.5}
+            pointRadius={1.6}
           />
           <VisTooltip triggers={triggers} />
         </VisSingleContainer>

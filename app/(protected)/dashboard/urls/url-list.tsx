@@ -3,7 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import { User } from "@prisma/client";
+import { set } from "date-fns";
 import { LineChart, PenLine, RefreshCwIcon } from "lucide-react";
+import { toast } from "sonner";
 import useSWR, { useSWRConfig } from "swr";
 
 import { siteConfig } from "@/config/site";
@@ -23,8 +25,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Switch } from "@/components/ui/switch";
 import {
   Table,
   TableBody,
@@ -42,8 +50,10 @@ import {
 import StatusDot from "@/components/dashboard/status-dot";
 import { FormType } from "@/components/forms/record-form";
 import { UrlForm } from "@/components/forms/url-form";
+import { BlurImg } from "@/components/shared/blur-image";
 import { CopyButton } from "@/components/shared/copy-button";
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
+import { Icons } from "@/components/shared/icons";
 import { LinkPreviewer } from "@/components/shared/link-previewer";
 import { PaginationWrapper } from "@/components/shared/pagination";
 
@@ -56,26 +66,26 @@ export interface UrlListProps {
 
 function TableColumnSekleton() {
   return (
-    <TableRow className="grid grid-cols-3 items-center sm:grid-cols-8">
+    <TableRow className="grid grid-cols-3 items-center sm:grid-cols-9">
       <TableCell className="col-span-1">
         <Skeleton className="h-5 w-20" />
       </TableCell>
       <TableCell className="col-span-1 sm:col-span-2">
         <Skeleton className="h-5 w-20" />
       </TableCell>
-      <TableCell className="col-span-1 hidden justify-center sm:flex">
+      <TableCell className="col-span-1 hidden sm:flex">
         <Skeleton className="h-5 w-16" />
       </TableCell>
-      <TableCell className="col-span-1 hidden justify-center sm:flex">
+      <TableCell className="col-span-1 hidden sm:flex">
         <Skeleton className="h-5 w-16" />
       </TableCell>
-      <TableCell className="col-span-1 hidden justify-center sm:flex">
+      <TableCell className="col-span-1 hidden sm:flex">
         <Skeleton className="h-5 w-16" />
       </TableCell>
-      <TableCell className="col-span-1 hidden justify-center sm:flex">
+      <TableCell className="col-span-1 hidden sm:flex">
         <Skeleton className="h-5 w-16" />
       </TableCell>
-      <TableCell className="col-span-1 flex justify-center">
+      <TableCell className="col-span-1 flex">
         <Skeleton className="h-5 w-16" />
       </TableCell>
     </TableRow>
@@ -91,6 +101,11 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [isShowStats, setShowStats] = useState(false);
+  const [isShowQrcode, setShowQrcode] = useState(false);
+  const [qrcodeInfo, setQrcodeInfo] = useState({
+    tmp_url: "",
+    payload: "",
+  });
   const [selectedUrlId, setSelectedUrlId] = useState("");
   const [searchParams, setSearchParams] = useState({
     slug: "",
@@ -115,6 +130,36 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
       `${action}?page=${currentPage}&size=${pageSize}&slug=${searchParams.slug}&userName=${searchParams.userName}&target=${searchParams.target}`,
       undefined,
     );
+  };
+
+  const handleQrcode = async (link: string) => {
+    if (link) {
+      // setIsShoting(true);
+      const payload = `/api/v1/scraping/qrcode?url=${link}&key=${user.apiKey}`;
+      const res = await fetch(payload);
+      if (!res.ok || res.status !== 200) {
+        toast.error(res.statusText);
+      } else {
+        // const blob = await res.blob();
+        // const imageUrl = URL.createObjectURL(blob);
+        setQrcodeInfo({
+          tmp_url: await res.text(),
+          payload: `${window.location.origin}${payload}`,
+        });
+        // toast.success("Success!");
+      }
+      // setIsShoting(false);
+    }
+  };
+  const handleDownloadQrCode = (url: string) => {
+    const link = document.createElement("a");
+    link.download = `wrdo-${url}.png`;
+    link.href = qrcodeInfo.tmp_url;
+    link.click();
+  };
+  const handleCopyQrCode = (url: string) => {
+    navigator.clipboard.writeText(qrcodeInfo.payload);
+    toast.success("Copied to clipboard");
   };
 
   return (
@@ -209,26 +254,26 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
           )}
           <Table>
             <TableHeader className="bg-gray-100/50 dark:bg-primary-foreground">
-              <TableRow className="grid grid-cols-3 items-center sm:grid-cols-8">
+              <TableRow className="grid grid-cols-3 items-center sm:grid-cols-9">
                 <TableHead className="col-span-1 flex items-center font-bold">
                   Url
                 </TableHead>
                 <TableHead className="col-span-1 flex items-center font-bold sm:col-span-2">
                   Target
                 </TableHead>
-                <TableHead className="col-span-1 hidden items-center justify-center font-bold sm:flex">
+                <TableHead className="col-span-1 hidden items-center font-bold sm:flex">
                   User
                 </TableHead>
-                <TableHead className="col-span-1 hidden items-center justify-center font-bold sm:flex">
+                <TableHead className="col-span-1 hidden items-center font-bold sm:flex">
                   Status
                 </TableHead>
-                <TableHead className="col-span-1 hidden items-center justify-center font-bold sm:flex">
+                <TableHead className="col-span-1 hidden items-center font-bold sm:flex">
                   Expiration
                 </TableHead>
-                <TableHead className="col-span-1 hidden items-center justify-center font-bold sm:flex">
+                <TableHead className="col-span-1 hidden items-center font-bold sm:flex">
                   Updated
                 </TableHead>
-                <TableHead className="col-span-1 flex items-center justify-center font-bold">
+                <TableHead className="col-span-1 flex items-center font-bold">
                   Actions
                 </TableHead>
               </TableRow>
@@ -247,11 +292,11 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                   <>
                     <TableRow
                       key={short.id}
-                      className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-8"
+                      className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-9"
                     >
                       <TableCell className="col-span-1 flex items-center gap-1">
                         <Link
-                          className="line-clamp-2 overflow-hidden overflow-ellipsis whitespace-normal text-slate-600 hover:text-blue-400 hover:underline dark:text-slate-400"
+                          className="overflow-hidden overflow-ellipsis whitespace-normal text-slate-600 hover:text-blue-400 hover:underline dark:text-slate-400"
                           href={`/s/${short.url}`}
                           target="_blank"
                           prefetch={false}
@@ -273,7 +318,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                           formatUrl={removeUrlSuffix(short.target)}
                         />
                       </TableCell>
-                      <TableCell className="col-span-1 hidden justify-center truncate sm:flex">
+                      <TableCell className="col-span-1 hidden truncate sm:flex">
                         <TooltipProvider>
                           <Tooltip delayDuration={200}>
                             <TooltipTrigger className="truncate">
@@ -285,16 +330,21 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                           </Tooltip>
                         </TooltipProvider>
                       </TableCell>
-                      <TableCell className="col-span-1 hidden justify-center sm:flex">
-                        <StatusDot status={short.active} />
+                      <TableCell className="col-span-1 hidden sm:flex">
+                        <Switch
+                          disabled
+                          className="data-[state=checked]:bg-blue-500"
+                          defaultChecked={short.active === 1}
+                          onCheckedChange={(value) => {}}
+                        />
                       </TableCell>
-                      <TableCell className="col-span-1 hidden justify-center sm:flex">
+                      <TableCell className="col-span-1 hidden sm:flex">
                         {expirationTime(short.expiration, short.updatedAt)}
                       </TableCell>
-                      <TableCell className="col-span-1 hidden justify-center sm:flex">
+                      <TableCell className="col-span-1 hidden sm:flex">
                         {timeAgo(short.updatedAt as Date)}
                       </TableCell>
-                      <TableCell className="col-span-1 flex items-center justify-center gap-2">
+                      <TableCell className="col-span-1 flex items-center gap-1">
                         <Button
                           className="h-7 px-1 text-xs hover:bg-slate-100 dark:hover:text-primary-foreground"
                           size="sm"
@@ -315,6 +365,92 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                           <p>Edit</p>
                           <PenLine className="ml-1 size-3" />
                         </Button>
+                        <HoverCard
+                          open={isShowQrcode && selectedUrlId === short.id}
+                        >
+                          <HoverCardTrigger>
+                            <Button
+                              className="h-7 px-1 text-xs hover:bg-slate-100 dark:hover:text-primary-foreground"
+                              size="sm"
+                              variant={"outline"}
+                              onClick={() => {
+                                // setQrcodeInfo({
+                                //   tmp_url: "",
+                                //   payload: "",
+                                // });
+                                setSelectedUrlId(short.id!);
+                                setShowQrcode(!isShowQrcode);
+                                handleQrcode(`https://wr.do/s/${short.url}`);
+                              }}
+                            >
+                              <Icons.qrcode className="mx-0.5 size-4" />
+                            </Button>
+                          </HoverCardTrigger>
+                          <HoverCardContent
+                            className="flex w-64 flex-col items-center justify-center gap-2"
+                            onMouseLeave={() => setShowQrcode(false)}
+                          >
+                            {!user.apiKey && (
+                              <div className="flex flex-col items-center gap-2">
+                                <p className="text-center text-sm">
+                                  Please generate api key before use this
+                                  feature. Learn more about{" "}
+                                  <Link
+                                    className="py-1 text-blue-600 hover:text-blue-400 hover:underline dark:hover:text-primary-foreground"
+                                    href={"/docs/open-api#api-key"}
+                                  >
+                                    api key
+                                  </Link>
+                                  .
+                                </p>
+
+                                <Link
+                                  className="flex h-8 items-center justify-center rounded-md bg-blue-500 px-2 py-1 text-xs text-white hover:bg-blue-400 dark:hover:text-primary-foreground"
+                                  href={"/dashboard/settings"}
+                                >
+                                  Generate Api Key
+                                </Link>
+                              </div>
+                            )}
+                            {user.apiKey && (
+                              <BlurImg
+                                src={qrcodeInfo.tmp_url}
+                                alt="ligth preview landing"
+                                className="rounded-md border"
+                                width={180}
+                                height={180}
+                                priority
+                                placeholder="blur"
+                              />
+                            )}
+                            {user.apiKey && (
+                              <div className="flex items-center justify-center gap-2">
+                                <Button
+                                  onClick={() => {
+                                    handleDownloadQrCode(short.url);
+                                  }}
+                                  className="h-8 py-1 text-xs hover:bg-blue-400 dark:hover:text-primary-foreground"
+                                  size="sm"
+                                  variant={"blue"}
+                                >
+                                  Download
+                                  <Icons.download className="ml-1 size-4" />
+                                </Button>
+                                <Button
+                                  onClick={() => {
+                                    handleCopyQrCode(short.url);
+                                  }}
+                                  className="h-8 py-1 text-xs hover:bg-gray-400 dark:hover:text-primary-foreground"
+                                  size="sm"
+                                  variant={"default"}
+                                >
+                                  Copy Link
+                                  <Icons.copy className="ml-1 size-4" />
+                                </Button>
+                              </div>
+                            )}
+                          </HoverCardContent>
+                        </HoverCard>
                         <Button
                           className="h-7 px-1 text-xs hover:bg-slate-100 dark:hover:text-primary-foreground"
                           size="sm"
@@ -327,7 +463,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                             }
                           }}
                         >
-                          <LineChart className="ml-1 size-4" />
+                          <LineChart className="mx-0.5 size-4" />
                         </Button>
                       </TableCell>
                     </TableRow>

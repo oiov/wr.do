@@ -12,6 +12,7 @@ import {
   CircleHelp,
   CirclePlay,
   Copy,
+  Download,
   File,
   FileText,
   Flame,
@@ -62,6 +63,7 @@ export const Icons = {
   camera: Camera,
   fileText: FileText,
   dashboard: LayoutPanelLeft,
+  download: Download,
   ellipsis: MoreVertical,
   paintbrush: Paintbrush,
   github: ({ ...props }: LucideProps) => (

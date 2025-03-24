@@ -33,7 +33,7 @@ export function BlurImg(props) {
       className={cn(
         props.className,
         "duration-500 ease-in-out",
-        isLoading ? "blur-sm" : "blur-0",
+        isLoading ? "animate-pulse blur-md" : "blur-0",
       )}
       onLoad={() => setLoading(false)}
     />
