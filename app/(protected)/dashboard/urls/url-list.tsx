@@ -133,7 +133,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
   };
 
   const handleQrcode = async (link: string) => {
-    if (link) {
+    if (link && user.apiKey) {
       // setIsShoting(true);
       const payload = `/api/v1/scraping/qrcode?url=${link}&key=${user.apiKey}`;
       const res = await fetch(payload);
@@ -300,6 +300,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                           href={`/s/${short.url}`}
                           target="_blank"
                           prefetch={false}
+                          title={short.url}
                         >
                           {short.url}
                         </Link>
