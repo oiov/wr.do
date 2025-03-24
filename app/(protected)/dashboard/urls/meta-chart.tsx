@@ -130,13 +130,12 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
   const [activeChart, setActiveChart] =
     React.useState<keyof typeof chartConfig>("pv");
 
-  const processedData = processUrlMeta(data)
-    .map((entry) => ({
-      date: entry.date,
-      pv: entry.clicks,
-      uv: new Set(entry.ips).size,
-    }))
-    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  const processedData = processUrlMeta(data).map((entry) => ({
+    date: entry.date,
+    pv: entry.clicks,
+    uv: new Set(entry.ips).size,
+  }));
+  // .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
   const dataTotal = calculateUVAndPV(data);
 

@@ -161,6 +161,23 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
     navigator.clipboard.writeText(qrcodeInfo.payload);
     toast.success("Copied to clipboard");
   };
+  const handleChangeStatu = async (checked: boolean, id: string) => {
+    const res = await fetch(`/api/url/update/active`, {
+      method: "POST",
+      body: JSON.stringify({
+        id,
+        active: checked ? 1 : 0,
+      }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data) {
+        toast.success("Successed!");
+      }
+    } else {
+      toast.error("Activation failed!");
+    }
+  };
 
   return (
     <>
@@ -333,10 +350,11 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                       </TableCell>
                       <TableCell className="col-span-1 hidden sm:flex">
                         <Switch
-                          disabled
                           className="data-[state=checked]:bg-blue-500"
                           defaultChecked={short.active === 1}
-                          onCheckedChange={(value) => {}}
+                          onCheckedChange={(value) =>
+                            handleChangeStatu(value, short.id || "")
+                          }
                         />
                       </TableCell>
                       <TableCell className="col-span-1 hidden sm:flex">

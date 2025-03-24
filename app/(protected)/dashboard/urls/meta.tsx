@@ -19,6 +19,7 @@ export default function UserUrlMetaInfo({ user, action, urlId }: UrlMetaProps) {
   const { data, isLoading } = useSWR<UrlMeta[]>(
     `${action}?id=${urlId}`,
     fetcher,
+    { focusThrottleInterval: 30000 }, // 30 seconds,
   );
 
   if (isLoading)

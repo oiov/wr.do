@@ -35,7 +35,7 @@ export async function getUserShortUrls(
     role === "USER"
       ? {
           userId,
-          active,
+          // active,
         }
       : {};
 
@@ -86,7 +86,7 @@ export async function getUserShortUrlCount(
         role === "USER"
           ? {
               userId,
-              active,
+              // active,
             }
           : {},
     });
@@ -127,8 +127,29 @@ export async function updateUserShortUrl(data: ShortUrlFormData) {
         target: data.target,
         url: data.url,
         visible: data.visible,
-        active: data.active,
+        // active: data.active,
         expiration: data.expiration,
+        updatedAt: new Date().toISOString(),
+      },
+    });
+    return { status: "success", data: res };
+  } catch (error) {
+    return { status: error };
+  }
+}
+
+export async function updateUserShortUrlActive(
+  userId: string,
+  id: string,
+  active: number = 1,
+  role: UserRole = "USER",
+) {
+  try {
+    const option = role === "USER" ? { userId, id } : { id };
+    const res = await prisma.userUrl.update({
+      where: option,
+      data: {
+        active,
         updatedAt: new Date().toISOString(),
       },
     });
@@ -172,6 +193,7 @@ export async function getUserUrlMetaInfo(urlId: string) {
     where: {
       urlId,
     },
+    orderBy: { updatedAt: "asc" },
   });
 }
 
