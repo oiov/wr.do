@@ -13,6 +13,7 @@ import {
   HeroCard,
 } from "../../../components/dashboard/dashboard-info-card";
 import UserRecordsList from "./records/record-list";
+import LiveLog from "./urls/live-logs";
 import UserUrlsList from "./urls/url-list";
 
 export const metadata = constructMetadata({
@@ -68,6 +69,7 @@ export default async function DashboardPage() {
           }}
           action="/api/url"
         />
+        <LiveLog admin={false} />
       </div>
     </>
   );

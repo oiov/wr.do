@@ -50,9 +50,15 @@ export function LinkPreviewer({
   return (
     <TooltipProvider>
       <Tooltip delayDuration={200} onOpenChange={handleOpenChange}>
-        <TooltipTrigger className="truncate hover:text-blue-400 hover:underline">
-          <Link className="flex items-center" target="_blank" href={url}>
-            {formatUrl} <Icons.outLink className="ml-0.5 mt-0.5" />
+        <TooltipTrigger className="w-full hover:text-blue-400 hover:underline">
+          <Link
+            className="flex items-center"
+            target="_blank"
+            href={url}
+            title={url}
+          >
+            <span className="truncate">{formatUrl}</span>
+            <Icons.outLink className="ml-0.5 mt-0.5 size-3 flex-shrink-0" />
           </Link>
         </TooltipTrigger>
         <TooltipContent

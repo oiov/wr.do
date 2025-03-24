@@ -163,7 +163,7 @@ export default function LiveLog({ admin }: { admin: boolean }) {
             onClick={toggleLive}
             variant={"outline"}
             size="sm"
-            className={`ml-auto gap-2 transition-colors hover:border-blue-600 hover:text-blue-600 ${
+            className={`ml-auto gap-2 bg-primary-foreground transition-colors hover:border-blue-600 hover:text-blue-600 ${
               isLive
                 ? "animate-pulse border-dashed border-blue-600 text-blue-500"
                 : ""
@@ -172,7 +172,7 @@ export default function LiveLog({ admin }: { admin: boolean }) {
             <Icons.CirclePlay className="h-4 w-4" /> {isLive ? "Stop" : "Live"}
           </Button>
           <Button
-            className="mx-2"
+            className="mx-2 bg-primary-foreground"
             variant={"outline"}
             size="sm"
             onClick={() => handleRefresh()}
@@ -188,7 +188,7 @@ export default function LiveLog({ admin }: { admin: boolean }) {
             variant={"outline"}
             size="sm"
             onClick={() => setLogs([])}
-            className={`gap-2 transition-colors ${
+            className={`gap-2 bg-primary-foreground transition-colors ${
               logs.length > 0
                 ? "hover:border-yellow-400 hover:text-yellow-400"
                 : ""

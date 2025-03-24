@@ -312,7 +312,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                           )}
                         />
                       </TableCell>
-                      <TableCell className="col-span-1 truncate sm:col-span-2">
+                      <TableCell className="col-span-1 flex items-center justify-start sm:col-span-2">
                         <LinkPreviewer
                           apiKey={user.apiKey ?? ""}
                           url={short.target}
@@ -363,8 +363,8 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                             }
                           }}
                         >
-                          <p>Edit</p>
-                          <PenLine className="ml-1 size-3" />
+                          <p className="hidden sm:block">Edit</p>
+                          <PenLine className="ml-1 size-4 sm:mx-0.5" />
                         </Button>
                         <HoverCard
                           open={isShowQrcode && selectedUrlId === short.id}
@@ -451,7 +451,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                         <Button
                           className="h-7 px-1 text-xs hover:bg-slate-100 dark:hover:text-primary-foreground"
                           size="sm"
-                          variant={"outline"}
+                          variant="outline"
                           onClick={() => {
                             setSelectedUrlId(short.id!);
                             if (isShowStats && selectedUrlId !== short.id) {
@@ -460,7 +460,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                             }
                           }}
                         >
-                          <LineChart className="mx-0.5 size-4" />
+                          <Icons.lineChart className="mx-0.5 size-4" />
                         </Button>
                       </TableCell>
                     </TableRow>
