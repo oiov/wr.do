@@ -375,10 +375,6 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                               size="sm"
                               variant={"outline"}
                               onClick={() => {
-                                // setQrcodeInfo({
-                                //   tmp_url: "",
-                                //   payload: "",
-                                // });
                                 setSelectedUrlId(short.id!);
                                 setShowQrcode(!isShowQrcode);
                                 handleQrcode(`https://wr.do/s/${short.url}`);
@@ -418,8 +414,8 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                                 src={qrcodeInfo.tmp_url}
                                 alt="ligth preview landing"
                                 className="rounded-md border"
-                                width={180}
-                                height={180}
+                                width={200}
+                                height={200}
                                 priority
                                 placeholder="blur"
                               />

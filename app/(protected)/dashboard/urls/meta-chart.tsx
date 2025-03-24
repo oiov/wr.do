@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { UrlMeta } from "@prisma/client";
 import { VisSingleContainer, VisTooltip, VisTopoJSONMap } from "@unovis/react";
@@ -10,6 +11,7 @@ import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
 import { getCountryName } from "@/lib/contries";
 import { isLink, removeUrlSuffix, timeAgo } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -323,37 +325,66 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
 }
 
 export function StatsList({ data, title }: { data: Stat[]; title: string }) {
+  const [showAll, setShowAll] = useState(false);
+  const displayedData = showAll ? data.slice(0, 50) : data.slice(0, 8);
+
   return (
     <div className="rounded-lg border p-4">
       <h1 className="text-lg font-bold">{title}</h1>
-      {data.slice(0, 10).map((ref) => (
-        <div className="mt-1" key={ref.dimension}>
-          <div className="mb-0.5 flex items-center justify-between text-sm">
-            {isLink(ref.dimension) ? (
-              <Link
-                className="truncate font-medium hover:opacity-70 hover:after:content-['↗']"
-                href={ref.dimension}
-              >
-                {removeUrlSuffix(ref.dimension)}
-              </Link>
-            ) : (
-              <p className="font-medium">{decodeURIComponent(ref.dimension)}</p>
-            )}
-            <p className="text-slate-500">
-              {ref.clicks} ({ref.percentage})
-            </p>
-          </div>
-          <div className="w-full rounded-lg bg-neutral-200 dark:bg-neutral-600">
+      <div
+        className={`overflow-hidden transition-all duration-500 ease-in-out`}
+        style={{
+          maxHeight: showAll ? `${data.length * 2.5 + 2}rem` : "18rem", // 动态计算最大高度
+        }}
+      >
+        {displayedData.map((ref) => (
+          <div
+            key={ref.dimension}
+            className="group relative mt-1.5 h-7 w-full items-center rounded-lg bg-neutral-100 transition-all duration-100 hover:bg-blue-500/60 dark:bg-neutral-600"
+          >
+            <div className="flex h-7 items-center justify-between px-2 text-xs">
+              {isLink(ref.dimension) ? (
+                <Link
+                  className="w-2/3 truncate font-medium hover:opacity-70 hover:after:content-['↗']"
+                  href={ref.dimension}
+                >
+                  {removeUrlSuffix(ref.dimension)}
+                </Link>
+              ) : (
+                <p className="font-medium">
+                  {decodeURIComponent(ref.dimension)}
+                </p>
+              )}
+              <p className="">
+                <span>{ref.clicks}</span>
+                <span className="ml-1 hidden animate-fade-in transition-all duration-200 group-hover:inline-block">
+                  ({ref.percentage})
+                </span>
+              </p>
+            </div>
             <div
-              className="rounded-lg bg-blue-500/90 px-0.5 py-1 leading-none transition-all duration-300"
+              className="absolute left-0 top-0 h-7 rounded-lg px-0.5 py-1 leading-none transition-all duration-300"
               style={{
                 width: `${ref.percentage}`,
-                opacity: parseFloat(ref.percentage) / 10,
+                background: `linear-gradient(to right, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.7))`,
+                opacity: parseFloat(ref.percentage) / 100 + 0.3,
               }}
             ></div>
           </div>
+        ))}
+      </div>
+
+      {data.length > 8 && (
+        <div className="mt-3 text-center">
+          <Button
+            variant={"outline"}
+            onClick={() => setShowAll(!showAll)}
+            className="h-7 px-4 py-1 text-xs"
+          >
+            {showAll ? "Hide" : "Load More"}
+          </Button>
         </div>
-      ))}
+      )}
     </div>
   );
 }

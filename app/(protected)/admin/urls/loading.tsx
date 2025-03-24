@@ -5,7 +5,7 @@ export default function DashboardUrlsLoading() {
   return (
     <>
       <DashboardHeader heading="Short Urls" text="" />
-      <Skeleton className="h-[400px] w-full rounded-lg" />
+      <Skeleton className="h-full w-full rounded-lg" />
     </>
   );
 }
