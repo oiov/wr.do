@@ -83,7 +83,7 @@ export default async function HeroLanding() {
 export function LandingImages() {
   return (
     <>
-      <div className="mt-10 w-full max-w-6xl px-6">
+      <div className="mx-auto mt-10 w-full max-w-6xl px-6">
         <div className="my-14 flex flex-col items-center justify-around gap-10 md:flex-row-reverse">
           <Image
             className="rounded-lg shadow-lg transition-all hover:opacity-90 hover:shadow-xl"
