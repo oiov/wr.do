@@ -9,7 +9,7 @@ import { TopoJSONMap } from "@unovis/ts";
 import { WorldMapTopoJSON } from "@unovis/ts/maps";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
-import { getCountryName } from "@/lib/contries";
+import { getCountryName, getDeviceName } from "@/lib/contries";
 import { isLink, removeUrlSuffix, timeAgo } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -116,8 +116,11 @@ function generateStatsList(
     const percentage = (clicks / totalClicks) * 100;
     statsList.push({
       dimension:
-        (dimension === "country" ? getCountryName(dimValue) : dimValue) ??
-        "Unknown",
+        dimension === "country"
+          ? getCountryName(dimValue)
+          : dimension === "device"
+            ? getDeviceName(dimValue)
+            : dimValue,
       clicks,
       percentage: percentage.toFixed(0) + "%",
     });
