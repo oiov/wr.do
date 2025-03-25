@@ -174,7 +174,7 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
 
   const triggers = {
     [TopoJSONMap.selectors.feature]: (d: any) =>
-      `${getCountryName(d.id)} · ${countryClicks[d.id]}`,
+      `${getCountryName(d.id)} · ${countryClicks[d.id] || 0}`,
     // [TopoJSONMap.selectors.point]: (d) => decodeURIComponent(d.city),
   };
 
