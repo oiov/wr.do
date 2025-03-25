@@ -8,7 +8,9 @@ import { cn, nFormatter } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/shared/icons";
 
+import { Doc } from "../../.contentlayer/generated/types";
 import GitHubStarsWithSuspense from "../shared/github-star-wrapper";
+import UrlShortener from "./url-shortener";
 
 export default async function HeroLanding() {
   const user = await getCurrentUser();
@@ -16,14 +18,14 @@ export default async function HeroLanding() {
     <section className="space-y-6 py-12 sm:py-20 lg:py-24">
       <div className="container flex max-w-screen-md flex-col items-center gap-5 text-center">
         <Link
-          href="/docs/open-api/screenshot"
+          href="/dashboard"
           target="_blank"
           className={cn(
             buttonVariants({ variant: "outline", size: "sm", rounded: "xl" }),
             "px-4",
           )}
         >
-          <span className="mr-3">🎉</span>Screenshot API&nbsp;
+          <span className="mr-3">🎉</span>Short link analytics&nbsp;
           <span className="font-bold" style={{ fontFamily: "Bahamas Bold" }}>
             available
           </span>
@@ -31,9 +33,9 @@ export default async function HeroLanding() {
         </Link>
 
         <h1 className="text-balance font-satoshi text-[40px] font-black leading-[1.15] tracking-tight sm:text-5xl md:text-6xl md:leading-[1.15]">
-          One Platform Powers{" "}
+          Short Links With{" "}
           <span className="bg-gradient-to-r from-violet-600 via-blue-600 to-cyan-500 bg-clip-text text-transparent">
-            Endless Solutions
+            Powerful Solutions
           </span>
         </h1>
 
@@ -42,24 +44,37 @@ export default async function HeroLanding() {
           you need to build better.
         </p>
 
-        <div className="flex flex-col items-center justify-center gap-2 md:flex-row">
-          <GitHubStarsWithSuspense
+        <div className="flex items-center justify-center gap-4">
+          {/* <GitHubStarsWithSuspense
             owner="oiov"
             repo="wr.do"
             className="shadow-sm"
-          />
+          /> */}
+          <Link
+            href="/docs"
+            prefetch={true}
+            className={cn(
+              buttonVariants({ rounded: "xl", size: "lg", variant: "outline" }),
+              "gap-2 bg-primary-foreground px-4 text-[15px] font-semibold text-primary hover:bg-slate-100",
+            )}
+          >
+            <span>Documents</span>
+            <Icons.bookOpen className="size-4" />
+          </Link>
           <Link
             href="/dashboard"
             prefetch={true}
             className={cn(
               buttonVariants({ rounded: "xl", size: "lg" }),
-              "gap-2 px-5 text-[15px] font-semibold",
+              "px-4 text-[15px] font-semibold",
             )}
           >
             <span>{user?.id ? "Dashboard" : "Sign in for free"}</span>
-            <Icons.arrowRight className="size-4" />
+            {/* <Icons.arrowRight className="size-4" /> */}
           </Link>
         </div>
+
+        <UrlShortener />
       </div>
     </section>
   );
@@ -68,7 +83,7 @@ export default async function HeroLanding() {
 export function LandingImages() {
   return (
     <>
-      <div className="mt-12 w-full max-w-6xl px-6">
+      <div className="mt-10 w-full max-w-6xl px-6">
         <div className="my-14 flex flex-col items-center justify-around gap-10 md:flex-row-reverse">
           <Image
             className="rounded-lg shadow-lg transition-all hover:opacity-90 hover:shadow-xl"

@@ -1,5 +1,6 @@
 import {
   AlertTriangle,
+  ArrowDown,
   ArrowRight,
   ArrowUpRight,
   BadgeHelp,
@@ -33,6 +34,7 @@ import {
   MessagesSquare,
   Moon,
   MoreVertical,
+  MousePointerClick,
   Package,
   Paintbrush,
   Plus,
@@ -54,6 +56,7 @@ export const Icons = {
   add: Plus,
   arrowRight: ArrowRight,
   arrowUpRight: ArrowUpRight,
+  arrowDown: ArrowDown,
   chevronLeft: ChevronLeft,
   chevronRight: ChevronRight,
   bookOpen: BookOpen,
@@ -66,6 +69,7 @@ export const Icons = {
   download: Download,
   ellipsis: MoreVertical,
   paintbrush: Paintbrush,
+  mousePointerClick: MousePointerClick,
   github: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"
