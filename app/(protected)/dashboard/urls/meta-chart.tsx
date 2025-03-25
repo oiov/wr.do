@@ -5,7 +5,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { UrlMeta } from "@prisma/client";
 import { VisSingleContainer, VisTooltip, VisTopoJSONMap } from "@unovis/react";
-import { MapData, TopoJSONMap } from "@unovis/ts";
+import { TopoJSONMap } from "@unovis/ts";
 import { WorldMapTopoJSON } from "@unovis/ts/maps";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
@@ -151,21 +151,32 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
   const areaData = data.map((item) => ({
     id: item.country,
   }));
-  const pointData = data.map((item) => ({
-    id: item.id,
-    city: item.city,
-    latitude: item.latitude,
-    longitude: item.longitude,
-  }));
+  // const pointData = data.map((item) => ({
+  //   id: item.id,
+  //   city: item.city,
+  //   latitude: item.latitude,
+  //   longitude: item.longitude,
+  //   clicks: item.click,
+  // }));
   // const pointLabel = (d: any) => d.city;
+
+  // 计算每个国家的点击次数
+  const countryClicks: { [key: string]: number } = {};
+  data.forEach((item) => {
+    const country = item.country;
+    if (country) {
+      if (!countryClicks[country]) {
+        countryClicks[country] = 0;
+      }
+      countryClicks[country] += item.click;
+    }
+  });
+
   const triggers = {
-    [TopoJSONMap.selectors.feature]: (d) => `${getCountryName(d.id)}`,
-    [TopoJSONMap.selectors.point]: (d) => decodeURIComponent(d.city),
+    [TopoJSONMap.selectors.feature]: (d: any) =>
+      `${getCountryName(d.id)} · ${countryClicks[d.id]}`,
+    // [TopoJSONMap.selectors.point]: (d) => decodeURIComponent(d.city),
   };
-  // const mapEvents = {
-  //   [TopoJSONMap.selectors.point]: {},
-  //   [TopoJSONMap.selectors.feature]: {},
-  // };
 
   const refererStats = generateStatsList(data, "referer");
   const cityStats = generateStatsList(data, "city");
@@ -293,13 +304,11 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
           </AreaChart>
         </ChartContainer>
 
-        <VisSingleContainer data={{ areas: areaData, points: pointData }}>
+        <VisSingleContainer data={{ areas: areaData }}>
           <VisTopoJSONMap
             topojson={WorldMapTopoJSON}
-            // events={mapEvents}
+            // pointRadius={1.6}
             // mapFitToPoints={true}
-            // pointLabel={pointLabel}
-            pointRadius={1.6}
           />
           <VisTooltip triggers={triggers} />
         </VisSingleContainer>
