@@ -282,7 +282,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                   User
                 </TableHead>
                 <TableHead className="col-span-1 hidden items-center font-bold sm:flex">
-                  Status
+                  Enabled
                 </TableHead>
                 <TableHead className="col-span-1 hidden items-center font-bold sm:flex">
                   Expiration
