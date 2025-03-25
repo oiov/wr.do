@@ -181,7 +181,7 @@ export function LandingImages() {
         </div>
       </div>
 
-      <div className="grids grids-dark my-10 flex w-full max-w-6xl items-center justify-center gap-8 pb-6 pt-6 md:gap-14 md:pb-10 md:pt-10">
+      <div className="grids grids-dark mx-auto my-10 flex w-full max-w-6xl items-center justify-center gap-8 pb-6 pt-6 md:gap-14 md:pb-10 md:pt-10">
         <CardItem
           bgColor="bg-cyan-400"
           rotate="rotate-12 origin-top-left"
