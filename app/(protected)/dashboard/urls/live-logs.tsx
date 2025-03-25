@@ -258,7 +258,7 @@ export default function LiveLog({ admin }: { admin: boolean }) {
                       >
                         {decodeURIComponent(
                           log.city
-                            ? `${log.city}(${getCountryName(log.country || "")})`
+                            ? `${log.city},${getCountryName(log.country || "")}`
                             : "-",
                         )}
                       </TableCell>

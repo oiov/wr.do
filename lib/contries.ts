@@ -74,6 +74,7 @@ export const countryMap = {
   HT: "Haiti",
   HN: "Honduras",
   HU: "Hungary",
+  HK: "Hong Kong",
   IS: "Iceland",
   IN: "India",
   ID: "Indonesia",

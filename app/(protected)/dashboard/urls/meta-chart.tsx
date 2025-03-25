@@ -115,7 +115,9 @@ function generateStatsList(
   for (const [dimValue, clicks] of Object.entries(dimensionCounts)) {
     const percentage = (clicks / totalClicks) * 100;
     statsList.push({
-      dimension: dimValue ?? "Unknown",
+      dimension:
+        (dimension === "country" ? getCountryName(dimValue) : dimValue) ??
+        "Unknown",
       clicks,
       percentage: percentage.toFixed(0) + "%",
     });
@@ -182,6 +184,7 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
   const cityStats = generateStatsList(data, "city");
   const deviceStats = generateStatsList(data, "device");
   const browserStats = generateStatsList(data, "browser");
+  const countryStats = generateStatsList(data, "country");
 
   return (
     <Card className="rounded-t-none border-t-0">
@@ -317,6 +320,9 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
           {refererStats.length > 0 && (
             <StatsList data={refererStats} title="Referrers" />
           )}
+          {countryStats.length > 0 && (
+            <StatsList data={countryStats} title="Countries" />
+          )}
           {cityStats.length > 0 && (
             <StatsList data={cityStats} title="Cities" />
           )}
@@ -340,9 +346,9 @@ export function StatsList({ data, title }: { data: Stat[]; title: string }) {
     <div className="rounded-lg border p-4">
       <h1 className="text-lg font-bold">{title}</h1>
       <div
-        className={`overflow-hidden transition-all duration-500 ease-in-out`}
+        className={`scrollbar-hidden overflow-hidden overflow-y-auto transition-all duration-500 ease-in-out`}
         style={{
-          maxHeight: showAll ? `${data.length * 2.5 + 2}rem` : "18rem", // 动态计算最大高度
+          maxHeight: "18rem", // 动态计算最大高度
         }}
       >
         {displayedData.map((ref) => (
@@ -390,7 +396,7 @@ export function StatsList({ data, title }: { data: Stat[]; title: string }) {
             onClick={() => setShowAll(!showAll)}
             className="h-7 px-4 py-1 text-xs"
           >
-            {showAll ? "Hide" : "Load More"}
+            {showAll ? "Hide" : `Load More ${data.length - 8}+`}
           </Button>
         </div>
       )}
