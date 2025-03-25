@@ -382,7 +382,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                           }}
                         >
                           <p className="hidden sm:block">Edit</p>
-                          <PenLine className="ml-1 size-4 sm:mx-0.5" />
+                          <PenLine className="mx-0.5 size-4 sm:ml-1 sm:size-3" />
                         </Button>
                         <HoverCard
                           open={isShowQrcode && selectedUrlId === short.id}
