@@ -149,7 +149,7 @@ export default function LiveLog({ admin }: { admin: boolean }) {
   return (
     <Card className="grids mx-auto w-full">
       <CardHeader>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-2">
           <div>
             <CardTitle className="text-base text-gray-800 dark:text-gray-100">
               Live Log
@@ -172,7 +172,7 @@ export default function LiveLog({ admin }: { admin: boolean }) {
             <Icons.CirclePlay className="h-4 w-4" /> {isLive ? "Stop" : "Live"}
           </Button>
           <Button
-            className="mx-2 bg-primary-foreground"
+            className="bg-primary-foreground"
             variant={"outline"}
             size="sm"
             onClick={() => handleRefresh()}
@@ -213,9 +213,9 @@ export default function LiveLog({ admin }: { admin: boolean }) {
                   <TableHead className="h-8 w-1/6 px-1">Time</TableHead>
                   <TableHead className="h-8 w-1/12 px-1">Url</TableHead>
                   <TableHead className="h-8 px-1">Target</TableHead>
-                  <TableHead className="h-8 w-1/12 px-1">Clicks</TableHead>
                   <TableHead className="h-8 w-1/12 px-1">IP</TableHead>
                   <TableHead className="h-8 w-1/6 px-1">Location</TableHead>
+                  <TableHead className="h-8 w-1/12 px-1">Clicks</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -250,14 +250,20 @@ export default function LiveLog({ admin }: { admin: boolean }) {
                           {log.target}
                         </a>
                       </TableCell>
-                      <TableCell className="px-1 py-1.5">{log.click}</TableCell>
+
                       <TableCell className="px-1 py-1.5">{log.ip}</TableCell>
-                      <TableCell className="max-w-6 truncate px-1 py-1.5">
+                      <TableCell
+                        className="max-w-6 truncate px-1 py-1.5"
+                        title={getCountryName(log.country || "")}
+                      >
                         {decodeURIComponent(
                           log.city
-                            ? `${log.city}, ${getCountryName(log.country || "")}`
+                            ? `${log.city}(${getCountryName(log.country || "")})`
                             : "-",
                         )}
+                      </TableCell>
+                      <TableCell className="px-1 py-1.5 text-green-700">
+                        {log.click}
                       </TableCell>
                     </motion.tr>
                   ))}

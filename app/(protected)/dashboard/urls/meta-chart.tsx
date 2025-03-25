@@ -346,6 +346,7 @@ export function StatsList({ data, title }: { data: Stat[]; title: string }) {
                 <Link
                   className="w-2/3 truncate font-medium hover:opacity-70 hover:after:content-['↗']"
                   href={ref.dimension}
+                  target="_blank"
                 >
                   {removeUrlSuffix(ref.dimension)}
                 </Link>
