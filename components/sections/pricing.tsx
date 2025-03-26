@@ -8,6 +8,7 @@ import { Check, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 import { Icons } from "../shared/icons";
+import { Button } from "../ui/button";
 
 export const PricingSection = () => {
   return (
@@ -29,7 +30,11 @@ export const PricingSection = () => {
             tier="Free"
             price="$0/mo"
             bestFor="For hobbyists and individuals looking to manage their links"
-            CTA={<GhostButton className="w-full">Get started free</GhostButton>}
+            CTA={
+              <Button className="w-full" variant={"default"}>
+                Get started free
+              </Button>
+            }
             benefits={[
               {
                 text: "100K tracked clicks/mo",
@@ -90,7 +95,11 @@ export const PricingSection = () => {
             tier="Enterprise"
             price="Contact us"
             bestFor="For large organizations with custom needs"
-            CTA={<GhostButton className="w-full">Contact us</GhostButton>}
+            CTA={
+              <Button className="w-full" variant={"outline"}>
+                Contact us
+              </Button>
+            }
             benefits={[
               {
                 text: "Unlimited tracked clicks/mo",
@@ -200,20 +209,6 @@ const Card = ({ className, children, style = {} }: CardProps) => {
     >
       {children}
     </motion.div>
-  );
-};
-
-const GhostButton = ({ children, className, ...rest }: GhostButtonProps) => {
-  return (
-    <button
-      className={cn(
-        "rounded-md px-4 py-2 text-lg text-zinc-700 transition-all hover:scale-[1.02] hover:bg-zinc-200 hover:text-zinc-900 active:scale-[0.98] dark:text-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-zinc-50",
-        className,
-      )}
-      {...rest}
-    >
-      {children}
-    </button>
   );
 };
 
