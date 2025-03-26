@@ -8,7 +8,6 @@ import { cn, nFormatter } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/shared/icons";
 
-import { Doc } from "../../.contentlayer/generated/types";
 import GitHubStarsWithSuspense from "../shared/github-star-wrapper";
 import UrlShortener from "./url-shortener";
 

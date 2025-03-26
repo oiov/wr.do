@@ -42,7 +42,7 @@ export default function UrlShotenerExp() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+          <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900/70">
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-4">
                 <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-black">
@@ -65,14 +65,14 @@ export default function UrlShotenerExp() {
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <p className="text-base font-bold text-gray-700">
+                    <p className="text-base font-bold text-gray-700 dark:text-gray-50">
                       wr.do/s/try
                     </p>
                     <div className="flex gap-1">
-                      <button className="rounded-full border p-1.5 transition-colors hover:bg-gray-100">
+                      <button className="rounded-full border p-1.5 transition-colors hover:bg-gray-100 dark:bg-gray-600/50">
                         <Icons.copy className="size-3 text-gray-500" />
                       </button>
-                      <button className="rounded-full border p-1.5 transition-colors hover:bg-gray-100">
+                      <button className="rounded-full border p-1.5 transition-colors hover:bg-gray-100 dark:bg-gray-600/50">
                         <Icons.qrcode className="size-3 text-gray-500" />
                       </button>
                     </div>
@@ -102,18 +102,18 @@ export default function UrlShotenerExp() {
                         ></polyline>
                       </g>
                     </svg>
-                    wr.do/login
+                    wr.do/dashboard
                   </div>
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1 rounded-lg border bg-gray-50 px-3 py-1">
+                <div className="flex items-center gap-1 rounded-lg border bg-gray-50 px-3 py-1 dark:bg-gray-600/50">
                   <Icons.mousePointerClick className="size-4" />
-                  <p className="text-sm font-medium text-gray-700">
+                  <p className="text-sm font-medium text-gray-700 dark:text-gray-50">
                     12.6K <span className="hidden sm:inline">clicks</span>
                   </p>
                 </div>
-                <button className="rounded-lg p-2 transition-colors hover:bg-gray-100">
+                <button className="hidden rounded-lg p-2 transition-colors hover:bg-gray-100 sm:block">
                   <svg
                     width="20"
                     height="20"

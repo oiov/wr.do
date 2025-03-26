@@ -6,6 +6,7 @@ import {
   BadgeHelp,
   BookOpen,
   Bug,
+  Calendar,
   Camera,
   Check,
   ChevronLeft,
@@ -43,6 +44,7 @@ import {
   Settings,
   SunMedium,
   Trash2,
+  Unplug,
   User,
   Users,
   X,
@@ -64,6 +66,7 @@ export const Icons = {
   close: X,
   copy: Copy,
   camera: Camera,
+  calendar: Calendar,
   fileText: FileText,
   dashboard: LayoutPanelLeft,
   download: Download,
@@ -148,6 +151,7 @@ export const Icons = {
   mail: Mail,
   bug: Bug,
   CirclePlay: CirclePlay,
+  unplug: Unplug,
   lineChart: ({ ...props }: LucideProps) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
