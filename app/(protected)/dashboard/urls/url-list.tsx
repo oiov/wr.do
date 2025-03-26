@@ -353,7 +353,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                       <TableCell className="col-span-1 flex items-center gap-1">
                         <Link
                           className="overflow-hidden overflow-ellipsis whitespace-normal text-slate-600 hover:text-blue-400 hover:underline dark:text-slate-400"
-                          href={`/s/${short.url}`}
+                          href={`https://${short.prefix}/s/${short.url}`}
                           target="_blank"
                           prefetch={false}
                           title={short.url}
@@ -361,7 +361,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                           {short.url}
                         </Link>
                         <CopyButton
-                          value={`${siteConfig.url}/s/${short.url}`}
+                          value={`${short.prefix}/s/${short.url}`}
                           className={cn(
                             "size-[25px]",
                             "duration-250 transition-all group-hover:opacity-100",
@@ -434,7 +434,9 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                               onClick={() => {
                                 setSelectedUrlId(short.id!);
                                 setShowQrcode(!isShowQrcode);
-                                handleQrcode(`https://wr.do/s/${short.url}`);
+                                handleQrcode(
+                                  `https://${short.prefix}/s/${short.url}`,
+                                );
                               }}
                             >
                               <Icons.qrcode className="mx-0.5 size-4" />

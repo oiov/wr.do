@@ -126,6 +126,7 @@ CREATE TABLE "user_urls"
     "userName" TEXT NOT NULL,
     "target" TEXT NOT NULL,
     "url" TEXT NOT NULL,
+    "prefix" TEXT NOT NULL,
     "visible" INTEGER NOT NULL DEFAULT 0,
     "active" INTEGER NOT NULL DEFAULT 1,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

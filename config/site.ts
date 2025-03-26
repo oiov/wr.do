@@ -5,6 +5,7 @@ const site_url = env.NEXT_PUBLIC_APP_URL;
 const free_recored_quota = env.NEXT_PUBLIC_FREE_RECORD_QUOTA;
 const free_url_quota = env.NEXT_PUBLIC_FREE_URL_QUOTA;
 const open_signup = env.NEXT_PUBLIC_OPEN_SIGNUP;
+const short_domains = env.NEXT_PUBLIC_SHORT_DOMAINS || "";
 
 export const siteConfig: SiteConfig = {
   name: "WR.DO",
@@ -22,6 +23,7 @@ export const siteConfig: SiteConfig = {
     url: Number(free_url_quota),
   },
   openSignup: open_signup === "1" ? true : false,
+  shortDomains: short_domains.split(","),
 };
 
 export const footerLinks: SidebarNavItem[] = [

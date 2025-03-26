@@ -110,6 +110,7 @@ model UserUrl {
   userName   String
   target     String
   url        String   @unique
+  prefix     String
   visible    Int      @default(0)
   active     Int      @default(1)
   expiration String   @default("-1")

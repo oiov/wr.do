@@ -7,6 +7,7 @@ import { Sparkles } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
+import { siteConfig } from "@/config/site";
 import { ShortUrlFormData } from "@/lib/dto/short-urls";
 import { EXPIRATION_ENUMS } from "@/lib/enums";
 import { generateUrlSuffix } from "@/lib/utils";
@@ -63,6 +64,7 @@ export function UrlForm({
       target: initData?.target || "",
       url: initData?.url || "",
       active: initData?.active || 1,
+      prefix: initData?.prefix || siteConfig.shortDomains[0],
       visible: initData?.visible || 0,
       expiration: initData?.expiration || "-1",
     },
@@ -148,7 +150,7 @@ export function UrlForm({
       onSubmit={onSubmit}
     >
       <div className="items-center justify-start gap-4 md:flex">
-        <FormSectionColumns title="Target">
+        <FormSectionColumns title="Target URL">
           <div className="flex w-full items-center gap-2">
             <Label className="sr-only" htmlFor="target">
               Target
@@ -172,19 +174,38 @@ export function UrlForm({
             )}
           </div>
         </FormSectionColumns>
-        <FormSectionColumns title="Url Suffix">
+        <FormSectionColumns title="Short Link">
           <div className="flex w-full items-center gap-2">
             <Label className="sr-only" htmlFor="url">
               Url
             </Label>
 
             <div className="relative flex items-center">
-              <span className="pointer-events-none absolute left-3 whitespace-nowrap text-sm text-gray-400">
-                https://wr.do/s/
-              </span>
+              <Select
+                onValueChange={(value: string) => {
+                  setValue("prefix", value);
+                }}
+                name="prefix"
+                defaultValue={initData?.prefix || siteConfig.shortDomains[0]}
+                disabled={type === "edit"}
+              >
+                <SelectTrigger className="w-2/5 rounded-r-none shadow-inner">
+                  <SelectValue placeholder="Select a domain" />
+                </SelectTrigger>
+                <SelectContent>
+                  {siteConfig.shortDomains.map((v) => (
+                    <SelectItem key={v} value={v}>
+                      {v}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {/* <span className="pointer-events-none absolute left-20 whitespace-nowrap text-sm text-gray-400">
+                /s/
+              </span> */}
               <Input
                 id="url"
-                className="flex-1 rounded-r-none pl-[116px] shadow-inner"
+                className="w-3/5 flex-1 rounded-none pl-[8px] shadow-inner"
                 size={20}
                 {...register("url")}
                 disabled={type === "edit"}
@@ -210,7 +231,7 @@ export function UrlForm({
               </p>
             ) : (
               <p className="pb-0.5 text-[13px] text-muted-foreground">
-                A random url suffix.
+                A random url suffix. Final url like「wr.do/s/suffix」
               </p>
             )}
           </div>
@@ -241,7 +262,15 @@ export function UrlForm({
             Expiration time, default for never.
           </p>
         </FormSectionColumns>
-        <FormSectionColumns title="Visible">
+        {/* <div>
+          <p className="text-sm text-gray-700 dark:text-white">
+            Your Final URL:
+          </p>
+          <p className="text-sm text-gray-700 dark:text-white">
+            {getValues("prefix")}/s/{getValues("url")}
+          </p>
+        </div> */}
+        {/* <FormSectionColumns title="Visible">
           <div className="flex w-full items-center gap-2">
             <Label className="sr-only" htmlFor="visible">
               Visible
@@ -257,7 +286,7 @@ export function UrlForm({
           <p className="p-1 text-[13px] text-muted-foreground">
             Public or private short url.
           </p>
-        </FormSectionColumns>
+        </FormSectionColumns> */}
         {/* <FormSectionColumns title="Active">
           <div className="flex w-full items-center gap-2">
             <Label className="sr-only" htmlFor="active">

@@ -9,6 +9,7 @@ export interface ShortUrlFormData {
   userName: string;
   target: string;
   url: string;
+  prefix: string;
   visible: number;
   active: number;
   expiration: string;
@@ -103,6 +104,7 @@ export async function createUserShortUrl(data: ShortUrlFormData) {
         userName: data.userName || "Anonymous",
         target: data.target,
         url: data.url,
+        prefix: data.prefix,
         visible: data.visible,
         active: data.active,
         expiration: data.expiration,
@@ -127,6 +129,7 @@ export async function updateUserShortUrl(data: ShortUrlFormData) {
         target: data.target,
         url: data.url,
         visible: data.visible,
+        prefix: data.prefix,
         // active: data.active,
         expiration: data.expiration,
         updatedAt: new Date().toISOString(),
@@ -206,6 +209,7 @@ export async function getUrlBySuffix(suffix: string) {
       id: true,
       target: true,
       active: true,
+      prefix: true,
       expiration: true,
       updatedAt: true,
     },

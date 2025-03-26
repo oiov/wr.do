@@ -19,6 +19,7 @@ export type SiteConfig = {
     url: number;
   };
   openSignup: boolean;
+  shortDomains: string[];
 };
 
 export type NavItem = {

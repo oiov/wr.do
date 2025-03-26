@@ -25,13 +25,14 @@ export async function POST(req: Request) {
 
     const { data } = await req.json();
 
-    const { target, url, visible, active, expiration } =
+    const { target, url, prefix, visible, active, expiration } =
       createUrlSchema.parse(data);
     const res = await createUserShortUrl({
       userId: user.id,
       userName: user.name || "Anonymous",
       target,
       url,
+      prefix,
       visible,
       active,
       expiration,

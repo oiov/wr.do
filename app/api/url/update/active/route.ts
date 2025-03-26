@@ -6,7 +6,6 @@ import {
 } from "@/lib/dto/short-urls";
 import { checkUserStatus } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";
-import { createUrlSchema } from "@/lib/validations/url";
 
 export async function POST(req: Request) {
   try {

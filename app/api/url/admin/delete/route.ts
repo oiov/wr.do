@@ -1,5 +1,4 @@
 import { env } from "@/env.mjs";
-import { getUserRecords } from "@/lib/dto/cloudflare-dns-record";
 import { deleteUserShortUrl } from "@/lib/dto/short-urls";
 import { checkUserStatus } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";
