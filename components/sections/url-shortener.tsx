@@ -31,7 +31,7 @@ export default function UrlShotenerExp() {
               <input
                 type="text"
                 placeholder="Shorten any link..."
-                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-600 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
+                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-600 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-gray-600"
               />
               <Link
                 href={"/dashboard/urls"}
