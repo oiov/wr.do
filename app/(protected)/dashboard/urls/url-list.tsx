@@ -224,38 +224,77 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
         </CardHeader>
         <CardContent>
           <div className="mb-2 flex-row items-center gap-2 space-y-2 sm:flex sm:space-y-0">
-            <Input
-              className=""
-              placeholder="Search by slug..."
-              value={searchParams.slug}
-              onChange={(e) => {
-                setSearchParams({
-                  ...searchParams,
-                  slug: e.target.value,
-                });
-              }}
-            />
-            <Input
-              placeholder="Search by target..."
-              value={searchParams.target}
-              onChange={(e) => {
-                setSearchParams({
-                  ...searchParams,
-                  target: e.target.value,
-                });
-              }}
-            />
-            {user.role === "ADMIN" && (
+            <div className="relative w-full">
               <Input
-                placeholder="Search by user name..."
-                value={searchParams.userName}
+                className=""
+                placeholder="Search by slug..."
+                value={searchParams.slug}
                 onChange={(e) => {
                   setSearchParams({
                     ...searchParams,
-                    userName: e.target.value,
+                    slug: e.target.value,
                   });
                 }}
               />
+              {searchParams.slug && (
+                <Button
+                  className="absolute right-2 top-1/2 h-6 -translate-y-1/2 rounded-full px-1 text-gray-500 hover:text-gray-700"
+                  onClick={() => setSearchParams({ ...searchParams, slug: "" })}
+                  variant={"ghost"}
+                >
+                  <Icons.close className="size-3" />
+                </Button>
+              )}
+            </div>
+
+            <div className="relative w-full">
+              <Input
+                placeholder="Search by target..."
+                value={searchParams.target}
+                onChange={(e) => {
+                  setSearchParams({
+                    ...searchParams,
+                    target: e.target.value,
+                  });
+                }}
+              />
+              {searchParams.target && (
+                <Button
+                  className="absolute right-2 top-1/2 h-6 -translate-y-1/2 rounded-full px-1 text-gray-500 hover:text-gray-700"
+                  onClick={() =>
+                    setSearchParams({ ...searchParams, target: "" })
+                  }
+                  variant={"ghost"}
+                >
+                  <Icons.close className="size-3" />
+                </Button>
+              )}
+            </div>
+
+            {user.role === "ADMIN" && (
+              <div className="relative w-full">
+                <Input
+                  placeholder="Search by user name..."
+                  value={searchParams.userName}
+                  onChange={(e) => {
+                    setSearchParams({
+                      ...searchParams,
+                      userName: e.target.value,
+                    });
+                  }}
+                />
+                {searchParams.userName && (
+                  <Button
+                    className="absolute right-2 top-1/2 h-6 -translate-y-1/2 rounded-full px-1 text-gray-500 hover:text-gray-700"
+                    onClick={() =>
+                      setSearchParams({ ...searchParams, userName: "" })
+                    }
+                    variant={"ghost"}
+                  >
+                    <Icons.close className="size-3" />
+                  </Button>
+                )}
+              </div>
             )}
           </div>
           {isShowForm && (
