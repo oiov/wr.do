@@ -79,7 +79,7 @@ export const countryMap = {
   HT: "Haiti",
   HN: "Honduras",
   HU: "Hungary",
-  HK: "Hong Kong",
+  HK: "Hong Kong,China",
   IS: "Iceland",
   IN: "India",
   ID: "Indonesia",
@@ -200,7 +200,7 @@ export const countryMap = {
   AS: "American Samoa",
   AX: "Åland Islands",
   BM: "Bermuda",
-  MO: "Macao",
+  MO: "Macao,China",
   PS: "Palestine, State of",
   PR: "Puerto Rico",
   TW: "Taiwan",
@@ -211,106 +211,55 @@ export const getCountryName = (code: string) => {
   return countryMap[code.toUpperCase()] || code;
 };
 
-export const deviceMap = {
-  // 你提供的初始型号
-  K: "K",
-  CPH1923: "OPPO A1k",
-  "1820": "Nokia 6.1",
-  V2111: "Vivo Y70s",
-  CPH2471: "OPPO A58",
-  M2006C3LG: "Redmi 9A",
-  CPH2269: "OPPO A54",
-  CPH2185: "OPPO A15",
-  "1904": "Nokia 3.2",
+const vendorMap = [
+  // 手机厂商
+  { prefix: /^CPH/i, vendor: "OPPO" }, // OPPO 智能手机
+  { prefix: /^V\d/i, vendor: "Vivo" }, // Vivo 智能手机
+  { prefix: /^(M\d|220\d|230\d|240\d)/i, vendor: "Xiaomi" }, // 小米/Redmi 智能手机
+  { prefix: /^RMX/i, vendor: "Realme" }, // Realme 智能手机
+  { prefix: /^SM-/i, vendor: "Samsung" }, // 三星智能手机/平板
+  {
+    prefix: /^(ANA|STF|VOG|JNY|LYA|TAS|DBR|ADY|FNE|REP|NOP|ROD)/i,
+    vendor: "Huawei",
+  },
+  { prefix: /^iPhone/i, vendor: "iPhone" }, // 苹果 iPhone
+  { prefix: /^(IN|KB|LE|CPH\d{4})/i, vendor: "OnePlus" }, // OnePlus 智能手机
+  { prefix: /^(TA-\d|\d{4}$)/i, vendor: "Nokia" }, // 诺基亚智能手机/功能机
+  { prefix: /^XQ-/i, vendor: "Sony" }, // 索尼 Xperia 智能手机
+  { prefix: /^XT/i, vendor: "Motorola" }, // 摩托罗拉智能手机
+  { prefix: /^(GP|G[0-9A-Z]{3})/i, vendor: "Google" }, // Google Pixel 智能手机
+  { prefix: /^LM-/i, vendor: "LG" }, // LG 智能手机
+  { prefix: /^ASUS-/i, vendor: "Asus" }, // 华硕智能手机
 
-  // OPPO 常见型号 (部分基于 CPH/PDxM 系列)
-  CPH2179: "OPPO A53",
-  CPH2239: "OPPO A16",
-  CPH2365: "OPPO A77 5G",
-  CPH2385: "OPPO A57",
-  CPH2449: "OPPO Find X5 Pro",
-  CPH2451: "OPPO Find X5",
-  CPH2521: "OPPO Reno11 5G",
-  CPH2573: "OPPO Reno12 Pro 5G",
-  CPH2591: "OPPO Find X8 Pro",
-  CPH2593: "OPPO Find X8",
+  // 平板厂商
+  { prefix: /^iPad/i, vendor: "Apple" }, // 苹果 iPad
+  { prefix: /^(TBL-|TB-)/i, vendor: "Lenovo" }, // 联想平板
 
-  // Vivo 常见型号 (部分基于 V/PD 系列)
-  V2040: "Vivo Y70",
-  V2130: "Vivo Y33s",
-  V2145: "Vivo Y21",
-  V2236: "Vivo Y16",
-  V2307: "Vivo Y28 5G",
-  V2333: "Vivo Y78 5G",
-  V2349: "Vivo X100",
-  V2309A: "Vivo X100 Pro",
-  V2239: "Vivo V29",
-  V2250: "Vivo V30 Pro",
+  // 电脑厂商
+  { prefix: /^MacBook/i, vendor: "MacBook" }, // 苹果 MacBook
+  { prefix: /^(A1\d{2}|A2\d{2})/i, vendor: "Apple" }, // 苹果 MacBook 内部型号
+  { prefix: /^(XPS|Latitude|Inspiron)/i, vendor: "Dell" }, // 戴尔笔记本
+  { prefix: /^(Pavilion|EliteBook|ProBook|Envy)/i, vendor: "HP" }, // 惠普电脑
+  { prefix: /^(ThinkPad|IdeaPad|Legion)/i, vendor: "Lenovo" }, // 联想笔记本
+  { prefix: /^(ROG|ZenBook|VivoBook|G[5-9]|Strix)/i, vendor: "Asus" }, // 华硕笔记本
+  { prefix: /^(Acer-|Predator|Nitro)/i, vendor: "Acer" }, // 宏碁笔记本/游戏设备
+  { prefix: /^Surface/i, vendor: "Microsoft" }, // 微软 Surface
+  { prefix: /^(MateBook|MagicBook)/i, vendor: "Huawei" }, // 华为笔记本
 
-  // 小米/Redmi 常见型号 (部分基于 M/220x 系列)
-  M2007J20CG: "Redmi Note 9",
-  M2010J19CG: "Redmi Note 9 Pro",
-  M2101K7AG: "Redmi Note 10",
-  M2103K19G: "Redmi Note 10 Pro",
-  M2004J19C: "Redmi 9",
-  "2201117TG": "Redmi Note 11",
-  "23021RAAEG": "Xiaomi 13",
-  "23127PN0CG": "Redmi Note 13 Pro",
-  "24053PY09G": "Redmi Note 14 5G",
-  "2210132G": "Xiaomi 12 Pro",
+  // 其他设备
+  { prefix: /^Watch/i, vendor: "Apple Watch" }, // 苹果 Watch
+  { prefix: /^GT-/i, vendor: "Huawei Watch" }, // 华为手表
+  { prefix: /^MiBand/i, vendor: "Xiaomi Watch" }, // 小米手环
+];
 
-  // 诺基亚 常见型号
-  "TA-1020": "Nokia 5",
-  " TA-1030": "Nokia 3",
-  "TA-1174": "Nokia 7.2",
-  "TA-1333": "Nokia 5.4",
-  "TA-1398": "Nokia G20",
-  "TA-1529": "Nokia G42 5G",
-  "TA-1485": "Nokia 2660 Flip",
-  "TA-1551": "Nokia XR21",
-
-  // 三星 常见型号 (基于 SM- 系列)
-  "SM-G960F": "Samsung Galaxy S9",
-  "SM-G973F": "Samsung Galaxy S10",
-  "SM-A515F": "Samsung Galaxy A51",
-  "SM-A525F": "Samsung Galaxy A52",
-  "SM-G998B": "Samsung Galaxy S21 Ultra",
-  "SM-S911B": "Samsung Galaxy S23",
-  "SM-A356E": "Samsung Galaxy A35 5G",
-  "SM-M556B": "Samsung Galaxy M55 5G",
-
-  // 华为 常见型号 (基于 ANA/STF 系列)
-  "ANA-AN00": "Huawei Mate 30 5G",
-  "STF-AL10": "Huawei Mate 10",
-  "VOG-AL00": "Huawei P30",
-  "JNY-LX1": "Huawei P40 Lite",
-  "LYA-L29": "Huawei Mate 20 Pro",
-  "TAS-AL00": "Huawei Mate 50",
-  "DBR-W10": "Huawei MatePad 11", // 平板示例
-
-  // 苹果 常见型号 (基于内部标识符)
-  "iPhone11,8": "iPhone XR",
-  "iPhone12,1": "iPhone 11",
-  "iPhone13,2": "iPhone 12",
-  "iPhone14,5": "iPhone 13",
-  "iPhone15,2": "iPhone 14 Pro",
-  "iPhone16,1": "iPhone 15 Pro", // 2023 机型
-
-  // OnePlus 常见型号
-  IN2013: "OnePlus 8",
-  KB2000: "OnePlus 8T",
-  LE2123: "OnePlus 9 Pro",
-  CPH2551: "OnePlus 12",
-  CPH2611: "OnePlus Nord 4",
-
-  // Realme 常见型号
-  RMX3370: "Realme GT Neo 2",
-  RMX3686: "Realme Narzo 60",
-  RMX3830: "Realme C53",
-  RMX3998: "Realme 12 Pro 5G",
-  RMX3890: "Realme GT 6",
-};
-
-export const getDeviceName = (model: string) => {
-  return deviceMap[model.toUpperCase()] || model;
+export const getDeviceVendor = (model: string) => {
+  const upperModel = model.toUpperCase();
+  for (const { prefix, vendor } of vendorMap) {
+    if (typeof prefix === "string" && upperModel.startsWith(prefix)) {
+      return vendor;
+    } else if (prefix instanceof RegExp && prefix.test(upperModel)) {
+      return vendor;
+    }
+  }
+  return model;
 };

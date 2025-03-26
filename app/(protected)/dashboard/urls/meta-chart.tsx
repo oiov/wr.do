@@ -9,7 +9,7 @@ import { TopoJSONMap } from "@unovis/ts";
 import { WorldMapTopoJSON } from "@unovis/ts/maps";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
-import { getCountryName, getDeviceName } from "@/lib/contries";
+import { getCountryName, getDeviceVendor } from "@/lib/contries";
 import { isLink, removeUrlSuffix, timeAgo } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -97,35 +97,36 @@ function generateStatsList(
   const dimensionCounts: { [key: string]: number } = {};
   let totalClicks = 0;
 
+  // 第一步：遍历记录，累加点击数
   records.forEach((record) => {
-    const dimValue = record[dimension] || ("Unknown" as any);
-    const click = record.click;
+    // 获取维度值，默认为 "Unknown" 如果未定义
+    const rawValue = record[dimension] || "Unknown";
+    const dimValue =
+      dimension === "country"
+        ? getCountryName(rawValue as string) // 国家代码转为国家名称
+        : dimension === "device"
+          ? getDeviceVendor(rawValue as string) // 设备型号转为厂商名称
+          : rawValue; // 其他维度直接使用原始值
 
-    if (!dimensionCounts[dimValue]) {
-      dimensionCounts[dimValue] = 0;
-    }
+    const click = record.click || 0; // 确保 click 是数字，默认 0 如果未定义
 
-    dimensionCounts[dimValue] += click;
+    dimensionCounts[dimValue] = (dimensionCounts[dimValue] || 0) + click;
     totalClicks += click;
   });
 
-  // 计算百分比并生成列表
-  const statsList: Stat[] = [];
+  // 第二步：生成统计列表并计算百分比
+  const statsList: Stat[] = Object.entries(dimensionCounts).map(
+    ([dimValue, clicks]) => {
+      const percentage = totalClicks > 0 ? (clicks / totalClicks) * 100 : 0;
+      return {
+        dimension: dimValue,
+        clicks,
+        percentage: percentage.toFixed(0) + "%",
+      };
+    },
+  );
 
-  for (const [dimValue, clicks] of Object.entries(dimensionCounts)) {
-    const percentage = (clicks / totalClicks) * 100;
-    statsList.push({
-      dimension:
-        dimension === "country"
-          ? getCountryName(dimValue)
-          : dimension === "device"
-            ? getDeviceName(dimValue)
-            : dimValue,
-      clicks,
-      percentage: percentage.toFixed(0) + "%",
-    });
-  }
-
+  // 第三步：按百分比降序排序
   statsList.sort((a, b) => parseFloat(b.percentage) - parseFloat(a.percentage));
 
   return statsList;
