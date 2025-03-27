@@ -159,7 +159,9 @@
 }
 
 .custom-bg {
-  background: linear-gradient(to right, #4f4f4f2e 1px, transparent 1px),
-    linear-gradient(to bottom, #8080800a 1px, transparent 1px);
-  background-size: 14px 24px;
+  background: linear-gradient(to right, #4f4f4f12 1px, transparent 1px),
+    linear-gradient(to bottom, #80808012 1px, transparent 1px);
+  background-size: 80px 80px;
+  max-width: 1200px;
+  margin: 0 auto;
 }

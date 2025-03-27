@@ -8,13 +8,13 @@ import { cn, nFormatter } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/shared/icons";
 
-import GitHubStarsWithSuspense from "../shared/github-star-wrapper";
+// import GitHubStarsWithSuspense from "../shared/github-star-wrapper";
 import UrlShortener from "./url-shortener";
 
 export default async function HeroLanding() {
   const user = await getCurrentUser();
   return (
-    <section className="space-y-6 py-12 sm:py-20 lg:py-24">
+    <section className="custom-bg relative space-y-6 py-12 sm:py-20 lg:py-24">
       <div className="container flex max-w-screen-md flex-col items-center gap-5 text-center">
         <Link
           href="/dashboard"
