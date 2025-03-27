@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
       browser,
     } = await req.json();
 
-    if (!slug || !ip) return Response.json(null);
+    if (!slug || !ip) return Response.json("Missing[0000]");
 
     const res = await getUrlBySuffix(slug);
     if (res?.target && res?.active === 1) {
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
       const expirationTime = createdAt + expirationMilliseconds;
 
       if (res.expiration !== "-1" && now > expirationTime) {
-        return Response.json(null);
+        return Response.json("Expired[0001]");
       }
 
       // console.log("[api/s]", device, browser);
@@ -48,8 +48,8 @@ export async function POST(req: NextRequest) {
       });
       return Response.json(res.target);
     }
-    return Response.json(null);
+    return Response.json("Disabled[0002]");
   } catch (error) {
-    return Response.json(null);
+    return Response.json("Error[0003]");
   }
 }

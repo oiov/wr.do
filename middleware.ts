@@ -10,6 +10,13 @@ export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
 
+const redirectMap = {
+  "Missing[0000]": "/docs/short-urls#missing-links",
+  "Expired[0001]": "/docs/short-urls#expired-links",
+  "Disabled[0002]": "/docs/short-urls#disabled-links",
+  "Error[0003]": "/docs/short-urls#error-links",
+};
+
 // 提取短链接处理逻辑
 async function handleShortUrl(req: NextAuthRequest) {
   if (!req.url.includes("/s/")) return NextResponse.next();
@@ -43,12 +50,28 @@ async function handleShortUrl(req: NextAuthRequest) {
   });
 
   if (!res.ok)
-    return NextResponse.redirect(`${siteConfig.url}/docs/short-urls`, 302);
+    return NextResponse.redirect(
+      `${siteConfig.url}${redirectMap["Error[0003]"]}`,
+      302,
+    );
 
   const target = await res.json();
-  return target
-    ? NextResponse.redirect(target, 302)
-    : NextResponse.redirect(`${siteConfig.url}/docs/short-urls`, 302);
+
+  if (!target || typeof target !== "string") {
+    return NextResponse.redirect(
+      `${siteConfig.url}${redirectMap["Error[0003]"]}`,
+      302,
+    );
+  }
+
+  if (target in redirectMap) {
+    return NextResponse.redirect(
+      `${siteConfig.url}${redirectMap[target]}`,
+      302,
+    );
+  }
+
+  return NextResponse.redirect(target, 302);
 }
 
 // 提取 slug
@@ -68,7 +91,6 @@ function parseUserAgent(ua: string) {
 }
 
 export default auth(async (req) => {
-  // console.log("请求地址", req.url);
   try {
     return await handleShortUrl(req);
   } catch (error) {
