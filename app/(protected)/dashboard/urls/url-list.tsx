@@ -226,7 +226,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
           <div className="mb-2 flex-row items-center gap-2 space-y-2 sm:flex sm:space-y-0">
             <div className="relative w-full">
               <Input
-                className=""
+                className="h-8 text-xs md:text-xs"
                 placeholder="Search by slug..."
                 value={searchParams.slug}
                 onChange={(e) => {
@@ -249,6 +249,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
 
             <div className="relative w-full">
               <Input
+                className="h-8 text-xs md:text-xs"
                 placeholder="Search by target..."
                 value={searchParams.target}
                 onChange={(e) => {
@@ -274,6 +275,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
             {user.role === "ADMIN" && (
               <div className="relative w-full">
                 <Input
+                  className="h-8 text-xs md:text-xs"
                   placeholder="Search by user name..."
                   value={searchParams.userName}
                   onChange={(e) => {

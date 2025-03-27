@@ -25,7 +25,6 @@ export default async function DashboardPage() {
         link="/docs/short-urls"
         linkText="Short urls."
       />
-      <LiveLog admin={false} />
       <UserUrlsList
         user={{
           id: user.id,
@@ -35,6 +34,7 @@ export default async function DashboardPage() {
         }}
         action="/api/url"
       />
+      <LiveLog admin={false} />
     </>
   );
 }
