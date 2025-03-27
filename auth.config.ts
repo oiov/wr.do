@@ -5,6 +5,9 @@ import Resend from "next-auth/providers/resend";
 
 import { env } from "@/env.mjs";
 
+import { siteConfig } from "./config/site";
+import { getVerificationEmailHtml, resend } from "./lib/email";
+
 const linuxDoProvider: any = {
   id: "linuxdo",
   name: "Linux Do",
@@ -45,6 +48,24 @@ export default {
     Resend({
       apiKey: env.RESEND_API_KEY,
       from: "wrdo <support@wr.do>",
+      async sendVerificationRequest({ identifier: email, url, provider }) {
+        try {
+          // 使用 Resend 发送自定义验证邮件
+          const { data, error } = await resend.emails.send({
+            from: provider.from || "no-reply@wr.do",
+            to: [email],
+            subject: "Verify your email address",
+            html: getVerificationEmailHtml({ url, appName: siteConfig.name }),
+          });
+
+          if (error) {
+            throw new Error(`Resend error: ${JSON.stringify(error)}`);
+          }
+        } catch (error) {
+          console.error("Error sending verification email", error);
+          throw new Error("Error sending verification email");
+        }
+      },
     }),
     linuxDoProvider,
   ],
