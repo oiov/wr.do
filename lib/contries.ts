@@ -203,7 +203,7 @@ export const countryMap = {
   MO: "Macao,China",
   PS: "Palestine, State of",
   PR: "Puerto Rico",
-  TW: "Taiwan",
+  TW: "Taiwan,China",
   XK: "Kosovo",
 };
 

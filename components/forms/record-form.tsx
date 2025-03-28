@@ -116,7 +116,7 @@ export function RecordForm({
         });
         if (!response.ok || response.status !== 200) {
           toast.error("Update Failed", {
-            description: response.statusText,
+            description: await response.text(),
           });
         } else {
           const res = await response.json();
@@ -142,7 +142,7 @@ export function RecordForm({
         });
         if (!response.ok || response.status !== 200) {
           toast.error("Delete Failed", {
-            description: response.statusText,
+            description: await response.text(),
           });
         } else {
           await response.json();

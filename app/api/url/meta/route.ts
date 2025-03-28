@@ -9,6 +9,7 @@ export async function GET(req: Request) {
 
     const url = new URL(req.url);
     const urlId = url.searchParams.get("id");
+    const range = url.searchParams.get("range") || "24h";
 
     if (!urlId) {
       return Response.json("url id is required", {
@@ -16,7 +17,7 @@ export async function GET(req: Request) {
       });
     }
 
-    const data = await getUserUrlMetaInfo(urlId);
+    const data = await getUserUrlMetaInfo(urlId, range);
 
     return Response.json(data);
   } catch (error) {

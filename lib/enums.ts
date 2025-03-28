@@ -212,3 +212,23 @@ export const LOGS_LIMITEs_ENUMS = [
     label: "1000",
   },
 ];
+
+export const TIME_RANGES: Record<string, number> = {
+  "24h": 24 * 60 * 60 * 1000, // 24小时的毫秒数
+  "7d": 7 * 24 * 60 * 60 * 1000,
+  "30d": 30 * 24 * 60 * 60 * 1000,
+  "90d": 90 * 24 * 60 * 60 * 1000,
+  "180d": 180 * 24 * 60 * 60 * 1000,
+  "365d": 365 * 24 * 60 * 60 * 1000,
+};
+
+export const DATE_DIMENSION_ENUMS = [
+  { value: "24h", label: "Last 24 Hours" },
+  { value: "7d", label: "Last 7 Days" },
+  { value: "30d", label: "Last 30 Days" },
+  { value: "60d", label: "Last 2 Months" },
+  { value: "90d", label: "Last 3 Months" },
+  { value: "180d", label: "Last 6 Months" },
+  { value: "365d", label: "Last 1 Year" },
+  { value: "All", label: "All the time" },
+] as const;

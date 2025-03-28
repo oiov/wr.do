@@ -10,6 +10,7 @@ import { WorldMapTopoJSON } from "@unovis/ts/maps";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
 import { getCountryName, getDeviceVendor } from "@/lib/contries";
+import { DATE_DIMENSION_ENUMS } from "@/lib/enums";
 import { isLink, removeUrlSuffix, timeAgo } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,6 +25,13 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const chartConfig = {
   pv: {
@@ -132,7 +140,15 @@ function generateStatsList(
   return statsList;
 }
 
-export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
+export function DailyPVUVChart({
+  data,
+  timeRange,
+  setTimeRange,
+}: {
+  data: UrlMeta[];
+  timeRange: string;
+  setTimeRange: React.Dispatch<React.SetStateAction<string>>;
+}) {
   const [activeChart, setActiveChart] =
     React.useState<keyof typeof chartConfig>("pv");
 
@@ -194,12 +210,30 @@ export function DailyPVUVChart({ data }: { data: UrlMeta[] }) {
     <Card className="rounded-t-none border-t-0">
       <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-2 sm:py-3">
-          <CardTitle>Daily Stats</CardTitle>
+          <CardTitle>Link Analytics</CardTitle>
           <CardDescription>
             Last visitor from {latestFrom} about {latestDate}.
           </CardDescription>
         </div>
-        <div className="flex">
+        <div className="flex items-center">
+          <Select
+            onValueChange={(value: string) => {
+              setTimeRange(value);
+            }}
+            name="time range"
+            defaultValue={timeRange}
+          >
+            <SelectTrigger className="mx-4 w-full shadow-inner">
+              <SelectValue placeholder="Select a time" />
+            </SelectTrigger>
+            <SelectContent>
+              {DATE_DIMENSION_ENUMS.map((e) => (
+                <SelectItem key={e.value} value={e.value}>
+                  {e.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           {["pv", "uv"].map((key) => {
             const chart = key as keyof typeof chartConfig;
             return (

@@ -3,6 +3,8 @@ import { UrlMeta, UserRole } from "@prisma/client";
 
 import { prisma } from "@/lib/db";
 
+import { getStartDate } from "../utils";
+
 export interface ShortUrlFormData {
   id?: string;
   userId: string;
@@ -191,10 +193,18 @@ export async function deleteUserShortUrl(userId: string, urlId: string) {
   });
 }
 
-export async function getUserUrlMetaInfo(urlId: string) {
+export async function getUserUrlMetaInfo(
+  urlId: string,
+  dateRange: string = "",
+) {
+  const startDate = getStartDate(dateRange);
+
   return await prisma.urlMeta.findMany({
     where: {
       urlId,
+      ...(startDate && {
+        createdAt: { gte: startDate },
+      }),
     },
     orderBy: { updatedAt: "asc" },
   });

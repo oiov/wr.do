@@ -9,6 +9,8 @@ import UAParser from "ua-parser-js";
 import { env } from "@/env.mjs";
 import { siteConfig } from "@/config/site";
 
+import { TIME_RANGES } from "./enums";
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -261,3 +263,8 @@ export function toCamelCase(str: string) {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join("");
 }
+
+export const getStartDate = (range: string): Date | undefined => {
+  if (!range || !(range in TIME_RANGES)) return undefined;
+  return new Date(Date.now() - TIME_RANGES[range]);
+};
