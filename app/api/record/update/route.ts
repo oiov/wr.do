@@ -16,10 +16,7 @@ export async function POST(req: Request) {
 
     const { CLOUDFLARE_ZONE_ID, CLOUDFLARE_API_KEY, CLOUDFLARE_EMAIL } = env;
     if (!CLOUDFLARE_ZONE_ID || !CLOUDFLARE_API_KEY || !CLOUDFLARE_EMAIL) {
-      return Response.json(
-        { statusText: "API key andzone id are required." },
-        { status: 401 },
-      );
+      return Response.json("API key andzone id are required.", { status: 401 });
     }
 
     const { record, recordId } = await req.json();
@@ -30,7 +27,6 @@ export async function POST(req: Request) {
     if (reservedDomains.includes(record_name)) {
       return Response.json("Domain name is reserved", {
         status: 403,
-        statusText: "Domain name is reserved",
       });
     }
 
@@ -44,7 +40,6 @@ export async function POST(req: Request) {
     if (!data.success || !data.result?.id) {
       return Response.json(data.errors, {
         status: 501,
-        statusText: `An error occurred. ${data.errors}`,
       });
     } else {
       const res = await updateUserRecord(user.id, {
@@ -65,7 +60,6 @@ export async function POST(req: Request) {
       if (res.status !== "success") {
         return Response.json(res.status, {
           status: 502,
-          statusText: `An error occurred. ${res.status}`,
         });
       }
       return Response.json(res.data);
@@ -74,7 +68,6 @@ export async function POST(req: Request) {
     console.error(error);
     return Response.json(error?.statusText || error, {
       status: error?.status || 500,
-      statusText: error?.statusText || "Server error",
     });
   }
 }
@@ -87,10 +80,9 @@ export async function PUT(req: Request) {
 
     const { CLOUDFLARE_ZONE_ID, CLOUDFLARE_API_KEY, CLOUDFLARE_EMAIL } = env;
     if (!CLOUDFLARE_ZONE_ID || !CLOUDFLARE_API_KEY || !CLOUDFLARE_EMAIL) {
-      return Response.json(
-        { statusText: "API key and zone id are required." },
-        { status: 401 },
-      );
+      return Response.json("API key and zone id are required.", {
+        status: 401,
+      });
     }
 
     const { zone_id, record_id, target, active } = await req.json();
@@ -112,16 +104,13 @@ export async function PUT(req: Request) {
     );
 
     if (!res) {
-      return Response.json(
-        { statusText: "An error occurred." },
-        { status: 502 },
-      );
+      return Response.json("An error occurred.", { status: 502 });
     }
     return Response.json(
       isTargetAccessible ? "Target is accessible!" : "Target is unaccessible!",
     );
   } catch (error) {
     console.error(error);
-    return Response.json({ statusText: "Server error" }, { status: 500 });
+    return Response.json(`An error occurred. ${error}`, { status: 500 });
   }
 }

@@ -31,14 +31,14 @@ export async function POST(req: Request) {
 
     // Check quota: 若是管理员则不检查，否则检查
     const user_records_count = await getUserRecordCount(user.id);
+
     if (
       user.role !== "ADMIN" &&
-      Number(NEXT_PUBLIC_FREE_RECORD_QUOTA) > 0 &&
       user_records_count >= Number(NEXT_PUBLIC_FREE_RECORD_QUOTA)
+      // Number(NEXT_PUBLIC_FREE_RECORD_QUOTA) > 0 &&
     ) {
       return Response.json("Your records have reached the free limit.", {
         status: 409,
-        statusText: "Your records have reached the free limit.",
       });
     }
 
@@ -56,7 +56,6 @@ export async function POST(req: Request) {
     if (reservedDomains.includes(record_name)) {
       return Response.json("Domain name is reserved", {
         status: 403,
-        statusText: "Domain name is reserved",
       });
     }
 
@@ -70,7 +69,6 @@ export async function POST(req: Request) {
     if (user_record && user_record.length > 0) {
       return Response.json("Record already exists", {
         status: 403,
-        statusText: "Record already exists",
       });
     }
 
@@ -83,7 +81,6 @@ export async function POST(req: Request) {
     if (!data.success || !data.result?.id) {
       return Response.json(data.errors, {
         status: 501,
-        statusText: `An error occurred. ${data.errors}`,
       });
     } else {
       const res = await createUserRecord(user.id, {
@@ -105,7 +102,6 @@ export async function POST(req: Request) {
       if (res.status !== "success") {
         return Response.json(res.status, {
           status: 502,
-          statusText: `An error occurred. ${res.status}`,
         });
       }
       return Response.json(res.data);
@@ -114,7 +110,6 @@ export async function POST(req: Request) {
     console.error("[错误]", error);
     return Response.json(error?.statusText || error, {
       status: error?.status || 500,
-      statusText: error?.statusText || "Server error",
     });
   }
 }

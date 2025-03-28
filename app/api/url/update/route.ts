@@ -14,7 +14,6 @@ export async function POST(req: Request) {
     if (!data?.id) {
       return Response.json(`Url id is required`, {
         status: 400,
-        statusText: `Url id is required`,
       });
     }
 
@@ -34,14 +33,12 @@ export async function POST(req: Request) {
     if (res.status !== "success") {
       return Response.json(res.status, {
         status: 400,
-        statusText: `An error occurred. ${res.status}`,
       });
     }
     return Response.json(res.data);
   } catch (error) {
     return Response.json(error?.statusText || error, {
       status: error.status || 500,
-      statusText: error.statusText || "Server error",
     });
   }
 }

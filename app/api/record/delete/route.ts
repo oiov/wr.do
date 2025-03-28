@@ -15,7 +15,6 @@ export async function POST(req: Request) {
     if (!CLOUDFLARE_ZONE_ID || !CLOUDFLARE_API_KEY || !CLOUDFLARE_EMAIL) {
       return Response.json("API key、zone iD and email are required", {
         status: 400,
-        statusText: "API key、zone iD and email are required",
       });
     }
 

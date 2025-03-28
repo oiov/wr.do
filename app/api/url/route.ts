@@ -29,7 +29,6 @@ export async function GET(req: Request) {
   } catch (error) {
     return Response.json(error?.statusText || error, {
       status: error.status || 500,
-      statusText: error.statusText || "Server error",
     });
   }
 }

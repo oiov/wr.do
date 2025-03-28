@@ -88,7 +88,7 @@ export function UrlForm({
       });
       if (!response.ok || response.status !== 200) {
         toast.error("Created Failed!", {
-          description: response.statusText,
+          description: await response.json(),
         });
       } else {
         // const res = await response.json();
@@ -108,7 +108,7 @@ export function UrlForm({
         });
         if (!response.ok || response.status !== 200) {
           toast.error("Update Failed", {
-            description: response.statusText,
+            description: await response.json(),
           });
         } else {
           const res = await response.json();
@@ -132,7 +132,7 @@ export function UrlForm({
         });
         if (!response.ok || response.status !== 200) {
           toast.error("Delete Failed", {
-            description: response.statusText,
+            description: await response.json(),
           });
         } else {
           await response.json();

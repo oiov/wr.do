@@ -11,7 +11,6 @@ export async function POST(req: Request) {
     if (user.role !== "ADMIN") {
       return Response.json("Unauthorized", {
         status: 401,
-        statusText: "Unauthorized",
       });
     }
 
@@ -19,7 +18,6 @@ export async function POST(req: Request) {
     if (!CLOUDFLARE_ZONE_ID || !CLOUDFLARE_API_KEY || !CLOUDFLARE_EMAIL) {
       return Response.json("API key、zone iD and email are required", {
         status: 400,
-        statusText: "API key、zone iD and email are required",
       });
     }
 
@@ -27,7 +25,6 @@ export async function POST(req: Request) {
     if (!recordId || !userId) {
       return Response.json("RecordId and userId are required", {
         status: 400,
-        statusText: "RecordId and userId are required",
       });
     }
 
@@ -41,7 +38,6 @@ export async function POST(req: Request) {
     if (!data.success || !data.result?.id) {
       return Response.json(data.errors, {
         status: 501,
-        statusText: `An error occurred. ${data.errors}`,
       });
     } else {
       const res = await updateUserRecord(userId, {
@@ -62,7 +58,6 @@ export async function POST(req: Request) {
       if (res.status !== "success") {
         return Response.json(res.status, {
           status: 502,
-          statusText: `An error occurred. ${res.status}`,
         });
       }
       return Response.json(res.data);
@@ -70,7 +65,6 @@ export async function POST(req: Request) {
   } catch (error) {
     return Response.json(error?.statusText || error, {
       status: error?.status || 500,
-      statusText: error?.statusText || "Server error",
     });
   }
 }

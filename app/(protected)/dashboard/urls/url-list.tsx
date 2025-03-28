@@ -312,8 +312,8 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
           )}
           <Table>
             <TableHeader className="bg-gray-100/50 dark:bg-primary-foreground">
-              <TableRow className="grid grid-cols-3 items-center sm:grid-cols-9">
-                <TableHead className="col-span-1 flex items-center font-bold">
+              <TableRow className="grid grid-cols-3 items-center sm:grid-cols-10">
+                <TableHead className="col-span-1 flex items-center font-bold sm:col-span-2">
                   Url
                 </TableHead>
                 <TableHead className="col-span-1 flex items-center font-bold sm:col-span-2">
@@ -350,9 +350,9 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                   <>
                     <TableRow
                       key={short.id}
-                      className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-9"
+                      className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-10"
                     >
-                      <TableCell className="col-span-1 flex items-center gap-1">
+                      <TableCell className="col-span-1 flex items-center gap-1 sm:col-span-2">
                         <Link
                           className="overflow-hidden overflow-ellipsis whitespace-normal text-slate-600 hover:text-blue-400 hover:underline dark:text-slate-400"
                           href={`https://${short.prefix}/s/${short.url}`}

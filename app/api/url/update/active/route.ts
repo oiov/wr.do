@@ -25,16 +25,14 @@ export async function POST(req: Request) {
 
     const res = await updateUserShortUrlActive(user.id, id, active, user.role);
     if (res.status !== "success") {
-      return Response.json(res.status, {
+      return Response.json("Update failed", {
         status: 400,
-        statusText: `An error occurred. ${res.status}`,
       });
     }
     return Response.json(res.data);
   } catch (error) {
     return Response.json(error?.statusText || error, {
       status: error.status || 500,
-      statusText: error.statusText || "Server error",
     });
   }
 }

@@ -42,7 +42,7 @@ export const PricingSection = () => {
                 icon: <Icons.mousePointerClick className="size-4" />,
               },
               {
-                text: "10k new links/mo",
+                text: "1k new links/mo",
                 checked: true,
                 icon: <Icons.link className="size-4" />,
               },

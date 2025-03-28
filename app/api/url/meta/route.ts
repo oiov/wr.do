@@ -13,7 +13,6 @@ export async function GET(req: Request) {
     if (!urlId) {
       return Response.json("url id is required", {
         status: 400,
-        statusText: "url id is required",
       });
     }
 
@@ -23,7 +22,6 @@ export async function GET(req: Request) {
   } catch (error) {
     return Response.json(error?.statusText || error, {
       status: error.status || 500,
-      statusText: error.statusText || "Server error",
     });
   }
 }

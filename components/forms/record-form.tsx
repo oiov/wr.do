@@ -90,12 +90,12 @@ export function RecordForm({
           records: [data],
         }),
       });
+
       if (!response.ok || response.status !== 200) {
         toast.error("Created Failed!", {
-          description: response.statusText,
+          description: await response.json(),
         });
       } else {
-        // const res = await response.json();
         toast.success(`Created successfully!`);
         setShowForm(false);
         onRefresh();
@@ -116,7 +116,7 @@ export function RecordForm({
         });
         if (!response.ok || response.status !== 200) {
           toast.error("Update Failed", {
-            description: response.statusText,
+            description: await response.json(),
           });
         } else {
           const res = await response.json();
@@ -142,7 +142,7 @@ export function RecordForm({
         });
         if (!response.ok || response.status !== 200) {
           toast.error("Delete Failed", {
-            description: response.statusText,
+            description: await response.json(),
           });
         } else {
           await response.json();

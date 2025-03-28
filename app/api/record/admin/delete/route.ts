@@ -11,7 +11,6 @@ export async function POST(req: Request) {
     if (user.role !== "ADMIN") {
       return Response.json("Unauthorized", {
         status: 401,
-        statusText: "Unauthorized",
       });
     }
 
@@ -19,7 +18,6 @@ export async function POST(req: Request) {
     if (!record_id || !userId) {
       return Response.json("RecordId and userId are required", {
         status: 400,
-        statusText: "RecordId and userId are required",
       });
     }
 
@@ -27,7 +25,6 @@ export async function POST(req: Request) {
     if (!CLOUDFLARE_ZONE_ID || !CLOUDFLARE_API_KEY || !CLOUDFLARE_EMAIL) {
       return Response.json("API key、zone iD and email are required", {
         status: 400,
-        statusText: "API key、zone iD and email are required",
       });
     }
 
@@ -43,18 +40,15 @@ export async function POST(req: Request) {
       await deleteUserRecord(userId, record_id, zone_id, active);
       return Response.json("success", {
         status: 200,
-        statusText: "success",
       });
     }
-    return Response.json({
+    return Response.json("Not Implemented", {
       status: 501,
-      statusText: "Not Implemented",
     });
   } catch (error) {
     console.error(error);
     return Response.json(error?.statusText || error, {
       status: error.status || 500,
-      statusText: error.statusText || "Server error",
     });
   }
 }

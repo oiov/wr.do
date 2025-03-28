@@ -19,7 +19,6 @@ export async function POST(req: Request) {
     ) {
       return Response.json("Your short urls have reached the free limit.", {
         status: 409,
-        statusText: "Your short urls have reached the free limit.",
       });
     }
 
@@ -40,14 +39,12 @@ export async function POST(req: Request) {
     if (res.status !== "success") {
       return Response.json(res.status, {
         status: 502,
-        statusText: `An error occurred. ${res.status}`,
       });
     }
     return Response.json(res.data);
   } catch (error) {
     return Response.json(error?.statusText || error, {
       status: error.status || 500,
-      statusText: error.statusText || "Server error",
     });
   }
 }
