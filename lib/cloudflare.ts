@@ -84,7 +84,7 @@ export const createDNSRecord = async (
     return data;
   } catch (error) {
     // console.error("Error creating DNS record.", error);
-    throw error;
+    return error;
   }
 };
 

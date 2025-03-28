@@ -17,12 +17,18 @@ export async function POST(req: Request) {
 
     const {
       CLOUDFLARE_ZONE_ID,
+      CLOUDFLARE_ZONE_NAME,
       CLOUDFLARE_API_KEY,
       CLOUDFLARE_EMAIL,
       NEXT_PUBLIC_FREE_RECORD_QUOTA,
     } = env;
 
-    if (!CLOUDFLARE_ZONE_ID || !CLOUDFLARE_API_KEY || !CLOUDFLARE_EMAIL) {
+    if (
+      !CLOUDFLARE_ZONE_ID ||
+      !CLOUDFLARE_ZONE_NAME ||
+      !CLOUDFLARE_API_KEY ||
+      !CLOUDFLARE_EMAIL
+    ) {
       return Response.json("API key、zone iD and email are required", {
         status: 400,
         statusText: "API key、zone iD and email are required",
@@ -35,7 +41,6 @@ export async function POST(req: Request) {
     if (
       user.role !== "ADMIN" &&
       user_records_count >= Number(NEXT_PUBLIC_FREE_RECORD_QUOTA)
-      // Number(NEXT_PUBLIC_FREE_RECORD_QUOTA) > 0 &&
     ) {
       return Response.json("Your records have reached the free limit.", {
         status: 409,
@@ -53,6 +58,7 @@ export async function POST(req: Request) {
     const record_name = record.name.endsWith(".wr.do")
       ? record.name
       : record.name + ".wr.do";
+
     if (reservedDomains.includes(record_name)) {
       return Response.json("Domain name is reserved", {
         status: 403,
@@ -78,15 +84,17 @@ export async function POST(req: Request) {
       CLOUDFLARE_EMAIL,
       record,
     );
+
     if (!data.success || !data.result?.id) {
-      return Response.json(data.errors, {
+      console.log("[data]", data);
+      return Response.json(data.messages, {
         status: 501,
       });
     } else {
       const res = await createUserRecord(user.id, {
         record_id: data.result.id,
-        zone_id: data.result.zone_id,
-        zone_name: data.result.zone_name,
+        zone_id: CLOUDFLARE_ZONE_ID,
+        zone_name: CLOUDFLARE_ZONE_NAME,
         name: data.result.name,
         type: data.result.type,
         content: data.result.content,
@@ -99,6 +107,7 @@ export async function POST(req: Request) {
         modified_on: data.result.modified_on,
         active: 0,
       });
+
       if (res.status !== "success") {
         return Response.json(res.status, {
           status: 502,
@@ -108,7 +117,7 @@ export async function POST(req: Request) {
     }
   } catch (error) {
     console.error("[错误]", error);
-    return Response.json(error?.statusText || error, {
+    return Response.json(error, {
       status: error?.status || 500,
     });
   }

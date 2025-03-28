@@ -73,7 +73,7 @@ export async function createUserRecord(
     // revalidatePath('/dashboard/settings');
     return { status: "success", data: res };
   } catch (error) {
-    // console.log(error)
+    // console.log(error);
     return { status: error };
   }
 }
@@ -122,7 +122,7 @@ export async function getUserRecordCount(
         role === "USER"
           ? {
               userId: userId,
-              active,
+              // active,
             }
           : {},
     });
@@ -140,11 +140,11 @@ export async function getUserRecordByTypeNameContent(
 ) {
   return await prisma.userRecord.findMany({
     where: {
-      userId,
+      // userId,
       type,
-      content,
+      // content,
       name,
-      active,
+      // active,
     },
   });
 }
@@ -160,7 +160,7 @@ export async function deleteUserRecord(
       userId,
       record_id,
       zone_id,
-      active,
+      // active,
     },
   });
 }
@@ -190,7 +190,7 @@ export async function updateUserRecord(
         record_id,
         zone_id,
         zone_name,
-        active: active,
+        // active: active,
       },
       data: {
         type,
