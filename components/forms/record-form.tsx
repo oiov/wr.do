@@ -93,7 +93,7 @@ export function RecordForm({
 
       if (!response.ok || response.status !== 200) {
         toast.error("Created Failed!", {
-          description: await response.json(),
+          description: await response.text(),
         });
       } else {
         toast.success(`Created successfully!`);
