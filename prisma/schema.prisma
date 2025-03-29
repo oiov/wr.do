@@ -198,4 +198,6 @@ model ForwardEmail {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map(name: "forward_emails")
 }
