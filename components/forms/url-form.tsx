@@ -145,124 +145,125 @@ export function UrlForm({
   };
 
   return (
-    <form
-      className="mb-4 rounded-lg border border-dashed p-4 shadow-sm animate-in fade-in-50"
-      onSubmit={onSubmit}
-    >
-      <div className="items-center justify-start gap-4 md:flex">
-        <FormSectionColumns title="Target URL">
-          <div className="flex w-full items-center gap-2">
-            <Label className="sr-only" htmlFor="target">
-              Target
-            </Label>
-            <Input
-              id="target"
-              className="flex-1 shadow-inner"
-              size={32}
-              {...register("target")}
-            />
-          </div>
-          <div className="flex flex-col justify-between p-1">
-            {errors?.target ? (
-              <p className="pb-0.5 text-[13px] text-red-600">
-                {errors.target.message}
-              </p>
-            ) : (
-              <p className="pb-0.5 text-[13px] text-muted-foreground">
-                Required. https://your-origin-url
-              </p>
-            )}
-          </div>
-        </FormSectionColumns>
-        <FormSectionColumns title="Short Link">
-          <div className="flex w-full items-center gap-2">
-            <Label className="sr-only" htmlFor="url">
-              Url
-            </Label>
+    <div className="mb-4 rounded-lg border border-dashed shadow-sm animate-in fade-in-50">
+      <div className="rounded-t-lg bg-muted px-4 py-2 text-lg font-semibold">
+        {type === "add" ? "Create" : "Edit"} short link
+      </div>
+      <form className="p-4" onSubmit={onSubmit}>
+        <div className="items-center justify-start gap-4 md:flex">
+          <FormSectionColumns title="Target URL">
+            <div className="flex w-full items-center gap-2">
+              <Label className="sr-only" htmlFor="target">
+                Target
+              </Label>
+              <Input
+                id="target"
+                className="flex-1 shadow-inner"
+                size={32}
+                {...register("target")}
+              />
+            </div>
+            <div className="flex flex-col justify-between p-1">
+              {errors?.target ? (
+                <p className="pb-0.5 text-[13px] text-red-600">
+                  {errors.target.message}
+                </p>
+              ) : (
+                <p className="pb-0.5 text-[13px] text-muted-foreground">
+                  Required. https://your-origin-url
+                </p>
+              )}
+            </div>
+          </FormSectionColumns>
+          <FormSectionColumns title="Short Link">
+            <div className="flex w-full items-center gap-2">
+              <Label className="sr-only" htmlFor="url">
+                Url
+              </Label>
 
-            <div className="relative flex items-center">
-              <Select
-                onValueChange={(value: string) => {
-                  setValue("prefix", value);
-                }}
-                name="prefix"
-                defaultValue={initData?.prefix || siteConfig.shortDomains[0]}
-                disabled={type === "edit"}
-              >
-                <SelectTrigger className="w-2/5 rounded-r-none shadow-inner">
-                  <SelectValue placeholder="Select a domain" />
-                </SelectTrigger>
-                <SelectContent>
-                  {siteConfig.shortDomains.map((v) => (
-                    <SelectItem key={v} value={v}>
-                      {v}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {/* <span className="pointer-events-none absolute left-20 whitespace-nowrap text-sm text-gray-400">
+              <div className="relative flex items-center">
+                <Select
+                  onValueChange={(value: string) => {
+                    setValue("prefix", value);
+                  }}
+                  name="prefix"
+                  defaultValue={initData?.prefix || siteConfig.shortDomains[0]}
+                  disabled={type === "edit"}
+                >
+                  <SelectTrigger className="w-2/5 rounded-r-none shadow-inner">
+                    <SelectValue placeholder="Select a domain" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {siteConfig.shortDomains.map((v) => (
+                      <SelectItem key={v} value={v}>
+                        {v}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {/* <span className="pointer-events-none absolute left-20 whitespace-nowrap text-sm text-gray-400">
                 /s/
               </span> */}
-              <Input
-                id="url"
-                className="w-3/5 flex-1 rounded-none pl-[8px] shadow-inner"
-                size={20}
-                {...register("url")}
-                disabled={type === "edit"}
-              />
-              <Button
-                className="rounded-l-none"
-                type="button"
-                size="sm"
-                variant="outline"
-                disabled={type === "edit"}
-                onClick={() => {
-                  setValue("url", generateUrlSuffix(6));
-                }}
-              >
-                <Sparkles className="h-4 w-4 text-slate-500" />
-              </Button>
+                <Input
+                  id="url"
+                  className="w-3/5 flex-1 rounded-none pl-[8px] shadow-inner"
+                  size={20}
+                  {...register("url")}
+                  disabled={type === "edit"}
+                />
+                <Button
+                  className="rounded-l-none"
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  disabled={type === "edit"}
+                  onClick={() => {
+                    setValue("url", generateUrlSuffix(6));
+                  }}
+                >
+                  <Sparkles className="h-4 w-4 text-slate-500" />
+                </Button>
+              </div>
             </div>
-          </div>
-          <div className="flex flex-col justify-between p-1">
-            {errors?.url ? (
-              <p className="pb-0.5 text-[13px] text-red-600">
-                {errors.url.message}
-              </p>
-            ) : (
-              <p className="pb-0.5 text-[13px] text-muted-foreground">
-                A random url suffix. Final url like「wr.do/s/suffix」
-              </p>
-            )}
-          </div>
-        </FormSectionColumns>
-      </div>
+            <div className="flex flex-col justify-between p-1">
+              {errors?.url ? (
+                <p className="pb-0.5 text-[13px] text-red-600">
+                  {errors.url.message}
+                </p>
+              ) : (
+                <p className="pb-0.5 text-[13px] text-muted-foreground">
+                  A random url suffix. Final url like「wr.do/s/suffix」
+                </p>
+              )}
+            </div>
+          </FormSectionColumns>
+        </div>
 
-      <div className="items-center justify-start gap-4 md:flex">
-        <FormSectionColumns title="Expiration">
-          <Select
-            onValueChange={(value: string) => {
-              setValue("expiration", value);
-            }}
-            name="expiration"
-            defaultValue={initData?.expiration || "-1"}
-          >
-            <SelectTrigger className="w-full shadow-inner">
-              <SelectValue placeholder="Select a time" />
-            </SelectTrigger>
-            <SelectContent>
-              {EXPIRATION_ENUMS.map((e) => (
-                <SelectItem key={e.value} value={e.value}>
-                  {e.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <p className="p-1 text-[13px] text-muted-foreground">
-            Expiration time, default for never.
-          </p>
-        </FormSectionColumns>
-        {/* <div>
+        <div className="items-center justify-start gap-4 md:flex">
+          <FormSectionColumns title="Expiration">
+            <Select
+              onValueChange={(value: string) => {
+                setValue("expiration", value);
+              }}
+              name="expiration"
+              defaultValue={initData?.expiration || "-1"}
+            >
+              <SelectTrigger className="w-full shadow-inner">
+                <SelectValue placeholder="Select a time" />
+              </SelectTrigger>
+              <SelectContent>
+                {EXPIRATION_ENUMS.map((e) => (
+                  <SelectItem key={e.value} value={e.value}>
+                    {e.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <p className="p-1 text-[13px] text-muted-foreground">
+              Expiration time, default for never.
+            </p>
+          </FormSectionColumns>
+          {/* <div>
           <p className="text-sm text-gray-700 dark:text-white">
             Your Final URL:
           </p>
@@ -270,7 +271,7 @@ export function UrlForm({
             {getValues("prefix")}/s/{getValues("url")}
           </p>
         </div> */}
-        {/* <FormSectionColumns title="Visible">
+          {/* <FormSectionColumns title="Visible">
           <div className="flex w-full items-center gap-2">
             <Label className="sr-only" htmlFor="visible">
               Visible
@@ -287,7 +288,7 @@ export function UrlForm({
             Public or private short url.
           </p>
         </FormSectionColumns> */}
-        {/* <FormSectionColumns title="Active">
+          {/* <FormSectionColumns title="Active">
           <div className="flex w-full items-center gap-2">
             <Label className="sr-only" htmlFor="active">
               Active
@@ -303,46 +304,47 @@ export function UrlForm({
             Enable or disable short url.
           </p>
         </FormSectionColumns> */}
-      </div>
+        </div>
 
-      {/* Action buttons */}
-      <div className="mt-3 flex justify-end gap-3">
-        {type === "edit" && (
+        {/* Action buttons */}
+        <div className="mt-3 flex justify-end gap-3">
+          {type === "edit" && (
+            <Button
+              type="button"
+              variant="destructive"
+              className="mr-auto w-[80px] px-0"
+              onClick={() => handleDeleteUrl()}
+              disabled={isDeleting}
+            >
+              {isDeleting ? (
+                <Icons.spinner className="size-4 animate-spin" />
+              ) : (
+                <p>Delete</p>
+              )}
+            </Button>
+          )}
           <Button
-            type="button"
-            variant="destructive"
-            className="mr-auto w-[80px] px-0"
-            onClick={() => handleDeleteUrl()}
-            disabled={isDeleting}
+            type="reset"
+            variant="outline"
+            className="w-[80px] px-0"
+            onClick={() => setShowForm(false)}
           >
-            {isDeleting ? (
+            Cancle
+          </Button>
+          <Button
+            type="submit"
+            variant="blue"
+            disabled={isPending}
+            className="w-[80px] shrink-0 px-0"
+          >
+            {isPending ? (
               <Icons.spinner className="size-4 animate-spin" />
             ) : (
-              <p>Delete</p>
+              <p>{type === "edit" ? "Update" : "Save"}</p>
             )}
           </Button>
-        )}
-        <Button
-          type="reset"
-          variant="outline"
-          className="w-[80px] px-0"
-          onClick={() => setShowForm(false)}
-        >
-          Cancle
-        </Button>
-        <Button
-          type="submit"
-          variant="blue"
-          disabled={isPending}
-          className="w-[80px] shrink-0 px-0"
-        >
-          {isPending ? (
-            <Icons.spinner className="size-4 animate-spin" />
-          ) : (
-            <p>{type === "edit" ? "Update" : "Save"}</p>
-          )}
-        </Button>
-      </div>
-    </form>
+        </div>
+      </form>
+    </div>
   );
 }

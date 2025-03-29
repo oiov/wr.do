@@ -233,6 +233,8 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                   <TableColumnSekleton />
                   <TableColumnSekleton />
                   <TableColumnSekleton />
+                  <TableColumnSekleton />
+                  <TableColumnSekleton />
                 </>
               ) : data && data.list && data.list.length ? (
                 data.list.map((record) => (

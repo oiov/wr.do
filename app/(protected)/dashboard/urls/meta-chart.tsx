@@ -170,9 +170,6 @@ export function DailyPVUVChart({
     .filter(Boolean)
     .join(" ");
 
-  const areaData = data.map((item) => ({
-    id: item.country,
-  }));
   // const pointData = data.map((item) => ({
   //   id: item.id,
   //   city: item.city,
@@ -193,6 +190,13 @@ export function DailyPVUVChart({
       countryClicks[country] += item.click;
     }
   });
+
+  const areaData = Object.entries(countryClicks).map(
+    ([country, clicks], index) => ({
+      id: country,
+      // color: getColorByClicks(clicks, index, countryClicks),
+    }),
+  );
 
   const triggers = {
     [TopoJSONMap.selectors.feature]: (d: any) =>
@@ -441,3 +445,46 @@ export function StatsList({ data, title }: { data: Stat[]; title: string }) {
     </div>
   );
 }
+
+// const baseColors = [
+//   "#ff6b7e",
+//   "#a6cc74",
+//   "#4d8cfd",
+//   "#f4b83e",
+//   "#FF00FF",
+//   "#6859be",
+// ];
+
+// const hexToRgb = (hex: string) => {
+//   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+//   return result
+//     ? {
+//         r: parseInt(result[1], 16),
+//         g: parseInt(result[2], 16),
+//         b: parseInt(result[3], 16),
+//       }
+//     : null;
+// };
+
+// const getColorByClicks = (
+//   clicks: number,
+//   baseColorIndex: number,
+//   countryClicks: { [key: string]: number },
+// ) => {
+//   const maxClicks = Math.max(...Object.values(countryClicks));
+//   const minClicks = Math.min(...Object.values(countryClicks));
+
+//   // 归一化点击次数
+//   const normalized =
+//     maxClicks === minClicks
+//       ? 0
+//       : (clicks - minClicks) / (maxClicks - minClicks);
+
+//   // 获取基础颜色
+//   const baseColor = hexToRgb(baseColors[baseColorIndex % baseColors.length]);
+
+//   // 最低60%透明度，最高100%不透明
+//   const alpha = 0.5 + normalized * 0.5;
+
+//   return `rgba(${baseColor!.r}, ${baseColor!.g}, ${baseColor!.b}, ${alpha})`;
+// };

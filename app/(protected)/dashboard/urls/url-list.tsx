@@ -66,8 +66,8 @@ export interface UrlListProps {
 
 function TableColumnSekleton() {
   return (
-    <TableRow className="grid grid-cols-3 items-center sm:grid-cols-9">
-      <TableCell className="col-span-1">
+    <TableRow className="grid grid-cols-3 items-center sm:grid-cols-10">
+      <TableCell className="col-span-1 sm:col-span-2">
         <Skeleton className="h-5 w-20" />
       </TableCell>
       <TableCell className="col-span-1 sm:col-span-2">
@@ -223,6 +223,17 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
           </div>
         </CardHeader>
         <CardContent>
+          {isShowForm && (
+            <UrlForm
+              user={{ id: user.id, name: user.name || "" }}
+              isShowForm={isShowForm}
+              setShowForm={setShowForm}
+              type={formType}
+              initData={currentEditUrl}
+              action={action}
+              onRefresh={handleRefresh}
+            />
+          )}
           <div className="mb-2 flex-row items-center gap-2 space-y-2 sm:flex sm:space-y-0">
             <div className="relative w-full">
               <Input
@@ -299,17 +310,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
               </div>
             )}
           </div>
-          {isShowForm && (
-            <UrlForm
-              user={{ id: user.id, name: user.name || "" }}
-              isShowForm={isShowForm}
-              setShowForm={setShowForm}
-              type={formType}
-              initData={currentEditUrl}
-              action={action}
-              onRefresh={handleRefresh}
-            />
-          )}
+
           <Table>
             <TableHeader className="bg-gray-100/50 dark:bg-primary-foreground">
               <TableRow className="grid grid-cols-3 items-center sm:grid-cols-10">
