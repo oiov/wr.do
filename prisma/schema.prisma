@@ -179,3 +179,23 @@ model ScrapeMeta {
   @@index([userId, type, apiKey])
   @@map(name: "scrape_metas")
 }
+
+model ForwardEmail {
+  id        String  @id @default(uuid()) // 使用 UUID 作为主键
+  from      String
+  fromName  String
+  to        String
+  subject   String? @default("No Subject")
+  text      String? @default("")
+  html      String? @default("")
+  date      String? @default("")
+  messageId String? @default("")
+  replyTo   String? @default("")
+
+  cc          String? @default("[]")
+  headers     String? @default("[]")
+  attachments String? @default("[]")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

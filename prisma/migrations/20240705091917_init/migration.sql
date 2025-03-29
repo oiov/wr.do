@@ -214,3 +214,24 @@ CREATE UNIQUE INDEX "scrape_metas_type_ip_link_key" ON "scrape_metas" ("type", "
 -- AddForeignKey
 ALTER TABLE "scrape_metas" ADD CONSTRAINT "scrape_metas_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
+
+CREATE TABLE "forward_emails"
+(
+    "id" TEXT NOT NULL,
+    "from" TEXT NOT NULL,
+    "fromName" TEXT NOT NULL,
+    "to" TEXT NOT NULL,
+    "subject" TEXT DEFAULT 'No Subject',
+    "text" TEXT DEFAULT '',
+    "html" TEXT DEFAULT '',
+    "date" TEXT DEFAULT '',
+    "messageId" TEXT DEFAULT '',
+    "replyTo" TEXT DEFAULT '',
+    "cc" TEXT DEFAULT '[]',
+    "headers" TEXT DEFAULT '[]',
+    "attachments" TEXT DEFAULT '[]',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "forward_emails_pkey" PRIMARY KEY ("id")
+);
