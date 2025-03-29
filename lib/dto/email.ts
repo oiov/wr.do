@@ -42,7 +42,7 @@ export async function createEmail(emailData: OriginalEmail) {
       messageId: emailData.messageId,
       replyTo: emailData.replyTo,
       cc: emailData.cc,
-      headers: emailData.headers,
+      headers: "",
       attachments: JSON.stringify(emailData.attachments), // 转换为 JSON 字符串
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),

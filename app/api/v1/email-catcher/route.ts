@@ -12,6 +12,7 @@ export async function POST(req: Request) {
 
     return Response.json({ msg: "success" });
   } catch (error) {
+    console.log(error);
     return Response.json({ statusText: "Server error" }, { status: 500 });
   }
 }
