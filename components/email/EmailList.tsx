@@ -200,7 +200,7 @@ export default function EmailList({
               target="_blank"
               rel="noreferrer"
             >
-              What is the limit? It's free?
+              What is the limit? It&apos;s free?
             </Link>
           </li>
         </ul>
