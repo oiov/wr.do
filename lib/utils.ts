@@ -74,7 +74,14 @@ export function constructMetadata({
 
 export function formatDate(input: string | number): string {
   const date = new Date(input);
-  return date.toLocaleDateString("en-US", {
+
+  const locale = navigator.language || "en-US";
+
+  return date.toLocaleDateString(locale, {
+    second: "numeric",
+    minute: "numeric",
+    hour: "numeric",
+    weekday: "long",
     month: "long",
     day: "numeric",
     year: "numeric",
@@ -268,3 +275,77 @@ export const getStartDate = (range: string): Date | undefined => {
   if (!range || !(range in TIME_RANGES)) return undefined;
   return new Date(Date.now() - TIME_RANGES[range]);
 };
+
+export function htmlToText(html: string): string {
+  if (typeof window === "undefined") return html; // 服务端渲染时返回原始内容
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, "text/html");
+  return doc.body.textContent || "";
+}
+
+export function formatFileSize(bytes: number): string {
+  if (bytes === 0) return "0 B";
+  const k = 1024;
+  const sizes = ["B", "KB", "MB", "GB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return `${(bytes / Math.pow(k, i)).toFixed(1)} ${sizes[i]}`;
+}
+
+export function downloadFile(url: string, filename: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+
+    a.setAttribute("rel", "noopener noreferrer");
+    a.setAttribute("target", "_blank");
+
+    try {
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      resolve();
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
+export async function downloadFileFromUrl(
+  url: string,
+  filename: string,
+): Promise<void> {
+  try {
+    // 获取文件内容
+    const response = await fetch(url, {
+      // credentials: "include", // 如果需要带上cookie
+      // mode: "cors", // 处理跨域
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    // 获取 Blob
+    const blob = await response.blob();
+
+    // 创建下载 URL
+    const downloadUrl = URL.createObjectURL(blob);
+
+    // 创建下载链接
+    const a = document.createElement("a");
+    a.href = downloadUrl;
+    a.download = filename;
+
+    // 执行下载
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    // 清理
+    URL.revokeObjectURL(downloadUrl);
+  } catch (error) {
+    console.error("下载失败:", error);
+    throw error;
+  }
+}

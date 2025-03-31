@@ -1,6 +1,7 @@
 import {
   AlertTriangle,
   ArrowDown,
+  ArrowLeft,
   ArrowRight,
   ArrowUpRight,
   BadgeHelp,
@@ -32,6 +33,7 @@ import {
   LucideIcon,
   LucideProps,
   Mail,
+  MailPlus,
   MessagesSquare,
   Moon,
   MoreVertical,
@@ -40,7 +42,10 @@ import {
   Paintbrush,
   Plus,
   QrCode,
+  RefreshCcw,
+  RefreshCw,
   Search,
+  Send,
   Settings,
   SunMedium,
   Trash2,
@@ -58,6 +63,7 @@ export const Icons = {
   add: Plus,
   arrowRight: ArrowRight,
   arrowUpRight: ArrowUpRight,
+  arrowLeft: ArrowLeft,
   arrowDown: ArrowDown,
   chevronLeft: ChevronLeft,
   chevronRight: ChevronRight,
@@ -120,6 +126,7 @@ export const Icons = {
   page: File,
   package: Package,
   post: FileText,
+  refreshCw: RefreshCw,
   search: Search,
   settings: Settings,
   spinner: Loader2,
@@ -149,9 +156,11 @@ export const Icons = {
   globe: Globe,
   link: Link,
   mail: Mail,
+  mailPlus: MailPlus,
   bug: Bug,
   CirclePlay: CirclePlay,
   unplug: Unplug,
+  send: Send,
   lineChart: ({ ...props }: LucideProps) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -169,7 +178,6 @@ export const Icons = {
       <path d="m19 9-5 5-4-4-3 3" stroke="#0065ea" />
     </svg>
   ),
-  // help: CircleHelp,
   outLink: ({ ...props }: LucideProps) => (
     <svg
       width="100"

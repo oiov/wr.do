@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 
 import { siteConfig } from "@/config/site";
 import { getUserRecordCount } from "@/lib/dto/cloudflare-dns-record";
+import { getAllUserEmailsCount } from "@/lib/dto/email";
 import { getUserShortUrlCount } from "@/lib/dto/short-urls";
 import { getCurrentUser } from "@/lib/session";
 import { constructMetadata } from "@/lib/utils";
@@ -27,13 +28,14 @@ export default async function DashboardPage() {
 
   const record_count = await getUserRecordCount(user.id);
   const url_count = await getUserShortUrlCount(user.id);
+  const email_count = await getAllUserEmailsCount(user.id);
 
   return (
     <>
       <DashboardHeader heading="Dashboard" text="" />
       <div className="flex flex-col gap-5">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 xl:grid-cols-3">
-          <HeroCard />
+          <HeroCard count={email_count} total={siteConfig.freeQuota.url} />
           <DashboardInfoCard
             userId={user.id}
             title="DNS Records"

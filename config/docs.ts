@@ -26,6 +26,11 @@ export const docsConfig: DocsConfig = {
           href: "/docs/short-urls",
           icon: "page",
         },
+        {
+          title: "Emails",
+          href: "/docs/emails",
+          icon: "page",
+        },
       ],
     },
     {

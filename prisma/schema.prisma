@@ -67,6 +67,7 @@ model User {
   UserRecord UserRecord[]
   UserUrl    UserUrl[]
   ScrapeMeta ScrapeMeta[]
+  UserEmail  UserEmail[]
 
   @@map(name: "users")
 }
@@ -199,5 +200,23 @@ model ForwardEmail {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  UserEmail UserEmail? @relation(fields: [to], references: [emailAddress])
+
   @@map(name: "forward_emails")
+}
+
+model UserEmail {
+  id           String @id @default(uuid())
+  userId       String
+  emailAddress String @unique
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  forwardEmails ForwardEmail[] // 与 ForwardEmail 的 from 字段关联
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("user_emails")
 }

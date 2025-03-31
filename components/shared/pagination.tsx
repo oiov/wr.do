@@ -1,5 +1,7 @@
 import React from "react";
 
+import { cn } from "@/lib/utils";
+
 import {
   Pagination,
   PaginationContent,
@@ -11,10 +13,12 @@ import {
 } from "../ui/pagination";
 
 export function PaginationWrapper({
+  className,
   total,
   currentPage,
   setCurrentPage,
 }: {
+  className?: string;
   total: number;
   currentPage: number;
   setCurrentPage: (page: number) => void;
@@ -51,12 +55,12 @@ export function PaginationWrapper({
   }
 
   return (
-    <Pagination className="my-3 justify-end">
+    <Pagination className={cn("my-3 justify-end", className)}>
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
             onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
-            href={`#`} // 可以使用链接或 onClick 方法
+            href={`#`}
           />
         </PaginationItem>
 

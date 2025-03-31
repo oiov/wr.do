@@ -11,6 +11,7 @@ export const sidebarLinks: SidebarNavItem[] = [
       { href: "/dashboard", icon: "dashboard", title: "Dashboard" },
       { href: "/dashboard/records", icon: "globeLock", title: "DNS Records" },
       { href: "/dashboard/urls", icon: "link", title: "Short Urls" },
+      { href: "/emails", icon: "mail", title: "Emails" },
     ],
   },
   {

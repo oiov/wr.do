@@ -235,3 +235,26 @@ CREATE TABLE "forward_emails"
 
     CONSTRAINT "forward_emails_pkey" PRIMARY KEY ("id")
 );
+
+CREATE TABLE "user_emails"
+(
+    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "userId" TEXT NOT NULL,
+    "emailAddress" TEXT NOT NULL UNIQUE,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "user_emails_userId_fkey" FOREIGN KEY ("userId")
+    REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+ALTER TABLE "user_emails" ADD COLUMN "deletedAt" TIMESTAMP
+(3);
+
+ALTER TABLE "forward_emails"
+ADD CONSTRAINT "forward_emails_to_fkey" 
+FOREIGN KEY ("to") 
+REFERENCES "user_emails" ("emailAddress") 
+ON DELETE SET NULL 
+ON UPDATE CASCADE;
+
