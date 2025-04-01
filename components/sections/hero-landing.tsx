@@ -83,12 +83,12 @@ export function LandingImages() {
       <div className="mx-auto mt-10 w-full max-w-6xl px-6">
         <div className="my-14 flex flex-col items-center justify-around gap-10 md:flex-row-reverse">
           <Image
-            className="rounded-lg shadow-lg transition-all hover:opacity-90 hover:shadow-xl"
+            className="size-[260px] rounded-lg transition-all hover:opacity-90 hover:shadow-xl"
             alt={"example"}
-            src="/_static/blog/blog-post-1.jpg"
+            src="/_static/landing/link.svg"
             placeholder="blur"
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAGCAYAAAD68A/GAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAACCSURBVBhXZYzBCgIxDEQnTdPau+hveBB/XtiLn+NJQdoNS2Orq6zuO0zgZRhSVbvegeAJGx7hvUeMAUSEzu1RUesEKuNkIgyrFaoFzB4i8i1+cDEwXHOuRc65lbVpe38XuPm+YMdIKa3WOj9F60vWcj0IOg8Xy7ngdDxgv9vO+h/gCZNAKuSRdQ2rAAAAAElFTkSuQmCC"
-            width={450}
+            width={280}
             height={280}
           />
           <div className="grids grids-dark px-2 py-4">
@@ -106,9 +106,9 @@ export function LandingImages() {
 
         <div className="flex flex-col items-center justify-around gap-10 md:flex-row">
           <Image
-            className="rounded-lg shadow-lg transition-all hover:opacity-90 hover:shadow-xl"
+            className="size-[260px] rounded-lg transition-all hover:opacity-90 hover:shadow-xl"
             alt={"example"}
-            src="/_static/blog/blog-post-2.jpg"
+            src="/_static/landing/hosting.svg"
             placeholder="blur"
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAGCAYAAAD68A/GAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAACCSURBVBhXZYzBCgIxDEQnTdPau+hveBB/XtiLn+NJQdoNS2Orq6zuO0zgZRhSVbvegeAJGx7hvUeMAUSEzu1RUesEKuNkIgyrFaoFzB4i8i1+cDEwXHOuRc65lbVpe38XuPm+YMdIKa3WOj9F60vWcj0IOg8Xy7ngdDxgv9vO+h/gCZNAKuSRdQ2rAAAAAElFTkSuQmCC"
             width={430}
@@ -129,9 +129,9 @@ export function LandingImages() {
 
         <div className="my-14 flex flex-col items-center justify-around gap-10 md:flex-row-reverse">
           <Image
-            className="rounded-lg shadow-lg transition-all hover:opacity-90 hover:shadow-xl"
+            className="size-[260px] rounded-lg transition-all hover:opacity-90 hover:shadow-xl"
             alt={"example"}
-            src="/_static/blog/blog-post-1.jpg"
+            src="/_static/landing/email.svg"
             placeholder="blur"
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAGCAYAAAD68A/GAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAACCSURBVBhXZYzBCgIxDEQnTdPau+hveBB/XtiLn+NJQdoNS2Orq6zuO0zgZRhSVbvegeAJGx7hvUeMAUSEzu1RUesEKuNkIgyrFaoFzB4i8i1+cDEwXHOuRc65lbVpe38XuPm+YMdIKa3WOj9F60vWcj0IOg8Xy7ngdDxgv9vO+h/gCZNAKuSRdQ2rAAAAAElFTkSuQmCC"
             width={450}
@@ -152,9 +152,9 @@ export function LandingImages() {
 
         <div className="flex flex-col items-center justify-around gap-10 md:flex-row">
           <Image
-            className="rounded-lg shadow-lg transition-all hover:opacity-90 hover:shadow-xl"
+            className="size-[260px] rounded-lg transition-all hover:opacity-90 hover:shadow-xl"
             alt={"example"}
-            src="/_static/blog/blog-post-2.jpg"
+            src="/_static/landing/domain.svg"
             placeholder="blur"
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAGCAYAAAD68A/GAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAACCSURBVBhXZYzBCgIxDEQnTdPau+hveBB/XtiLn+NJQdoNS2Orq6zuO0zgZRhSVbvegeAJGx7hvUeMAUSEzu1RUesEKuNkIgyrFaoFzB4i8i1+cDEwXHOuRc65lbVpe38XuPm+YMdIKa3WOj9F60vWcj0IOg8Xy7ngdDxgv9vO+h/gCZNAKuSRdQ2rAAAAAElFTkSuQmCC"
             width={430}
@@ -175,9 +175,9 @@ export function LandingImages() {
 
         <div className="flex flex-col items-center justify-around gap-10 md:flex-row-reverse">
           <Image
-            className="rounded-lg shadow-lg transition-all hover:opacity-90 hover:shadow-xl"
+            className="size-[260px] rounded-lg transition-all hover:opacity-90 hover:shadow-xl"
             alt={"example"}
-            src="/_static/blog/blog-post-3.jpg"
+            src="/_static/landing/screenshot.svg"
             placeholder="blur"
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAGCAYAAAD68A/GAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAACCSURBVBhXZYzBCgIxDEQnTdPau+hveBB/XtiLn+NJQdoNS2Orq6zuO0zgZRhSVbvegeAJGx7hvUeMAUSEzu1RUesEKuNkIgyrFaoFzB4i8i1+cDEwXHOuRc65lbVpe38XuPm+YMdIKa3WOj9F60vWcj0IOg8Xy7ngdDxgv9vO+h/gCZNAKuSRdQ2rAAAAAElFTkSuQmCC"
             width={460}
@@ -205,9 +205,9 @@ export function LandingImages() {
 
         <div className="my-14 flex flex-col items-center justify-around gap-10 md:flex-row">
           <Image
-            className="rounded-lg shadow-lg transition-all hover:opacity-90 hover:shadow-xl"
+            className="size-[260px] rounded-lg transition-all hover:opacity-90 hover:shadow-xl"
             alt={"example"}
-            src="/_static/blog/blog-post-4.jpg"
+            src="/_static/landing/info.svg"
             placeholder="blur"
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAGCAYAAAD68A/GAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAACCSURBVBhXZYzBCgIxDEQnTdPau+hveBB/XtiLn+NJQdoNS2Orq6zuO0zgZRhSVbvegeAJGx7hvUeMAUSEzu1RUesEKuNkIgyrFaoFzB4i8i1+cDEwXHOuRc65lbVpe38XuPm+YMdIKa3WOj9F60vWcj0IOg8Xy7ngdDxgv9vO+h/gCZNAKuSRdQ2rAAAAAElFTkSuQmCC"
             width={430}
@@ -262,7 +262,7 @@ export function CardItem({
       <div
         className={
           `${bgColor} ${rotate}` +
-          " flex h-14 w-14 cursor-pointer items-center justify-center rounded-xl text-xl shadow-lg transition-all hover:rotate-0 md:h-20 md:w-20"
+          " flex h-14 w-14 cursor-pointer items-center justify-center rounded-xl text-xl transition-all hover:rotate-0 md:h-20 md:w-20"
         }
       >
         <span className="font-bold text-slate-100 md:scale-150">{icon}</span>
