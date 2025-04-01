@@ -37,17 +37,22 @@ export const PricingSection = () => {
             }
             benefits={[
               {
-                text: "100K tracked clicks/mo",
+                text: "100K tracked clicks",
                 checked: true,
                 icon: <Icons.mousePointerClick className="size-4" />,
               },
               {
-                text: "1k new links/mo",
+                text: "1k new links",
                 checked: true,
                 icon: <Icons.link className="size-4" />,
               },
               {
                 text: "180-day analytics retention",
+                checked: true,
+                icon: <Icons.calendar className="size-4" />,
+              },
+              {
+                text: "1k emails addresses",
                 checked: true,
                 icon: <Icons.calendar className="size-4" />,
               },
@@ -113,6 +118,11 @@ export const PricingSection = () => {
               },
               {
                 text: "1-year analytics retention",
+                checked: true,
+                icon: <Icons.calendar className="size-4" />,
+              },
+              {
+                text: "1k emails addresses",
                 checked: true,
                 icon: <Icons.calendar className="size-4" />,
               },
