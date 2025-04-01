@@ -5,7 +5,8 @@ import { footerLinks, siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { ModeToggle } from "@/components/layout/mode-toggle";
 
-import { NewsletterForm } from "../forms/newsletter-form";
+// import { NewsletterForm } from "../forms/newsletter-form";
+import GitHubStarsWithSuspense from "../shared/github-star-wrapper";
 import { Icons } from "../shared/icons";
 
 export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
@@ -13,7 +14,6 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
     <footer className={cn("border-t bg-background", className)}>
       <div className="container grid max-w-6xl grid-cols-2 gap-6 py-14 md:grid-cols-5">
         <div className="col-span-full flex flex-col items-start sm:col-span-1 md:col-span-2">
-          {/* <NewsletterForm /> */}
           <div className="flex items-center gap-6 md:gap-10">
             <Link href="/" className="flex items-center space-x-1.5">
               <Icons.logo />
@@ -30,6 +30,7 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
             Powerful Screenshot and Meta Scraping API.
             <br /> Open source.
           </div>
+          <GitHubStarsWithSuspense className="mt-4" owner="oiov" repo="wr.do" />
         </div>
         {footerLinks.map((section) => (
           <div key={section.title}>

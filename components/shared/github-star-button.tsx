@@ -68,11 +68,12 @@ const GitHubStarsButton: React.FC<GitHubStarsButtonProps> = ({
       className={cn(
         buttonVariants({
           variant: "outline",
-          rounded: "xl",
+          rounded: "lg",
           size: "lg",
           className: "bg-primary-foreground hover:opacity-70",
         }),
         "px-4 text-[15px]",
+        className,
       )}
       aria-label={`GitHub repository: ${owner}/${repo}`}
     >

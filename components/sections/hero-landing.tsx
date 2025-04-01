@@ -2,13 +2,11 @@ import { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { siteConfig } from "@/config/site";
 import { getCurrentUser } from "@/lib/session";
-import { cn, nFormatter } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/shared/icons";
 
-// import GitHubStarsWithSuspense from "../shared/github-star-wrapper";
 import UrlShortener from "./url-shortener";
 
 export default async function HeroLanding() {
@@ -98,8 +96,10 @@ export function LandingImages() {
               URL Shortening
             </h3>
             <p className="text-lg">
-              📖 Transform long URLs into memorable links instantly with
-              analytics.
+              📖 Instantly transform long, unwieldy URLs into short, memorable
+              links that are easy to share. Enjoy built-in analytics to track
+              clicks, monitor performance, and gain insights into your
+              audience—all in real time.
             </p>
           </div>
         </div>
@@ -119,7 +119,10 @@ export function LandingImages() {
               Free Subdomain Hosting
             </h3>
             <p className="text-lg">
-              🎉 Launch your web presence with free custom subdomains.
+              🎉 Kickstart your online presence with free, fully customizable
+              subdomains. Whether you're launching a personal project or testing
+              a business idea, get started quickly with no cost and reliable
+              hosting you can trust.
             </p>
           </div>
         </div>
@@ -139,7 +142,10 @@ export function LandingImages() {
               Email Receivers & Senders
             </h3>
             <p className="text-lg">
-              📧 Securely receive emails from any email provider.
+              📧 Seamlessly receive and send emails from any email provider with
+              top-notch security. Stay connected and manage your communications
+              effortlessly, knowing your data is protected with robust
+              encryption and privacy features.
             </p>
           </div>
         </div>
@@ -155,10 +161,14 @@ export function LandingImages() {
             height={280}
           />
           <div className="grids grids-dark px-2 py-4">
-            <h3 className="mb-6 text-xl font-bold md:text-3xl">Multi-Domain</h3>
+            <h3 className="mb-6 text-xl font-bold md:text-3xl">
+              Multiple Domains
+            </h3>
             <p className="text-lg">
-              🎉 Start your business with multiple domains. Such as
-              wr.do、uv.do.
+              🤩 Empower your business with the flexibility of multiple domains,
+              such as wr.do, uv.do, and more. Establish a strong digital
+              footprint, create branded links, or manage diverse projects—all
+              under one unified platform.
             </p>
           </div>
         </div>
@@ -178,8 +188,10 @@ export function LandingImages() {
               Website Screenshot API
             </h3>
             <p className="text-lg">
-              📷 Capture any webpage instantly with our Screenshot API. Access
-              to third party services.{" "}
+              📷 Capture high-quality screenshots of any webpage instantly with
+              our powerful Screenshot API. Integrate seamlessly into your
+              applications, access third-party services, and unlock advanced
+              features by applying your unique API key.
               <a
                 className="underline"
                 href="/dashboard/settings"
@@ -206,8 +218,10 @@ export function LandingImages() {
               Meta Information API
             </h3>
             <p className="text-lg">
-              🍥 Smart web data extraction for seamless integration.Access to
-              third party services.{" "}
+              🍥 Extract rich, structured web data effortlessly with our smart
+              Meta Information API. Perfect for developers, businesses, or
+              researchers, this tool offers seamless integration, third-party
+              service access, and enhanced functionality.
               <a
                 className="underline"
                 href="/dashboard/settings"
