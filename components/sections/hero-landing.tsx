@@ -24,7 +24,7 @@ export default async function HeroLanding() {
             "px-4",
           )}
         >
-          <span className="mr-3">🎉</span>Short link analytics&nbsp;
+          <span className="mr-3">🎉</span>Email receivers is&nbsp;
           <span className="font-bold" style={{ fontFamily: "Bahamas Bold" }}>
             available
           </span>
@@ -32,15 +32,15 @@ export default async function HeroLanding() {
         </Link>
 
         <h1 className="text-balance font-satoshi text-[40px] font-black leading-[1.15] tracking-tight sm:text-5xl md:text-6xl md:leading-[1.15]">
-          Short Links With{" "}
+          One platform powers{" "}
           <span className="bg-gradient-to-r from-violet-600 via-blue-600 to-cyan-500 bg-clip-text text-transparent">
-            Powerful Solutions
+            endless solutions
           </span>
         </h1>
 
         <p className="max-w-2xl text-balance text-muted-foreground sm:text-lg">
-          Link shortening, domain hosting, and screenshot api -<br /> everything
-          you need to build better.
+          Link shortening, domain hosting, email receivers/senders <br /> and
+          screenshot api, everything you need to build better.
         </p>
 
         <div className="flex items-center justify-center gap-4">
@@ -95,10 +95,11 @@ export function LandingImages() {
           />
           <div className="grids grids-dark px-2 py-4">
             <h3 className="mb-6 text-xl font-bold md:text-3xl">
-              Free Subdomain Hosting
+              URL Shortening
             </h3>
             <p className="text-lg">
-              🎉 Launch your web presence with free custom subdomains.
+              📖 Transform long URLs into memorable links instantly with
+              analytics.
             </p>
           </div>
         </div>
@@ -115,10 +116,49 @@ export function LandingImages() {
           />
           <div className="grids grids-dark px-2 py-4">
             <h3 className="mb-6 text-xl font-bold md:text-3xl">
-              URL Shortening
+              Free Subdomain Hosting
             </h3>
             <p className="text-lg">
-              📖 Transform long URLs into memorable links instantly with stats.
+              🎉 Launch your web presence with free custom subdomains.
+            </p>
+          </div>
+        </div>
+
+        <div className="my-14 flex flex-col items-center justify-around gap-10 md:flex-row-reverse">
+          <Image
+            className="rounded-lg shadow-lg transition-all hover:opacity-90 hover:shadow-xl"
+            alt={"example"}
+            src="/_static/blog/blog-post-1.jpg"
+            placeholder="blur"
+            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAGCAYAAAD68A/GAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAACCSURBVBhXZYzBCgIxDEQnTdPau+hveBB/XtiLn+NJQdoNS2Orq6zuO0zgZRhSVbvegeAJGx7hvUeMAUSEzu1RUesEKuNkIgyrFaoFzB4i8i1+cDEwXHOuRc65lbVpe38XuPm+YMdIKa3WOj9F60vWcj0IOg8Xy7ngdDxgv9vO+h/gCZNAKuSRdQ2rAAAAAElFTkSuQmCC"
+            width={450}
+            height={280}
+          />
+          <div className="grids grids-dark px-2 py-4">
+            <h3 className="mb-6 text-xl font-bold md:text-3xl">
+              Email Receivers & Senders
+            </h3>
+            <p className="text-lg">
+              📧 Securely receive emails from any email provider.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex flex-col items-center justify-around gap-10 md:flex-row">
+          <Image
+            className="rounded-lg shadow-lg transition-all hover:opacity-90 hover:shadow-xl"
+            alt={"example"}
+            src="/_static/blog/blog-post-2.jpg"
+            placeholder="blur"
+            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAGCAYAAAD68A/GAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAACCSURBVBhXZYzBCgIxDEQnTdPau+hveBB/XtiLn+NJQdoNS2Orq6zuO0zgZRhSVbvegeAJGx7hvUeMAUSEzu1RUesEKuNkIgyrFaoFzB4i8i1+cDEwXHOuRc65lbVpe38XuPm+YMdIKa3WOj9F60vWcj0IOg8Xy7ngdDxgv9vO+h/gCZNAKuSRdQ2rAAAAAElFTkSuQmCC"
+            width={430}
+            height={280}
+          />
+          <div className="grids grids-dark px-2 py-4">
+            <h3 className="mb-6 text-xl font-bold md:text-3xl">Multi-Domain</h3>
+            <p className="text-lg">
+              🎉 Start your business with multiple domains. Such as
+              wr.do、uv.do.
             </p>
           </div>
         </div>

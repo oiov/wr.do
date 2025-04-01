@@ -166,21 +166,11 @@ export default function EmailList({
           <li>
             <Link
               className="text-blue-500 underline"
-              href="/docs/emails"
-              target="_blank"
-              rel="noreferrer"
-            >
-              What is wr.do email?
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="text-blue-500 underline"
               href="/docs/emails#how-it-works"
               target="_blank"
               rel="noreferrer"
             >
-              How it works?
+              How to use email to send or receive emails?
             </Link>
           </li>
           <li>

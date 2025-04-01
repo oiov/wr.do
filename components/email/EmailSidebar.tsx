@@ -100,9 +100,13 @@ export default function EmailSidebar({
     }
   };
 
-  const handleSubmitEmail = async (emailAddress: string) => {
-    if (!emailAddress) {
+  const handleSubmitEmail = async (emailSuffix: string) => {
+    if (!emailSuffix) {
       toast.error("Email address cannot be empty");
+      return;
+    }
+    if (/[^a-zA-Z0-9_\-\.]/.test(emailSuffix)) {
+      toast.error("Invalid email address");
       return;
     }
     if (!domainSuffix) {
@@ -117,7 +121,7 @@ export default function EmailSidebar({
         const res = await fetch(`/api/email/${editEmailId}`, {
           method: "PUT",
           body: JSON.stringify({
-            emailAddress: `${emailAddress}@${domainSuffix}`,
+            emailAddress: `${emailSuffix}@${domainSuffix}`,
           }),
         });
         if (res.ok) {
@@ -135,7 +139,7 @@ export default function EmailSidebar({
           const res = await fetch("/api/email", {
             method: "POST",
             body: JSON.stringify({
-              emailAddress: `${emailAddress}@${domainSuffix}`,
+              emailAddress: `${emailSuffix}@${domainSuffix}`,
             }),
           });
           if (res.ok) {
@@ -215,8 +219,8 @@ export default function EmailSidebar({
                 variant="outline"
                 size="icon"
                 onClick={async () => {
-                  setIsRefreshing(true); // 开始旋转
-                  await mutate(); // 触发数据重新获取
+                  setIsRefreshing(true);
+                  await mutate();
                   setIsRefreshing(false);
                 }}
                 disabled={isRefreshing}
@@ -420,7 +424,7 @@ export default function EmailSidebar({
                     id="emailAddress"
                     name="emailAddress"
                     type="text"
-                    placeholder="Enter email address"
+                    placeholder="Enter email suffix"
                     className="w-full rounded-r-none"
                     required
                     defaultValue={
@@ -435,7 +439,7 @@ export default function EmailSidebar({
                     defaultValue={domainSuffix || siteConfig.shortDomains[0]}
                     disabled={isEdit}
                   >
-                    <SelectTrigger className="w-2/5 rounded-none border-x-0 shadow-inner">
+                    <SelectTrigger className="w-1/3 rounded-none border-x-0 shadow-inner">
                       <SelectValue placeholder="Select a domain" />
                     </SelectTrigger>
                     <SelectContent>

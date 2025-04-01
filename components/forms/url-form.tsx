@@ -190,7 +190,7 @@ export function UrlForm({
                   defaultValue={initData?.prefix || siteConfig.shortDomains[0]}
                   disabled={type === "edit"}
                 >
-                  <SelectTrigger className="w-2/5 rounded-r-none shadow-inner">
+                  <SelectTrigger className="w-1/3 rounded-r-none border-r-0 shadow-inner">
                     <SelectValue placeholder="Select a domain" />
                   </SelectTrigger>
                   <SelectContent>
@@ -212,7 +212,7 @@ export function UrlForm({
                   disabled={type === "edit"}
                 />
                 <Button
-                  className="rounded-l-none"
+                  className="rounded-l-none border-l-0"
                   type="button"
                   size="sm"
                   variant="outline"
