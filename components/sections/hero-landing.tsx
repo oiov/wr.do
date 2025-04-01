@@ -7,13 +7,14 @@ import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/shared/icons";
 
+import EmailManagerExp from "./email";
 import UrlShortener from "./url-shortener";
 
 export default async function HeroLanding() {
   const user = await getCurrentUser();
   return (
     <section className="custom-bg relative space-y-6 py-12 sm:py-20 lg:py-24">
-      <div className="container flex max-w-screen-md flex-col items-center gap-5 text-center">
+      <div className="container flex max-w-screen-lg flex-col items-center gap-5 text-center">
         <Link
           href="/dashboard"
           target="_blank"
@@ -234,15 +235,8 @@ export function LandingImages() {
         </div>
       </div>
 
-      <div className="grids grids-dark mx-auto my-10 flex w-full max-w-6xl items-center justify-center gap-8 pb-6 pt-6 md:gap-14 md:pb-10 md:pt-10">
-        <CardItem
-          bgColor="bg-cyan-400"
-          rotate="rotate-12 origin-top-left"
-          icon={"✏️"}
-        />
-        <CardItem bgColor="bg-orange-400" rotate="rotate-45" icon="👻" />
-        <CardItem rotate="rotate-12 origin-top-left" icon={"📷"} />
-        <CardItem bgColor="bg-pink-400" rotate="-rotate-12" icon="🎓" />
+      <div className="grids grids-dark mx-auto my-10 flex w-full max-w-6xl px-4">
+        <EmailManagerExp />
       </div>
     </>
   );
