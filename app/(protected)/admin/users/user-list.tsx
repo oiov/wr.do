@@ -5,7 +5,6 @@ import { User } from "@prisma/client";
 import { PenLine, RefreshCwIcon } from "lucide-react";
 import useSWR, { useSWRConfig } from "swr";
 
-import { siteConfig } from "@/config/site";
 import { fetcher, timeAgo } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Badge } from "@/components/ui/badge";
@@ -15,8 +14,8 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
@@ -33,9 +32,9 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import StatusDot from "@/components/dashboard/status-dot";
-import { FormType } from "@/components/forms/record-form";
 import { UserForm } from "@/components/forms/user-form";
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
+import { Icons } from "@/components/shared/icons";
 import { PaginationWrapper } from "@/components/shared/pagination";
 
 import CountUpFn from "../../../../components/dashboard/count-up";
@@ -46,12 +45,15 @@ export interface UrlListProps {
 
 function TableColumnSekleton({ className }: { className?: string }) {
   return (
-    <TableRow className="grid grid-cols-3 items-center sm:grid-cols-7">
+    <TableRow className="grid grid-cols-3 items-center sm:grid-cols-8">
       <TableCell className="col-span-1">
         <Skeleton className="h-5 w-20" />
       </TableCell>
       <TableCell className="col-span-1 sm:col-span-2">
         <Skeleton className="h-5 w-20" />
+      </TableCell>
+      <TableCell className="col-span-1 hidden justify-center sm:flex">
+        <Skeleton className="h-5 w-16" />
       </TableCell>
       <TableCell className="col-span-1 hidden justify-center sm:flex">
         <Skeleton className="h-5 w-16" />
@@ -75,10 +77,14 @@ export default function UsersList({ user }: UrlListProps) {
   const [currentEditUser, setcurrentEditUser] = useState<User | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [searchParams, setSearchParams] = useState({
+    email: "",
+    userName: "",
+  });
 
   const { mutate } = useSWRConfig();
   const { data, error, isLoading } = useSWR<{ total: number; list: User[] }>(
-    `/api/user/admin?page=${currentPage}&size=${pageSize}`,
+    `/api/user/admin?page=${currentPage}&size=${pageSize}&email=${searchParams.email}&userName=${searchParams.userName}`,
     fetcher,
     {
       revalidateOnFocus: false,
@@ -86,7 +92,10 @@ export default function UsersList({ user }: UrlListProps) {
   );
 
   const handleRefresh = () => {
-    mutate(`/api/user/admin?page=${currentPage}&size=${pageSize}`, undefined);
+    mutate(
+      `/api/user/admin?page=${currentPage}&size=${pageSize}&email=${searchParams.email}&userName=${searchParams.userName}`,
+      undefined,
+    );
   };
 
   return (
@@ -124,9 +133,60 @@ export default function UsersList({ user }: UrlListProps) {
               onRefresh={handleRefresh}
             />
           )}
+          <div className="mb-2 flex-row items-center gap-2 space-y-2 sm:flex sm:space-y-0">
+            <div className="relative w-full">
+              <Input
+                className="h-8 text-xs md:text-xs"
+                placeholder="Search by email..."
+                value={searchParams.email}
+                onChange={(e) => {
+                  setSearchParams({
+                    ...searchParams,
+                    email: e.target.value,
+                  });
+                }}
+              />
+              {searchParams.email && (
+                <Button
+                  className="absolute right-2 top-1/2 h-6 -translate-y-1/2 rounded-full px-1 text-gray-500 hover:text-gray-700"
+                  onClick={() =>
+                    setSearchParams({ ...searchParams, email: "" })
+                  }
+                  variant={"ghost"}
+                >
+                  <Icons.close className="size-3" />
+                </Button>
+              )}
+            </div>
+
+            <div className="relative w-full">
+              <Input
+                className="h-8 text-xs md:text-xs"
+                placeholder="Search by user name..."
+                value={searchParams.userName}
+                onChange={(e) => {
+                  setSearchParams({
+                    ...searchParams,
+                    userName: e.target.value,
+                  });
+                }}
+              />
+              {searchParams.userName && (
+                <Button
+                  className="absolute right-2 top-1/2 h-6 -translate-y-1/2 rounded-full px-1 text-gray-500 hover:text-gray-700"
+                  onClick={() =>
+                    setSearchParams({ ...searchParams, userName: "" })
+                  }
+                  variant={"ghost"}
+                >
+                  <Icons.close className="size-3" />
+                </Button>
+              )}
+            </div>
+          </div>
           <Table>
             <TableHeader className="bg-gray-100/50 dark:bg-primary-foreground">
-              <TableRow className="grid grid-cols-3 items-center sm:grid-cols-7">
+              <TableRow className="grid grid-cols-3 items-center sm:grid-cols-8">
                 <TableHead className="col-span-1 flex items-center font-bold">
                   Name
                 </TableHead>
@@ -135,6 +195,9 @@ export default function UsersList({ user }: UrlListProps) {
                 </TableHead>
                 <TableHead className="col-span-1 hidden items-center justify-center font-bold sm:flex">
                   Role
+                </TableHead>
+                <TableHead className="col-span-1 hidden items-center justify-center font-bold sm:flex">
+                  Plan
                 </TableHead>
                 <TableHead className="col-span-1 hidden items-center justify-center font-bold sm:flex">
                   Status
@@ -158,7 +221,7 @@ export default function UsersList({ user }: UrlListProps) {
                 data.list.map((user) => (
                   <TableRow
                     key={user.id}
-                    className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-7"
+                    className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-8"
                   >
                     <TableCell className="col-span-1 truncate">
                       <TooltipProvider>
@@ -185,6 +248,11 @@ export default function UsersList({ user }: UrlListProps) {
                     <TableCell className="col-span-1 hidden justify-center sm:flex">
                       <Badge className="text-xs" variant="outline">
                         {user.role}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="col-span-1 hidden justify-center sm:flex">
+                      <Badge className="text-xs" variant="outline">
+                        {user.team}
                       </Badge>
                     </TableCell>
                     <TableCell className="col-span-1 hidden justify-center sm:flex">

@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
-import Link from "next/link";
+import { useState, useTransition } from "react";
 import { User, UserEmail } from "@prisma/client";
 import randomName from "@scaleway/random-name";
 import {
@@ -18,7 +17,6 @@ import useSWRInfinite from "swr/infinite";
 import { siteConfig } from "@/config/site";
 import { UserEmailList } from "@/lib/dto/email";
 import { cn, fetcher, timeAgo } from "@/lib/utils";
-import { useMediaQuery } from "@/hooks/use-media-query";
 
 import { CopyButton } from "../shared/copy-button";
 import { EmptyPlaceholder } from "../shared/empty-placeholder";
@@ -79,8 +77,7 @@ export default function EmailSidebar({
   const { data, isLoading, error, size, setSize, mutate } = useSWRInfinite<{
     list: UserEmailList[];
     total: number;
-  }>(getKey, fetcher, { revalidateOnFocus: false, dedupingInterval: 3000 });
-  console.log("[数据]", data);
+  }>(getKey, fetcher, { dedupingInterval: 3000 });
 
   if (
     !selectedEmailAddress &&
@@ -208,7 +205,6 @@ export default function EmailSidebar({
     <div
       className={cn(`flex h-full flex-col border-r transition-all`, className)}
     >
-      {isLoading}
       {/* Header */}
       <div className="border-b p-2 text-center">
         <div className="mb-2 flex items-center justify-center gap-2">

@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { User } from "@prisma/client";
 
-import { useMediaQuery } from "@/hooks/use-media-query";
+// import { useMediaQuery } from "@/hooks/use-media-query";
 import EmailList from "@/components/email/EmailList";
 import EmailSidebar from "@/components/email/EmailSidebar";
 
@@ -13,7 +13,7 @@ export function EmailDashboard({ user }: { user: User }) {
   >(null);
   const [selectedEmailId, setSelectedEmailId] = useState<string | null>(null);
 
-  const { isTablet } = useMediaQuery();
+  // const { isTablet } = useMediaQuery();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   // useEffect(() => {
@@ -23,7 +23,7 @@ export function EmailDashboard({ user }: { user: User }) {
   return (
     <div className="flex h-[calc(100vh-60px)]">
       <EmailSidebar
-        className={!isCollapsed ? "w-56 xl:w-64" : "w-16"}
+        className={!isCollapsed ? "w-64 xl:w-72" : "w-16"}
         user={user}
         onSelectEmail={setSelectedEmailAddress}
         selectedEmailAddress={selectedEmailAddress}

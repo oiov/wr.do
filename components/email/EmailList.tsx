@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { ForwardEmail } from "@prisma/client";
 import { toast } from "sonner";
@@ -12,8 +13,11 @@ import { Icons } from "../shared/icons";
 import { PaginationWrapper } from "../shared/pagination";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Modal } from "../ui/modal";
 import { Skeleton } from "../ui/skeleton";
 import { Switch } from "../ui/switch";
+import { Textarea } from "../ui/textarea";
 import {
   Tooltip,
   TooltipContent,
@@ -22,6 +26,19 @@ import {
 } from "../ui/tooltip";
 import EmailDetail from "./EmailDetail";
 import Loader from "./Loader";
+
+import "react-quill/dist/quill.snow.css";
+
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "../ui/drawer";
+
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 interface EmailListProps {
   emailAddress: string | null;
@@ -40,6 +57,9 @@ export default function EmailList({
   const [isAutoRefresh, setIsAutoRefresh] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [showSendDrawer, setShowSendDrawer] = useState(false);
+  const [sendForm, setSendForm] = useState({ to: "", subject: "", html: "" });
+  const [isPending, startTransition] = useTransition();
 
   const { data, error, isLoading, mutate } = useSWR<{
     total: number;
@@ -217,7 +237,44 @@ export default function EmailList({
   };
 
   const handleOpenSendEmailModal = () => {
-    toast.warning(`Work in progress...`);
+    setShowSendDrawer(true);
+    setSendForm({ to: "", subject: "", html: "" });
+  };
+
+  const handleSendEmail = async () => {
+    if (!emailAddress) {
+      toast.error("No email address selected");
+      return;
+    }
+    if (!sendForm.to || !sendForm.subject || !sendForm.html) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    startTransition(async () => {
+      try {
+        const response = await fetch("/api/email/send", {
+          method: "POST",
+          body: JSON.stringify({
+            from: emailAddress,
+            to: sendForm.to,
+            subject: sendForm.subject,
+            html: sendForm.html,
+          }),
+        });
+
+        if (response.ok) {
+          toast.success("Email sent successfully");
+          setShowSendDrawer(false);
+        } else {
+          toast.error("Failed to send email", {
+            description: await response.text(),
+          });
+        }
+      } catch (error) {
+        toast.error(error.message || "Error sending email");
+      }
+    });
   };
 
   return (
@@ -344,6 +401,83 @@ export default function EmailList({
           setCurrentPage={setCurrentPage}
         />
       )}
+
+      {/* 发送邮件 Modal */}
+      <Drawer open={showSendDrawer} onOpenChange={setShowSendDrawer}>
+        <DrawerContent className="fixed bottom-0 right-0 top-0 w-full rounded-none sm:max-w-xl">
+          <DrawerHeader>
+            <DrawerTitle className="flex items-center gap-1">
+              Send Email{" "}
+              <Icons.help className="size-5 text-neutral-600 hover:text-neutral-400" />
+            </DrawerTitle>
+            <DrawerClose asChild>
+              <Button variant="ghost" className="absolute right-4 top-4">
+                <Icons.close className="h-4 w-4" />
+              </Button>
+            </DrawerClose>
+          </DrawerHeader>
+          <div className="scrollbar-hidden h-[calc(100vh)] space-y-4 overflow-y-auto p-6">
+            <div>
+              <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                From
+              </label>
+              <Input value={emailAddress || ""} disabled className="mt-1" />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                To
+              </label>
+              <Input
+                value={sendForm.to}
+                onChange={(e) =>
+                  setSendForm({ ...sendForm, to: e.target.value })
+                }
+                placeholder="recipient@example.com"
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                Subject
+              </label>
+              <Input
+                value={sendForm.subject}
+                onChange={(e) =>
+                  setSendForm({ ...sendForm, subject: e.target.value })
+                }
+                placeholder="Enter subject"
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                Content
+              </label>
+              <ReactQuill
+                value={sendForm.html}
+                onChange={(value) => setSendForm({ ...sendForm, html: value })}
+                className="mt-1 h-40 rounded-lg"
+                theme="snow"
+                placeholder="Enter your message"
+              />
+            </div>
+          </div>
+          <DrawerFooter>
+            <DrawerClose asChild>
+              <Button variant="outline" disabled={isPending}>
+                Cancel
+              </Button>
+            </DrawerClose>
+            <Button
+              onClick={handleSendEmail}
+              disabled={isPending}
+              variant={"default"}
+            >
+              {isPending ? "Sending..." : "Send"}
+            </Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
     </div>
   );
 }

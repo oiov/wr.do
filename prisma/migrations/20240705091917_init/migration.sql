@@ -43,7 +43,7 @@ CREATE TABLE "users"
     "emailVerified" TIMESTAMP(3),
     "image" TEXT,
     "active" INTEGER NOT NULL DEFAULT 1,
-    "team" TEXT,
+    "team" TEXT NOT NULL DEFAULT 'free',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "role" "UserRole" NOT NULL DEFAULT 'USER',

@@ -220,15 +220,15 @@ export default function EmailDetail({
             <h3 className="mb-2 text-sm font-semibold text-neutral-700 dark:text-neutral-400">
               Attachments ({attachments.length})
             </h3>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
               {attachments.map((attachment, index) => {
                 const FileIcon = getFileIcon(attachment.mimeType); // 动态获取图标
                 return (
                   <div
                     key={index}
-                    className="group flex items-center justify-between rounded-md border border-dotted bg-gray-100 p-2 transition-shadow hover:border-dashed dark:bg-neutral-800"
+                    className="group relative flex items-center justify-between rounded-md border border-dotted bg-gray-100 p-2 transition-shadow hover:border-dashed dark:bg-neutral-800"
                   >
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 overflow-hidden">
                       {attachment.mimeType.startsWith("image/") ? (
                         <BlurImg
                           src={`${siteConfig.emailR2Domain}/${attachment.r2Path}`}
@@ -244,7 +244,10 @@ export default function EmailDetail({
                         <FileIcon className="size-4 text-neutral-500 dark:text-neutral-400" />
                       )}
                       <div>
-                        <p className="max-w-[120px] truncate text-xs text-neutral-800 dark:text-neutral-400">
+                        <p
+                          className="max-w-full truncate text-xs text-neutral-800 dark:text-neutral-400"
+                          title={attachment.filename}
+                        >
                           {attachment.filename}
                         </p>
                         <p className="text-xs text-neutral-500">
@@ -256,7 +259,7 @@ export default function EmailDetail({
                     </div>
                     <Button
                       onClick={() => handleDownload(attachment)}
-                      className="hidden animate-fade-in px-2 group-hover:block"
+                      className="absolute right-0 top-0 hidden transform animate-fade-in px-2 group-hover:block"
                       size="sm"
                       variant="ghost"
                     >

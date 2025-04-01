@@ -60,7 +60,7 @@ export function UserForm({
       email: initData?.email || "",
       image: initData?.image || "",
       role: initData?.role || "USER",
-      team: initData?.team || "",
+      team: initData?.team || "free",
     },
   });
 
@@ -151,6 +151,22 @@ export function UserForm({
             </p>
           )}
         </FormSectionColumns>
+        <FormSectionColumns title="Active">
+          <div className="flex w-full items-center gap-2">
+            <Label className="sr-only" htmlFor="active">
+              Active
+            </Label>
+            <Switch
+              id="active"
+              {...register("active")}
+              defaultChecked={initData?.active === 1}
+              onCheckedChange={(value) => setValue("active", value ? 1 : 0)}
+            />
+          </div>
+        </FormSectionColumns>
+      </div>
+
+      <div className="items-center justify-start gap-4 md:flex">
         <FormSectionColumns title="Role">
           <Select
             onValueChange={(value: string) => {
@@ -171,21 +187,25 @@ export function UserForm({
             </SelectContent>
           </Select>
         </FormSectionColumns>
-      </div>
-
-      <div className="items-center justify-start gap-4 md:flex">
-        <FormSectionColumns title="Active">
-          <div className="flex w-full items-center gap-2">
-            <Label className="sr-only" htmlFor="active">
-              Active
-            </Label>
-            <Switch
-              id="active"
-              {...register("active")}
-              defaultChecked={initData?.active === 1}
-              onCheckedChange={(value) => setValue("active", value ? 1 : 0)}
-            />
-          </div>
+        <FormSectionColumns title="Plan">
+          <Select
+            onValueChange={(value: string) => {
+              setValue("team", value);
+            }}
+            name="team"
+            defaultValue={`${initData?.team}` || "free"}
+          >
+            <SelectTrigger className="w-full shadow-inner">
+              <SelectValue placeholder="Select a plan" />
+            </SelectTrigger>
+            <SelectContent>
+              {["free", "premium", "business"].map((role) => (
+                <SelectItem key={role} value={role}>
+                  {role}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </FormSectionColumns>
       </div>
 

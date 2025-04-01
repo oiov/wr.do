@@ -65,7 +65,7 @@ export const {
       token.picture = dbUser.image;
       token.role = dbUser.role;
       token.active = dbUser.active;
-      token.team = dbUser.team;
+      token.team = dbUser.team || "free";
       token.apiKey = dbUser.apiKey;
 
       return token;

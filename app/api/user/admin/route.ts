@@ -16,7 +16,14 @@ export async function GET(req: Request) {
     const url = new URL(req.url);
     const page = url.searchParams.get("page");
     const size = url.searchParams.get("size");
-    const data = await getAllUsers(Number(page || "1"), Number(size || "10"));
+    const email = url.searchParams.get("email") || "";
+    const userName = url.searchParams.get("userName") || "";
+    const data = await getAllUsers(
+      Number(page || "1"),
+      Number(size || "10"),
+      email,
+      userName,
+    );
 
     return Response.json(data);
   } catch (error) {

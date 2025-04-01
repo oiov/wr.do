@@ -147,6 +147,9 @@ export async function fetcher<JSON = any>(
   return res.json();
 }
 
+export const isValidEmail = (email: string) =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
 export function nFormatter(num: number, digits?: number) {
   if (!num) return "0";
   const lookup = [

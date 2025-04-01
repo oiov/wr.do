@@ -33,16 +33,35 @@ export const getUserById = async (id: string) => {
   }
 };
 
-export const getAllUsers = async (page: number, size: number) => {
+export const getAllUsers = async (
+  page: number,
+  size: number,
+  email?: string,
+  userName?: string,
+) => {
   try {
+    let options;
+    if (email) {
+      options = { where: { email: { contains: email } } };
+    }
+    if (userName) {
+      options = { where: { name: { contains: userName } } };
+    }
+    if (email && userName) {
+      options = {
+        where: { email: { contains: email }, name: { contains: userName } },
+      };
+    }
+
     const [total, list] = await prisma.$transaction([
-      prisma.user.count(), // 获取所有用户的总数
+      prisma.user.count(options),
       prisma.user.findMany({
         skip: (page - 1) * size,
         take: size,
         orderBy: {
           createdAt: "desc",
         },
+        ...options,
       }),
     ]);
     return {
