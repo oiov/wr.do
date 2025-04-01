@@ -120,9 +120,9 @@ export function LandingImages() {
             </h3>
             <p className="text-lg">
               🎉 Kickstart your online presence with free, fully customizable
-              subdomains. Whether you're launching a personal project or testing
-              a business idea, get started quickly with no cost and reliable
-              hosting you can trust.
+              subdomains. Whether you&apos;re launching a personal project or
+              testing a business idea, get started quickly with no cost and
+              reliable hosting you can trust.
             </p>
           </div>
         </div>
