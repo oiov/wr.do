@@ -98,7 +98,7 @@ export default function EmailList({
     }
   }, [emailAddress, data, selectedEmailId]);
 
-  if (emailAddress) {
+  if (!emailAddress) {
     return (
       <div className="grids flex flex-1 animate-fade-in flex-col items-center justify-center p-4 text-center text-neutral-600 dark:text-neutral-400">
         <BlurImg

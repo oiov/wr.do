@@ -375,7 +375,7 @@ export default function EmailSidebar({
             <Skeleton className="h-[50px] w-full rounded-lg" />
           </div>
         )}
-        {!error && userEmails && userEmails.length === 0 && (
+        {!error && !isLoading && userEmails && userEmails.length === 0 && (
           <>
             {!isCollapsed ? (
               <div className="flex h-full items-center justify-center">
