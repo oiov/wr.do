@@ -28,6 +28,7 @@ import Loader from "./Loader";
 import "react-quill/dist/quill.snow.css";
 
 import { BlurImg } from "../shared/blur-image";
+import { Checkbox } from "../ui/checkbox";
 import {
   Drawer,
   DrawerClose,
@@ -202,6 +203,8 @@ export default function EmailList({
 
   // 处理邮件选择
   const handleSelectEmail = (emailId: string) => {
+    console.log(emailId);
+
     setSelectedEmails((prev) =>
       prev.includes(emailId)
         ? prev.filter((id) => id !== emailId)
@@ -390,7 +393,7 @@ export default function EmailList({
         </div>
       )}
       {!isLoading && !error && (
-        <div className="scrollbar-hidden relative h-[calc(100vh-105px)] animate-fade-in overflow-scroll p-3">
+        <div className="scrollbar-hidden relative h-[calc(100vh-105px)] animate-fade-in overflow-scroll">
           {selectedEmailId ? (
             <EmailDetail
               email={data?.list?.find((email) => email.id === selectedEmailId)}
@@ -404,19 +407,18 @@ export default function EmailList({
                 data.list.map((email) => (
                   <div
                     key={email.id}
-                    className="border-b border-dotted bg-neutral-100/50 p-2 hover:bg-gray-100 dark:border-neutral-700 dark:bg-neutral-900 hover:dark:bg-neutral-700"
+                    className="border-b border-dotted bg-neutral-100/50 px-3 py-2 hover:bg-gray-100 dark:border-neutral-700 dark:bg-neutral-900 hover:dark:bg-neutral-700"
                   >
                     <div className="flex items-center justify-between">
                       {showMutiCheckBox && (
                         <div
                           className="flex items-center gap-2"
-                          onClick={(e) => e.stopPropagation()} // 在操作容器上阻止冒泡
+                          onClick={(e) => e.stopPropagation()}
                         >
-                          <Input
-                            type="checkbox"
-                            checked={selectedEmails.includes(email.id)}
-                            onChange={() => handleSelectEmail(email.id)}
-                            className="mr-2 size-4"
+                          <Checkbox
+                            defaultChecked={selectedEmails.includes(email.id)}
+                            onCheckedChange={() => handleSelectEmail(email.id)}
+                            className="mr-2 size-4 border-neutral-300 bg-neutral-100 data-[state=checked]:border-neutral-900 data-[state=checked]:bg-neutral-600 data-[state=checked]:text-neutral-100 dark:border-neutral-700 dark:bg-neutral-800 dark:data-[state=checked]:border-neutral-300 dark:data-[state=checked]:bg-neutral-300"
                           />
                         </div>
                       )}
