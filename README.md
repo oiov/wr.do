@@ -7,6 +7,7 @@
 
 ## Features
 
+- 📮 **Email Support:** Receive notifications via email
 - 🌐 **Multi-Tenant Support:** Manage multiple DNS records seamlessly
 - ⚡ **Instant Record Creation:** Set up CNAME, A, and other records quickly
 - 🔗 **URL Shortening:** Generate short links with visitor statistics attached
