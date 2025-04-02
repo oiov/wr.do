@@ -177,6 +177,9 @@ export default function EmailDetail({
             "U"}
         </div>
         <div className="max-w-[80%] flex-grow text-xs text-neutral-600 dark:text-neutral-300">
+          <p className="text-sm">
+            <strong>{email.subject}</strong>
+          </p>
           <TooltipProvider>
             <Tooltip delayDuration={100}>
               <TooltipTrigger className="line-clamp-2 text-wrap text-left">
