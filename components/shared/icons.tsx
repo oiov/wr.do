@@ -10,6 +10,8 @@ import {
   Calendar,
   Camera,
   Check,
+  CheckCheck,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
   CircleHelp,
@@ -25,14 +27,17 @@ import {
   HelpCircle,
   Home,
   Image,
+  Inbox,
   Laptop,
   LayoutPanelLeft,
   LineChart,
   Link,
+  ListChecks,
   Loader2,
   LucideIcon,
   LucideProps,
   Mail,
+  MailOpen,
   MailPlus,
   MessagesSquare,
   Moon,
@@ -67,8 +72,10 @@ export const Icons = {
   arrowDown: ArrowDown,
   chevronLeft: ChevronLeft,
   chevronRight: ChevronRight,
+  chevronDown: ChevronDown,
   bookOpen: BookOpen,
   check: Check,
+  checkCheck: CheckCheck,
   close: X,
   copy: Copy,
   camera: Camera,
@@ -79,6 +86,7 @@ export const Icons = {
   ellipsis: MoreVertical,
   paintbrush: Paintbrush,
   mousePointerClick: MousePointerClick,
+  listChecks: ListChecks,
   github: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"
@@ -132,6 +140,7 @@ export const Icons = {
   spinner: Loader2,
   sun: SunMedium,
   trash: Trash2,
+  inbox: Inbox,
   twitter: ({ ...props }: LucideProps) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -157,6 +166,7 @@ export const Icons = {
   link: Link,
   mail: Mail,
   mailPlus: MailPlus,
+  mailOpen: MailOpen,
   bug: Bug,
   CirclePlay: CirclePlay,
   unplug: Unplug,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ForwardEmail } from "@prisma/client";
 import {
   File,
@@ -36,6 +36,7 @@ interface EmailDetailProps {
   email: ForwardEmail | undefined;
   selectedEmailId: string | null;
   onClose: () => void;
+  onMarkAsRead: () => void;
 }
 
 interface Attachment {
@@ -87,6 +88,7 @@ export default function EmailDetail({
   email,
   selectedEmailId,
   onClose,
+  onMarkAsRead,
 }: EmailDetailProps) {
   const [previewImage, setPreviewImage] = useState<string | null>(null); // 控制图片预览 Modal
 
@@ -190,6 +192,12 @@ export default function EmailDetail({
           </p>
           <p>
             <strong>Date:</strong> {formatDate(email.date as any)}
+            {/* {email.readAt && (
+              <>
+                <strong className="ml-2">Read At</strong>:{" "}
+                {formatDate(email.readAt as any)}
+              </>
+            )} */}
           </p>
           {attachments.length > 0 && (
             <p>
@@ -207,9 +215,9 @@ export default function EmailDetail({
         </Button>
       </div>
 
-      <div className="scrollbar-hidden flex h-full flex-col justify-between overflow-x-auto overflow-y-auto px-2 py-3">
+      <div className="scrollbar-hidden flex h-full flex-col justify-between overflow-y-auto overflow-x-scroll px-2 py-3">
         <div
-          className="break-all"
+          className=""
           dangerouslySetInnerHTML={{
             __html: processContent(email.html || email.text || ""),
           }}

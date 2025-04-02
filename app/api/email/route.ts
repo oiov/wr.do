@@ -14,15 +14,22 @@ export async function GET(req: NextRequest) {
     const page = parseInt(searchParams.get("page") || "0", 10);
     const size = parseInt(searchParams.get("size") || "10", 10);
     const search = searchParams.get("search") || "";
+    const all = searchParams.get("all") || "false";
 
-    const userEmails = await getAllUserEmails(user.id, page, size, search);
+    if (all === "true" && user.role === "ADMIN") {
+    }
+
+    const userEmails = await getAllUserEmails(
+      user.id,
+      page,
+      size,
+      search,
+      user.role === "ADMIN" && all === "true",
+    );
     return NextResponse.json(userEmails, { status: 200 });
   } catch (error) {
     console.error("Error fetching user emails:", error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 },
-    );
+    return NextResponse.json("Internal Server Error", { status: 500 });
   }
 }
 

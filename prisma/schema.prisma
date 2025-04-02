@@ -197,8 +197,9 @@ model ForwardEmail {
   headers     String? @default("[]")
   attachments String? @default("[]")
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   UserEmail UserEmail? @relation(fields: [to], references: [emailAddress])
 

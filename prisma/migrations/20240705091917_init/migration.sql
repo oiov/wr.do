@@ -236,6 +236,8 @@ CREATE TABLE "forward_emails"
     CONSTRAINT "forward_emails_pkey" PRIMARY KEY ("id")
 );
 
+ALTER TABLE "forward_emails" ADD COLUMN "readAt" TIMESTAMP;
+
 CREATE TABLE "user_emails"
 (
     "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),

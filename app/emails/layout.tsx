@@ -46,7 +46,7 @@ export default async function Dashboard({ children }: ProtectedLayoutProps) {
         </header>
 
         <main className="flex-1">
-          <MaxWidthWrapper className="flex max-h-screen max-w-7xl flex-col gap-4 px-0 lg:gap-6">
+          <MaxWidthWrapper className="flex max-h-screen max-w-full flex-col gap-4 px-0 lg:gap-6">
             {children}
           </MaxWidthWrapper>
         </main>

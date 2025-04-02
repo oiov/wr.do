@@ -13,15 +13,12 @@ export function EmailDashboard({ user }: { user: User }) {
   >(null);
   const [selectedEmailId, setSelectedEmailId] = useState<string | null>(null);
 
-  // const { isTablet } = useMediaQuery();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  // useEffect(() => {
-  //   setIsCollapsed(!isTablet);
-  // }, [isTablet]);
+  const [isAdminModel, setAdminModel] = useState(false);
 
   return (
-    <div className="flex h-[calc(100vh-60px)]">
+    <div className="flex h-[calc(100vh-60px)] w-full">
       <EmailSidebar
         className={!isCollapsed ? "w-64 xl:w-72" : "w-16"}
         user={user}
@@ -29,11 +26,14 @@ export function EmailDashboard({ user }: { user: User }) {
         selectedEmailAddress={selectedEmailAddress}
         isCollapsed={isCollapsed}
         setIsCollapsed={setIsCollapsed}
+        isAdminModel={isAdminModel}
+        setAdminModel={setAdminModel}
       />
       <EmailList
         emailAddress={selectedEmailAddress}
         selectedEmailId={selectedEmailId}
         onSelectEmail={setSelectedEmailId}
+        isAdminModel={isAdminModel}
       />
     </div>
   );

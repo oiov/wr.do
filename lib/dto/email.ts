@@ -31,6 +31,9 @@ export interface OriginalEmail {
 
 export interface UserEmailList extends UserEmail {
   count: number;
+  unreadCount: number;
+  user: string;
+  email: string;
 }
 
 export async function saveForwardEmail(emailData: OriginalEmail) {
@@ -55,6 +58,7 @@ export async function saveForwardEmail(emailData: OriginalEmail) {
       cc: emailData.cc,
       headers: "[]",
       attachments: JSON.stringify(emailData.attachments),
+      readAt: null,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     },
@@ -71,14 +75,25 @@ export async function getAllUserEmails(
   page: number,
   size: number,
   search: string,
+  admin: boolean, // 是否是开启管理员查询
 ) {
+  let whereOptions = {};
+  if (admin) {
+    whereOptions = {
+      deletedAt: null,
+      emailAddress: { contains: search, mode: "insensitive" },
+    };
+  } else {
+    whereOptions = {
+      userId,
+      deletedAt: null,
+      emailAddress: { contains: search, mode: "insensitive" },
+    };
+  }
+
   const [userEmails, total] = await Promise.all([
     prisma.userEmail.findMany({
-      where: {
-        userId,
-        deletedAt: null,
-        emailAddress: { contains: search, mode: "insensitive" },
-      },
+      where: { ...whereOptions },
       select: {
         id: true,
         userId: true,
@@ -86,6 +101,12 @@ export async function getAllUserEmails(
         createdAt: true,
         updatedAt: true,
         _count: { select: { forwardEmails: true } },
+        user: { select: { name: true, email: true } },
+        forwardEmails: {
+          select: {
+            readAt: true,
+          },
+        },
       },
       skip: page * size,
       take: size,
@@ -94,18 +115,25 @@ export async function getAllUserEmails(
       },
     }),
     prisma.userEmail.count({
-      where: {
-        userId,
-        deletedAt: null,
-        emailAddress: { contains: search, mode: "insensitive" },
-      },
+      where: { ...whereOptions },
     }),
   ]);
 
-  const result = userEmails.map((email) => ({
-    ...email,
-    count: email._count.forwardEmails,
-  }));
+  const result = userEmails.map((email) => {
+    // 计算未读邮件数量
+    const unreadCount = email.forwardEmails.filter(
+      (mail) => mail.readAt === null,
+    ).length;
+
+    return {
+      ...email,
+      count: email._count.forwardEmails, // 总邮件数
+      unreadCount: unreadCount, // 未读邮件数
+      user: email.user.name,
+      email: email.user.email,
+      forwardEmails: undefined,
+    };
+  });
 
   return {
     list: result,
@@ -199,4 +227,133 @@ export async function getEmailsByEmailAddress(
     list,
     total,
   };
+}
+
+/**
+ * 将邮件标记为已读
+ * @param emailId 需要标记为已读的邮件ID
+ * @param userId 当前用户ID (用于权限验证)
+ * @returns 更新后的邮件信息
+ */
+export async function markEmailAsRead(emailId: string, userId: string) {
+  try {
+    // 首先查询邮件是否存在，并检查权限
+    const email = await prisma.forwardEmail.findFirst({
+      where: {
+        id: emailId,
+        UserEmail: {
+          userId,
+        },
+        readAt: null,
+      },
+      include: {
+        UserEmail: true,
+      },
+    });
+
+    if (!email) {
+      throw new Error("邮件已读不存在或您没有权限访问此邮件");
+    }
+
+    // 更新邮件的 readAt 字段为当前时间
+    const updatedEmail = await prisma.forwardEmail.update({
+      where: {
+        id: emailId,
+      },
+      data: {
+        readAt: new Date(),
+      },
+    });
+
+    return updatedEmail;
+  } catch (error) {
+    console.error("标记邮件为已读失败:", error);
+    throw error;
+  }
+}
+
+/**
+ * 批量将邮件标记为已读
+ * @param emailIds 需要标记为已读的邮件ID数组
+ * @param userId 当前用户ID (用于权限验证)
+ * @returns 更新的邮件数量
+ */
+export async function markEmailsAsRead(emailIds: string[], userId: string) {
+  try {
+    // 验证所有邮件是否属于该用户
+    const emails = await prisma.forwardEmail.findMany({
+      where: {
+        id: { in: emailIds },
+        UserEmail: {
+          userId: userId,
+        },
+      },
+    });
+
+    // 获取有效的邮件IDs (用户有权限的)
+    const validEmailIds = emails.map((email) => email.id);
+
+    if (validEmailIds.length === 0) {
+      throw new Error("没有找到可标记的邮件或您没有权限");
+    }
+
+    // 批量更新邮件的 readAt 字段
+    const updateResult = await prisma.forwardEmail.updateMany({
+      where: {
+        id: { in: validEmailIds },
+      },
+      data: {
+        readAt: new Date(),
+      },
+    });
+
+    return {
+      updatedCount: updateResult.count,
+      message: `成功将 ${updateResult.count} 封邮件标记为已读`,
+    };
+  } catch (error) {
+    console.error("批量标记邮件为已读失败:", error);
+    throw error;
+  }
+}
+
+/**
+ * 将指定用户邮箱的所有邮件标记为已读
+ * @param userEmailId 用户邮箱ID
+ * @param userId 当前用户ID (用于权限验证)
+ * @returns 更新的邮件数量
+ */
+export async function markAllEmailsAsRead(userEmailId: string, userId: string) {
+  try {
+    // 验证用户邮箱是否属于该用户
+    const userEmail = await prisma.userEmail.findFirst({
+      where: {
+        id: userEmailId,
+        userId: userId,
+      },
+    });
+
+    if (!userEmail) {
+      throw new Error("邮箱不存在或您没有权限");
+    }
+
+    // 更新该邮箱下所有未读邮件
+    const updateResult = await prisma.forwardEmail.updateMany({
+      where: {
+        to: userEmail.emailAddress,
+        readAt: null,
+      },
+      data: {
+        readAt: new Date(),
+      },
+    });
+
+    return {
+      updatedCount: updateResult.count,
+      message: `成功将 ${updateResult.count} 封邮件标记为已读`,
+    };
+  } catch (error) {
+    console.error("标记所有邮件为已读失败:", error);
+    throw error;
+  }
 }

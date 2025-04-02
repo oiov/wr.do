@@ -29,6 +29,8 @@ import Loader from "./Loader";
 
 import "react-quill/dist/quill.snow.css";
 
+import { Check } from "lucide-react";
+
 import {
   Drawer,
   DrawerClose,
@@ -37,6 +39,13 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "../ui/drawer";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -45,6 +54,7 @@ interface EmailListProps {
   selectedEmailId: string | null;
   onSelectEmail: (emailId: string | null) => void;
   className?: string;
+  isAdminModel: boolean;
 }
 
 export default function EmailList({
@@ -52,6 +62,7 @@ export default function EmailList({
   selectedEmailId,
   onSelectEmail,
   className,
+  isAdminModel,
 }: EmailListProps) {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isAutoRefresh, setIsAutoRefresh] = useState(false);
@@ -60,6 +71,9 @@ export default function EmailList({
   const [showSendDrawer, setShowSendDrawer] = useState(false);
   const [sendForm, setSendForm] = useState({ to: "", subject: "", html: "" });
   const [isPending, startTransition] = useTransition();
+  const [selectedEmails, setSelectedEmails] = useState<string[]>([]);
+
+  const [showMutiCheckBox, setShowMutiCheckBox] = useState(false);
 
   const { data, error, isLoading, mutate } = useSWR<{
     total: number;
@@ -70,7 +84,6 @@ export default function EmailList({
       : null,
     fetcher,
     {
-      revalidateOnFocus: false,
       refreshInterval: isAutoRefresh ? 5000 : 0,
       dedupingInterval: 2000, // 避免短时间内重复请求
     },
@@ -224,6 +237,56 @@ export default function EmailList({
     );
   }
 
+  // 处理单封邮件标记为已读
+  const handleMarkAsRead = async (emailId: string) => {
+    try {
+      await fetch("/api/email/read", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ emailId }),
+      }).then(() => mutate());
+    } catch (error) {
+      console.log("Error marking email as read");
+    }
+  };
+
+  // 处理批量标记为已读
+  const handleMarkSelectedAsRead = async () => {
+    if (selectedEmails.length === 0) {
+      toast.error("Please select at least one email");
+      return;
+    }
+
+    startTransition(async () => {
+      try {
+        const response = await fetch("/api/email/read", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ emailIds: selectedEmails }),
+        });
+
+        if (response.ok) {
+          setSelectedEmails([]);
+          mutate();
+        } else {
+          const errorData = await response.json();
+          toast.error(errorData.error || "Failed to mark emails as read");
+        }
+      } catch (error) {
+        toast.error("Error marking emails as read");
+      }
+    });
+  };
+
+  // 处理邮件选择
+  const handleSelectEmail = (emailId: string) => {
+    setSelectedEmails((prev) =>
+      prev.includes(emailId)
+        ? prev.filter((id) => id !== emailId)
+        : [...prev, emailId],
+    );
+  };
+
   const handleSetAutoRefresh = (value: boolean) => {
     setIsAutoRefresh(value);
   };
@@ -277,8 +340,18 @@ export default function EmailList({
     });
   };
 
+  const handleEmailSelection = (emailId: string | null) => {
+    if (emailId) {
+      const selectedEmail = data?.list?.find((email) => email.id === emailId);
+      if (selectedEmail && !selectedEmail.readAt) {
+        handleMarkAsRead(emailId);
+      }
+    }
+    onSelectEmail(emailId);
+  };
+
   return (
-    <div className={cn("grids flex max-w-full flex-1 flex-col", className)}>
+    <div className={cn("grids flex flex-1 flex-col", className)}>
       <div className="flex items-center gap-2 bg-neutral-200/40 p-2 text-base font-semibold text-neutral-600 backdrop-blur dark:bg-neutral-800 dark:text-neutral-50">
         <Icons.mail size={20} />
         <span>INBOX</span>
@@ -330,6 +403,55 @@ export default function EmailList({
               )}
             />
           </Button>
+          <Button
+            variant="outline"
+            size={"sm"}
+            onClick={() => setShowMutiCheckBox(!showMutiCheckBox)}
+          >
+            <Icons.listChecks className="size-4" />
+          </Button>
+          {selectedEmails.length > 0 && (
+            <>
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex w-full items-center gap-1"
+                    disabled={isPending}
+                  >
+                    <span className="text-sm">more</span>
+                    <Icons.chevronDown className="mt-0.5 size-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleMarkSelectedAsRead}
+                      className="w-full"
+                      disabled={isPending}
+                    >
+                      <span className="text-xs">Mask as read</span>
+                    </Button>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      // onClick={handleMarkSelectedAsRead}
+                      className="w-full"
+                      disabled={isPending}
+                    >
+                      <span className="text-xs">Delete selected</span>
+                    </Button>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>
+          )}
         </div>
       </div>
       {isLoading && (
@@ -352,6 +474,7 @@ export default function EmailList({
               email={data?.list?.find((email) => email.id === selectedEmailId)}
               selectedEmailId={selectedEmailId}
               onClose={() => onSelectEmail(null)}
+              onMarkAsRead={() => handleMarkAsRead(selectedEmailId)}
             />
           ) : (
             <>
@@ -359,24 +482,46 @@ export default function EmailList({
                 data.list.map((email) => (
                   <div
                     key={email.id}
-                    onClick={() => onSelectEmail(email.id)}
-                    className="max-w-full cursor-pointer border-b border-dotted bg-neutral-100/50 p-2 hover:bg-gray-100 dark:border-neutral-700 dark:bg-neutral-900 hover:dark:bg-neutral-700"
+                    className="border-b border-dotted bg-neutral-100/50 p-2 hover:bg-gray-100 dark:border-neutral-700 dark:bg-neutral-900 hover:dark:bg-neutral-700"
                   >
-                    <div className="mb-1 flex items-center justify-between">
-                      <span className="w-3/4 truncate text-sm font-semibold text-neutral-800 dark:text-neutral-200">
-                        {email.fromName || email.subject || "Untitled"}
-                      </span>
-                      <span className="text-xs text-neutral-600 dark:text-neutral-400">
-                        {timeAgo((email.date as any) || email.createdAt)}
-                      </span>
-                    </div>
-                    <div className="mb-0.5 line-clamp-1 w-3/4 truncate text-xs font-medium text-neutral-600 dark:text-neutral-400">
-                      {email.subject}
-                    </div>
-                    <div className="line-clamp-2 break-all text-xs text-neutral-500">
-                      {email.html
-                        ? htmlToText(email.html)
-                        : email.text || "No content"}
+                    <div className="flex items-center justify-between">
+                      {showMutiCheckBox && (
+                        <div
+                          className="flex items-center gap-2"
+                          onClick={(e) => e.stopPropagation()} // 在操作容器上阻止冒泡
+                        >
+                          <Input
+                            type="checkbox"
+                            checked={selectedEmails.includes(email.id)}
+                            onChange={() => handleSelectEmail(email.id)}
+                            className="mr-2 size-4"
+                          />
+                        </div>
+                      )}
+                      <div
+                        className="flex-1 cursor-pointer"
+                        onClick={() => handleEmailSelection(email.id)}
+                      >
+                        <div className="mb-1 flex items-center justify-between">
+                          <span className="w-3/4 truncate text-sm font-semibold text-neutral-800 dark:text-neutral-200">
+                            {email.fromName || email.subject || "Untitled"}
+                          </span>
+                          <span className="ml-auto text-xs text-neutral-600 dark:text-neutral-400">
+                            {timeAgo((email.date as any) || email.createdAt)}
+                          </span>
+                          {email.readAt && (
+                            <Icons.checkCheck className="ml-2 size-3 text-green-600" />
+                          )}
+                        </div>
+                        <div className="mb-0.5 line-clamp-1 w-3/4 truncate text-xs font-medium text-neutral-600 dark:text-neutral-400">
+                          {email.subject}
+                        </div>
+                        <div className="line-clamp-2 break-all text-xs text-neutral-500">
+                          {email.html
+                            ? htmlToText(email.html)
+                            : email.text || "No content"}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ))

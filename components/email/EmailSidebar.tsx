@@ -18,9 +18,11 @@ import { siteConfig } from "@/config/site";
 import { UserEmailList } from "@/lib/dto/email";
 import { cn, fetcher, timeAgo } from "@/lib/utils";
 
+import CountUp from "../dashboard/count-up";
 import { CopyButton } from "../shared/copy-button";
 import { EmptyPlaceholder } from "../shared/empty-placeholder";
 import { Icons } from "../shared/icons";
+import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Modal } from "../ui/modal"; // 引入 Modal 组件
@@ -33,6 +35,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Skeleton } from "../ui/skeleton";
+import { Switch } from "../ui/switch";
 
 interface EmailSidebarProps {
   user: User;
@@ -41,6 +44,8 @@ interface EmailSidebarProps {
   className?: string;
   isCollapsed?: boolean;
   setIsCollapsed: (isCollapsed: boolean) => void;
+  isAdminModel: boolean;
+  setAdminModel: (isAdminModel: boolean) => void;
 }
 
 export default function EmailSidebar({
@@ -50,6 +55,8 @@ export default function EmailSidebar({
   className,
   isCollapsed,
   setIsCollapsed,
+  isAdminModel,
+  setAdminModel,
 }: EmailSidebarProps) {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -71,7 +78,7 @@ export default function EmailSidebar({
     previousPageData: { list: UserEmail[] } | null,
   ) => {
     if (previousPageData && !previousPageData.list.length) return null;
-    return `/api/email?page=${pageIndex}&size=${pageSize}&search=${searchQuery}`;
+    return `/api/email?page=${pageIndex}&size=${pageSize}&search=${searchQuery}&all=${isAdminModel}`;
   };
 
   const { data, isLoading, error, size, setSize, mutate } = useSWRInfinite<{
@@ -90,6 +97,16 @@ export default function EmailSidebar({
 
   const userEmails = data ? data.flatMap((page) => page.list) : [];
   const hasMore = data && data[data.length - 1]?.list.length === pageSize;
+
+  const totalInboxEmails = userEmails.reduce(
+    (sum, email) => sum + (email.count || 0),
+    0,
+  );
+
+  const totalUnreadEmails = userEmails.reduce(
+    (sum, email) => sum + (email.unreadCount || 0),
+    0,
+  );
 
   const handleLoadMore = () => {
     if (hasMore && !isLoading) {
@@ -272,6 +289,69 @@ export default function EmailSidebar({
           <SquarePlus className="size-4" />
           {!isCollapsed && <span className="text-xs">Create New Email</span>}
         </Button>
+
+        {!isCollapsed && (
+          <div className="mt-4 grid grid-cols-2 gap-2 rounded-lg text-xs text-neutral-700 dark:bg-gray-900 dark:text-neutral-400">
+            {/* Address */}
+            <div className="flex flex-col items-center gap-1 rounded-md bg-neutral-100 px-1 pb-1 pt-2 transition-colors hover:bg-neutral-200 dark:bg-gray-800 dark:hover:bg-gray-700">
+              <div className="flex items-center gap-1">
+                <Icons.mail className="size-3" />
+                <p className="line-clamp-1 text-start font-medium">Address</p>
+              </div>
+              <p className="text-base font-semibold text-gray-900 dark:text-gray-100">
+                <CountUp count={data ? data[0].total : 0} />
+              </p>
+            </div>
+
+            {/* Inbox Emails */}
+            <div className="flex flex-col items-center gap-1 rounded-md bg-neutral-100 px-1 pb-1 pt-2 transition-colors hover:bg-neutral-200 dark:bg-gray-800 dark:hover:bg-gray-700">
+              <div className="flex items-center gap-1">
+                <Icons.inbox className="size-3" />
+                <p className="line-clamp-1 text-start font-medium">
+                  Inbox Emails
+                </p>
+              </div>
+              <p className="text-base font-semibold text-gray-900 dark:text-gray-100">
+                <CountUp count={totalInboxEmails} />
+              </p>
+            </div>
+
+            <div className="flex flex-col items-center gap-1 rounded-md bg-neutral-100 px-1 pb-1 pt-2 transition-colors hover:bg-neutral-200 dark:bg-gray-800 dark:hover:bg-gray-700">
+              <div className="flex items-center gap-1">
+                <Icons.mailOpen className="size-3" />
+                <p className="line-clamp-1 text-start font-medium">
+                  Unread Emails
+                </p>
+              </div>
+              <p className="text-base font-semibold text-gray-900 dark:text-gray-100">
+                <CountUp count={totalUnreadEmails} />
+              </p>
+            </div>
+
+            {/* Sent Emails */}
+            <div className="flex flex-col items-center gap-1 rounded-md bg-neutral-200 px-1 pb-1 pt-2 transition-colors hover:bg-neutral-200 dark:bg-gray-800 dark:hover:bg-gray-700">
+              <div className="flex items-center gap-1">
+                <Icons.send className="size-3" />
+                <p className="line-clamp-1 text-start font-medium">
+                  Sent Emails
+                </p>
+              </div>
+              <p className="text-base font-semibold text-gray-900 dark:text-gray-100">
+                {/* <CountUp count={0} /> */}--
+              </p>
+            </div>
+          </div>
+        )}
+
+        {!isCollapsed && user.role === "ADMIN" && (
+          <div className="mt-2 flex items-center gap-2 text-sm">
+            Admin Mode:{" "}
+            <Switch
+              defaultChecked={isAdminModel}
+              onCheckedChange={(v) => setAdminModel(v)}
+            />
+          </div>
+        )}
       </div>
 
       <div className="scrollbar-hidden flex-1 overflow-y-scroll">
@@ -289,13 +369,13 @@ export default function EmailSidebar({
           </div>
         )}
         {error && (
-          <div className="flex flex-col gap-1 px-1">
+          <div className="flex flex-col gap-1 p-1">
             <Skeleton className="h-[50px] w-full rounded-lg" />
             <Skeleton className="h-[50px] w-full rounded-lg" />
             <Skeleton className="h-[50px] w-full rounded-lg" />
           </div>
         )}
-        {userEmails && userEmails.length === 0 && (
+        {!error && userEmails && userEmails.length === 0 && (
           <>
             {!isCollapsed ? (
               <div className="flex h-full items-center justify-center">
@@ -328,7 +408,7 @@ export default function EmailSidebar({
             key={email.id}
             onClick={() => onSelectEmail(email.emailAddress)}
             className={cn(
-              `border-gray-5 cursor-pointer border-b border-dashed p-2 transition-colors hover:bg-gray-100 dark:border-zinc-700 dark:hover:bg-neutral-800`,
+              `border-gray-5 m-1 cursor-pointer bg-neutral-50 p-2 transition-colors hover:bg-neutral-100 dark:border-zinc-700 dark:hover:bg-neutral-800`,
               selectedEmailAddress === email.emailAddress
                 ? "bg-gray-100 dark:bg-neutral-800"
                 : "",
@@ -377,8 +457,18 @@ export default function EmailSidebar({
             </div>
             {!isCollapsed && (
               <div className="mt-2 flex items-center justify-between gap-2 text-xs text-gray-500">
-                <span>{email.count} emails </span>
-                <span> Created at {timeAgo(email.createdAt)}</span>
+                <div className="flex items-center gap-1">
+                  {email.unreadCount > 0 && (
+                    <Badge variant="default">{email.unreadCount}</Badge>
+                  )}
+                  {email.count} recived
+                </div>
+                <span>
+                  {isAdminModel
+                    ? `Created by ${email.user || email.email.slice(0, 5)} at`
+                    : ""}{" "}
+                  {timeAgo(email.createdAt)}
+                </span>
               </div>
             )}
           </div>
@@ -389,7 +479,7 @@ export default function EmailSidebar({
             variant="secondary"
             onClick={handleLoadMore}
           >
-            Load more
+            Load more {data[0].total - userEmails.length}+
           </Button>
         )}
       </div>
