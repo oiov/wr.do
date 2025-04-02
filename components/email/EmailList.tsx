@@ -390,7 +390,7 @@ export default function EmailList({
         </div>
       )}
       {!isLoading && !error && (
-        <div className="scrollbar-hidden relative h-[calc(100vh-105px)] animate-fade-in overflow-y-scroll p-3">
+        <div className="scrollbar-hidden relative h-[calc(100vh-105px)] animate-fade-in overflow-scroll p-3">
           {selectedEmailId ? (
             <EmailDetail
               email={data?.list?.find((email) => email.id === selectedEmailId)}

@@ -168,36 +168,36 @@ export default function EmailDetail({
       )}
     >
       <div className="flex items-start justify-between gap-2 border-b px-2 py-2">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-gray-300 to-gray-900 text-sm font-bold text-white">
+        <div
+          onClick={onClose}
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-gray-300 to-gray-900 text-sm font-bold text-white"
+        >
           {email.subject?.[0].toUpperCase() ||
             email.fromName?.[0].toUpperCase() ||
             "U"}
         </div>
-        <div className="mr-auto text-xs text-neutral-600 dark:text-neutral-300">
+        <div className="max-w-[80%] flex-grow text-xs text-neutral-600 dark:text-neutral-300">
           <TooltipProvider>
             <Tooltip delayDuration={100}>
-              <TooltipTrigger className="w-4/5 truncate text-left">
+              <TooltipTrigger className="line-clamp-2 text-wrap text-left">
                 <strong>From:</strong> {email.fromName} &lt;{email.from}&gt;
               </TooltipTrigger>
-              <TooltipContent className="w-60">
-                {email.fromName} &lt;{email.from}&gt;
+              <TooltipContent side="bottom" className="w-60 text-wrap">
+                {email.fromName} <br />
+                {email.from}
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
           <p>
             <strong>To:</strong> {email.to}
           </p>
-          <p>
-            <strong>Reply-To:</strong> {email.replyTo}
-          </p>
+          {email.replyTo && (
+            <p>
+              <strong>Reply-To:</strong> {email.replyTo}
+            </p>
+          )}
           <p>
             <strong>Date:</strong> {formatDate(email.date as any)}
-            {/* {email.readAt && (
-              <>
-                <strong className="ml-2">Read At</strong>:{" "}
-                {formatDate(email.readAt as any)}
-              </>
-            )} */}
           </p>
           {attachments.length > 0 && (
             <p>
@@ -206,7 +206,7 @@ export default function EmailDetail({
           )}
         </div>
         <Button
-          className="ml-auto size-8 px-1 py-1"
+          className="ml-auto size-8 flex-grow-0 px-1 py-1"
           size={"sm"}
           onClick={onClose}
           variant={"outline"}
@@ -215,7 +215,7 @@ export default function EmailDetail({
         </Button>
       </div>
 
-      <div className="scrollbar-hidden flex h-full flex-col justify-between overflow-y-auto overflow-x-scroll px-2 py-3">
+      <div className="scrollbar-hidden flex h-full flex-col justify-between overflow-y-auto px-2 py-3">
         <div
           className=""
           dangerouslySetInnerHTML={{

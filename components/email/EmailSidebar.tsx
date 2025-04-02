@@ -291,9 +291,9 @@ export default function EmailSidebar({
         </Button>
 
         {!isCollapsed && (
-          <div className="mt-4 grid grid-cols-2 gap-2 rounded-lg text-xs text-neutral-700 dark:bg-gray-900 dark:text-neutral-400">
+          <div className="mt-4 grid grid-cols-2 gap-2 rounded-lg text-xs text-neutral-700 dark:bg-neutral-900 dark:text-neutral-400">
             {/* Address */}
-            <div className="flex flex-col items-center gap-1 rounded-md bg-neutral-100 px-1 pb-1 pt-2 transition-colors hover:bg-neutral-200 dark:bg-gray-800 dark:hover:bg-gray-700">
+            <div className="flex flex-col items-center gap-1 rounded-md bg-neutral-100 px-1 pb-1 pt-2 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-gray-700">
               <div className="flex items-center gap-1">
                 <Icons.mail className="size-3" />
                 <p className="line-clamp-1 text-start font-medium">Address</p>
@@ -304,7 +304,7 @@ export default function EmailSidebar({
             </div>
 
             {/* Inbox Emails */}
-            <div className="flex flex-col items-center gap-1 rounded-md bg-neutral-100 px-1 pb-1 pt-2 transition-colors hover:bg-neutral-200 dark:bg-gray-800 dark:hover:bg-gray-700">
+            <div className="flex flex-col items-center gap-1 rounded-md bg-neutral-100 px-1 pb-1 pt-2 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-gray-700">
               <div className="flex items-center gap-1">
                 <Icons.inbox className="size-3" />
                 <p className="line-clamp-1 text-start font-medium">
@@ -316,7 +316,7 @@ export default function EmailSidebar({
               </p>
             </div>
 
-            <div className="flex flex-col items-center gap-1 rounded-md bg-neutral-100 px-1 pb-1 pt-2 transition-colors hover:bg-neutral-200 dark:bg-gray-800 dark:hover:bg-gray-700">
+            <div className="flex flex-col items-center gap-1 rounded-md bg-neutral-100 px-1 pb-1 pt-2 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-gray-700">
               <div className="flex items-center gap-1">
                 <Icons.mailOpen className="size-3" />
                 <p className="line-clamp-1 text-start font-medium">
@@ -329,7 +329,7 @@ export default function EmailSidebar({
             </div>
 
             {/* Sent Emails */}
-            <div className="flex flex-col items-center gap-1 rounded-md bg-neutral-200 px-1 pb-1 pt-2 transition-colors hover:bg-neutral-200 dark:bg-gray-800 dark:hover:bg-gray-700">
+            <div className="flex flex-col items-center gap-1 rounded-md bg-neutral-200 px-1 pb-1 pt-2 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-gray-700">
               <div className="flex items-center gap-1">
                 <Icons.send className="size-3" />
                 <p className="line-clamp-1 text-start font-medium">
@@ -408,9 +408,9 @@ export default function EmailSidebar({
             key={email.id}
             onClick={() => onSelectEmail(email.emailAddress)}
             className={cn(
-              `border-gray-5 m-1 cursor-pointer bg-neutral-50 p-2 transition-colors hover:bg-neutral-100 dark:border-zinc-700 dark:hover:bg-neutral-800`,
+              `border-gray-5 m-1 cursor-pointer bg-neutral-50 p-2 transition-colors hover:bg-neutral-100 dark:border-zinc-700 dark:bg-neutral-800 dark:hover:bg-neutral-900`,
               selectedEmailAddress === email.emailAddress
-                ? "bg-gray-100 dark:bg-neutral-800"
+                ? "bg-gray-100 dark:bg-neutral-900"
                 : "",
               isCollapsed ? "flex items-center justify-center" : "",
             )}
