@@ -14,10 +14,8 @@ import { PaginationWrapper } from "../shared/pagination";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { Modal } from "../ui/modal";
 import { Skeleton } from "../ui/skeleton";
 import { Switch } from "../ui/switch";
-import { Textarea } from "../ui/textarea";
 import {
   Tooltip,
   TooltipContent,
@@ -29,8 +27,7 @@ import Loader from "./Loader";
 
 import "react-quill/dist/quill.snow.css";
 
-import { Check } from "lucide-react";
-
+import { BlurImg } from "../shared/blur-image";
 import {
   Drawer,
   DrawerClose,
@@ -101,90 +98,15 @@ export default function EmailList({
     }
   }, [emailAddress, data, selectedEmailId]);
 
-  if (!emailAddress) {
+  if (emailAddress) {
     return (
       <div className="grids flex flex-1 animate-fade-in flex-col items-center justify-center p-4 text-center text-neutral-600 dark:text-neutral-400">
-        <svg
-          id="iconce.com"
-          width="120"
-          height="120"
-          viewBox="0 0 120 120"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          xmlnsXlink="http://www.w3.org/1999/xlink"
-        >
-          <defs>
-            <linearGradient
-              id="r5"
-              gradientUnits="userSpaceOnUse"
-              gradientTransform="rotate(45)"
-              style={{ transformOrigin: "center center" }}
-            >
-              <animateTransform
-                attributeName="gradientTransform"
-                type="rotate"
-                values="0;360"
-                dur="5s"
-                repeatCount="indefinite"
-              />
-              <stop stopColor="#CCCFE2">
-                <animate
-                  attributeName="stopColor"
-                  values="#CCCFE2;#25242B;#CCCFE2"
-                  dur="3s"
-                  repeatCount="indefinite"
-                />
-              </stop>
-              <stop offset="1" stopColor="#25242B">
-                <animate
-                  attributeName="stopColor"
-                  values="#25242B;#CCCFE2;#25242B"
-                  dur="3s"
-                  repeatCount="indefinite"
-                />
-              </stop>
-            </linearGradient>
-            <radialGradient
-              id="r6"
-              cx="0"
-              cy="0"
-              r="1"
-              gradientUnits="userSpaceOnUse"
-              gradientTransform="translate(256) rotate(90) scale(512)"
-            >
-              <stop stopColor="white" />
-              <stop offset="1" stopColor="white" stopOpacity="0" />
-            </radialGradient>
-          </defs>
-          <rect
-            id="r4"
-            width="100"
-            height="100"
-            x="5"
-            y="5"
-            rx="16"
-            fill="url(#r5)"
-            paintOrder="stroke"
-          />
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="80"
-            height="80"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#FFFFFF"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="text-white"
-            alignmentBaseline="middle"
-            x="15"
-            y="15"
-          >
-            <rect width="20" height="16" x="2" y="4" rx="2" />
-            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-          </svg>
-        </svg>
+        <BlurImg
+          className="size-40"
+          src="/_static/landing/mailbox.svg"
+          height={200}
+          width={200}
+        />
 
         <h2 className="my-2 text-lg font-semibold">
           No Email Address Selected
