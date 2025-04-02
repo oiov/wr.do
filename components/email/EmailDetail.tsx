@@ -176,34 +176,34 @@ export default function EmailDetail({
             email.fromName?.[0].toUpperCase() ||
             "U"}
         </div>
-        <div className="max-w-[80%] flex-grow text-xs text-neutral-600 dark:text-neutral-300">
+        <div className="max-w-[80%] flex-grow text-neutral-600 dark:text-neutral-300">
           <p className="text-sm">
             <strong>{email.subject}</strong>
           </p>
           <TooltipProvider>
             <Tooltip delayDuration={100}>
-              <TooltipTrigger className="line-clamp-2 text-wrap text-left">
+              <TooltipTrigger className="line-clamp-2 text-wrap text-left text-xs">
                 <strong>From:</strong> {email.fromName} &lt;{email.from}&gt;
               </TooltipTrigger>
-              <TooltipContent side="bottom" className="w-60 text-wrap">
+              <TooltipContent side="bottom" className="w-60 text-wrap text-xs">
                 {email.fromName} <br />
                 {email.from}
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          <p>
+          <p className="text-xs">
             <strong>To:</strong> {email.to}
           </p>
           {email.replyTo && (
-            <p>
+            <p className="text-xs">
               <strong>Reply-To:</strong> {email.replyTo}
             </p>
           )}
-          <p>
+          <p className="text-xs">
             <strong>Date:</strong> {formatDate(email.date as any)}
           </p>
           {attachments.length > 0 && (
-            <p>
+            <p className="text-xs">
               <strong>Attachments</strong>: {attachments.length}
             </p>
           )}
