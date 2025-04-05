@@ -361,7 +361,7 @@ export function EmptyInboxSection() {
             target="_blank"
             rel="noreferrer"
           >
-            What is the limit? It&apos;s free?
+            What is the limit? It's free?
           </Link>
         </li>
       </ul>
