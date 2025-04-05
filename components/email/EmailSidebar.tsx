@@ -369,7 +369,7 @@ export default function EmailSidebar({
                   <EmptyPlaceholder.Icon name="mailPlus" />
                   <EmptyPlaceholder.Title>No emails</EmptyPlaceholder.Title>
                   <EmptyPlaceholder.Description>
-                    You don't have any email yet. Start creating email.
+                    You don&apos;t have any email yet. Start creating email.
                   </EmptyPlaceholder.Description>
                 </EmptyPlaceholder>
               </div>

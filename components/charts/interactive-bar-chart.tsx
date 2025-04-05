@@ -1,9 +1,11 @@
 "use client";
 
 import * as React from "react";
+import { useState } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import useSWR from "swr";
 
+import { DATE_DIMENSION_ENUMS } from "@/lib/enums";
 import { fetcher } from "@/lib/utils";
 import {
   Card,
@@ -19,6 +21,13 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 import { Skeleton } from "../ui/skeleton";
 
 const chartConfig = {
@@ -37,17 +46,42 @@ const chartConfig = {
     label: "Users",
     color: "hsl(var(--chart-1))",
   },
+  emails: {
+    label: "Emails",
+    color: "hsl(var(--chart-2))",
+  },
+  inbox: {
+    label: "Inbox",
+    color: "hsl(var(--chart-1))",
+  },
 } satisfies ChartConfig;
 
 export function InteractiveBarChart() {
+  const [timeRange, setTimeRange] = useState<string>("90d");
   const [activeChart, setActiveChart] =
     React.useState<keyof typeof chartConfig>("users");
 
   const { data, isLoading } = useSWR<{
-    list: [{ records: number; urls: number; users: number; date: string }];
-    total: { records: number; urls: number; users: number };
-  }>(`api/admin`, fetcher, {
+    list: [
+      {
+        records: number;
+        urls: number;
+        users: number;
+        emails: number;
+        inbox: number;
+        date: string;
+      },
+    ];
+    total: {
+      records: number;
+      urls: number;
+      users: number;
+      emails: number;
+      inbox: number;
+    };
+  }>(`api/admin?range=${timeRange}`, fetcher, {
     revalidateOnFocus: false,
+    dedupingInterval: 60000,
   });
 
   if (isLoading) return <Skeleton className="size-full rounded-lg" />;
@@ -60,17 +94,36 @@ export function InteractiveBarChart() {
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
           <CardTitle>Data Increase</CardTitle>
           <CardDescription>
-            Showing total data for the last 3 months
+            Showing data increase in
+            <Select
+              onValueChange={(value: string) => {
+                setTimeRange(value);
+              }}
+              name="time range"
+              defaultValue={timeRange}
+            >
+              <SelectTrigger className="mt-1 w-40 shadow-inner">
+                <SelectValue placeholder="Select a time" />
+              </SelectTrigger>
+              <SelectContent>
+                {DATE_DIMENSION_ENUMS.map((e) => (
+                  <SelectItem key={e.value} value={e.value}>
+                    {e.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </CardDescription>
         </div>
+
         <div className="flex">
-          {["users", "records", "urls"].map((key) => {
+          {["users", "records", "urls", "emails", "inbox"].map((key) => {
             const chart = key as keyof typeof chartConfig;
             return (
               <button
                 key={chart}
                 data-active={activeChart === chart}
-                className="relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-6"
+                className="relative z-30 flex flex-1 flex-col justify-center gap-1 border-l border-t p-4 text-left data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:p-6"
                 onClick={() => setActiveChart(chart)}
               >
                 <span className="text-xs text-muted-foreground">

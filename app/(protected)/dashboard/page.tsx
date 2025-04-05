@@ -42,19 +42,19 @@ export default async function DashboardPage() {
           />
           <DashboardInfoCard
             userId={user.id}
-            title="DNS Records"
-            count={record_count}
-            total={Team_Plan_Quota[user.team].RC_NewRecords}
-            link="/dashboard/records"
-            icon="globeLock"
-          />
-          <DashboardInfoCard
-            userId={user.id}
             title="Short URLs"
             count={url_count}
             total={Team_Plan_Quota[user.team].SL_NewLinks}
             link="/dashboard/urls"
             icon="link"
+          />
+          <DashboardInfoCard
+            userId={user.id}
+            title="DNS Records"
+            count={record_count}
+            total={Team_Plan_Quota[user.team].RC_NewRecords}
+            link="/dashboard/records"
+            icon="globeLock"
           />
         </div>
         <UserRecordsList

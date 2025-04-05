@@ -52,17 +52,17 @@ export default async function AdminPage() {
           />
           <DashboardInfoCard
             userId={user.id}
-            title="DNS Records"
-            count={record_count}
-            link="/admin/records"
-            icon="globeLock"
-          />
-          <DashboardInfoCard
-            userId={user.id}
             title="Short URLs"
             count={url_count}
             link="/admin/urls"
             icon="link"
+          />
+          <DashboardInfoCard
+            userId={user.id}
+            title="DNS Records"
+            count={record_count}
+            link="/admin/records"
+            icon="globeLock"
           />
         </div>
         <InteractiveBarChart />
