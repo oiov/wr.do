@@ -278,7 +278,7 @@ export default function EmailList({
   return (
     <div className={cn("grids flex flex-1 flex-col", className)}>
       <div className="flex items-center gap-2 bg-neutral-200/40 p-2 text-base font-semibold text-neutral-600 backdrop-blur dark:bg-neutral-800 dark:text-neutral-50">
-        <Icons.mail size={20} />
+        <Icons.inbox size={20} />
         <span>INBOX</span>
         {data && data.total > 0 && (
           <Badge
@@ -301,7 +301,6 @@ export default function EmailList({
           <TooltipProvider>
             <Tooltip delayDuration={200}>
               <TooltipTrigger>
-                {/* 自定义开关图标 */}
                 <Switch
                   className="mt-1 data-[state=checked]:bg-blue-500 data-[state=unchecked]:bg-neutral-300 dark:data-[state=unchecked]:bg-neutral-200"
                   onCheckedChange={(value) => handleSetAutoRefresh(value)}
