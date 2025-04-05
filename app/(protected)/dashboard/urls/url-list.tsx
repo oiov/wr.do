@@ -192,7 +192,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
             <div className="grid gap-2">
               <CardTitle>Short URLs</CardTitle>
               <CardDescription className="text-balance">
-                Your Short URLs
+                Your Short URLs. Create links manually or use the API.
               </CardDescription>
             </div>
           )}

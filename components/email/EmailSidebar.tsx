@@ -18,6 +18,7 @@ import { siteConfig } from "@/config/site";
 import { UserEmailList } from "@/lib/dto/email";
 import { reservedAddressSuffix } from "@/lib/enums";
 import { cn, fetcher, timeAgo } from "@/lib/utils";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 import CountUp from "../dashboard/count-up";
 import { CopyButton } from "../shared/copy-button";
@@ -60,6 +61,8 @@ export default function EmailSidebar({
   isAdminModel,
   setAdminModel,
 }: EmailSidebarProps) {
+  const { isMobile } = useMediaQuery();
+
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isEdit, setIsEdit] = useState(false);
@@ -211,7 +214,7 @@ export default function EmailSidebar({
       <div className="border-b p-2 text-center">
         <div className="mb-2 flex items-center justify-center gap-2">
           {!isCollapsed && (
-            <div className="flex items-center gap-2">
+            <div className="flex w-full items-center gap-2">
               <Button
                 className="size-8 lg:size-7"
                 variant="outline"
@@ -232,13 +235,13 @@ export default function EmailSidebar({
                   }
                 />
               </Button>
-              <div className="relative flex-1">
+              <div className="relative w-full flex-grow">
                 <Input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search emails..."
-                  className="h-[30px] w-full border p-1 pl-8 text-xs"
+                  className="h-[30px] w-full border p-1 pl-8 text-xs placeholder:text-xs"
                 />
                 <Search className="absolute left-2 top-2 size-4 text-gray-500" />
               </div>
@@ -424,15 +427,32 @@ export default function EmailSidebar({
                     emailAddress={selectedEmailAddress}
                     onSuccess={mutate}
                     triggerButton={
-                      <Icons.send className="hidden size-5 rounded border p-1 text-primary hover:bg-neutral-200 group-hover:ml-auto group-hover:inline" />
+                      <Icons.send
+                        className={cn(
+                          "size-5 rounded border p-1 text-primary",
+                          !isMobile
+                            ? "hidden hover:bg-neutral-200 group-hover:ml-auto group-hover:inline"
+                            : "",
+                        )}
+                      />
                     }
                   />
                   <PenLine
-                    className="hidden size-5 rounded border p-1 text-primary hover:bg-neutral-200 group-hover:ml-auto group-hover:inline"
+                    className={cn(
+                      "size-5 rounded border p-1 text-primary",
+                      !isMobile
+                        ? "hidden hover:bg-neutral-200 group-hover:inline"
+                        : "",
+                    )}
                     onClick={() => handleOpenEditEmail(email)}
                   />
                   <Icons.trash
-                    className="hidden size-5 rounded border p-1 text-primary hover:bg-neutral-200 group-hover:inline"
+                    className={cn(
+                      "size-5 rounded border p-1 text-primary",
+                      !isMobile
+                        ? "hidden hover:bg-neutral-200 group-hover:inline"
+                        : "",
+                    )}
                     onClick={() => {
                       setEmailToDelete(email.id);
                       setShowDeleteModal(true);
