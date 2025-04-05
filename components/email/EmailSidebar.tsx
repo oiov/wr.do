@@ -37,6 +37,7 @@ import {
 } from "../ui/select";
 import { Skeleton } from "../ui/skeleton";
 import { Switch } from "../ui/switch";
+import { SendEmailModal } from "./SendEmailModal";
 
 interface EmailSidebarProps {
   user: User;
@@ -394,7 +395,7 @@ export default function EmailSidebar({
             key={email.id}
             onClick={() => onSelectEmail(email.emailAddress)}
             className={cn(
-              `border-gray-5 m-1 cursor-pointer bg-neutral-50 p-2 transition-colors hover:bg-neutral-100 dark:border-zinc-700 dark:bg-neutral-800 dark:hover:bg-neutral-900`,
+              `border-gray-5 group m-1 cursor-pointer bg-neutral-50 p-2 transition-colors hover:bg-neutral-100 dark:border-zinc-700 dark:bg-neutral-800 dark:hover:bg-neutral-900`,
               selectedEmailAddress === email.emailAddress
                 ? "bg-gray-100 dark:bg-neutral-900"
                 : "",
@@ -419,24 +420,31 @@ export default function EmailSidebar({
               </span>
               {!isCollapsed && (
                 <>
-                  <CopyButton
-                    value={`${email.emailAddress}`}
-                    className={cn(
-                      "ml-auto size-5 rounded border p-1",
-                      "duration-250 transition-all group-hover:opacity-100",
-                    )}
-                    title="Copy email address"
+                  <SendEmailModal
+                    emailAddress={selectedEmailAddress}
+                    onSuccess={mutate}
+                    triggerButton={
+                      <Icons.send className="hidden size-5 rounded border p-1 text-primary hover:bg-neutral-200 group-hover:ml-auto group-hover:inline" />
+                    }
                   />
                   <PenLine
-                    className="size-5 rounded border p-1 text-primary"
+                    className="hidden size-5 rounded border p-1 text-primary hover:bg-neutral-200 group-hover:ml-auto group-hover:inline"
                     onClick={() => handleOpenEditEmail(email)}
                   />
                   <Icons.trash
-                    className="size-5 rounded border p-1 text-primary"
+                    className="hidden size-5 rounded border p-1 text-primary hover:bg-neutral-200 group-hover:inline"
                     onClick={() => {
                       setEmailToDelete(email.id);
                       setShowDeleteModal(true);
                     }}
+                  />
+                  <CopyButton
+                    value={`${email.emailAddress}`}
+                    className={cn(
+                      "size-5 rounded border p-1",
+                      "duration-250 transition-all hover:bg-neutral-200",
+                    )}
+                    title="Copy email address"
                   />
                 </>
               )}

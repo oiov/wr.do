@@ -57,14 +57,7 @@ export default async function DashboardPage() {
             icon="globeLock"
           />
         </div>
-        <UserRecordsList
-          user={{
-            id: user.id,
-            name: user.name || "",
-            apiKey: user.apiKey || "",
-          }}
-          action="/api/record"
-        />
+        <LiveLog admin={false} />
         <UserUrlsList
           user={{
             id: user.id,
@@ -74,7 +67,14 @@ export default async function DashboardPage() {
           }}
           action="/api/url"
         />
-        <LiveLog admin={false} />
+        <UserRecordsList
+          user={{
+            id: user.id,
+            name: user.name || "",
+            apiKey: user.apiKey || "",
+          }}
+          action="/api/record"
+        />
       </div>
     </>
   );

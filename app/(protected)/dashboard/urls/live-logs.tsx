@@ -155,7 +155,7 @@ export default function LiveLog({ admin }: { admin: boolean }) {
               Live Log
             </CardTitle>
             <CardDescription>
-              Real-time updates of short URL visits.
+              Real-time logs of short link visits.
             </CardDescription>
           </div>
 
@@ -164,9 +164,7 @@ export default function LiveLog({ admin }: { admin: boolean }) {
             variant={"outline"}
             size="sm"
             className={`ml-auto gap-2 bg-primary-foreground transition-colors hover:border-blue-600 hover:text-blue-600 ${
-              isLive
-                ? "animate-pulse border-dashed border-blue-600 text-blue-500"
-                : ""
+              isLive ? "border-dashed border-blue-600 text-blue-500" : ""
             }`}
           >
             <Icons.CirclePlay className="h-4 w-4" /> {isLive ? "Stop" : "Live"}
