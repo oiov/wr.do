@@ -228,51 +228,52 @@ export function MobileSheetSidebar({ links }: DashboardSidebarProps) {
                   </span>
                 </Link>
 
-                {/* <ProjectSwitcher large /> */}
+                {links.map(
+                  (section) =>
+                    section.items.length > 0 && (
+                      <section
+                        key={section.title}
+                        className="flex flex-col gap-0.5"
+                      >
+                        <p className="text-xs text-muted-foreground">
+                          {section.title}
+                        </p>
 
-                {links.map((section) => (
-                  <section
-                    key={section.title}
-                    className="flex flex-col gap-0.5"
-                  >
-                    <p className="text-xs text-muted-foreground">
-                      {section.title}
-                    </p>
-
-                    {section.items.map((item) => {
-                      const Icon = Icons[item.icon || "arrowRight"];
-                      return (
-                        item.href && (
-                          <Fragment key={`link-fragment-${item.title}`}>
-                            <Link
-                              key={`link-${item.title}`}
-                              onClick={() => {
-                                if (!item.disabled) setOpen(false);
-                              }}
-                              href={item.disabled ? "#" : item.href}
-                              className={cn(
-                                "flex items-center gap-3 rounded-md p-2 text-sm font-medium hover:bg-muted",
-                                path === item.href
-                                  ? "bg-muted"
-                                  : "text-muted-foreground hover:text-accent-foreground",
-                                item.disabled &&
-                                  "cursor-not-allowed opacity-80 hover:bg-transparent hover:text-muted-foreground",
-                              )}
-                            >
-                              <Icon className="size-5" />
-                              {item.title}
-                              {item.badge && (
-                                <Badge className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full">
-                                  {item.badge}
-                                </Badge>
-                              )}
-                            </Link>
-                          </Fragment>
-                        )
-                      );
-                    })}
-                  </section>
-                ))}
+                        {section.items.map((item) => {
+                          const Icon = Icons[item.icon || "arrowRight"];
+                          return (
+                            item.href && (
+                              <Fragment key={`link-fragment-${item.title}`}>
+                                <Link
+                                  key={`link-${item.title}`}
+                                  onClick={() => {
+                                    if (!item.disabled) setOpen(false);
+                                  }}
+                                  href={item.disabled ? "#" : item.href}
+                                  className={cn(
+                                    "flex items-center gap-3 rounded-md p-2 text-sm font-medium hover:bg-muted",
+                                    path === item.href
+                                      ? "bg-muted"
+                                      : "text-muted-foreground hover:text-accent-foreground",
+                                    item.disabled &&
+                                      "cursor-not-allowed opacity-80 hover:bg-transparent hover:text-muted-foreground",
+                                  )}
+                                >
+                                  <Icon className="size-5" />
+                                  {item.title}
+                                  {item.badge && (
+                                    <Badge className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full">
+                                      {item.badge}
+                                    </Badge>
+                                  )}
+                                </Link>
+                              </Fragment>
+                            )
+                          );
+                        })}
+                      </section>
+                    ),
+                )}
 
                 {/* <div className="mt-auto">
                   <UpgradeCard />
