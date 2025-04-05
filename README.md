@@ -1,6 +1,6 @@
 <div align="center">
   <h1>WR.DO</h1>
-  <p><a href="https://discord.gg/d68kWCBDEs">Discord</a> · English | <a href="/README-zh.md">简体中文</a></p>
+  <p><a href="https://discord.com/invite/AHPQYuZu3m">Discord</a> · English | <a href="/README-zh.md">简体中文</a></p>
   <p>Craft DNS Records, Make Short Links, Email Support.</p>
   <!-- <img src="https://wr.do/_static/images/light-preview.png"/> -->
 </div>

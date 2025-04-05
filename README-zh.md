@@ -1,6 +1,6 @@
 <div align="center">
   <h1>WR.DO</h1>
-  <p><a href="https://discord.gg/d68kWCBDEs">Discord</a> · English | <a href="/README-zh.md">简体中文</a></p>
+  <p><a href="https://discord.com/invite/AHPQYuZu3m">Discord</a> · English | <a href="/README-zh.md">简体中文</a></p>
   <p>创建 DNS 记录，生成短链接，临时邮箱</p>
   <!-- <img src="https://wr.do/_static/images/light-preview.png"/> -->
 </div>
