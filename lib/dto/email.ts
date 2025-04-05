@@ -91,44 +91,74 @@ export async function getAllUserEmails(
     };
   }
 
-  const [userEmails, total] = await Promise.all([
-    prisma.userEmail.findMany({
-      where: { ...whereOptions },
-      select: {
-        id: true,
-        userId: true,
-        emailAddress: true,
-        createdAt: true,
-        updatedAt: true,
-        _count: { select: { forwardEmails: true } },
-        user: { select: { name: true, email: true } },
-        forwardEmails: {
-          select: {
-            readAt: true,
-          },
+  // Fetch paginated UserEmail records
+  const userEmailsPromise = prisma.userEmail.findMany({
+    where: { ...whereOptions },
+    select: {
+      id: true,
+      userId: true,
+      emailAddress: true,
+      createdAt: true,
+      updatedAt: true,
+      _count: { select: { forwardEmails: true } }, // Count of forwardEmails for this UserEmail
+      user: { select: { name: true, email: true } },
+      forwardEmails: {
+        select: {
+          readAt: true,
         },
       },
-      skip: (page - 1) * size,
-      take: size,
-      orderBy: {
-        updatedAt: "desc",
+    },
+    skip: (page - 1) * size,
+    take: size,
+    orderBy: {
+      updatedAt: "desc",
+    },
+  });
+
+  // Fetch total count of UserEmail records
+  const totalPromise = prisma.userEmail.count({
+    where: { ...whereOptions },
+  });
+
+  // Fetch all emailAddress values that match the whereOptions
+  const emailAddressesPromise = prisma.userEmail.findMany({
+    where: { ...whereOptions },
+    select: { emailAddress: true },
+  });
+
+  const [userEmails, total, emailAddresses] = await Promise.all([
+    userEmailsPromise,
+    totalPromise,
+    emailAddressesPromise,
+  ]);
+
+  // Extract all email addresses for the total counts query
+  const emailAddressList = emailAddresses.map((e) => e.emailAddress);
+
+  // Fetch total inbox and unread counts across all matching UserEmails
+  const [totalInboxCount, totalUnreadCount] = await Promise.all([
+    prisma.forwardEmail.count({
+      where: {
+        to: { in: emailAddressList },
       },
     }),
-    prisma.userEmail.count({
-      where: { ...whereOptions },
+    prisma.forwardEmail.count({
+      where: {
+        to: { in: emailAddressList },
+        readAt: null,
+      },
     }),
   ]);
 
   const result = userEmails.map((email) => {
-    // 计算未读邮件数量
     const unreadCount = email.forwardEmails.filter(
       (mail) => mail.readAt === null,
     ).length;
 
     return {
       ...email,
-      count: email._count.forwardEmails, // 总邮件数
-      unreadCount: unreadCount, // 未读邮件数
+      count: email._count.forwardEmails, // Total emails for this specific UserEmail
+      unreadCount: unreadCount, // Unread emails for this specific UserEmail
       user: email.user.name,
       email: email.user.email,
       forwardEmails: undefined,
@@ -137,7 +167,9 @@ export async function getAllUserEmails(
 
   return {
     list: result,
-    total,
+    total, // Total number of UserEmail records
+    totalInboxCount, // Total number of ForwardEmail records for all matching UserEmails
+    totalUnreadCount, // Total number of unread ForwardEmail records for all matching UserEmails
   };
 }
 

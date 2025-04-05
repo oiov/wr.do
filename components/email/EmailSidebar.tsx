@@ -74,14 +74,15 @@ export default function EmailSidebar({
 
   const pageSize = 10;
 
-  // Updated to use useSWR with explicit page and size parameters
   const { data, isLoading, error, mutate } = useSWR<{
     list: UserEmailList[];
     total: number;
+    totalInboxCount: number;
+    totalUnreadCount: number;
   }>(
     `/api/email?page=${currentPage}&size=${pageSize}&search=${searchQuery}&all=${isAdminModel}`,
     fetcher,
-    { dedupingInterval: 3000 },
+    { dedupingInterval: 5000 },
   );
 
   if (!selectedEmailAddress && data && data.list.length > 0) {
@@ -90,16 +91,6 @@ export default function EmailSidebar({
 
   const userEmails = data?.list || [];
   const totalPages = data ? Math.ceil(data.total / pageSize) : 0;
-
-  const totalInboxEmails = userEmails.reduce(
-    (sum, email) => sum + (email.count || 0),
-    0,
-  );
-
-  const totalUnreadEmails = userEmails.reduce(
-    (sum, email) => sum + (email.unreadCount || 0),
-    0,
-  );
 
   const handleSubmitEmail = async (emailSuffix: string) => {
     if (!emailSuffix) {
@@ -289,7 +280,9 @@ export default function EmailSidebar({
             <div className="flex flex-col items-center gap-1 rounded-md bg-neutral-100 px-1 pb-1 pt-2 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-gray-700">
               <div className="flex items-center gap-1">
                 <Icons.mail className="size-3" />
-                <p className="line-clamp-1 text-start font-medium">Address</p>
+                <p className="line-clamp-1 text-start font-medium">
+                  Email Address
+                </p>
               </div>
               <p className="text-base font-semibold text-gray-900 dark:text-gray-100">
                 <CountUp count={data ? data.total : 0} />
@@ -305,7 +298,7 @@ export default function EmailSidebar({
                 </p>
               </div>
               <p className="text-base font-semibold text-gray-900 dark:text-gray-100">
-                <CountUp count={totalInboxEmails} />
+                <CountUp count={data ? data.totalInboxCount : 0} />
               </p>
             </div>
 
@@ -317,7 +310,7 @@ export default function EmailSidebar({
                 </p>
               </div>
               <p className="text-base font-semibold text-gray-900 dark:text-gray-100">
-                <CountUp count={totalUnreadEmails} />
+                <CountUp count={data ? data.totalUnreadCount : 0} />
               </p>
             </div>
 
