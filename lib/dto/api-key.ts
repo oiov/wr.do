@@ -11,15 +11,15 @@ export const getApiKeyByUserId = async (userId: string) => {
 
 export const checkApiKey = async (apiKey: string) => {
   return prisma.user.findFirst({
-    where: { apiKey },
-    select: { id: true },
+    where: { apiKey, active: 1 },
+    select: { id: true, team: true, name: true },
   });
 };
 
 export const generateApiKey = async (userId: string) => {
   const apiKey = crypto.randomUUID();
   return prisma.user.update({
-    where: { id: userId },
+    where: { id: userId, active: 1 },
     data: { apiKey },
     select: { apiKey: true },
   });

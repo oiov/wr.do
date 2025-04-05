@@ -88,15 +88,21 @@ Remember to add your environment variables in `wrangler.jsonc` before deploy.
 
 ### Config your domain email rule
 
+Via:
+```bash
+https://dash.cloudflare.com/[account_id]/[zone_name]/email/routing/routes
+```
 
-Via the [https://dash.cloudflare.com/account_id/zone_name/email/routing/routes](https://dash.cloudflare.com/[account_id]/[zone_name]/email/routing/routes]), 
 edit `Catch-all address`, select:
 - `Action` -> `Send to a worker` 
 - `Destination` -> `wrdo-email-worker`(The worker name you deploy).
 
 Then save and active it.
 
+<Callout type="warning" twClass="mb-3">
 Once you add a new domain, you need to perform the same action, the email worker can be the same.
+</Callout>
+
 
 
 

@@ -17,11 +17,6 @@ export const docsConfig: DocsConfig = {
           icon: "page",
         },
         {
-          title: "DNS Records",
-          href: "/docs/dns-records",
-          icon: "page",
-        },
-        {
           title: "Short URLs",
           href: "/docs/short-urls",
           icon: "page",
@@ -29,6 +24,11 @@ export const docsConfig: DocsConfig = {
         {
           title: "Emails",
           href: "/docs/emails",
+          icon: "page",
+        },
+        {
+          title: "DNS Records",
+          href: "/docs/dns-records",
           icon: "page",
         },
       ],

@@ -4,6 +4,7 @@ import { getCurrentUser } from "@/lib/session";
 import { constructMetadata } from "@/lib/utils";
 import { DashboardHeader } from "@/components/dashboard/header";
 
+import ApiReference from "./api-reference";
 import LiveLog from "./live-logs";
 import UserUrlsList from "./url-list";
 
@@ -23,7 +24,7 @@ export default async function DashboardPage() {
         heading="Manage&nbsp;Short&nbsp;URLs"
         text="List and manage short urls."
         link="/docs/short-urls"
-        linkText="Short urls."
+        linkText="short urls."
       />
       <UserUrlsList
         user={{
@@ -35,6 +36,7 @@ export default async function DashboardPage() {
         action="/api/url"
       />
       <LiveLog admin={false} />
+      <ApiReference />
     </>
   );
 }
