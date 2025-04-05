@@ -122,6 +122,11 @@ export const docsConfig: DocsConfig = {
           icon: "page",
         },
         {
+          title: "Email Worker",
+          href: "/docs/developer/cloudflare-email-worker",
+          icon: "page",
+        },
+        {
           title: "Database",
           href: "/docs/developer/database",
           icon: "page",

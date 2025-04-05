@@ -1,7 +1,7 @@
 <div align="center">
   <h1>WR.DO</h1>
   <p><a href="https://discord.gg/d68kWCBDEs">Discord</a> · English | <a href="/README-zh.md">简体中文</a></p>
-  <p>Craft DNS Records, Make Short Links</p>
+  <p>Craft DNS Records, Make Short Links, Email Support.</p>
   <!-- <img src="https://wr.do/_static/images/light-preview.png"/> -->
 </div>
 
@@ -29,17 +29,20 @@
 
 ## Quick Start
 
-See docs about [guide](https://wr.do/docs/quick-start) for quick start.
+See usage docs about [guide](https://wr.do/docs/quick-start) for quick start.
 
 ## Self-hosted Tutorial
 
 ### Requirements
 
 - [Vercel](https://vercel.com) to deploy app
-- [Cloudflare](https://dash.cloudflare.com/) account  
-- A **domain** name hosted on Cloudflare
+- A **domain** name hosted on [Cloudflare](https://dash.cloudflare.com/)
 
 See more docs about [developer](https://wr.do/docs/developer/installation).
+
+### Email worker
+
+See more docs about [email worker](https://wr.do/docs/developer/cloudflare-email-worker).
 
 ## Local development
 

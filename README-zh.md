@@ -1,7 +1,7 @@
 <div align="center">
   <h1>WR.DO</h1>
   <p><a href="https://discord.gg/d68kWCBDEs">Discord</a> · English | <a href="/README-zh.md">简体中文</a></p>
-  <p>创建 DNS 记录，生成短链接</p>
+  <p>创建 DNS 记录，生成短链接，临时邮箱</p>
   <!-- <img src="https://wr.do/_static/images/light-preview.png"/> -->
 </div>
 
@@ -35,10 +35,13 @@
 ### 要求
 
 - [Vercel](https://vercel.com) 账户用于部署应用
-- [Cloudflare](https://dash.cloudflare.com/) 账户  
-- 在 Cloudflare 托管的 **域名**
+- 至少一个在 [Cloudflare](https://dash.cloudflare.com/) 托管的 **域名**
 
-查看有关[开发者](https://wr.do/docs/developer/installation)的文档。
+查看[开发文档](https://wr.do/docs/developer/installation)。
+
+### Email worker
+
+查看 [email worker](https://wr.do/docs/developer/cloudflare-email-worker) 文档用于邮件接收。
 
 ## 本地开发
 

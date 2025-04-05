@@ -1,0 +1,102 @@
+---
+title: Cloudflare Email Worker Configs
+description: How to config the cloudflare api.
+---
+
+Before you start, you must have a Cloudflare account and a domain be hosted on Cloudflare.
+
+### Introduction to Cloudflare Email Worker and R2
+
+#### Cloudflare Email Worker
+
+Cloudflare Email Worker is a feature of Cloudflare's Email Routing service combined with the Workers platform. 
+It allows users to process incoming emails programmatically at Cloudflare's edge network. 
+When an email is sent to a custom address configured in Email Routing,
+the associated Worker is triggered, receiving the email data (e.g., sender, recipient, headers, and body). 
+Developers can write JavaScript code to define custom logic, 
+such as forwarding emails to specific addresses, filtering spam, 
+or integrating with external APIs.
+
+#### Cloudflare R2
+
+Cloudflare R2 (Object Storage) is a scalable, S3-compatible storage solution provided by Cloudflare. 
+It allows users to store and retrieve files (e.g., email attachments) at the edge with zero egress fees. 
+In the context of an Email Worker, R2 can be used to store email attachments or other data, accessible via environment bindings in the Worker script.
+
+### Overview of cf-email-forwarding-worker
+
+[oiov/cf-email-forwarding-worker](https://github.com/oiov/cf-email-forwarding-worker), 
+implements an advanced email forwarding solution using Cloudflare Email Worker and R2. 
+Instead of directly forwarding emails to another email address, 
+it sends the email data to a third-party API endpoint for custom processing. 
+Additionally, it leverages Cloudflare R2 to store email attachments, making them accessible to the third-party application.
+
+#### Key Features
+
+- **API-based Forwarding**: Emails are sent as structured data to a configurable third-party API (APP_API_URL) via HTTP POST requests.
+- **Attachment Storage**: Email attachments are uploaded to an R2 bucket and their URLs are included in the API payload.
+- **Customizable**: The third-party app can process the email data (e.g., sender, subject, body, attachments) as needed.
+#### Configuration
+
+The Worker relies on two environment variables defined in the wrangler.jsonc file:
+
+```json
+"vars": {
+  "APP_API_URL": "https://wr.do/api/v1/email-catcher"
+},
+"r2_buckets": [
+  {
+    "binding": "R2_BUCKET",
+    "bucket_name": "wremail"
+  }
+]
+```
+
+`APP_API_URL`: The URL of the third-party API endpoint that receives the email data. This allows the third-party app to handle emails in a custom way (e.g., logging, processing, or forwarding).
+
+`R2_BUCKET`: The binding name for the R2 storage bucket, accessible in the Worker code as env.R2_BUCKET. The bucket_name (`wremail`) specifies the R2 bucket where email attachments are stored. Note: R2 must be activated and configured in your Cloudflare account beforehand.
+
+#### How It Works
+
+- Email Reception: An email sent to the configured address triggers the Worker.
+- Attachment Handling: If the email contains attachments, they are extracted and uploaded to the R2 bucket (wremail). The Worker generates accessible URLs for these attachments.
+- API Forwarding: The email data (e.g., sender, recipient, subject, body, and attachment URLs) is packaged into a JSON payload and sent to the `APP_API_URL` via an HTTP POST request.
+- Third-Party Processing: The third-party app receives the payload and processes it according to its own logic.
+
+#### Example Usage
+
+- A user sends an email to example@yourdomain.com.
+- The Worker uploads any attachments to the wremail R2 bucket.
+- The Worker sends a POST request to https://wr.do/api/v1/email-catcher with the email details and attachment URLs.
+- The third-party app logs the email, stores it in a database, or forwards it elsewhere.
+#### Prerequisites
+- A Cloudflare account with Email Routing enabled.
+- An R2 bucket created and bound to the Worker (e.g., wremail).
+- A third-party API endpoint ready to receive POST requests with email data.
+
+### Deploy email worker to Cloudflare
+
+```bash
+git clone https://github.com/oiov/cf-email-forwarding-worker.git
+cd cf-email-forwarding-worker
+pnpm install
+
+wranler login 
+wranler deploy
+```
+Remember to add your environment variables in `wrangler.jsonc` before deploy.
+
+### Config your domain email rule
+
+
+Via the [https://dash.cloudflare.com/account_id/zone_name/email/routing/routes](https://dash.cloudflare.com/[account_id]/[zone_name]/email/routing/routes]), 
+edit `Catch-all address`, select:
+- `Action` -> `Send to a worker` 
+- `Destination` -> `wrdo-email-worker`(The worker name you deploy).
+
+Then save and active it.
+
+Once you add a new domain, you need to perform the same action, the email worker can be the same.
+
+
+
