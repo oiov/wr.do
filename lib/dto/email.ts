@@ -108,7 +108,7 @@ export async function getAllUserEmails(
           },
         },
       },
-      skip: page * size,
+      skip: (page - 1) * size,
       take: size,
       orderBy: {
         updatedAt: "desc",

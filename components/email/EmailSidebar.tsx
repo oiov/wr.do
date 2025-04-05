@@ -12,21 +12,22 @@ import {
   SquarePlus,
 } from "lucide-react";
 import { toast } from "sonner";
-import useSWRInfinite from "swr/infinite";
+import useSWR from "swr"; // Changed from useSWRInfinite to useSWR
 
 import { siteConfig } from "@/config/site";
 import { UserEmailList } from "@/lib/dto/email";
+import { reservedAddressSuffix } from "@/lib/enums";
 import { cn, fetcher, timeAgo } from "@/lib/utils";
 
 import CountUp from "../dashboard/count-up";
 import { CopyButton } from "../shared/copy-button";
 import { EmptyPlaceholder } from "../shared/empty-placeholder";
 import { Icons } from "../shared/icons";
+import { PaginationWrapper } from "../shared/pagination";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { Modal } from "../ui/modal"; // 引入 Modal 组件
-
+import { Modal } from "../ui/modal";
 import {
   Select,
   SelectContent,
@@ -66,37 +67,29 @@ export default function EmailSidebar({
   const [domainSuffix, setDomainSuffix] = useState<string | null>(
     siteConfig.shortDomains[0],
   );
-
-  const [showDeleteModal, setShowDeleteModal] = useState(false); // 删除确认弹框状态
-  const [emailToDelete, setEmailToDelete] = useState<string | null>(null); // 要删除的邮箱 ID
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [emailToDelete, setEmailToDelete] = useState<string | null>(null);
   const [deleteInput, setDeleteInput] = useState("");
+  const [currentPage, setCurrentPage] = useState(1); // Added for pagination
 
   const pageSize = 10;
 
-  const getKey = (
-    pageIndex: number,
-    previousPageData: { list: UserEmail[] } | null,
-  ) => {
-    if (previousPageData && !previousPageData.list.length) return null;
-    return `/api/email?page=${pageIndex}&size=${pageSize}&search=${searchQuery}&all=${isAdminModel}`;
-  };
-
-  const { data, isLoading, error, size, setSize, mutate } = useSWRInfinite<{
+  // Updated to use useSWR with explicit page and size parameters
+  const { data, isLoading, error, mutate } = useSWR<{
     list: UserEmailList[];
     total: number;
-  }>(getKey, fetcher, { dedupingInterval: 3000 });
+  }>(
+    `/api/email?page=${currentPage}&size=${pageSize}&search=${searchQuery}&all=${isAdminModel}`,
+    fetcher,
+    { dedupingInterval: 3000 },
+  );
 
-  if (
-    !selectedEmailAddress &&
-    data &&
-    data.length > 0 &&
-    data[0].list.length > 0
-  ) {
-    onSelectEmail(data[0].list[0].emailAddress);
+  if (!selectedEmailAddress && data && data.list.length > 0) {
+    onSelectEmail(data.list[0].emailAddress);
   }
 
-  const userEmails = data ? data.flatMap((page) => page.list) : [];
-  const hasMore = data && data[data.length - 1]?.list.length === pageSize;
+  const userEmails = data?.list || [];
+  const totalPages = data ? Math.ceil(data.total / pageSize) : 0;
 
   const totalInboxEmails = userEmails.reduce(
     (sum, email) => sum + (email.count || 0),
@@ -107,12 +100,6 @@ export default function EmailSidebar({
     (sum, email) => sum + (email.unreadCount || 0),
     0,
   );
-
-  const handleLoadMore = () => {
-    if (hasMore && !isLoading) {
-      setSize(size + 1);
-    }
-  };
 
   const handleSubmitEmail = async (emailSuffix: string) => {
     if (!emailSuffix) {
@@ -127,6 +114,11 @@ export default function EmailSidebar({
       toast.error("Domain suffix cannot be empty");
       return;
     }
+    if (reservedAddressSuffix.includes(emailSuffix)) {
+      toast.error("Email address is reserved, please choose another one");
+      return;
+    }
+
     startTransition(async () => {
       if (isEdit) {
         const editEmailId = userEmails.find(
@@ -181,6 +173,7 @@ export default function EmailSidebar({
       setShowEmailModal(true);
     }
   };
+
   const handleDeleteEmail = async (id: string) => {
     startTransition(async () => {
       try {
@@ -299,7 +292,7 @@ export default function EmailSidebar({
                 <p className="line-clamp-1 text-start font-medium">Address</p>
               </div>
               <p className="text-base font-semibold text-gray-900 dark:text-gray-100">
-                <CountUp count={data ? data[0].total : 0} />
+                <CountUp count={data ? data.total : 0} />
               </p>
             </div>
 
@@ -383,7 +376,7 @@ export default function EmailSidebar({
                   <EmptyPlaceholder.Icon name="mailPlus" />
                   <EmptyPlaceholder.Title>No emails</EmptyPlaceholder.Title>
                   <EmptyPlaceholder.Description>
-                    You don&apos;t have any email yet. Start creating email.
+                    You don't have any email yet. Start creating email.
                   </EmptyPlaceholder.Description>
                 </EmptyPlaceholder>
               </div>
@@ -473,16 +466,17 @@ export default function EmailSidebar({
             )}
           </div>
         ))}
-        {hasMore && !isLoading && (
-          <Button
-            className="mx-auto w-full text-xs"
-            variant="secondary"
-            onClick={handleLoadMore}
-          >
-            Load more {data[0].total - userEmails.length}+
-          </Button>
-        )}
       </div>
+
+      {/* Pagination */}
+      {!isCollapsed && data && totalPages > 1 && (
+        <PaginationWrapper
+          className="m-0 scale-75 justify-center"
+          total={totalPages}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+      )}
 
       {/* 创建\编辑邮箱的 Modal */}
       {showEmailModal && (

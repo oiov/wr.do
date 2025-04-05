@@ -190,6 +190,18 @@ export const reservedDomains = [
   "demo1.wr.do",
 ];
 
+export const reservedAddressSuffix = [
+  "admin",
+  "support",
+  "billing",
+  "security",
+  "root",
+  "administrator",
+  "system",
+  "noreply",
+  "no-reply",
+];
+
 export const LOGS_LIMITEs_ENUMS = [
   {
     value: "50",

@@ -5,7 +5,7 @@ export const Team_Plan_Quota = {
     SL_AnalyticsRetention: 180,
     SL_Domains: 1,
     SL_AdvancedAnalytics: true,
-    RC_NewRecords: 3,
+    RC_NewRecords: 0,
     EM_EmailAddresses: 1000,
     EM_Domains: 1,
     APP_Support: "basic",

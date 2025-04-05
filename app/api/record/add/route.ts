@@ -8,6 +8,7 @@ import {
 import { checkUserStatus } from "@/lib/dto/user";
 import { reservedDomains } from "@/lib/enums";
 import { getCurrentUser } from "@/lib/session";
+import { Team_Plan_Quota } from "@/lib/team";
 import { generateSecret } from "@/lib/utils";
 
 export async function POST(req: Request) {
@@ -40,7 +41,7 @@ export async function POST(req: Request) {
 
     if (
       user.role !== "ADMIN" &&
-      user_records_count >= Number(NEXT_PUBLIC_FREE_RECORD_QUOTA)
+      user_records_count >= Team_Plan_Quota[user.team].RC_NewRecords
     ) {
       return Response.json("Your records have reached the free limit.", {
         status: 409,

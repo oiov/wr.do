@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { createUserEmail, getAllUserEmails } from "@/lib/dto/email";
 import { checkUserStatus } from "@/lib/dto/user";
+import { reservedAddressSuffix } from "@/lib/enums";
 import { getCurrentUser } from "@/lib/session";
 
 // 查询所有 UserEmail 地址
@@ -11,7 +12,7 @@ export async function GET(req: NextRequest) {
     if (user instanceof Response) return user;
 
     const { searchParams } = new URL(req.url);
-    const page = parseInt(searchParams.get("page") || "0", 10);
+    const page = parseInt(searchParams.get("page") || "1", 10);
     const size = parseInt(searchParams.get("size") || "10", 10);
     const search = searchParams.get("search") || "";
     const all = searchParams.get("all") || "false";
@@ -44,10 +45,15 @@ export async function POST(req: NextRequest) {
     return NextResponse.json("Missing userId or emailAddress", { status: 400 });
   }
 
-  if (emailAddress.split("@")[0].length < 5) {
+  const suffix = emailAddress.split("@")[0];
+  if (!suffix || suffix < 5) {
     return NextResponse.json("Email address length must be at least 5", {
       status: 400,
     });
+  }
+
+  if (reservedAddressSuffix.includes(suffix)) {
+    return NextResponse.json("Invalid email address", { status: 400 });
   }
 
   try {
@@ -59,7 +65,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
     if (error.code === "P2002") {
-      return NextResponse.json("Email address already exists", { status: 409 });
+      return NextResponse.json("Email address already exists", {
+        status: 409,
+      });
     }
     return NextResponse.json("Internal Server Error", { status: 500 });
   }
