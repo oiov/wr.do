@@ -379,16 +379,10 @@ export default function EmailList({
         </div>
       </div>
       {isLoading && (
-        <div className="flex flex-col gap-2 p-2">
-          <Skeleton className="h-[80px] w-full rounded-lg" />
-          <Skeleton className="h-[80px] w-full rounded-lg" />
-          <Skeleton className="h-[80px] w-full rounded-lg" />
-          <Skeleton className="h-[80px] w-full rounded-lg" />
-          <Skeleton className="h-[80px] w-full rounded-lg" />
-          <Skeleton className="h-[80px] w-full rounded-lg" />
-          <Skeleton className="h-[80px] w-full rounded-lg" />
-          <Skeleton className="h-[80px] w-full rounded-lg" />
-          <Skeleton className="h-[80px] w-full rounded-lg" />
+        <div className="flex flex-col gap-2 p-1">
+          {[...Array(9)].map((_, index) => (
+            <Skeleton key={index} className="h-[80px] w-full rounded-lg" />
+          ))}
         </div>
       )}
       {!isLoading && !error && (
