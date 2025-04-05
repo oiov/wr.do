@@ -1,7 +1,7 @@
 <div align="center">
   <h1>WR.DO</h1>
   <p><a href="https://wr.do/s/discord">Discord</a> · English | <a href="/README-zh.md">简体中文</a></p>
-  <p>Craft DNS Records, Make Short Links, Email Support.</p>
+  <p>Make Short Links, Manage DNS Records, Email Support.</p>
   <!-- <img src="https://wr.do/_static/images/light-preview.png"/> -->
 </div>
 
@@ -42,7 +42,7 @@ See more docs about [developer](https://wr.do/docs/developer/installation).
 
 ### Email worker
 
-See more docs about [email worker](https://wr.do/docs/developer/cloudflare-email-worker).
+See docs about [email worker](https://wr.do/docs/developer/cloudflare-email-worker).
 
 ## Local development
 

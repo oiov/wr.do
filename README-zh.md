@@ -1,7 +1,7 @@
 <div align="center">
   <h1>WR.DO</h1>
   <p><a href="https://wr.do/s/discord">Discord</a> · English | <a href="/README-zh.md">简体中文</a></p>
-  <p>创建 DNS 记录，生成短链接，临时邮箱</p>
+  <p>生成短链接, 创建 DNS 记录, 管理临时邮箱</p>
   <!-- <img src="https://wr.do/_static/images/light-preview.png"/> -->
 </div>
 
