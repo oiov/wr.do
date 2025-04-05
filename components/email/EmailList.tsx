@@ -309,7 +309,7 @@ export default function EmailList({
                   aria-label="Auto refresh"
                 />
               </TooltipTrigger>
-              <TooltipContent side="left">Auto refresh</TooltipContent>
+              <TooltipContent side="bottom">Auto refresh</TooltipContent>
             </Tooltip>
           </TooltipProvider>
 
