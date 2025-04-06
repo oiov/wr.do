@@ -90,7 +90,7 @@ export function RadialShapeChart({
       </CardContent>
       <CardFooter className="flex-col gap-2 text-pretty text-center text-sm">
         <div className="flex items-center gap-2 font-medium leading-none">
-          {(total / totalUser).toFixed(2)}%
+          {((total / totalUser) * 100).toFixed(2)}%
           <TrendingUp className="size-4" />
         </div>
         <div className="leading-none text-muted-foreground">
