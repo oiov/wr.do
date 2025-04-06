@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { User } from "@prisma/client";
+import { u } from "framer-motion/dist/types.d-B50aGbjN";
 
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
@@ -22,6 +23,12 @@ export function EmailDashboard({ user }: { user: User }) {
   // useEffect(() => {
   //   setIsCollapsed(!isTablet);
   // }, [isTablet]);
+
+  useEffect(() => {
+    if (isMobile && selectedEmailAddress) {
+      setIsCollapsed(true);
+    }
+  }, [isMobile, selectedEmailAddress]);
 
   return (
     <div className="flex h-[calc(100vh-60px)] w-full">
