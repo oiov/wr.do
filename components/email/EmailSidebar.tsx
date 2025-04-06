@@ -288,7 +288,7 @@ export default function EmailSidebar({
                   Email Address
                 </p>
               </div>
-              <p className="text-base font-semibold text-gray-900 dark:text-gray-100">
+              <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                 <CountUp count={data ? data.total : 0} />
               </p>
             </div>
@@ -301,19 +301,23 @@ export default function EmailSidebar({
                   Inbox Emails
                 </p>
               </div>
-              <p className="text-base font-semibold text-gray-900 dark:text-gray-100">
+              <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                 <CountUp count={data ? data.totalInboxCount : 0} />
               </p>
             </div>
 
-            <div className="flex flex-col items-center gap-1 rounded-md bg-neutral-100 px-1 pb-1 pt-2 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-gray-700">
+            <div
+              className={
+                "flex cursor-pointer flex-col items-center gap-1 rounded-md bg-neutral-100 px-1 pb-1 pt-2 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-gray-700"
+              }
+            >
               <div className="flex items-center gap-1">
                 <Icons.mailOpen className="size-3" />
                 <p className="line-clamp-1 text-start font-medium">
                   Unread Emails
                 </p>
               </div>
-              <p className="text-base font-semibold text-gray-900 dark:text-gray-100">
+              <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                 <CountUp count={data ? data.totalUnreadCount : 0} />
               </p>
             </div>
@@ -326,7 +330,7 @@ export default function EmailSidebar({
                   Sent Emails
                 </p>
               </div>
-              <p className="text-base font-semibold text-gray-900 dark:text-gray-100">
+              <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                 {/* <CountUp count={0} /> */}--
               </p>
             </div>
@@ -452,10 +456,13 @@ export default function EmailSidebar({
                       !isMobile
                         ? "hidden hover:bg-neutral-200 group-hover:inline"
                         : "",
+                      email.deletedAt ? "bg-gray-400" : "",
                     )}
                     onClick={() => {
-                      setEmailToDelete(email.id);
-                      setShowDeleteModal(true);
+                      if (!email.deletedAt) {
+                        setEmailToDelete(email.id);
+                        setShowDeleteModal(true);
+                      }
                     }}
                   />
                   <CopyButton

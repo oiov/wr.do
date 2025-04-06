@@ -80,7 +80,7 @@ export async function getAllUserEmails(
   let whereOptions = {};
   if (admin) {
     whereOptions = {
-      deletedAt: null,
+      // deletedAt: null,
       emailAddress: { contains: search, mode: "insensitive" },
     };
   } else {
@@ -100,6 +100,7 @@ export async function getAllUserEmails(
       emailAddress: true,
       createdAt: true,
       updatedAt: true,
+      deletedAt: true,
       _count: { select: { forwardEmails: true } }, // Count of forwardEmails for this UserEmail
       user: { select: { name: true, email: true } },
       forwardEmails: {
