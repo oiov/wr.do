@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { User } from "@prisma/client";
-import { u } from "framer-motion/dist/types.d-B50aGbjN";
 
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
@@ -15,14 +14,8 @@ export function EmailDashboard({ user }: { user: User }) {
   >(null);
   const { isMobile } = useMediaQuery();
   const [selectedEmailId, setSelectedEmailId] = useState<string | null>(null);
-
   const [isCollapsed, setIsCollapsed] = useState(false);
-
   const [isAdminModel, setAdminModel] = useState(false);
-
-  // useEffect(() => {
-  //   setIsCollapsed(!isTablet);
-  // }, [isTablet]);
 
   useEffect(() => {
     if (isMobile && selectedEmailAddress) {
