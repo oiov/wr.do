@@ -97,8 +97,8 @@ export default function EmailSidebar({
   const totalPages = data ? Math.ceil(data.total / pageSize) : 0;
 
   const handleSubmitEmail = async (emailSuffix: string) => {
-    if (!emailSuffix) {
-      toast.error("Email address cannot be empty");
+    if (!emailSuffix || emailSuffix.length < 5) {
+      toast.error("Email address characters must be at least 5");
       return;
     }
     if (/[^a-zA-Z0-9_\-\.]/.test(emailSuffix)) {
