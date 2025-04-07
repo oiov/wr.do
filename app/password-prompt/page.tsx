@@ -53,10 +53,9 @@ export default function PasswordPrompt() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (slug && !isLoading) {
-      // 防止重复提交
-      setIsLoading(true); // 开始加载
-      const fullPassword = password.join("");
+    const fullPassword = password.join("");
+    if (slug && !isLoading && fullPassword.length === 6) {
+      setIsLoading(true);
       router.push(`/s/${slug}?password=${encodeURIComponent(fullPassword)}`);
     }
   };
@@ -131,7 +130,9 @@ export default function PasswordPrompt() {
                 type="submit"
                 variant={"default"}
                 className="flex items-center gap-2"
-                disabled={isLoading} // 禁用按钮防止重复点击
+                disabled={
+                  !(slug && !isLoading && password.join("").length === 6)
+                }
               >
                 {isLoading ? (
                   <Icons.spinner className="size-4 animate-spin" />
