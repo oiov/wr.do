@@ -7,10 +7,10 @@
 
 ## Features
 
+- 🔗 **URL Shortening:** Generate short links with visitor analytic and password
 - 📮 **Email Support:** Receive emails and send emails
 - 🌐 **Multi-Tenant Support:** Manage multiple DNS records seamlessly
 - ⚡ **Instant Record Creation:** Set up CNAME, A, and other records quickly
-- 🔗 **URL Shortening:** Generate short links with visitor statistics attached
 - 📸 **Screenshot API:** Access to screenshot API.
 - 💯 **Meta Scraping API:** Access to meta scraping API.
 - 😀 **Permission Management:** A convenient admin panel for auditing

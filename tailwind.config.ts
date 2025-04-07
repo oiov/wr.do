@@ -178,6 +178,16 @@ const config = {
             transform: "translateX(0px)",
           },
         },
+        spotlight: {
+          "0%": {
+            opacity: "0",
+            transform: "translate(-72%, -62%) scale(0.5)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translate(-50%,-40%) scale(1)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -196,6 +206,8 @@ const config = {
         "fade-in-right": "fade-in-right 0.4s",
         "fade-out-left": "fade-out-left 0.4s",
         "fade-out-right": "fade-out-right 0.4s",
+
+        spotlight: "spotlight 2s ease .75s 1 forwards",
       },
     },
   },
