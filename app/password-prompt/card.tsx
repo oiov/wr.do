@@ -129,7 +129,7 @@ export default function PasswordPrompt() {
               <button
                 type="button"
                 onClick={toggleVisibility}
-                className="flex items-center gap-1 text-neutral-400 transition-colors hover:text-neutral-800"
+                className="flex items-center gap-1 text-neutral-400 transition-colors hover:text-neutral-600"
               >
                 {isHidden ? (
                   <EyeOff className="size-4" />
@@ -141,7 +141,7 @@ export default function PasswordPrompt() {
               <Button
                 type="submit"
                 variant={"default"}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 bg-neutral-300 text-neutral-800 hover:bg-neutral-400"
                 disabled={
                   !(slug && !isPending && password.join("").length === 6)
                 }
