@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
@@ -18,7 +18,8 @@ export default function PasswordPrompt() {
   const isError = searchParams.get("error") === "1";
   const [password, setPassword] = useState(["", "", "", "", "", ""]);
   const [isHidden, setIsHidden] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isPending, setisPending] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const inputRefs = useRef<(HTMLInputElement | null)[]>(Array(6).fill(null));
 
   useEffect(() => {
@@ -52,12 +53,18 @@ export default function PasswordPrompt() {
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const fullPassword = password.join("");
-    if (slug && !isLoading && fullPassword.length === 6) {
-      setIsLoading(true);
-      router.push(`/s/${slug}?password=${encodeURIComponent(fullPassword)}`);
-    }
+    startTransition(async () => {
+      e.preventDefault();
+      const fullPassword = password.join("");
+      if (slug && !isPending && fullPassword.length === 6) {
+        // setisPending(true);
+        router.push(`/s/${slug}?password=${encodeURIComponent(fullPassword)}`);
+      }
+    });
+
+    // setTimeout(() => {
+    //   return setisPending(false);
+    // }, 5000);
   };
 
   const toggleVisibility = () => {
@@ -131,15 +138,15 @@ export default function PasswordPrompt() {
                 variant={"default"}
                 className="flex items-center gap-2"
                 disabled={
-                  !(slug && !isLoading && password.join("").length === 6)
+                  !(slug && !isPending && password.join("").length === 6)
                 }
               >
-                {isLoading ? (
+                {isPending ? (
                   <Icons.spinner className="size-4 animate-spin" />
                 ) : (
                   <Icons.unLock className="size-4" />
                 )}
-                {isLoading ? "Unlocking..." : "Unlock"}
+                {isPending ? "Unlocking..." : "Unlock"}
               </Button>
             </div>
           </form>
