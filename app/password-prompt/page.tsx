@@ -18,7 +18,6 @@ export default function PasswordPrompt() {
   const isError = searchParams.get("error") === "1";
   const [password, setPassword] = useState(["", "", "", "", "", ""]);
   const [isHidden, setIsHidden] = useState(true);
-  // const [isPending, setisPending] = useState(false);
   const [isPending, startTransition] = useTransition();
   const inputRefs = useRef<(HTMLInputElement | null)[]>(Array(6).fill(null));
 
@@ -57,14 +56,9 @@ export default function PasswordPrompt() {
       e.preventDefault();
       const fullPassword = password.join("");
       if (slug && !isPending && fullPassword.length === 6) {
-        // setisPending(true);
         router.push(`/s/${slug}?password=${encodeURIComponent(fullPassword)}`);
       }
     });
-
-    // setTimeout(() => {
-    //   return setisPending(false);
-    // }, 5000);
   };
 
   const toggleVisibility = () => {
