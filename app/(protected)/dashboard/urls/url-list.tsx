@@ -368,6 +368,9 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                             "duration-250 transition-all group-hover:opacity-100",
                           )}
                         />
+                        {short.password && (
+                          <Icons.lock className="size-3 text-neutral-600 dark:text-neutral-400" />
+                        )}
                       </TableCell>
                       <TableCell className="col-span-1 flex items-center justify-start sm:col-span-2">
                         <LinkPreviewer

@@ -66,18 +66,18 @@ export default function PasswordPrompt() {
   };
 
   return (
-    <div className="grids flex min-h-screen flex-col bg-neutral-100">
+    <div className="grids grids-dark flex min-h-screen flex-col bg-neutral-100 dark:bg-neutral-900">
       <div className="flex flex-1 items-center justify-center">
         <div className="mx-3 w-full max-w-md rounded-lg bg-background/60 px-6 py-6 shadow-md backdrop-blur-xl md:px-[50px]">
-          <h1 className="mb-4 text-center text-2xl font-bold text-gray-800">
+          <h1 className="mb-4 text-center text-2xl font-bold text-neutral-800 dark:text-neutral-50">
             Protected Link
           </h1>
 
           <div className="mb-4 break-all text-left text-sm text-neutral-600 dark:text-neutral-400">
             <p>
-              You are attempting to access a password-protected link. Please
-              contact the owner to get the password. Learn more about this from
-              our{" "}
+              You are attempting to access a password-protected link.{" "}
+              <strong>Please contact the owner to get the password.</strong>{" "}
+              Learn more about this from our{" "}
               <Link
                 className="underline"
                 target="_blank"
@@ -89,7 +89,7 @@ export default function PasswordPrompt() {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div className="flex justify-between gap-2">
               {password.map((char, index) => (
                 <Input
@@ -117,7 +117,7 @@ export default function PasswordPrompt() {
                 type="button"
                 variant={"ghost"}
                 onClick={toggleVisibility}
-                className="flex items-center gap-1 text-gray-600 transition-colors hover:text-gray-800"
+                className="flex items-center gap-1 text-neutral-600 transition-colors hover:text-neutral-800 dark:text-neutral-400"
               >
                 {isHidden ? (
                   <EyeOff className="size-4" />
