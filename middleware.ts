@@ -15,6 +15,8 @@ const redirectMap = {
   "Expired[0001]": "/docs/short-urls#expired-links",
   "Disabled[0002]": "/docs/short-urls#disabled-links",
   "Error[0003]": "/docs/short-urls#error-links",
+  "PasswordRequired[0004]": "/password-prompt?error=0&slug=",
+  "IncorrectPassword[0005]": "/password-prompt?error=1&slug=",
 };
 
 // 提取短链接处理逻辑
@@ -28,6 +30,10 @@ async function handleShortUrl(req: NextAuthRequest) {
   const geo = geolocation(req);
   const headers = req.headers;
   const { browser, device } = parseUserAgent(headers.get("user-agent") || "");
+
+  const url = new URL(req.url);
+  const password = url.searchParams.get("password") || "";
+
   const trackingData = {
     slug,
     referer: headers.get("referer") || "(None)",
@@ -41,6 +47,7 @@ async function handleShortUrl(req: NextAuthRequest) {
     lang: headers.get("accept-language")?.split(",")[0],
     device: device.model || "Unknown",
     browser: browser.name || "Unknown",
+    password,
   };
 
   const res = await fetch(`${siteConfig.url}/api/s`, {
@@ -65,6 +72,15 @@ async function handleShortUrl(req: NextAuthRequest) {
   }
 
   if (target in redirectMap) {
+    if (
+      ["PasswordRequired[0004]", "IncorrectPassword[0005]"].includes(target)
+    ) {
+      return NextResponse.redirect(
+        `${siteConfig.url}${redirectMap[target]}${slug}`,
+        302,
+      );
+    }
+
     return NextResponse.redirect(
       `${siteConfig.url}${redirectMap[target]}`,
       302,

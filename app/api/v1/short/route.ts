@@ -31,7 +31,7 @@ export async function POST(req: Request) {
 
     const data = await req.json();
 
-    const { target, url, prefix, visible, active, expiration } =
+    const { target, url, prefix, visible, active, expiration, password } =
       createUrlSchema.parse(data);
     if (!target || !url) {
       return Response.json("Target url and slug are required", {
@@ -48,6 +48,7 @@ export async function POST(req: Request) {
       visible,
       active,
       expiration,
+      password,
     });
     if (res.status !== "success") {
       return Response.json(res.status, {

@@ -20,7 +20,7 @@ export async function POST(req: Request) {
 
     const { data } = await req.json();
 
-    const { target, url, prefix, visible, active, expiration } =
+    const { target, url, prefix, visible, active, expiration, password } =
       createUrlSchema.parse(data);
     const res = await createUserShortUrl({
       userId: user.id,
@@ -31,6 +31,7 @@ export async function POST(req: Request) {
       visible,
       active,
       expiration,
+      password,
     });
     if (res.status !== "success") {
       return Response.json(res.status, {

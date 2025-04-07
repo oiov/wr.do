@@ -3,12 +3,10 @@
 import { useState } from "react";
 import Link from "next/link";
 import { User } from "@prisma/client";
-import { set } from "date-fns";
-import { LineChart, PenLine, RefreshCwIcon } from "lucide-react";
+import { PenLine, RefreshCwIcon } from "lucide-react";
 import { toast } from "sonner";
 import useSWR, { useSWRConfig } from "swr";
 
-import { siteConfig } from "@/config/site";
 import { ShortUrlFormData } from "@/lib/dto/short-urls";
 import {
   cn,
@@ -356,7 +354,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                       <TableCell className="col-span-1 flex items-center gap-1 sm:col-span-2">
                         <Link
                           className="overflow-hidden overflow-ellipsis whitespace-normal text-slate-600 hover:text-blue-400 hover:underline dark:text-slate-400"
-                          href={`https://${short.prefix}/s/${short.url}`}
+                          href={`https://${short.prefix}/s/${short.url}${short.password ? `?password=${short.password}` : ""}`}
                           target="_blank"
                           prefetch={false}
                           title={short.url}
@@ -364,7 +362,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                           {short.url}
                         </Link>
                         <CopyButton
-                          value={`${short.prefix}/s/${short.url}`}
+                          value={`${short.prefix}/s/${short.url}${short.password ? `?password=${short.password}` : ""}`}
                           className={cn(
                             "size-[25px]",
                             "duration-250 transition-all group-hover:opacity-100",

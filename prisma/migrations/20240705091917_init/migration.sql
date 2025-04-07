@@ -260,3 +260,4 @@ REFERENCES "user_emails" ("emailAddress")
 ON DELETE SET NULL 
 ON UPDATE CASCADE;
 
+ALTER TABLE "user_urls" ADD COLUMN "password" TEXT NOT NULL DEFAULT '';

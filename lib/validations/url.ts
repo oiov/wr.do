@@ -24,4 +24,5 @@ export const createUrlSchema = z.object({
   visible: z.number().default(1),
   active: z.number().default(1),
   prefix: z.string().default("wr.do"),
+  password: z.string().max(6).default(""),
 });

@@ -58,7 +58,7 @@ export function LinkPreviewer({
             title={url}
           >
             <span className="truncate">{formatUrl}</span>
-            <Icons.outLink className="ml-0.5 mt-0.5 size-3 flex-shrink-0" />
+            <Icons.outLink className="ml-0.5 mt-0.5 size-3 shrink-0" />
           </Link>
         </TooltipTrigger>
         <TooltipContent

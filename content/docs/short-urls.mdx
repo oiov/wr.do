@@ -28,6 +28,13 @@ WR.DO provides a simple access statistics feature that can be used to track the 
 
 Once the generated short chain becomes invalid, it will not be deleted. When accessing the short chain again, it will be redirected to this page. Users can reset the short chain validity period to activate.
 
+## Password
+
+- **No Password**: The short link will not require a password.
+- **Password**: The short link will require a password to access.
+
+Users can set a password for the short link to protect it from unauthorized access.
+
 ## API Reference
 
 The `POST /api/v1/short` endpoint allows you to create a new short link for a given long URL.
@@ -43,7 +50,8 @@ curl -X POST \
     "expiration": "-1",
     "prefix": "wr.do",
     "visible": 1,
-    "active": 1
+    "active": 1,
+    "password": ""
   }' \
   https://wr.do/api/v1/short
 ```
@@ -57,7 +65,8 @@ curl -X POST \
   "expiration": "-1", // optional, seconds, default: "-1", "-1" means no expiration; "60" means 60 seconds
   "prefix": "wr.do", // optional, default: wr.do
   "visible": 1, // optional, default: 1, 1: visible, 0: invisible
-  "active": 1 // optional, default: 1, 1: active, 0: inactive
+  "active": 1, // optional, default: 1, 1: active, 0: inactive
+  "password": "" // optional, max length: 6
 }
 ```
 
@@ -80,6 +89,7 @@ Add the header `wrdo-api-key: YOUR_API_KEY` to your request.
   "visible": 1,
   "active": 1,
   "expiration": "-1",
+  "password": "",
   "createdAt": 2025-01-01T00:00:00.000Z,
   "updatedAt": 2025-01-01T00:00:00.000Z
 }

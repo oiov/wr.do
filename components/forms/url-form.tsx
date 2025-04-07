@@ -67,6 +67,7 @@ export function UrlForm({
       prefix: initData?.prefix || siteConfig.shortDomains[0],
       visible: initData?.visible || 0,
       expiration: initData?.expiration || "-1",
+      password: initData?.password || "",
     },
   });
 
@@ -79,6 +80,10 @@ export function UrlForm({
   });
 
   const handleCreateUrl = async (data: ShortUrlFormData) => {
+    if (data.password !== "" && data.password.length !== 6) {
+      toast.error("Password must be 6 characters!");
+      return;
+    }
     startTransition(async () => {
       const response = await fetch(`${action}/add`, {
         method: "POST",
@@ -100,6 +105,10 @@ export function UrlForm({
   };
 
   const handleUpdateUrl = async (data: ShortUrlFormData) => {
+    if (data.password !== "" && data.password.length !== 6) {
+      toast.error("Password must be 6 characters!");
+      return;
+    }
     startTransition(async () => {
       if (type === "edit") {
         const response = await fetch(`${action}/update`, {
@@ -240,6 +249,33 @@ export function UrlForm({
         </div>
 
         <div className="items-center justify-start gap-4 md:flex">
+          <FormSectionColumns title="Password (Optional)">
+            <div className="flex w-full items-center gap-2">
+              <Label className="sr-only" htmlFor="password">
+                Password
+              </Label>
+              <Input
+                id="password"
+                className="flex-1 shadow-inner"
+                size={32}
+                maxLength={6}
+                type="password"
+                placeholder="Enter 6 character password"
+                {...register("password")}
+              />
+            </div>
+            <div className="flex flex-col justify-between p-1">
+              {errors?.password ? (
+                <p className="pb-0.5 text-[13px] text-red-600">
+                  {errors.password.message}
+                </p>
+              ) : (
+                <p className="pb-0.5 text-[13px] text-muted-foreground">
+                  Optional. If you want to protect your link.
+                </p>
+              )}
+            </div>
+          </FormSectionColumns>
           <FormSectionColumns title="Expiration">
             <Select
               onValueChange={(value: string) => {
@@ -263,6 +299,7 @@ export function UrlForm({
               Expiration time, default for never.
             </p>
           </FormSectionColumns>
+
           {/* <div>
           <p className="text-sm text-gray-700 dark:text-white">
             Your Final URL:

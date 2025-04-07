@@ -1,4 +1,3 @@
-import { auth } from "@/auth";
 import { UrlMeta, UserRole } from "@prisma/client";
 
 import { prisma } from "@/lib/db";
@@ -15,6 +14,7 @@ export interface ShortUrlFormData {
   visible: number;
   active: number;
   expiration: string;
+  password: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -110,6 +110,7 @@ export async function createUserShortUrl(data: ShortUrlFormData) {
         visible: data.visible,
         active: data.active,
         expiration: data.expiration,
+        password: data.password,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       },
@@ -134,6 +135,7 @@ export async function updateUserShortUrl(data: ShortUrlFormData) {
         prefix: data.prefix,
         // active: data.active,
         expiration: data.expiration,
+        password: data.password,
         updatedAt: new Date().toISOString(),
       },
     });
@@ -221,6 +223,7 @@ export async function getUrlBySuffix(suffix: string) {
       active: true,
       prefix: true,
       expiration: true,
+      password: true,
       updatedAt: true,
     },
   });
