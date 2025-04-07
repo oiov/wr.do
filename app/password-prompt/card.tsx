@@ -158,7 +158,7 @@ export default function PasswordPrompt() {
         </div>
       </div>
 
-      <footer className="py-4 text-center text-sm text-muted-foreground">
+      <footer className="z-10 py-4 text-center text-sm font-semibold text-neutral-300">
         Powered by{" "}
         <Link
           className="hover:underline"
