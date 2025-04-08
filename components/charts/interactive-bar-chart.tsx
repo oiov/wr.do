@@ -57,7 +57,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function InteractiveBarChart() {
-  const [timeRange, setTimeRange] = useState<string>("90d");
+  const [timeRange, setTimeRange] = useState<string>("7d");
   const [activeChart, setActiveChart] =
     React.useState<keyof typeof chartConfig>("users");
 

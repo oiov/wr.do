@@ -17,7 +17,7 @@ export async function GET(req: Request) {
     }
 
     const url = new URL(req.url);
-    const range = url.searchParams.get("range") || "90d";
+    const range = url.searchParams.get("range") || "7d";
 
     const startDate = getStartDate(range);
 
