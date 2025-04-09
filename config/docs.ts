@@ -31,6 +31,11 @@ export const docsConfig: DocsConfig = {
           href: "/docs/dns-records",
           icon: "page",
         },
+        {
+          title: "WRoom",
+          href: "/docs/wroom",
+          icon: "page",
+        },
       ],
     },
     {

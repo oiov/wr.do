@@ -12,6 +12,7 @@ export const sidebarLinks: SidebarNavItem[] = [
       { href: "/dashboard/urls", icon: "link", title: "Short Urls" },
       { href: "/emails", icon: "mail", title: "Emails" },
       { href: "/dashboard/records", icon: "globeLock", title: "DNS Records" },
+      { href: "/chat", icon: "messages", title: "WRoom" },
     ],
   },
   {
@@ -60,15 +61,15 @@ export const sidebarLinks: SidebarNavItem[] = [
         authorizeOnly: UserRole.ADMIN,
       },
       {
-        href: "/admin/records",
-        icon: "globe",
-        title: "Records",
-        authorizeOnly: UserRole.ADMIN,
-      },
-      {
         href: "/admin/urls",
         icon: "link",
         title: "URLs",
+        authorizeOnly: UserRole.ADMIN,
+      },
+      {
+        href: "/admin/records",
+        icon: "globe",
+        title: "Records",
         authorizeOnly: UserRole.ADMIN,
       },
     ],

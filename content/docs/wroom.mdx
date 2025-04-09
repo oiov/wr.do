@@ -1,0 +1,196 @@
+---
+title: WRoom
+description: A temporary, peer-to-peer, and secure chat room
+---
+
+## Introduction
+
+The **WRoom** is a decentralized, browser-based application built using **PeerJS**, enabling real-time communication between users without relying on a central server. Leveraging WebRTC technology, this chat room supports both text and image messaging, making it a versatile tool for peer-to-peer interaction. The application features a modern, responsive UI built with **React** and **Next.js**, offering a seamless experience across desktop and mobile devices.
+
+### Key Features
+- **Decentralized Communication**: Uses PeerJS for direct peer-to-peer connections, eliminating the need for a central server.
+- **Text Messaging**: Send and receive real-time text messages with timestamps and usernames.
+- **Image Messaging**: Share images (up to 5MB) with other users in the chat room, displayed inline with messages.
+- **User Management**: Displays a list of connected users with unique avatars and usernames.
+- **Room Creation and Sharing**: Create new rooms or join existing ones using a unique peer ID, with easy sharing via a generated URL.
+- **Responsive Design**: Adapts to various screen sizes, with a collapsible sidebar for mobile users.
+- **Connection Status**: Real-time indicators for online users and connection state.
+- **Dark Mode**: Toggle between light and dark themes for user preference.
+
+### Technical Highlights
+- Built with **Next.js** for server-side rendering and client-side interactivity.
+- Utilizes **PeerJS** with STUN servers for reliable WebRTC connections.
+- Messages are transmitted as structured objects to ensure data integrity, especially for Base64-encoded images.
+- Random usernames are generated using the `@scaleway/random-name` library.
+- Styled with **Tailwind CSS** and custom gradient-based avatars.
+
+## Usage Guide
+
+This section provides step-by-step instructions on how to use the WRoom effectively.
+
+### Prerequisites
+- A modern web browser (e.g., Chrome, Firefox, Edge) with WebRTC support.
+- An internet connection (required for initial peer connection via STUN servers).
+- No additional software installation is needed—just open the application in your browser.
+
+### Getting Started
+
+1. **Access the Chat Room**
+   - Open [https://wr.do/chat](https://wr.do/chat) in your browser.
+   - The chat room will automatically initialize and assign you a unique **Peer ID**.
+
+2. **Create a New Room**
+   - Upon loading, you are the "owner" of a new chat room by default.
+   - Your **Peer ID** (e.g., `abc123-xyz789`) is displayed under "Your ID."
+   - Share this ID with others to invite them to your room.
+
+3. **Join an Existing Room**
+   - If you have a room ID from another user, enter it in the "Room ID" field.
+   - Click the **Connect** button to join the room.
+   - Once connected, the button will turn green and display "Connected."
+
+4. **Share Your Room**
+   - Click the **Share Room** button next to "Your ID" to copy a URL (e.g., `https://wr.do/chat?room=abc123-xyz789`).
+   - Send this URL to others via email, messaging apps, or any preferred method.
+   - Recipients can open the URL to join your room directly.
+
+### Sending Messages
+
+1. **Text Messages**
+   - Type your message in the text area at the bottom of the chat window.
+   - Press **Enter** (without Shift) or click the **Send** button (paper plane icon) to send.
+   - Your message will appear on the right side with your username and timestamp, while others' messages appear on the left.
+
+2. **Image Messages**
+   - Click the **Image** icon (next to the Send button) to open a file picker.
+   - Select an image file from your device (max size: 5MB, supported formats: PNG, JPG, etc.).
+   - The image will be sent automatically and displayed in the chat with your username and timestamp.
+   - *Note*: If the image exceeds 5MB, an error toast will appear.
+
+### Managing the Chat Room
+
+- **View Users**
+  - Toggle the sidebar (via the menu icon) to see a list of connected users.
+  - The room owner is marked with an "Owner" badge.
+  - Each user has a unique gradient avatar based on their username.
+
+- **Create a New Room**
+  - If you’re the owner, click **New Room** in the sidebar to reset the current room and generate a new Peer ID.
+  - This disconnects all users and starts a fresh session.
+
+- **Disconnect**
+  - Simply close the browser tab to leave the room. If you’re the owner, the room persists as long as other peers remain connected.
+
+### UI Customization
+- **Dark Mode**: Use the toggle in the top-right corner to switch between light and dark themes.
+- **Sidebar**: On mobile devices, the sidebar is hidden by default; tap the menu icon to show it.
+
+### Troubleshooting
+- **Connection Issues**: If "Disconnected" appears, check your internet connection or try refreshing the page.
+- **Image Not Displaying**: Ensure the image is under 5MB and in a supported format. If the issue persists, verify the recipient’s browser console for errors.
+- **Peer ID Not Working**: Confirm the ID is correct and the room owner is still online.
+
+## Notes
+- **Limitations**: The chat room relies on WebRTC, so firewall or network restrictions may affect connectivity. Images larger than 5MB are blocked to prevent performance issues.
+- **Privacy**: No messages are stored server-side; all communication is peer-to-peer. However, use caution when sharing sensitive information.
+- **Future Enhancements**: Potential features include file compression, multi-file support, or end-to-end encryption.
+
+This WRoom offers a lightweight, user-friendly solution for real-time communication. Enjoy chatting and sharing with your peers at [https://wr.do/chat](https://wr.do/chat)!
+
+
+Chinese (Simplified):
+
+## 介绍
+
+**WRoom 聊天室** 是一款基于浏览器的去中心化应用程序，利用 **PeerJS** 实现用户之间的实时通信，无需依赖中央服务器。通过 WebRTC 技术，该聊天室支持文本和图片消息，使其成为一个多功能的点对点交互工具。应用采用 **React** 和 **Next.js** 构建，拥有现代化的响应式用户界面，适用于桌面和移动设备。
+
+### 主要功能
+- **去中心化通信**：通过 PeerJS 实现直接的点对点连接，无需中央服务器。
+- **文本消息**：实时发送和接收带有时间戳和用户名的文本消息。
+- **图片消息**：与聊天室中的其他用户分享图片（最大 5MB），图片将内嵌显示在消息中。
+- **用户管理**：显示连接用户的列表，每个用户拥有独特的头像和用户名。
+- **房间创建与分享**：创建新房间或加入现有房间，使用唯一的 Peer ID，并通过生成的 URL 轻松分享。
+- **响应式设计**：适配不同屏幕尺寸，移动端用户可折叠侧边栏。
+- **连接状态**：实时显示在线用户数和连接状态。
+- **暗色模式**：可在浅色和深色主题之间切换，满足用户偏好。
+
+### 技术亮点
+- 使用 **Next.js** 实现服务端渲染和客户端交互。
+- 利用 **PeerJS** 和 STUN 服务器确保 WebRTC 连接的可靠性。
+- 消息以结构化对象形式传输，确保数据完整性，特别是 Base64 编码的图片。
+- 使用 `@scaleway/random-name` 库生成随机用户名。
+- 使用 **Tailwind CSS** 进行样式设计，搭配基于梯度的自定义头像。
+
+## 使用指南
+
+本节提供逐步说明，帮助您有效使用 P2P 聊天室。
+
+### 前提条件
+- 一个支持 WebRTC 的现代浏览器（如 Chrome、Firefox、Edge）。
+- 互联网连接（通过 STUN 服务器建立初始 Peer 连接时需要）。
+- 无需安装额外软件，直接在浏览器中打开应用即可。
+
+### 开始使用
+
+1. **访问聊天室**
+   - 在浏览器中打开 [https://wr.do/chat](https://wr.do/chat)。
+   - 聊天室将自动初始化并为您分配一个唯一的 **Peer ID**。
+
+2. **创建新房间**
+   - 加载应用后，您默认成为新聊天室的“拥有者”。
+   - 您的 **Peer ID**（例如 `abc123-xyz789`）会显示在“Your ID”字段中。
+   - 将此 ID 分享给他人，邀请他们加入您的房间。
+
+3. **加入现有房间**
+   - 如果您有其他用户的房间 ID，请在“Room ID”字段中输入。
+   - 点击 **Connect（连接）** 按钮加入房间。
+   - 连接成功后，按钮将变为绿色并显示“Connected（已连接）”。
+
+4. **分享您的房间**
+   - 点击“Your ID”旁边的 **Share Room（分享房间）** 按钮，复制包含您 Peer ID 的 URL（例如 `https://wr.do/chat?room=abc123-xyz789`）。
+   - 通过电子邮件、消息应用或其他方式将此 URL 发送给他人。
+   - 接收者可直接打开 URL 加入您的房间。
+
+### 发送消息
+
+1. **文本消息**
+   - 在聊天窗口底部的文本区域输入消息。
+   - 按 **Enter** 键（不按 Shift）或点击 **Send（发送）** 按钮（纸飞机图标）发送。
+   - 您的消息将显示在右侧，带有您的用户名和时间戳；他人的消息显示在左侧。
+
+2. **图片消息**
+   - 点击 **Image（图片）** 图标（位于发送按钮旁）打开文件选择器。
+   - 从设备中选择图片文件（最大 5MB，支持 PNG、JPG 等格式）。
+   - 图片将自动发送并在聊天中显示，带有您的用户名和时间戳。
+   - *注意*：如果图片超过 5MB，会显示错误提示。
+
+### 管理聊天室
+
+- **查看用户**
+  - 通过菜单图标切换侧边栏，查看连接用户列表。
+  - 房间拥有者标有“Owner（拥有者）”徽章。
+  - 每个用户拥有基于用户名的独特梯度头像。
+
+- **创建新房间**
+  - 如果您是拥有者，点击侧边栏中的 **New Room（新房间）** 重置当前房间并生成新的 Peer ID。
+  - 这将断开所有用户连接并开始一个新会话。
+
+- **断开连接**
+  - 关闭浏览器标签即可离开房间。如果您是拥有者，只要其他 Peer 仍在线，房间会继续存在。
+
+### 界面自定义
+- **暗色模式**：使用右上角的切换按钮在浅色和深色主题间切换。
+- **侧边栏**：在移动设备上，侧边栏默认隐藏，点击菜单图标可显示。
+
+### 故障排除
+- **连接问题**：如果显示“Disconnected（已断开）”，请检查网络连接或刷新页面。
+- **图片未显示**：确保图片小于 5MB 且格式支持。如问题持续，请检查接收方浏览器控制台是否有错误。
+- **Peer ID 无效**：确认 ID 正确且房间拥有者仍在线。
+
+
+## 注意事项
+- **限制**：聊天室依赖 WebRTC，防火墙或网络限制可能影响连接。图片大小超过 5MB 将被阻止以避免性能问题。
+- **隐私**：消息不存储在服务器端，所有通信均为点对点。但分享敏感信息时仍需谨慎。
+- **未来改进**：可能添加的功能包括文件压缩、多文件支持或端到端加密。
+
+**WRoom** 提供了一个轻量级、用户友好的实时通信解决方案。立即访问 [https://wr.do/chat](https://wr.do/chat)，享受与您的朋友聊天和分享吧！

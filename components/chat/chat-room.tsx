@@ -1,13 +1,14 @@
-// components/ChatRoom.tsx
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import randomName from "@scaleway/random-name";
+import { is } from "cheerio/lib/api/traversing";
 import {
   Check,
   Copy,
+  Image as ImageIcon,
   Menu,
   PanelLeftClose,
   PanelRightClose,
@@ -30,7 +31,8 @@ import { Textarea } from "../ui/textarea";
 
 type Message = {
   id: string;
-  text: string;
+  text?: string;
+  image?: string;
   isSelf: boolean;
   timestamp: string;
   username: string;
@@ -58,14 +60,6 @@ const generateGradientClasses = (seed: string) => {
     "bg-gradient-to-br from-teal-400 to-green-500",
     "bg-gradient-to-br from-orange-400 to-yellow-500",
     "bg-gradient-to-br from-indigo-400 to-blue-500",
-    "bg-gradient-to-br from-pink-400 to-red-500",
-    "bg-gradient-to-br from-teal-400 to-green-500",
-    "bg-gradient-to-br from-orange-400 to-yellow-500",
-    "bg-gradient-to-br from-indigo-400 to-blue-500",
-    "bg-gradient-to-br from-pink-400 to-red-500",
-    "bg-gradient-to-br from-teal-400 to-green-500",
-    "bg-gradient-to-br from-orange-400 to-yellow-500",
-    "bg-gradient-to-br from-indigo-400 to-blue-500",
   ];
   const hash = seed
     .split("")
@@ -87,6 +81,7 @@ export default function ChatRoom() {
   const [isSending, setIsSending] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
   const [connectedCount, setConnectedCount] = useState(0);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(!isSm);
   const peerInstance = useRef<Peer | null>(null);
@@ -95,6 +90,7 @@ export default function ChatRoom() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
   const [isInvited, setIsInvited] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isSm || isMobile) {
@@ -105,11 +101,9 @@ export default function ChatRoom() {
   useEffect(() => {
     if ((remotePeerId || !!searchParams.get("room")) && !isConnected) {
       setIsInvited(true);
-      // setRemotePeerId(peerId);
     }
-  }, [remotePeerId, setRemotePeerId, searchParams.get("room"), isConnected]);
+  }, [remotePeerId, searchParams, isConnected]);
 
-  // 在组件初始化时就设置用户名，避免未定义的用户名问题
   useEffect(() => {
     const newUsername = randomName("", ".");
     setUsername(newUsername);
@@ -121,7 +115,6 @@ export default function ChatRoom() {
     }
   }, [searchParams]);
 
-  // 清理函数，组件卸载时清理连接
   useEffect(() => {
     return () => {
       if (peerInstance.current) {
@@ -150,28 +143,28 @@ export default function ChatRoom() {
     if (peerInstance.current) return;
 
     try {
-      const peer = new Peer();
+      const peer = new Peer({
+        config: {
+          iceServers: [
+            { urls: "stun:stun.l.google.com:19302" },
+            { urls: "stun:stun1.l.google.com:19302" },
+          ],
+        },
+      });
       peerInstance.current = peer;
 
       peer.on("open", (id) => {
         setPeerId(id);
-        // 初始化自己为用户列表的第一个
         setUsers((prev) => {
           const newUser = { peerId: id, username };
-          // 确保不重复添加
           if (!prev.some((u) => u.peerId === id)) {
             return [...prev, newUser];
           }
           return prev;
         });
-        setConnectedCount(1); // 至少包括自己
-
-        if (isInvited && remotePeerId && !isConnected) {
-          // connectToPeer(); // 被邀请者自动连接, BUG: 自动连接可能会导致用户列表无法刷新
-        }
+        setConnectedCount(1);
       });
 
-      // 只有非被邀请用户（中继服务器）监听新连接
       if (!isInvited) {
         peer.on("connection", (conn) => {
           connections.current.push(conn);
@@ -193,7 +186,7 @@ export default function ChatRoom() {
       console.error("Failed to initialize peer:", err);
       toast.error("Failed to initialize peer connection");
     }
-  }, [username, isInvited, remotePeerId, isConnected]);
+  }, [username, isInvited]);
 
   useEffect(() => {
     if (username) {
@@ -204,106 +197,108 @@ export default function ChatRoom() {
   const handleConnection = (conn: any) => {
     conn.on("open", () => {
       setIsConnected(true);
-
-      // 更新连接计数
       setConnectedCount((prev) => {
         const newCount = prev + 1;
         broadcastCount(newCount);
         return newCount;
       });
 
-      // 发送当前用户列表给新连接的客户端
       setTimeout(() => {
         const userList = JSON.stringify(users);
-        conn.send(`USERLIST:${userList}`);
-      }, 100); // 延迟发送，确保状态已更新
+        conn.send({ type: "USERLIST", data: userList });
+      }, 100);
     });
 
-    conn.on("data", (data: string) => {
-      if (data.startsWith("JOIN:")) {
-        const [_, joiningUsername, joiningPeerId] = data.split(":");
-        const joinMessage = {
-          id: crypto.randomUUID(),
-          text: `[${joiningUsername}] entered the room`,
-          isSelf: false,
-          timestamp: formatTime(new Date()),
-          username: "System",
-          isSystem: true,
-        };
-
-        setMessages((prev) => [...prev, joinMessage]);
-
-        // 更新用户列表，确保不重复添加
-        setUsers((prev) => {
-          if (!prev.some((u) => u.peerId === joiningPeerId)) {
-            const updatedUsers = [
-              ...prev,
-              { peerId: joiningPeerId, username: joiningUsername },
-            ];
-            setTimeout(() => {
-              broadcastUserList(updatedUsers);
-              broadcastCount(updatedUsers.length);
-            }, 100);
-            return updatedUsers;
-          }
-          return prev;
-        });
-
-        broadcastMessage(joinMessage, conn);
-      } else if (data.startsWith("COUNT:")) {
-        const count = parseInt(data.split("COUNT:")[1], 10);
-        setConnectedCount(count);
-      } else if (data.startsWith("USERLIST:")) {
-        try {
-          const userList = JSON.parse(data.split("USERLIST:")[1]);
+    conn.on("data", (data: any) => {
+      if (typeof data === "object" && data.type) {
+        if (data.type === "JOIN") {
+          const { username: joiningUsername, peerId: joiningPeerId } =
+            data.data;
+          const joinMessage = {
+            id: crypto.randomUUID(),
+            text: `[${joiningUsername}] entered the room`,
+            isSelf: false,
+            timestamp: formatTime(new Date()),
+            username: "System",
+            isSystem: true,
+          };
+          setMessages((prev) => [...prev, joinMessage]);
           setUsers((prev) => {
-            const mergedUsers = [...userList];
-            if (!mergedUsers.some((u) => u.peerId === peerId)) {
-              mergedUsers.push({ peerId, username });
+            if (!prev.some((u) => u.peerId === joiningPeerId)) {
+              const updatedUsers = [
+                ...prev,
+                { peerId: joiningPeerId, username: joiningUsername },
+              ];
+              setTimeout(() => {
+                broadcastUserList(updatedUsers);
+                broadcastCount(updatedUsers.length);
+              }, 100);
+              return updatedUsers;
             }
-            // 去除重复项
-            return mergedUsers.filter(
-              (user, index, self) =>
-                index === self.findIndex((u) => u.peerId === user.peerId),
-            );
+            return prev;
           });
-        } catch (err) {
-          console.error("Error parsing user list:", err);
+          broadcastMessage(joinMessage, conn);
+        } else if (data.type === "COUNT") {
+          setConnectedCount(data.data);
+        } else if (data.type === "USERLIST") {
+          try {
+            const userList = JSON.parse(data.data);
+            setUsers((prev) => {
+              const mergedUsers = [...userList];
+              if (!mergedUsers.some((u) => u.peerId === peerId)) {
+                mergedUsers.push({ peerId, username });
+              }
+              return mergedUsers.filter(
+                (user, index, self) =>
+                  index === self.findIndex((u) => u.peerId === user.peerId),
+              );
+            });
+          } catch (err) {
+            console.error("Error parsing user list:", err);
+          }
+        } else if (data.type === "LEAVE") {
+          const { username: leavingUsername, peerId: leavingPeerId } =
+            data.data;
+          const leaveMessage = {
+            id: crypto.randomUUID(),
+            text: `[${leavingUsername}] left the room`,
+            isSelf: false,
+            timestamp: formatTime(new Date()),
+            username: "System",
+            isSystem: true,
+          };
+          setMessages((prev) => [...prev, leaveMessage]);
+          broadcastMessage(leaveMessage, conn);
+        } else if (data.type === "IMAGE") {
+          const { username: senderUsername, image } = data.data;
+          const newMessage = {
+            id: crypto.randomUUID(),
+            image,
+            isSelf: false,
+            timestamp: formatTime(new Date()),
+            username: senderUsername,
+          };
+          setMessages((prev) => [...prev, newMessage]);
+          broadcastMessage(newMessage, conn);
+        } else if (data.type === "TEXT") {
+          const { username: senderUsername, text } = data.data;
+          const newMessage = {
+            id: crypto.randomUUID(),
+            text,
+            isSelf: false,
+            timestamp: formatTime(new Date()),
+            username: senderUsername,
+          };
+          setMessages((prev) => [...prev, newMessage]);
+          broadcastMessage(newMessage, conn);
         }
-      } else if (data.startsWith("LEAVE:")) {
-        const [_, leavingUsername, leavingPeerId] = data.split(":");
-        const leaveMessage = {
-          id: crypto.randomUUID(),
-          text: `[${leavingUsername}] left the room`,
-          isSelf: false,
-          timestamp: formatTime(new Date()),
-          username: "System",
-          isSystem: true,
-        };
-        setMessages((prev) => [...prev, leaveMessage]);
-        broadcastMessage(leaveMessage, conn);
-      } else {
-        const [receivedUsername, ...messageParts] = data.split(": ");
-        const newMessage = {
-          id: crypto.randomUUID(),
-          text: messageParts.join(": "),
-          isSelf: false,
-          timestamp: formatTime(new Date()),
-          username: receivedUsername,
-        };
-        setMessages((prev) => [...prev, newMessage]);
-        broadcastMessage(newMessage, conn);
       }
     });
 
     conn.on("close", () => {
       connections.current = connections.current.filter((c) => c !== conn);
-
-      // 找到断开连接的用户
       const disconnectedUser = users.find((user) => user.peerId === conn.peer);
-
       if (disconnectedUser) {
-        // 创建离开的系统消息
         const leaveMessage = {
           id: crypto.randomUUID(),
           text: `[${disconnectedUser.username}] left the room`,
@@ -313,8 +308,6 @@ export default function ChatRoom() {
           isSystem: true,
         };
         setMessages((prev) => [...prev, leaveMessage]);
-
-        // 更新用户列表
         setUsers((prev) => {
           const updatedUsers = prev.filter((user) => user.peerId !== conn.peer);
           setTimeout(() => {
@@ -324,8 +317,6 @@ export default function ChatRoom() {
           return updatedUsers;
         });
       }
-
-      // 更新连接状态
       if (!connRef.current && connections.current.length === 0) {
         setIsConnected(false);
       }
@@ -333,11 +324,20 @@ export default function ChatRoom() {
   };
 
   const broadcastMessage = (message: Message, senderConn: any) => {
-    // 确保只广播到相关的连接
     connections.current.forEach((conn) => {
       if (conn !== senderConn && conn.open) {
         try {
-          conn.send(`${message.username}: ${message.text}`);
+          if (message.image) {
+            conn.send({
+              type: "IMAGE",
+              data: { username: message.username, image: message.image },
+            });
+          } else if (message.text) {
+            conn.send({
+              type: "TEXT",
+              data: { username: message.username, text: message.text },
+            });
+          }
         } catch (err) {
           console.error("Error broadcasting message:", err);
         }
@@ -349,7 +349,7 @@ export default function ChatRoom() {
     connections.current.forEach((conn) => {
       if (conn.open) {
         try {
-          conn.send(`COUNT:${count}`);
+          conn.send({ type: "COUNT", data: count });
         } catch (err) {
           console.error("Error broadcasting count:", err);
         }
@@ -363,7 +363,7 @@ export default function ChatRoom() {
     connections.current.forEach((conn) => {
       if (conn.open) {
         try {
-          conn.send(`USERLIST:${userList}`);
+          conn.send({ type: "USERLIST", data: userList });
         } catch (err) {
           console.error("Error broadcasting user list:", err);
         }
@@ -383,88 +383,94 @@ export default function ChatRoom() {
       connRef.current = conn;
 
       conn.on("open", () => {
-        conn.send(`JOIN:${username}:${peerId}`);
+        conn.send({ type: "JOIN", data: { username, peerId } });
         setIsConnected(true);
       });
 
-      conn.on("data", (data: string) => {
-        if (data.startsWith("JOIN:")) {
-          const [_, joiningUsername, joiningPeerId] = data.split(":");
-          const joinMessage = {
-            id: crypto.randomUUID(),
-            text: `[${joiningUsername}] entered the room`,
-            isSelf: false,
-            timestamp: formatTime(new Date()),
-            username: "System",
-            isSystem: true,
-          };
-          setMessages((prev) => [...prev, joinMessage]);
-
-          // 更新用户列表，确保不重复添加
-          setUsers((prev) => {
-            if (!prev.some((u) => u.peerId === joiningPeerId)) {
-              return [
-                ...prev,
-                { peerId: joiningPeerId, username: joiningUsername },
-              ];
-            }
-            return prev;
-          });
-        } else if (data.startsWith("COUNT:")) {
-          const count = parseInt(data.split("COUNT:")[1], 10);
-          setConnectedCount(count);
-        } else if (data.startsWith("USERLIST:")) {
-          try {
-            const userList = JSON.parse(data.split("USERLIST:")[1]);
+      conn.on("data", (data: any) => {
+        if (typeof data === "object" && data.type) {
+          if (data.type === "JOIN") {
+            const { username: joiningUsername, peerId: joiningPeerId } =
+              data.data;
+            const joinMessage = {
+              id: crypto.randomUUID(),
+              text: `[${joiningUsername}] entered the room`,
+              isSelf: false,
+              timestamp: formatTime(new Date()),
+              username: "System",
+              isSystem: true,
+            };
+            setMessages((prev) => [...prev, joinMessage]);
             setUsers((prev) => {
-              const mergedUsers = [...userList];
-              if (!mergedUsers.some((u) => u.peerId === peerId)) {
-                mergedUsers.push({ peerId, username });
+              if (!prev.some((u) => u.peerId === joiningPeerId)) {
+                return [
+                  ...prev,
+                  { peerId: joiningPeerId, username: joiningUsername },
+                ];
               }
-              // 去除重复项
-              return mergedUsers.filter(
-                (user, index, self) =>
-                  index === self.findIndex((u) => u.peerId === user.peerId),
-              );
+              return prev;
             });
-          } catch (err) {
-            console.error("Error parsing user list:", err);
+          } else if (data.type === "COUNT") {
+            setConnectedCount(data.data);
+          } else if (data.type === "USERLIST") {
+            try {
+              const userList = JSON.parse(data.data);
+              setUsers((prev) => {
+                const mergedUsers = [...userList];
+                if (!mergedUsers.some((u) => u.peerId === peerId)) {
+                  mergedUsers.push({ peerId, username });
+                }
+                return mergedUsers.filter(
+                  (user, index, self) =>
+                    index === self.findIndex((u) => u.peerId === user.peerId),
+                );
+              });
+            } catch (err) {
+              console.error("Error parsing user list:", err);
+            }
+          } else if (data.type === "LEAVE") {
+            const { username: leavingUsername, peerId: leavingPeerId } =
+              data.data;
+            const leaveMessage = {
+              id: crypto.randomUUID(),
+              text: `[${leavingUsername}] left the room`,
+              isSelf: false,
+              timestamp: formatTime(new Date()),
+              username: "System",
+              isSystem: true,
+            };
+            setMessages((prev) => [...prev, leaveMessage]);
+          } else if (data.type === "IMAGE") {
+            const { username: senderUsername, image } = data.data;
+            const newMessage = {
+              id: crypto.randomUUID(),
+              image,
+              isSelf: false,
+              timestamp: formatTime(new Date()),
+              username: senderUsername,
+            };
+            setMessages((prev) => [...prev, newMessage]);
+          } else if (data.type === "TEXT") {
+            const { username: senderUsername, text } = data.data;
+            const newMessage = {
+              id: crypto.randomUUID(),
+              text,
+              isSelf: false,
+              timestamp: formatTime(new Date()),
+              username: senderUsername,
+            };
+            setMessages((prev) => [...prev, newMessage]);
           }
-        } else if (data.startsWith("LEAVE:")) {
-          const [_, leavingUsername, leavingPeerId] = data.split(":");
-          const leaveMessage = {
-            id: crypto.randomUUID(),
-            text: `[${leavingUsername}] left the room`,
-            isSelf: false,
-            timestamp: formatTime(new Date()),
-            username: "System",
-            isSystem: true,
-          };
-          setMessages((prev) => [...prev, leaveMessage]);
-        } else {
-          const [receivedUsername, ...messageParts] = data.split(": ");
-          const newMessage = {
-            id: crypto.randomUUID(),
-            text: messageParts.join(": "),
-            isSelf: false,
-            timestamp: formatTime(new Date()),
-            username: receivedUsername,
-          };
-          setMessages((prev) => [...prev, newMessage]);
         }
       });
 
       conn.on("close", () => {
         setIsConnected(false);
         connRef.current = null;
-
-        // 找到断开连接的用户
         const disconnectedUser = users.find(
           (user) => user.peerId === remotePeerId,
         );
-
         if (disconnectedUser) {
-          // 创建离开的系统消息
           const leaveMessage = {
             id: crypto.randomUUID(),
             text: `[${disconnectedUser.username}] left the room`,
@@ -475,8 +481,6 @@ export default function ChatRoom() {
           };
           setMessages((prev) => [...prev, leaveMessage]);
         }
-
-        // 更新用户列表
         setUsers((prev) => {
           const updatedUsers = prev.filter(
             (user) => user.peerId !== remotePeerId,
@@ -500,11 +504,67 @@ export default function ChatRoom() {
     }
   }, [remotePeerId, username, peerId, users]);
 
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("Image size should not exceed 5MB");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedImage(file);
+        sendImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const sendImage = (base64Image: string) => {
+    if (!base64Image || isSending) return;
+
+    setIsSending(true);
+    const newMessage = {
+      id: crypto.randomUUID(),
+      image: base64Image,
+      isSelf: true,
+      timestamp: formatTime(new Date()),
+      username,
+    };
+    setMessages((prev) => [...prev, newMessage]);
+
+    try {
+      if (connRef.current && connRef.current.open) {
+        connRef.current.send({
+          type: "IMAGE",
+          data: { username, image: base64Image },
+        });
+      } else if (!isInvited && connections.current.length > 0) {
+        connections.current.forEach((conn) => {
+          if (conn.open) {
+            conn.send({
+              type: "IMAGE",
+              data: { username, image: base64Image },
+            });
+          }
+        });
+      }
+    } catch (err) {
+      console.error("Error sending image:", err);
+      toast.error("Failed to send image");
+    }
+
+    setSelectedImage(null);
+    setIsSending(false);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
   const sendMessage = useCallback(() => {
     if (!message || isSending) return;
 
     setIsSending(true);
-    const formattedMessage = `${username}: ${message}`;
     const newMessage = {
       id: crypto.randomUUID(),
       text: message,
@@ -516,12 +576,14 @@ export default function ChatRoom() {
 
     try {
       if (connRef.current && connRef.current.open) {
-        connRef.current.send(formattedMessage);
+        connRef.current.send({
+          type: "TEXT",
+          data: { username, text: message },
+        });
       } else if (!isInvited && connections.current.length > 0) {
-        // 只广播到当前房间的连接
         connections.current.forEach((conn) => {
           if (conn.open) {
-            conn.send(formattedMessage);
+            conn.send({ type: "TEXT", data: { username, text: message } });
           }
         });
       }
@@ -569,12 +631,11 @@ export default function ChatRoom() {
 
   const createNewRoom = () => {
     if (peerInstance.current) {
-      // 通知其他用户我要离开
       if (username && peerId) {
         connections.current.forEach((conn) => {
           if (conn.open) {
             try {
-              conn.send(`LEAVE:${username}:${peerId}`);
+              conn.send({ type: "LEAVE", data: { username, peerId } });
             } catch (err) {
               console.error("Error sending leave notification:", err);
             }
@@ -582,7 +643,6 @@ export default function ChatRoom() {
         });
       }
 
-      // 清理当前连接
       peerInstance.current.destroy();
       peerInstance.current = null;
       connections.current.forEach((conn) => {
@@ -594,7 +654,6 @@ export default function ChatRoom() {
       }
       connRef.current = null;
 
-      // 重置状态
       setPeerId("");
       setRemotePeerId("");
       setMessages([]);
@@ -602,7 +661,6 @@ export default function ChatRoom() {
       setIsConnected(false);
       setConnectedCount(0);
 
-      // 重新初始化
       setTimeout(() => {
         initializePeer();
       }, 500);
@@ -611,7 +669,6 @@ export default function ChatRoom() {
 
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-blue-50 to-neutral-100 dark:from-neutral-900 dark:to-neutral-800">
-      {/* 侧边栏 */}
       {(isMobile && isSidebarOpen) || (!isMobile && isSidebarOpen) ? (
         <div
           className={`${
@@ -627,7 +684,7 @@ export default function ChatRoom() {
             <Button
               variant={"ghost"}
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="p-0 text-neutral-600 hover:text-blue-500 dark:text-neutral-400 dark:hover:text-blue-400"
+              className="h-5 p-0 text-neutral-600 hover:text-blue-500 dark:text-neutral-400 dark:hover:text-blue-400"
             >
               {!isSidebarOpen ? (
                 <PanelRightClose size={20} />
@@ -659,53 +716,63 @@ export default function ChatRoom() {
               ))
             )}
           </div>
-          {!isInvited && (
-            <Button
-              onClick={createNewRoom}
-              variant={"outline"}
-              className="mt-auto flex items-center justify-center gap-1"
-            >
-              <Plus size={20} />
-              New Room
-            </Button>
-          )}
+          <Button
+            onClick={createNewRoom}
+            variant={"outline"}
+            className="mt-auto flex items-center justify-center gap-1"
+          >
+            <Plus size={20} />
+            New Room
+          </Button>
         </div>
       ) : null}
 
-      {/* 聊天框 */}
       <div
-        className={`flex flex-1 flex-col bg-white px-4 pb-1 pt-3 transition-all duration-300 dark:bg-neutral-800 ${
+        className={`grids grids-dark flex flex-1 flex-col bg-white px-4 pb-1 pt-3 transition-all duration-300 dark:bg-neutral-800 ${
           isMobile || !isSidebarOpen ? "w-full" : ""
         }`}
       >
-        <div className="mb-4 flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
+        <div className="mb-4 flex items-center justify-between gap-4">
+          <div className="mr-auto flex items-center gap-2">
             <Button
               variant={"ghost"}
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="p-0 text-neutral-600 hover:text-blue-500 dark:text-neutral-400 dark:hover:text-blue-400"
+              className="h-5 p-0 text-neutral-600 hover:text-blue-500 dark:text-neutral-400 dark:hover:text-blue-400"
             >
               {!isSidebarOpen && <PanelRightClose size={20} />}
             </Button>
-            <h1 className="text-2xl font-bold text-neutral-800 dark:text-neutral-100">
-              Chat Room
-            </h1>
+            <Link
+              href={"/chat"}
+              className="text-2xl font-bold text-neutral-800 dark:text-neutral-100"
+              style={{ fontFamily: "Bahamas Bold" }}
+            >
+              WRoom
+            </Link>
             <Badge>Beta</Badge>
           </div>
-          <div className="ml-auto flex items-center gap-2">
+
+          {!isMobile && (
+            <>
+              <Link
+                className="text-sm hover:underline"
+                href={"/dashboard"}
+                target="_blank"
+              >
+                Dashboard
+              </Link>
+              <Link
+                className="text-sm hover:underline"
+                href={"/docs/wroom"}
+                target="_blank"
+              >
+                About
+              </Link>
+            </>
+          )}
+          <div className="flex items-center gap-2">
             <Badge className="flex items-center gap-1 text-xs text-green-300 dark:text-green-700">
               <Icons.users className="size-3" /> Online: {connectedCount}
             </Badge>
-
-            {/* <span
-              className={`rounded-full px-2 py-1 text-xs ${
-                isConnected
-                  ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                  : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
-              }`}
-            >
-              {isConnected ? "Connected" : "Disconnected"}
-            </span> */}
           </div>
           <ModeToggle />
         </div>
@@ -713,7 +780,7 @@ export default function ChatRoom() {
         <div className="mb-4 space-y-3">
           <div className="flex items-center gap-2">
             <span className="text-sm text-neutral-600 dark:text-neutral-400">
-              Your&nbsp; &nbsp;ID:
+              Your&nbsp;&nbsp;&nbsp;ID:
             </span>
             <Input
               type="text"
@@ -745,13 +812,12 @@ export default function ChatRoom() {
               Room ID:
             </span>
             {!isInvited && isConnected ? (
-              // <Badge>Room owner</Badge>
               <Input
                 type="text"
-                placeholder="Your are the room owner"
+                placeholder="You are the room owner"
                 readOnly
                 disabled
-                className="flex-1 rounded border focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-200 dark:placeholder-neutral-400"
+                className="flex-1 rounded border bg-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-200 dark:placeholder-neutral-400"
               />
             ) : (
               <Input
@@ -761,14 +827,13 @@ export default function ChatRoom() {
                 placeholder="Enter a room id"
                 readOnly={isConnected}
                 disabled={isConnected}
-                className="flex-1 rounded border focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-200 dark:placeholder-neutral-400"
+                className="flex-1 rounded border bg-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-200 dark:placeholder-neutral-400"
               />
             )}
-
             <Button
               variant={"secondary"}
               onClick={connectToPeer}
-              disabled={!remotePeerId || isConnected}
+              disabled={!peerId || !remotePeerId || isConnected}
               size={"sm"}
               className={cn(
                 "flex items-center gap-2 rounded bg-blue-500 text-white transition-colors hover:bg-blue-600 disabled:cursor-not-allowed disabled:bg-neutral-400 dark:bg-blue-600 dark:hover:bg-blue-700",
@@ -782,7 +847,7 @@ export default function ChatRoom() {
           </div>
         </div>
 
-        <div className="h-full min-h-[100px] overflow-y-auto rounded-md rounded-b-none border border-neutral-200 p-4 dark:border-neutral-600 dark:bg-neutral-700">
+        <div className="h-full min-h-[100px] overflow-y-auto rounded-md rounded-b-none border border-neutral-200 bg-white p-4 dark:border-neutral-600 dark:bg-neutral-700">
           {messages.map((msg) => (
             <div
               key={msg.id}
@@ -820,7 +885,15 @@ export default function ChatRoom() {
                           : "bg-neutral-200 text-neutral-800 dark:bg-neutral-600 dark:text-neutral-200"
                       }`}
                     >
-                      <p className="text-sm">{msg.text}</p>
+                      {msg.text && <p className="text-sm">{msg.text}</p>}
+                      {msg.image && (
+                        <img
+                          src={msg.image}
+                          alt="Sent image"
+                          className="max-w-full rounded-md"
+                          style={{ maxHeight: "200px" }}
+                        />
+                      )}
                       <span
                         className={cn(
                           "mt-1 block text-xs opacity-70",
@@ -855,21 +928,42 @@ export default function ChatRoom() {
             onChange={(e) => setMessage(e.target.value)}
             placeholder={`Hi ${username || "Loading..."}, send a message to start...`}
             className="min-h-20 flex-1 rounded-md rounded-t-none border border-t-0 bg-neutral-50 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 dark:border-neutral-600 dark:bg-neutral-600 dark:text-neutral-200 dark:placeholder-neutral-400"
-            onKeyPress={(e) => e.key === "Enter" && sendMessage()}
+            onKeyPress={(e) =>
+              e.key === "Enter" && !e.shiftKey && sendMessage()
+            }
             disabled={!isConnected}
           />
-          <Button
-            onClick={sendMessage}
-            disabled={!isConnected || !message || isSending}
-            className="absolute bottom-2 right-2"
-            size={"sm"}
-          >
-            {isSending ? (
-              <span className="animate-spin">⌛</span>
-            ) : (
-              <Icons.send className="size-4" />
-            )}
-          </Button>
+          <div className="absolute bottom-2 right-2 flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={!isConnected || isSending}
+              title="Send Image"
+            >
+              <ImageIcon size={16} />
+            </Button>
+            <input
+              type="file"
+              ref={fileInputRef}
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="hidden"
+            />
+            <Button
+              onClick={sendMessage}
+              disabled={
+                !isConnected || (!message && !selectedImage) || isSending
+              }
+              size={"sm"}
+            >
+              {isSending ? (
+                <span className="animate-spin">⌛</span>
+              ) : (
+                <Icons.send className="size-4" />
+              )}
+            </Button>
+          </div>
         </div>
 
         <footer className="mt-2 py-2 text-center text-sm font-semibold text-neutral-600 dark:text-neutral-300">
