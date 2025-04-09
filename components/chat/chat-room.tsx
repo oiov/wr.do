@@ -755,17 +755,17 @@ export default function ChatRoom() {
             <>
               <Link
                 className="text-sm hover:underline"
-                href={"/dashboard"}
-                target="_blank"
-              >
-                Dashboard
-              </Link>
-              <Link
-                className="text-sm hover:underline"
                 href={"/docs/wroom"}
                 target="_blank"
               >
                 About
+              </Link>
+              <Link
+                className="text-sm hover:underline"
+                href={"/dashboard"}
+                target="_blank"
+              >
+                Dashboard
               </Link>
             </>
           )}
