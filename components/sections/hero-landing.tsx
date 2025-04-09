@@ -23,7 +23,7 @@ export default async function HeroLanding() {
             "px-4",
           )}
         >
-          <span className="mr-3">🎉</span>Email receivers is&nbsp;
+          <span className="mr-3">🎉</span>Email features are&nbsp;
           <span className="font-bold" style={{ fontFamily: "Bahamas Bold" }}>
             available
           </span>

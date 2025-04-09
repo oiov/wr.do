@@ -12,7 +12,7 @@ import {
   SquarePlus,
 } from "lucide-react";
 import { toast } from "sonner";
-import useSWR from "swr"; // Changed from useSWRInfinite to useSWR
+import useSWR from "swr";
 
 import { siteConfig } from "@/config/site";
 import { UserEmailList } from "@/lib/dto/email";

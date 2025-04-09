@@ -82,6 +82,7 @@
     "next-themes": "^0.3.0",
     "next-view-transitions": "^0.3.0",
     "nodemailer": "^6.9.14",
+    "peerjs": "^1.5.4",
     "prop-types": "^15.8.1",
     "react": "18.3.1",
     "react-countup": "^6.5.3",
