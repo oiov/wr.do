@@ -649,8 +649,10 @@ export default function ChatRoom() {
                   className="flex items-center gap-2 rounded-lg p-2 text-sm text-neutral-700 dark:text-neutral-300"
                 >
                   <div
-                    className={`h-8 w-8 rounded-full ${generateGradientClasses(user.username)}`}
-                  />
+                    className={`flex h-8 w-8 items-center justify-center rounded-full text-white ${generateGradientClasses(user.username)}`}
+                  >
+                    {user.username.slice(0, 1).toUpperCase()}
+                  </div>
                   <span className="truncate">{user.username}</span>
                   {index === 0 && <Badge>Owner</Badge>}
                 </div>
@@ -794,7 +796,7 @@ export default function ChatRoom() {
                 <>
                   {!msg.isSelf && (
                     <div
-                      className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-primary-foreground ${generateGradientClasses(
+                      className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-white ${generateGradientClasses(
                         msg.username,
                       )}`}
                     >
@@ -831,7 +833,7 @@ export default function ChatRoom() {
                   </div>
                   {msg.isSelf && (
                     <div
-                      className={`mt-1 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-primary-foreground ${avatarClasses}`}
+                      className={`mt-1 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-white ${avatarClasses}`}
                     >
                       {username?.slice(0, 1).toUpperCase()}
                     </div>
