@@ -36,4 +36,124 @@ Each email address can receive unlimited emails
 
 For send emails, the maximum number of emails is 10 per day.
 
+## API Reference
 
+The Email API allows you to create and manage email addresses and retrieve received emails in your inbox.
+
+### Create Email Address
+
+The `POST /api/v1/email` endpoint allows you to create a new email address.
+
+```bash
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -H "wrdo-api-key: YOUR_API_KEY" \
+  -d '{
+    "emailAddress": "your-suffix@wr.do"
+  }' \
+  https://wr.do/api/v1/email
+```
+
+#### Request Body (Params)
+
+```json
+{
+  "emailAddress": "your-suffix@wr.do" // required, suffix must be at least 5 characters
+}
+```
+
+#### Authorization Header
+
+- `wrdo-api-key`: You can use your API key to authenticate your requests. 
+You can find your API key in your [account settings](/dashboard/settings).
+Add the header `wrdo-api-key: YOUR_API_KEY` to your request.
+
+#### Response
+
+On success (Status 201):
+```json
+{
+  id: string;
+  userId: string;
+  emailAddress: string;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date | null;
+}
+```
+
+#### Error Responses
+
+- `401 Unauthorized`: Missing or invalid API key
+- `400 Bad Request`: Missing email address or invalid suffix (less than 5 characters)
+- `403 Forbidden`: Email address quota has been reached
+- `409 Conflict`: Email address already exists
+- `500 Internal Server Error`: Server error
+
+### Get Email Inbox
+
+The `GET /api/v1/email/inbox` endpoint allows you to retrieve all forwarded emails for a specific email address.
+
+<Callout type="warning" twClass="mt-0">
+  You must create a email address before you can get the inbox.
+</Callout>
+
+```bash
+curl -X GET \
+  -H "wrdo-api-key: YOUR_API_KEY" \
+  "https://wr.do/api/v1/email/inbox?emailAddress=your-suffix@wr.do&page=1&size=10"
+```
+
+#### Query Parameters
+
+- `emailAddress`: The email address to get the inbox for (required)
+- `page`: Page number for pagination (optional, default: 1)
+- `size`: Number of emails per page (optional, default: 10)
+
+#### Authorization Header
+
+- `wrdo-api-key`: You can use your API key to authenticate your requests. 
+You can find your API key in your [account settings](/dashboard/settings).
+Add the header `wrdo-api-key: YOUR_API_KEY` to your request.
+
+#### Response
+
+On success (Status 200):
+```json
+{
+  "list": [
+    {
+      id: string
+      from: string
+      fromName: string
+      to: string
+      subject: string | null
+      text: string | null
+      html: string | null
+      date: string | null
+      messageId: string | null
+      replyTo: string | null
+      cc: string | null
+      headers: string | null
+      attachments: string | null
+      readAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+    },
+  ],
+  "total": 25
+}
+```
+
+#### Error Responses
+
+- `401 Unauthorized`: Missing or invalid API key
+- `400 Bad Request`: Missing emailAddress parameter
+- `404 Not Found`: Email address not found or has been deleted
+- `500 Internal Server Error`: Server error
+
+### Delete Email Address
+
+The `DELETE /api/v1/email` endpoint allows you to delete a specific email address.
+
+working on it.

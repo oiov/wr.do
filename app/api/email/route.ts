@@ -45,14 +45,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json("Missing userId or emailAddress", { status: 400 });
   }
 
-  const suffix = emailAddress.split("@")[0];
-  if (!suffix || suffix < 5) {
+  const prefix = emailAddress.split("@")[0];
+  if (!prefix || prefix.length < 5) {
     return NextResponse.json("Email address length must be at least 5", {
       status: 400,
     });
   }
 
-  if (reservedAddressSuffix.includes(suffix)) {
+  if (reservedAddressSuffix.includes(prefix)) {
     return NextResponse.json("Invalid email address", { status: 400 });
   }
 

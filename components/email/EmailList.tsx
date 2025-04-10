@@ -364,6 +364,16 @@ export function EmptyInboxSection() {
             What is the limit? It's free?
           </Link>
         </li>
+        <li>
+          <Link
+            className="text-blue-500 underline"
+            href="/docs/emails#api-reference"
+            target="_blank"
+            rel="noreferrer"
+          >
+            How to create emails with api?
+          </Link>
+        </li>
       </ul>
       <div className="mt-6 flex gap-2">
         <span className="h-2 w-2 animate-pulse rounded-full bg-neutral-300 dark:bg-neutral-600" />

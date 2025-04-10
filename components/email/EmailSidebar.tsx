@@ -19,6 +19,7 @@ import { UserEmailList } from "@/lib/dto/email";
 import { reservedAddressSuffix } from "@/lib/enums";
 import { cn, fetcher, timeAgo } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import ApiReference from "@/app/emails/api-reference";
 
 import CountUp from "../dashboard/count-up";
 import { CopyButton } from "../shared/copy-button";
@@ -544,14 +545,14 @@ export default function EmailSidebar({
                       setDomainSuffix(value);
                     }}
                     name="suffix"
-                    defaultValue={domainSuffix || siteConfig.shortDomains[0]}
+                    defaultValue={domainSuffix || siteConfig.emailDomains[0]}
                     disabled={isEdit}
                   >
                     <SelectTrigger className="w-1/3 rounded-none border-x-0 shadow-inner">
                       <SelectValue placeholder="Select a domain" />
                     </SelectTrigger>
                     <SelectContent>
-                      {siteConfig.shortDomains.map((v) => (
+                      {siteConfig.emailDomains.map((v) => (
                         <SelectItem key={v} value={v}>
                           @{v}
                         </SelectItem>
