@@ -8,7 +8,7 @@ export const marketingConfig: MarketingConfig = {
     },
     {
       title: "Discord",
-      href: "/s/discord",
+      href: "https://discord.gg/AHPQYuZu3m",
     },
   ],
 };
