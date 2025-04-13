@@ -7,15 +7,13 @@
 
 ## Features
 
-- 🔗 **URL Shortening:** Generate short links with visitor analytic and password
-- 📮 **Email Support:** Receive emails and send emails
+- 🔗 **URL Shortening:** Generate short links with visitor analytic and password(support api)
+- 📮 **Email Support:** Receive emails and send emails(support api)
+- 💬 **P2P Chat:** Start chat in seconds
 - 🌐 **Multi-Tenant Support:** Manage multiple DNS records seamlessly
-- ⚡ **Instant Record Creation:** Set up CNAME, A, and other records quickly
-- 📸 **Screenshot API:** Access to screenshot API.
-- 💯 **Meta Scraping API:** Access to meta scraping API.
+- 📸 **Screenshot API:** Access to screenshot api、website meta-info scraping api.
 - 😀 **Permission Management:** A convenient admin panel for auditing
 - 🔒 **Secure & Reliable:** Built on Cloudflare's robust DNS API
-- 💰 **Free Registration:** No cost to create and manage records
 
 ## Screenshots
 
