@@ -17,6 +17,7 @@ export const siteConfig: SiteConfig = {
   links: {
     twitter: "https://twitter.com/yesmoree",
     github: "https://github.com/oiov/wr.do",
+    feedback: "https://github.com/oiov/wr.do/issues",
     discord: "https://discord.gg/AHPQYuZu3m",
   },
   mailSupport: "support@wr.do",
@@ -38,6 +39,7 @@ export const footerLinks: SidebarNavItem[] = [
       { title: "Terms", href: "/terms" },
       { title: "Privacy", href: "/privacy" },
       { title: "Blog", href: "https://www.oiov.dev" },
+      { title: "Feedback", href: siteConfig.links.feedback },
     ],
   },
   {

@@ -12,6 +12,7 @@ export type SiteConfig = {
   links: {
     twitter: string;
     github: string;
+    feedback: string;
     discord: string;
   };
   freeQuota: {

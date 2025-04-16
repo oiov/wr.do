@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import randomName from "@scaleway/random-name";
-import { is } from "cheerio/lib/api/traversing";
 import {
   Check,
   Copy,

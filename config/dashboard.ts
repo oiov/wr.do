@@ -81,7 +81,12 @@ export const sidebarLinks: SidebarNavItem[] = [
       { href: "/", icon: "home", title: "Homepage" },
       { href: "/docs", icon: "bookOpen", title: "Documentation" },
       { href: siteConfig.links.github, icon: "github", title: "Github" },
-      { href: siteConfig.links.discord, icon: "discord", title: "Discord" },
+      {
+        href: siteConfig.links.feedback,
+        icon: "messageQuoted",
+        title: "Feedback",
+      },
+      // { href: siteConfig.links.discord, icon: "discord", title: "Discord" },
       {
         href: "mailto:" + siteConfig.mailSupport,
         icon: "mail",
