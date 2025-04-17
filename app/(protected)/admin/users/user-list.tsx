@@ -203,7 +203,7 @@ export default function UsersList({ user }: UrlListProps) {
                   Status
                 </TableHead>
                 <TableHead className="col-span-1 hidden items-center justify-center font-bold sm:flex">
-                  CreatedAt
+                  Join
                 </TableHead>
                 <TableHead className="col-span-1 flex items-center justify-center font-bold">
                   Actions
@@ -252,7 +252,7 @@ export default function UsersList({ user }: UrlListProps) {
                     </TableCell>
                     <TableCell className="col-span-1 hidden justify-center sm:flex">
                       <Badge className="text-xs" variant="outline">
-                        {user.team}
+                        {user.team?.toLocaleUpperCase()}
                       </Badge>
                     </TableCell>
                     <TableCell className="col-span-1 hidden justify-center sm:flex">

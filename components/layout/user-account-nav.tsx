@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { UserAvatar } from "@/components/shared/user-avatar";
 
+import { Badge } from "../ui/badge";
+
 export function UserAccountNav() {
   const { data: session } = useSession();
   const user = session?.user;
@@ -53,7 +55,13 @@ export function UserAccountNav() {
 
             <div className="flex items-center justify-start gap-2 p-2">
               <div className="flex flex-col">
-                {user.name && <p className="font-medium">{user.name}</p>}
+                <div className="flex items-center gap-2">
+                  <p className="font-medium">{user.name || "Anonymous"}</p>
+                  <Badge className="text-xs" variant="default">
+                    {user.team}
+                  </Badge>
+                </div>
+
                 {user.email && (
                   <p className="w-[200px] truncate text-muted-foreground">
                     {user?.email}
@@ -131,7 +139,12 @@ export function UserAccountNav() {
       <DropdownMenuContent align="end">
         <div className="flex items-center justify-start gap-2 p-2">
           <div className="flex flex-col space-y-1 leading-none">
-            {user.name && <p className="font-medium">{user.name}</p>}
+            <div className="flex items-center justify-between">
+              <p className="font-medium">{user.name || "Anonymous"}</p>
+              <Badge className="text-xs" variant="default">
+                {user.team}
+              </Badge>
+            </div>
             {user.email && (
               <p className="w-[200px] truncate text-sm text-muted-foreground">
                 {user?.email}

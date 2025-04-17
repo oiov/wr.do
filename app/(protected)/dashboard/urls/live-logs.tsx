@@ -209,7 +209,7 @@ export default function LiveLog({ admin }: { admin: boolean }) {
               <TableHeader>
                 <TableRow className="bg-gray-100/50 text-sm dark:bg-primary-foreground">
                   <TableHead className="h-8 w-1/6 px-1">Time</TableHead>
-                  <TableHead className="h-8 w-1/12 px-1">Url</TableHead>
+                  <TableHead className="h-8 w-1/12 px-1">Slug</TableHead>
                   <TableHead className="h-8 px-1">Target</TableHead>
                   <TableHead className="h-8 w-1/12 px-1">IP</TableHead>
                   <TableHead className="h-8 w-1/6 px-1">Location</TableHead>

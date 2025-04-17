@@ -65,11 +65,14 @@ export interface UrlListProps {
 function TableColumnSekleton() {
   return (
     <TableRow className="grid grid-cols-3 items-center sm:grid-cols-10">
-      <TableCell className="col-span-1 sm:col-span-2">
+      <TableCell className="col-span-1">
         <Skeleton className="h-5 w-20" />
       </TableCell>
       <TableCell className="col-span-1 sm:col-span-2">
         <Skeleton className="h-5 w-20" />
+      </TableCell>
+      <TableCell className="col-span-1 hidden sm:flex">
+        <Skeleton className="h-5 w-16" />
       </TableCell>
       <TableCell className="col-span-1 hidden sm:flex">
         <Skeleton className="h-5 w-16" />
@@ -311,9 +314,9 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
 
           <Table>
             <TableHeader className="bg-gray-100/50 dark:bg-primary-foreground">
-              <TableRow className="grid grid-cols-3 items-center sm:grid-cols-10">
+              <TableRow className="grid grid-cols-3 items-center sm:grid-cols-11">
                 <TableHead className="col-span-1 flex items-center font-bold sm:col-span-2">
-                  Url
+                  Slug
                 </TableHead>
                 <TableHead className="col-span-1 flex items-center font-bold sm:col-span-2">
                   Target
@@ -330,7 +333,10 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                 <TableHead className="col-span-1 hidden items-center font-bold sm:flex">
                   Updated
                 </TableHead>
-                <TableHead className="col-span-1 flex items-center font-bold">
+                <TableHead className="col-span-1 hidden items-center font-bold sm:flex">
+                  Created
+                </TableHead>
+                <TableHead className="col-span-1 flex items-center font-bold sm:col-span-2">
                   Actions
                 </TableHead>
               </TableRow>
@@ -349,7 +355,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                   <>
                     <TableRow
                       key={short.id}
-                      className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-10"
+                      className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-11"
                     >
                       <TableCell className="col-span-1 flex items-center gap-1 sm:col-span-2">
                         <Link
@@ -403,10 +409,13 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                       <TableCell className="col-span-1 hidden sm:flex">
                         {expirationTime(short.expiration, short.updatedAt)}
                       </TableCell>
-                      <TableCell className="col-span-1 hidden sm:flex">
+                      <TableCell className="col-span-1 hidden truncate sm:flex">
                         {timeAgo(short.updatedAt as Date)}
                       </TableCell>
-                      <TableCell className="col-span-1 flex items-center gap-1">
+                      <TableCell className="col-span-1 hidden truncate sm:flex">
+                        {timeAgo(short.createdAt as Date)}
+                      </TableCell>
+                      <TableCell className="col-span-1 flex items-center gap-1 sm:col-span-2">
                         <Button
                           className="h-7 px-1 text-xs hover:bg-slate-100 dark:hover:text-primary-foreground"
                           size="sm"
