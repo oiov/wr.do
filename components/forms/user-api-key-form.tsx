@@ -58,7 +58,7 @@ export function UserApiKeyForm({ user }: UserNameFormProps) {
     <form onSubmit={onSubmit}>
       <SectionColumns
         title="API Key"
-        description="Generate a new API key to access the scraper apis."
+        description="Generate a new API key to access the open apis."
       >
         <div className="flex w-full items-center gap-2">
           <Label className="sr-only" htmlFor="name">
