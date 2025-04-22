@@ -58,7 +58,7 @@ export function UserAccountNav() {
                 <div className="flex items-center gap-2">
                   <p className="font-medium">{user.name || "Anonymous"}</p>
                   <Badge className="text-xs" variant="default">
-                    {user.team}
+                    {user.team.toUpperCase()}
                   </Badge>
                 </div>
 
@@ -142,7 +142,7 @@ export function UserAccountNav() {
             <div className="flex items-center justify-between">
               <p className="font-medium">{user.name || "Anonymous"}</p>
               <Badge className="text-xs" variant="default">
-                {user.team}
+                {user.team.toUpperCase()}
               </Badge>
             </div>
             {user.email && (
