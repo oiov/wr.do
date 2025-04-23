@@ -230,6 +230,22 @@ export async function deleteUserEmail(id: string) {
     });
   }
 }
+// 删除 UserEmail (软删除)
+export async function deleteUserEmailByAddress(email: string) {
+  const userEmail = await prisma.userEmail.findFirst({
+    where: { emailAddress: email, deletedAt: null },
+  });
+  console.log("userEmail", userEmail);
+
+  if (userEmail) {
+    await prisma.userEmail.update({
+      where: { emailAddress: email },
+      data: { deletedAt: new Date() },
+    });
+  } else {
+    throw new Error("User email not found or already deleted");
+  }
+}
 
 // 通过 emailAddress 查询邮件列表
 export async function getEmailsByEmailAddress(

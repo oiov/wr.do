@@ -156,4 +156,11 @@ On success (Status 200):
 
 The `DELETE /api/v1/email` endpoint allows you to delete a specific email address.
 
-working on it.
+```bash
+curl -X DELETE \
+  -H "wrdo-api-key: YOUR_API_KEY" \
+  -d '{
+    "emailAddress": "your-suffix@wr.do"
+  }' \
+  "https://wr.do/api/v1/email"
+```

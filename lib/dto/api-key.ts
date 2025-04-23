@@ -12,7 +12,7 @@ export const getApiKeyByUserId = async (userId: string) => {
 export const checkApiKey = async (apiKey: string) => {
   return prisma.user.findFirst({
     where: { apiKey, active: 1 },
-    select: { id: true, team: true, name: true },
+    select: { id: true, team: true, name: true, active: true },
   });
 };
 

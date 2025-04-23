@@ -20,6 +20,12 @@ export async function GET(req: NextRequest) {
       { status: 401 },
     );
   }
+  if (user.active === 0) {
+    return Response.json("Forbidden", {
+      status: 403,
+      statusText: "Forbidden",
+    });
+  }
 
   const { searchParams } = new URL(req.url);
   const emailAddress = searchParams.get("emailAddress");
