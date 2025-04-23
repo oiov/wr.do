@@ -62,12 +62,13 @@ model User {
   updatedAt     DateTime  @default(now()) @map(name: "updated_at")
   role          UserRole  @default(USER)
 
-  accounts   Account[]
-  sessions   Session[]
-  UserRecord UserRecord[]
-  UserUrl    UserUrl[]
-  ScrapeMeta ScrapeMeta[]
-  UserEmail  UserEmail[]
+  accounts      Account[]
+  sessions      Session[]
+  UserRecord    UserRecord[]
+  UserUrl       UserUrl[]
+  ScrapeMeta    ScrapeMeta[]
+  UserEmail     UserEmail[]
+  UserSendEmail UserSendEmail[]
 
   @@map(name: "users")
 }
@@ -183,7 +184,7 @@ model ScrapeMeta {
 }
 
 model ForwardEmail {
-  id        String  @id @default(uuid()) // 使用 UUID 作为主键
+  id        String  @id @default(uuid())
   from      String
   fromName  String
   to        String
@@ -221,4 +222,24 @@ model UserEmail {
   deletedAt DateTime?
 
   @@map("user_emails")
+}
+
+model UserSendEmail {
+  id     String @id @default(uuid())
+  userId String
+
+  from     String
+  fromName String? @default("")
+  to       String
+  subject  String? @default("No Subject")
+  text     String? @default("")
+  html     String? @default("")
+  replyTo  String? @default("")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_send_emails")
 }

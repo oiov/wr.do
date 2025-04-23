@@ -261,3 +261,20 @@ ON DELETE SET NULL
 ON UPDATE CASCADE;
 
 ALTER TABLE "user_urls" ADD COLUMN "password" TEXT NOT NULL DEFAULT '';
+
+CREATE TABLE "user_send_emails"
+(
+    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "userId" TEXT NOT NULL,
+    "from" TEXT NOT NULL,
+    "fromName" TEXT DEFAULT '',
+    "to" TEXT NOT NULL,
+    "subject" TEXT DEFAULT 'No Subject',
+    "text" TEXT DEFAULT '',
+    "html" TEXT DEFAULT '',
+    "replyTo" TEXT DEFAULT '',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+);
+
+CREATE INDEX "user_send_emails_userId_idx" ON "user_send_emails" ("userId");

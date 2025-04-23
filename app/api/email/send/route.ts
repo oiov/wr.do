@@ -1,10 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { getUserSendEmailCount, saveUserSendEmail } from "@/lib/dto/email";
+import { checkUserStatus } from "@/lib/dto/user";
 import { resend } from "@/lib/email";
+import { getCurrentUser } from "@/lib/session";
 import { isValidEmail } from "@/lib/utils";
 
 export async function POST(req: NextRequest) {
   try {
+    const user = checkUserStatus(await getCurrentUser());
+    if (user instanceof Response) return user;
+
     const { from, to, subject, html } = await req.json();
 
     if (!from || !to || !subject || !html) {
@@ -27,9 +33,29 @@ export async function POST(req: NextRequest) {
       return NextResponse.json("Failed to send email", { status: 500 });
     }
 
+    await saveUserSendEmail(user.id, from, to, subject, html);
+
     return NextResponse.json("success", { status: 200 });
   } catch (error) {
     console.log("Error sending email:", error);
+    return NextResponse.json("Internal server error", { status: 500 });
+  }
+}
+
+export async function GET(req: NextRequest) {
+  try {
+    const user = checkUserStatus(await getCurrentUser());
+    if (user instanceof Response) return user;
+
+    const { searchParams } = new URL(req.url);
+    const all = searchParams.get("all") || "false";
+
+    const count = await getUserSendEmailCount(
+      user.id,
+      user.role === "ADMIN" && all === "true",
+    );
+    return NextResponse.json(count);
+  } catch (error) {
     return NextResponse.json("Internal server error", { status: 500 });
   }
 }

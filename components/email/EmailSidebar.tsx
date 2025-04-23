@@ -91,6 +91,14 @@ export default function EmailSidebar({
     { dedupingInterval: 5000 },
   );
 
+  const { data: sendEmails } = useSWR<number>(
+    `/api/email/send?all=${isAdminModel}`,
+    fetcher,
+    {
+      dedupingInterval: 5000,
+    },
+  );
+
   if (!selectedEmailAddress && data && data.list.length > 0) {
     onSelectEmail(data.list[0].emailAddress);
   }
@@ -332,7 +340,7 @@ export default function EmailSidebar({
             </div>
 
             {/* Sent Emails */}
-            <div className="flex cursor-pointer flex-col items-center gap-1 rounded-md bg-neutral-200 px-1 pb-1 pt-2 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-gray-700">
+            <div className="flex cursor-pointer flex-col items-center gap-1 rounded-md bg-neutral-100 px-1 pb-1 pt-2 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-gray-700">
               <div className="flex items-center gap-1">
                 <Icons.send className="size-3" />
                 <p className="line-clamp-1 text-start font-medium">
@@ -340,7 +348,7 @@ export default function EmailSidebar({
                 </p>
               </div>
               <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                {/* <CountUp count={0} /> */}--
+                <CountUp count={sendEmails || 0} />
               </p>
             </div>
           </div>

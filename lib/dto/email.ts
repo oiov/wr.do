@@ -517,3 +517,30 @@ export async function markAllEmailsAsRead(userEmailId: string, userId: string) {
     throw error;
   }
 }
+
+export async function saveUserSendEmail(
+  userId: string,
+  from: string,
+  to: string,
+  subject: string,
+  html: string,
+) {
+  return prisma.userSendEmail.create({
+    data: {
+      userId,
+      from,
+      to,
+      subject,
+      html,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    },
+  });
+}
+
+export async function getUserSendEmailCount(userId: string, admin: boolean) {
+  if (admin) {
+    return prisma.userSendEmail.count();
+  }
+  return prisma.userSendEmail.count({ where: { userId } });
+}
