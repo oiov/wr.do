@@ -75,7 +75,8 @@ export default function EmailSidebar({
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [emailToDelete, setEmailToDelete] = useState<string | null>(null);
   const [deleteInput, setDeleteInput] = useState("");
-  const [currentPage, setCurrentPage] = useState(1); // Added for pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [onlyUnread, setOnlyUnread] = useState(false);
 
   const pageSize = 10;
 
@@ -85,7 +86,7 @@ export default function EmailSidebar({
     totalInboxCount: number;
     totalUnreadCount: number;
   }>(
-    `/api/email?page=${currentPage}&size=${pageSize}&search=${searchQuery}&all=${isAdminModel}`,
+    `/api/email?page=${currentPage}&size=${pageSize}&search=${searchQuery}&all=${isAdminModel}&unread=${onlyUnread}`,
     fetcher,
     { dedupingInterval: 5000 },
   );
@@ -308,9 +309,16 @@ export default function EmailSidebar({
             </div>
 
             <div
-              className={
-                "flex cursor-pointer flex-col items-center gap-1 rounded-md bg-neutral-100 px-1 pb-1 pt-2 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-gray-700"
-              }
+              className={cn(
+                "flex cursor-pointer flex-col items-center gap-1 rounded-md bg-neutral-100 px-1 pb-1 pt-2 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-gray-700",
+                {
+                  "bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-gray-700":
+                    onlyUnread,
+                },
+              )}
+              onClick={() => {
+                setOnlyUnread(!onlyUnread);
+              }}
             >
               <div className="flex items-center gap-1">
                 <Icons.mailOpen className="size-3" />
@@ -324,7 +332,7 @@ export default function EmailSidebar({
             </div>
 
             {/* Sent Emails */}
-            <div className="flex flex-col items-center gap-1 rounded-md bg-neutral-200 px-1 pb-1 pt-2 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-gray-700">
+            <div className="flex cursor-pointer flex-col items-center gap-1 rounded-md bg-neutral-200 px-1 pb-1 pt-2 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-gray-700">
               <div className="flex items-center gap-1">
                 <Icons.send className="size-3" />
                 <p className="line-clamp-1 text-start font-medium">

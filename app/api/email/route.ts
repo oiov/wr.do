@@ -16,6 +16,7 @@ export async function GET(req: NextRequest) {
     const size = parseInt(searchParams.get("size") || "10", 10);
     const search = searchParams.get("search") || "";
     const all = searchParams.get("all") || "false";
+    const unread = searchParams.get("unread") || "false";
 
     if (all === "true" && user.role === "ADMIN") {
     }
@@ -26,6 +27,7 @@ export async function GET(req: NextRequest) {
       size,
       search,
       user.role === "ADMIN" && all === "true",
+      unread === "true",
     );
     return NextResponse.json(userEmails, { status: 200 });
   } catch (error) {
