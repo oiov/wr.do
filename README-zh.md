@@ -26,6 +26,8 @@
 
 ## 快速开始
 
+查看开发者[快速开始](https://wr.do/docs/developer/quick-start)的详细文档。
+
 查看有关[快速开始](https://wr.do/docs/quick-start)的文档。
 
 ## 自托管教程

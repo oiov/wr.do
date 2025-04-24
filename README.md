@@ -31,6 +31,8 @@ See usage docs about [guide](https://wr.do/docs/quick-start) for quick start.
 
 ## Self-hosted Tutorial
 
+See step by step installation tutorial at [Quick Start for Developer](https://wr.do/docs/developer/quick-start).
+
 ### Requirements
 
 - [Vercel](https://vercel.com) to deploy app
