@@ -6,6 +6,7 @@ import {
   ArrowUpRight,
   BadgeHelp,
   BookOpen,
+  BotMessageSquare,
   Bug,
   Calendar,
   Camera,
@@ -87,6 +88,7 @@ export const Icons = {
   lock: LockKeyhole,
   unLock: LockKeyholeOpen,
   listFilter: ListFilter,
+  botMessageSquare: BotMessageSquare,
   pwdKey: ({ ...props }: LucideProps) => (
     <svg
       height="18"

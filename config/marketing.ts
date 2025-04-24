@@ -5,6 +5,10 @@ import { siteConfig } from "./site";
 export const marketingConfig: MarketingConfig = {
   mainNav: [
     {
+      title: "OiChat",
+      href: siteConfig.links.oichat,
+    },
+    {
       title: "Docs",
       href: "/docs",
     },
@@ -15,6 +19,10 @@ export const marketingConfig: MarketingConfig = {
     {
       title: "Discord",
       href: "https://discord.gg/AHPQYuZu3m",
+    },
+    {
+      title: "Pricing",
+      href: "#pricing",
     },
   ],
 };

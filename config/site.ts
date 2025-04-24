@@ -17,6 +17,7 @@ export const siteConfig: SiteConfig = {
     github: "https://github.com/oiov/wr.do",
     feedback: "https://github.com/oiov/wr.do/issues",
     discord: "https://discord.gg/AHPQYuZu3m",
+    oichat: "https://oi.wr.do",
   },
   mailSupport: "support@wr.do",
   openSignup: open_signup === "1" ? true : false,
@@ -43,6 +44,7 @@ export const footerLinks: SidebarNavItem[] = [
       { title: "Moise", href: "https://moise.oiov.dev" },
       // { title: "Inke", href: "https://inke.wr.do" },
       { title: "Iconce", href: "https://iconce.com" },
+      { title: "OiChat", href: siteConfig.links.oichat },
     ],
   },
   {

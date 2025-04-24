@@ -14,6 +14,7 @@ export type SiteConfig = {
     github: string;
     feedback: string;
     discord: string;
+    oichat: string;
   };
   openSignup: boolean;
   shortDomains: string[];
