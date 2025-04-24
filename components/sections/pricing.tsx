@@ -90,7 +90,7 @@ export const PricingSection = () => {
             benefits={getBenefits(Team_Plan_Quota.free)}
           />
           <PriceCard
-            tier="Pro"
+            tier="Premium"
             price="$5/mo"
             bestFor="Best for 5-50 users"
             CTA={

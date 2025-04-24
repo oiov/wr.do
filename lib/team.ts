@@ -44,20 +44,16 @@ export const Team_Plan_Quota = {
   },
 };
 
-type TimeRangeType = "day" | "month"; // 支持的限制周期
+type TimeRangeType = "day" | "month";
 
 interface RestrictOptions {
-  model: keyof PrismaClient; // Prisma 模型名称，如 'userEmail'
-  userId: string; // 用户 ID
-  limit: number; // 限制数量
-  rangeType: TimeRangeType; // 限制周期：'day' 或 'month'
-  referenceDate?: Date; // 可选，参考日期，默认为当前时间
+  model: keyof PrismaClient;
+  userId: string;
+  limit: number;
+  rangeType: TimeRangeType;
+  referenceDate?: Date;
 }
 
-/**
- * 根据指定时间范围检查记录数量是否超过限制
- * @throws 如果超过限制，抛出错误
- */
 export async function restrictByTimeRange({
   model,
   userId,
