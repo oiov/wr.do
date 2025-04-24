@@ -42,7 +42,7 @@ Copy/paste the `.env.example` in the `.env` file:
 |----------------------|-------|-------------|
 | NEXTAUTH_URL | `http://localhost:3000` | The URL of the Next.js application. |
 | AUTH_SECRET | `123465` | The secret used to encrypt tokens and email verification hashes. |
-| DATABASE_URL | `file:./db.sqlite` | The path to the postgres database. |
+| DATABASE_URL | `postgres://username:password@host:port/database` | The path to the postgres database. |
 | GOOGLE_CLIENT_ID | `123465` | The ID of the Google OAuth client. |
 | GOOGLE_CLIENT_SECRET | `123465` | The secret of the Google OAuth client. |
 | GITHUB_ID | `123465` | The ID of the GitHub OAuth client. |
@@ -51,8 +51,6 @@ Copy/paste the `.env.example` in the `.env` file:
 | CLOUDFLARE_ZONE_ID | `123465` | The zone ID for Cloudflare. |
 | CLOUDFLARE_API_KEY | `123465` | The API key for Cloudflare. |
 | CLOUDFLARE_EMAIL | `123465` | The email for Cloudflare. |
-| NEXT_PUBLIC_FREE_RECORD_QUOTA | `3` | The number of free records. |
-| NEXT_PUBLIC_FREE_URL_QUOTA | `100` | The number of free URLs. |
 | NEXT_PUBLIC_OPEN_SIGNUP | `1` | Open signup. |
 | SCREENSHOTONE_BASE_URL | `https://api.example.com` | pending |
 | GITHUB_TOKEN | `ghp_sscsfarwetqet` | https://github.com/settings/tokens |
@@ -66,6 +64,8 @@ Copy/paste the `.env.example` in the `.env` file:
 - How to get `CLOUDFLARE_ZONE_ID`、`CLOUDFLARE_API_KEY`、`CLOUDFLARE_EMAIL`, see [Cloudflare Configs](/docs/developer/cloudflare).
 - How to get `DATABASE_URL`, see [Database](/docs/developer/database).
 - How to active email worker, see [Email Worker](/docs/developer/cloudflare-email-worker).
+
+For step by step installation, see [Quick Start](/docs/developer/quick-start).
 
 ### Configuration part
 

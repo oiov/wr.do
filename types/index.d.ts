@@ -15,10 +15,6 @@ export type SiteConfig = {
     feedback: string;
     discord: string;
   };
-  freeQuota: {
-    record: number;
-    url: number;
-  };
   openSignup: boolean;
   shortDomains: string[];
   emailDomains: string[];

@@ -21,7 +21,6 @@ export async function POST(req: Request) {
       CLOUDFLARE_ZONE_NAME,
       CLOUDFLARE_API_KEY,
       CLOUDFLARE_EMAIL,
-      NEXT_PUBLIC_FREE_RECORD_QUOTA,
     } = env;
 
     if (

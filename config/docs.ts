@@ -112,6 +112,11 @@ export const docsConfig: DocsConfig = {
           icon: "page",
         },
         {
+          title: "Quick Start",
+          href: "/docs/developer/quick-start",
+          icon: "page",
+        },
+        {
           title: "Cloudflare",
           href: "/docs/developer/cloudflare",
           icon: "page",
