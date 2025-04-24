@@ -2,8 +2,9 @@
 
 import type React from "react";
 import type { CSSProperties, ReactNode } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { Check, X } from "lucide-react";
+import { X } from "lucide-react";
 
 import { Team_Plan_Quota } from "@/lib/team";
 import { cn, nFormatter } from "@/lib/utils";
@@ -80,9 +81,11 @@ export const PricingSection = () => {
             price="$0/mo"
             bestFor="For hobbyists and individuals looking to manage their links"
             CTA={
-              <Button className="w-full" variant={"default"}>
-                Get started free
-              </Button>
+              <Link href={"/dashboard"}>
+                <Button className="w-full" variant={"default"}>
+                  Get started free
+                </Button>
+              </Link>
             }
             benefits={getBenefits(Team_Plan_Quota.free)}
           />
@@ -91,9 +94,11 @@ export const PricingSection = () => {
             price="$5/mo"
             bestFor="Best for 5-50 users"
             CTA={
-              <Button className="w-full bg-zinc-800 text-zinc-50 hover:bg-zinc-700 hover:text-zinc-50 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200 dark:hover:text-zinc-900">
-                14-day free trial
-              </Button>
+              <Link href={"/dashboard"}>
+                <Button className="w-full bg-zinc-800 text-zinc-50 hover:bg-zinc-700 hover:text-zinc-50 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200 dark:hover:text-zinc-900">
+                  14-day free trial
+                </Button>
+              </Link>
             }
             benefits={getBenefits(Team_Plan_Quota.premium)}
           />
@@ -102,9 +107,11 @@ export const PricingSection = () => {
             price="Contact us"
             bestFor="For large organizations with custom needs"
             CTA={
-              <Button className="w-full" variant={"outline"}>
-                Contact us
-              </Button>
+              <Link href={"mailto:support@wr.do"}>
+                <Button className="w-full" variant="outline">
+                  Contact us
+                </Button>
+              </Link>
             }
             benefits={getBenefits(Team_Plan_Quota.business)}
           />
@@ -201,8 +208,3 @@ type BenefitType = {
   checked: boolean;
   icon: ReactNode;
 };
-
-type GhostButtonProps = {
-  children: ReactNode;
-  className?: string;
-} & React.ButtonHTMLAttributes<HTMLButtonElement>;

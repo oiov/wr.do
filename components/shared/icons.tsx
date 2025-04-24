@@ -33,6 +33,7 @@ import {
   LineChart,
   Link,
   ListChecks,
+  ListFilter,
   Loader2,
   LockKeyhole,
   LockKeyholeOpen,
@@ -85,6 +86,7 @@ export const Icons = {
   calendar: Calendar,
   lock: LockKeyhole,
   unLock: LockKeyholeOpen,
+  listFilter: ListFilter,
   pwdKey: ({ ...props }: LucideProps) => (
     <svg
       height="18"

@@ -40,6 +40,12 @@ import {
 } from "../ui/select";
 import { Skeleton } from "../ui/skeleton";
 import { Switch } from "../ui/switch";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 import { SendEmailModal } from "./SendEmailModal";
 
 interface EmailSidebarProps {
@@ -319,7 +325,7 @@ export default function EmailSidebar({
 
             <div
               className={cn(
-                "flex cursor-pointer flex-col items-center gap-1 rounded-md bg-neutral-100 px-1 pb-1 pt-2 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-gray-700",
+                "relative flex cursor-pointer flex-col items-center gap-1 rounded-md bg-neutral-100 px-1 pb-1 pt-2 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-gray-700",
                 {
                   "bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-gray-700":
                     onlyUnread,
@@ -338,6 +344,14 @@ export default function EmailSidebar({
               <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                 <CountUp count={data ? data.totalUnreadCount : 0} />
               </p>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Icons.listFilter className="absolute bottom-1 right-1 size-3" />
+                  </TooltipTrigger>
+                  <TooltipContent>Filter unread emails</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
 
             {/* Sent Emails */}
