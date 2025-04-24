@@ -350,10 +350,6 @@ export default function EmailSidebar({
               </div>
               <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                 <CountUp count={sendEmails || 0} />
-                {/* {" "}
-                <span className="text-xs">
-                  / {Team_Plan_Quota[user.team!].EM_SendEmails}
-                </span> */}
               </p>
             </div>
           </div>

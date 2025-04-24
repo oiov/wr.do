@@ -116,5 +116,5 @@ export async function restrictByTimeRange({
       statusText: `You have exceeded the ${rangeType}ly ${model.toString()} creation limit (${limit}). Please try again later.`,
     };
   }
-  return { status: 200 };
+  return null;
 }

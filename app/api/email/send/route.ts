@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
       limit: Team_Plan_Quota[user.team].EM_SendEmails,
       rangeType: "month",
     });
-    if (limit.status !== 200)
+    if (limit)
       return NextResponse.json(limit.statusText, { status: limit.status });
 
     const { from, to, subject, html } = await req.json();
