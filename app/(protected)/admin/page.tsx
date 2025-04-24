@@ -1,13 +1,18 @@
 import { redirect } from "next/navigation";
 
+import { TeamPlanQuota } from "@/config/team";
 import { getUserRecordCount } from "@/lib/dto/cloudflare-dns-record";
+import { getAllUserEmailsCount } from "@/lib/dto/email";
 import { getApiKeyCallCount, getScrapeStatsByType } from "@/lib/dto/scrape";
 import { getUserShortUrlCount } from "@/lib/dto/short-urls";
 import { getAllUsersActiveApiKeyCount, getAllUsersCount } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";
 import { constructMetadata } from "@/lib/utils";
 import { InteractiveBarChart } from "@/components/charts/interactive-bar-chart";
-import { DashboardInfoCard } from "@/components/dashboard/dashboard-info-card";
+import {
+  DashboardInfoCard,
+  UserInfoCard,
+} from "@/components/dashboard/dashboard-info-card";
 import { DashboardHeader } from "@/components/dashboard/header";
 
 import { DailyPVUVChart } from "../dashboard/scrape/daily-chart";
@@ -29,6 +34,7 @@ export default async function AdminPage() {
   const user_api_key_count = await getAllUsersActiveApiKeyCount();
   const record_count = await getUserRecordCount(user.id, 1, "ADMIN");
   const url_count = await getUserShortUrlCount(user.id, 1, "ADMIN");
+  const email_count = await getAllUserEmailsCount(user.id);
   // const api_key_call_count = await getApiKeyCallCount();
   const screenshot_stats = await getScrapeStatsByType("screenshot");
   const meta_stats = await getScrapeStatsByType("meta-info");
@@ -44,7 +50,7 @@ export default async function AdminPage() {
       />
       <div className="flex flex-col gap-5">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 xl:grid-cols-3">
-          <DashboardInfoCard
+          <UserInfoCard
             userId={user.id}
             title="Users"
             count={user_count}
@@ -53,14 +59,18 @@ export default async function AdminPage() {
           <DashboardInfoCard
             userId={user.id}
             title="Short URLs"
-            count={url_count}
+            total={url_count.total}
+            monthTotal={url_count.month_total}
+            limit={TeamPlanQuota[user.team].SL_NewLinks}
             link="/admin/urls"
             icon="link"
           />
           <DashboardInfoCard
             userId={user.id}
             title="DNS Records"
-            count={record_count}
+            total={record_count.total}
+            monthTotal={record_count.month_total}
+            limit={TeamPlanQuota[user.team].RC_NewRecords}
             link="/admin/records"
             icon="globeLock"
           />

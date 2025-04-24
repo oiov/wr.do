@@ -1,4 +1,5 @@
 import { env } from "@/env.mjs";
+import { TeamPlanQuota } from "@/config/team";
 import { createDNSRecord } from "@/lib/cloudflare";
 import {
   createUserRecord,
@@ -8,7 +9,6 @@ import {
 import { checkUserStatus } from "@/lib/dto/user";
 import { reservedDomains } from "@/lib/enums";
 import { getCurrentUser } from "@/lib/session";
-import { Team_Plan_Quota } from "@/lib/team";
 import { generateSecret } from "@/lib/utils";
 
 export async function POST(req: Request) {
@@ -36,11 +36,10 @@ export async function POST(req: Request) {
     }
 
     // Check quota: 若是管理员则不检查，否则检查
-    const user_records_count = await getUserRecordCount(user.id);
-
+    const { total } = await getUserRecordCount(user.id);
     if (
       user.role !== "ADMIN" &&
-      user_records_count >= Team_Plan_Quota[user.team].RC_NewRecords
+      total >= TeamPlanQuota[user.team].RC_NewRecords
     ) {
       return Response.json("Your records have reached the free limit.", {
         status: 409,

@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { TeamPlanQuota } from "@/config/team";
 import { getUserSendEmailCount, saveUserSendEmail } from "@/lib/dto/email";
 import { checkUserStatus } from "@/lib/dto/user";
 import { resend } from "@/lib/email";
 import { getCurrentUser } from "@/lib/session";
-import { restrictByTimeRange, Team_Plan_Quota } from "@/lib/team";
+import { restrictByTimeRange } from "@/lib/team";
 import { isValidEmail } from "@/lib/utils";
 
 export async function POST(req: NextRequest) {
@@ -16,7 +17,7 @@ export async function POST(req: NextRequest) {
     const limit = await restrictByTimeRange({
       model: "userSendEmail",
       userId: user.id,
-      limit: Team_Plan_Quota[user.team].EM_SendEmails,
+      limit: TeamPlanQuota[user.team].EM_SendEmails,
       rangeType: "month",
     });
     if (limit)

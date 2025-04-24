@@ -42,7 +42,6 @@ export async function getUserShortUrls(
         }
       : {};
 
-  // 这三个参数都是模糊查询
   if (userName) {
     option.userName = {
       contains: userName,
@@ -84,17 +83,44 @@ export async function getUserShortUrlCount(
   role: UserRole = "USER",
 ) {
   try {
-    return await prisma.userUrl.count({
-      where:
-        role === "USER"
-          ? {
-              userId,
-              // active,
-            }
-          : {},
-    });
+    // Start of last month from now
+    // const end = new Date();
+    // const start = new Date(
+    //   end.getFullYear(),
+    //   end.getMonth() - 1,
+    //   end.getDate(),
+    //   end.getHours(),
+    //   end.getMinutes(),
+    //   end.getSeconds(),
+    // );
+
+    // Start of current month
+    const now = new Date();
+    const start = new Date(now.getFullYear(), now.getMonth(), 1);
+    const end = new Date(
+      now.getFullYear(),
+      now.getMonth() + 1,
+      0,
+      23,
+      59,
+      59,
+      999,
+    );
+
+    const [total, month_total] = await prisma.$transaction([
+      prisma.userUrl.count({
+        where: role === "USER" ? { userId } : {},
+      }),
+      prisma.userUrl.count({
+        where:
+          role === "USER"
+            ? { userId, createdAt: { gte: start, lte: end } }
+            : { createdAt: { gte: start, lte: end } },
+      }),
+    ]);
+    return { total, month_total };
   } catch (error) {
-    return -1;
+    return { total: -1, month_total: -1 };
   }
 }
 

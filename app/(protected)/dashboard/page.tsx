@@ -1,11 +1,11 @@
 import { redirect } from "next/navigation";
 
 import { siteConfig } from "@/config/site";
+import { TeamPlanQuota } from "@/config/team";
 import { getUserRecordCount } from "@/lib/dto/cloudflare-dns-record";
 import { getAllUserEmailsCount } from "@/lib/dto/email";
 import { getUserShortUrlCount } from "@/lib/dto/short-urls";
 import { getCurrentUser } from "@/lib/session";
-import { Team_Plan_Quota } from "@/lib/team";
 import { constructMetadata } from "@/lib/utils";
 import { DashboardHeader } from "@/components/dashboard/header";
 
@@ -37,22 +37,25 @@ export default async function DashboardPage() {
       <div className="flex flex-col gap-5">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 xl:grid-cols-3">
           <HeroCard
-            count={email_count}
-            total={Team_Plan_Quota[user.team].EM_EmailAddresses}
+            total={email_count.total}
+            monthTotal={email_count.month_total}
+            limit={TeamPlanQuota[user.team].EM_EmailAddresses}
           />
           <DashboardInfoCard
             userId={user.id}
             title="Short URLs"
-            count={url_count}
-            total={Team_Plan_Quota[user.team].SL_NewLinks}
+            total={url_count.total}
+            monthTotal={url_count.month_total}
+            limit={TeamPlanQuota[user.team].SL_NewLinks}
             link="/dashboard/urls"
             icon="link"
           />
           <DashboardInfoCard
             userId={user.id}
             title="DNS Records"
-            count={record_count}
-            total={Team_Plan_Quota[user.team].RC_NewRecords}
+            total={record_count.total}
+            monthTotal={record_count.month_total}
+            limit={TeamPlanQuota[user.team].RC_NewRecords}
             link="/dashboard/records"
             icon="globeLock"
           />

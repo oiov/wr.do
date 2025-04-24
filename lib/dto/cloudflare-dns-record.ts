@@ -117,17 +117,33 @@ export async function getUserRecordCount(
   role: UserRole = "USER",
 ) {
   try {
-    return await prisma.userRecord.count({
-      where:
-        role === "USER"
-          ? {
-              userId: userId,
-              // active,
-            }
-          : {},
-    });
+    const now = new Date();
+    const start = new Date(now.getFullYear(), now.getMonth(), 1);
+    const end = new Date(
+      now.getFullYear(),
+      now.getMonth() + 1,
+      0,
+      23,
+      59,
+      59,
+      999,
+    );
+
+    const [total, month_total] = await prisma.$transaction([
+      prisma.userRecord.count({
+        where: role === "USER" ? { userId } : {},
+      }),
+      prisma.userRecord.count({
+        where:
+          role === "USER"
+            ? { userId, created_on: { gte: start, lte: end } }
+            : { created_on: { gte: start, lte: end } },
+      }),
+    ]);
+
+    return { total, month_total };
   } catch (error) {
-    return -1;
+    return { total: -1, month_total: -1 };
   }
 }
 

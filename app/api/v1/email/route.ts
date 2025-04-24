@@ -1,15 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { siteConfig } from "@/config/site";
+import { TeamPlanQuota } from "@/config/team";
 import { checkApiKey } from "@/lib/dto/api-key";
-import {
-  createUserEmail,
-  deleteUserEmailByAddress,
-  getAllUserEmailsCount,
-} from "@/lib/dto/email";
+import { createUserEmail, deleteUserEmailByAddress } from "@/lib/dto/email";
 import { reservedAddressSuffix } from "@/lib/enums";
-import { restrictByTimeRange, Team_Plan_Quota } from "@/lib/team";
-
-import { siteConfig } from "../../../../config/site";
+import { restrictByTimeRange } from "@/lib/team";
 
 // 创建新 UserEmail
 export async function POST(req: NextRequest) {
@@ -39,7 +35,7 @@ export async function POST(req: NextRequest) {
   const limit = await restrictByTimeRange({
     model: "userEmail",
     userId: user.id,
-    limit: Team_Plan_Quota[user.team!].EM_EmailAddresses,
+    limit: TeamPlanQuota[user.team!].EM_EmailAddresses,
     rangeType: "month",
   });
   if (limit)

@@ -15,9 +15,9 @@ import { toast } from "sonner";
 import useSWR from "swr";
 
 import { siteConfig } from "@/config/site";
+import { TeamPlanQuota } from "@/config/team";
 import { UserEmailList } from "@/lib/dto/email";
 import { reservedAddressSuffix } from "@/lib/enums";
-import { Team_Plan_Quota } from "@/lib/team";
 import { cn, fetcher, timeAgo } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import ApiReference from "@/app/emails/api-reference";

@@ -6,7 +6,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { X } from "lucide-react";
 
-import { Team_Plan_Quota } from "@/lib/team";
+import { TeamPlanQuota } from "@/config/team";
 import { cn, nFormatter } from "@/lib/utils";
 
 import { Icons } from "../shared/icons";
@@ -90,20 +90,20 @@ export const PricingSection = () => {
                 </Button>
               </Link>
             }
-            benefits={getBenefits(Team_Plan_Quota.free)}
+            benefits={getBenefits(TeamPlanQuota.free)}
           />
           <PriceCard
             tier="Premium"
             price="$5/mo"
             bestFor="Best for 5-50 users"
             CTA={
-              <Link href={"/dashboard"}>
+              <Link href={"/pricing"}>
                 <Button className="w-full bg-zinc-800 text-zinc-50 hover:bg-zinc-700 hover:text-zinc-50 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200 dark:hover:text-zinc-900">
                   14-day free trial
                 </Button>
               </Link>
             }
-            benefits={getBenefits(Team_Plan_Quota.premium)}
+            benefits={getBenefits(TeamPlanQuota.premium)}
           />
           <PriceCard
             tier="Enterprise"
@@ -116,7 +116,7 @@ export const PricingSection = () => {
                 </Button>
               </Link>
             }
-            benefits={getBenefits(Team_Plan_Quota.business)}
+            benefits={getBenefits(TeamPlanQuota.business)}
           />
         </div>
       </div>

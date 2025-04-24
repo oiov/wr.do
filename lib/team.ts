@@ -1,48 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 
-import { prisma } from "./db";
-
-export const Team_Plan_Quota = {
-  free: {
-    SL_TrackedClicks: 100000,
-    SL_NewLinks: 1000,
-    SL_AnalyticsRetention: 180,
-    SL_Domains: 2,
-    SL_AdvancedAnalytics: true,
-    RC_NewRecords: 0,
-    EM_EmailAddresses: 1000,
-    EM_Domains: 2,
-    EM_SendEmails: 200,
-    APP_Support: "basic",
-    APP_ApiAccess: true,
-  },
-  premium: {
-    SL_TrackedClicks: 1000000,
-    SL_NewLinks: 5000,
-    SL_AnalyticsRetention: 360,
-    SL_Domains: 2,
-    SL_AdvancedAnalytics: true,
-    RC_NewRecords: 2,
-    EM_EmailAddresses: 5000,
-    EM_Domains: 2,
-    EM_SendEmails: 1000,
-    APP_Support: "live",
-    APP_ApiAccess: true,
-  },
-  business: {
-    SL_TrackedClicks: 10000000,
-    SL_NewLinks: 10000,
-    SL_AnalyticsRetention: 360,
-    SL_Domains: 2,
-    SL_AdvancedAnalytics: true,
-    RC_NewRecords: 2,
-    EM_EmailAddresses: 10000,
-    EM_Domains: 2,
-    EM_SendEmails: 2000,
-    APP_Support: "live",
-    APP_ApiAccess: true,
-  },
-};
+import { prisma } from "../lib/db";
 
 type TimeRangeType = "day" | "month";
 

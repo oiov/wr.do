@@ -287,7 +287,27 @@ export async function getAllUserEmails(
 
 // 查询所有 UserEmail 数量
 export async function getAllUserEmailsCount(userId: string) {
-  return prisma.userEmail.count({ where: { userId, deletedAt: null } });
+  const now = new Date();
+  const start = new Date(now.getFullYear(), now.getMonth(), 1);
+  const end = new Date(
+    now.getFullYear(),
+    now.getMonth() + 1,
+    0,
+    23,
+    59,
+    59,
+    999,
+  );
+
+  const [total, month_total] = await prisma.$transaction([
+    prisma.userEmail.count({
+      where: { userId, deletedAt: null },
+    }),
+    prisma.userEmail.count({
+      where: { userId, createdAt: { gte: start, lte: end }, deletedAt: null },
+    }),
+  ]);
+  return { total, month_total };
 }
 
 // 创建 UserEmail
