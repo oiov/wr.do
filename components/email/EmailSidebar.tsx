@@ -17,6 +17,7 @@ import useSWR from "swr";
 import { siteConfig } from "@/config/site";
 import { UserEmailList } from "@/lib/dto/email";
 import { reservedAddressSuffix } from "@/lib/enums";
+import { Team_Plan_Quota } from "@/lib/team";
 import { cn, fetcher, timeAgo } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import ApiReference from "@/app/emails/api-reference";
@@ -349,6 +350,10 @@ export default function EmailSidebar({
               </div>
               <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                 <CountUp count={sendEmails || 0} />
+                {/* {" "}
+                <span className="text-xs">
+                  / {Team_Plan_Quota[user.team!].EM_SendEmails}
+                </span> */}
               </p>
             </div>
           </div>

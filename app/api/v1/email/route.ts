@@ -7,7 +7,7 @@ import {
   getAllUserEmailsCount,
 } from "@/lib/dto/email";
 import { reservedAddressSuffix } from "@/lib/enums";
-import { Team_Plan_Quota } from "@/lib/team";
+import { restrictByTimeRange, Team_Plan_Quota } from "@/lib/team";
 
 import { siteConfig } from "../../../../config/site";
 
@@ -35,15 +35,15 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  // check quota
-  const user_address_count = await getAllUserEmailsCount(user.id);
-  if (
-    user_address_count >= Team_Plan_Quota[user.team || "free"].EM_EmailAddresses
-  ) {
-    return Response.json("Your email addresses have reached the free limit.", {
-      status: 403,
-    });
-  }
+  // check limit
+  const limit = await restrictByTimeRange({
+    model: "userEmail",
+    userId: user.id,
+    limit: Team_Plan_Quota[user.team!].EM_EmailAddresses,
+    rangeType: "month",
+  });
+  if (limit.status !== 200)
+    return NextResponse.json(limit.statusText, { status: limit.status });
 
   const { emailAddress } = await req.json();
 

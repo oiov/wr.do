@@ -2,7 +2,7 @@ import { env } from "@/env.mjs";
 import { createUserShortUrl, getUserShortUrlCount } from "@/lib/dto/short-urls";
 import { checkUserStatus } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";
-import { Team_Plan_Quota } from "@/lib/team";
+import { restrictByTimeRange, Team_Plan_Quota } from "@/lib/team";
 import { createUrlSchema } from "@/lib/validations/url";
 
 export async function POST(req: Request) {
@@ -10,13 +10,15 @@ export async function POST(req: Request) {
     const user = checkUserStatus(await getCurrentUser());
     if (user instanceof Response) return user;
 
-    // check quota
-    const user_urls_count = await getUserShortUrlCount(user.id);
-    if (user_urls_count >= Team_Plan_Quota[user.team].SL_NewLinks) {
-      return Response.json("Your short urls have reached the free limit.", {
-        status: 409,
-      });
-    }
+    // check limit
+    const limit = await restrictByTimeRange({
+      model: "userUrl",
+      userId: user.id,
+      limit: Team_Plan_Quota[user.team].SL_NewLinks,
+      rangeType: "month",
+    });
+    if (limit.status !== 200)
+      return Response.json(limit.statusText, { status: limit.status });
 
     const { data } = await req.json();
 

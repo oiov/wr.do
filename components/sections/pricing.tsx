@@ -5,10 +5,59 @@ import type { CSSProperties, ReactNode } from "react";
 import { motion } from "framer-motion";
 import { Check, X } from "lucide-react";
 
-import { cn } from "@/lib/utils";
+import { Team_Plan_Quota } from "@/lib/team";
+import { cn, nFormatter } from "@/lib/utils";
 
 import { Icons } from "../shared/icons";
 import { Button } from "../ui/button";
+
+const getBenefits = (plan) => [
+  {
+    text: `${nFormatter(plan.SL_TrackedClicks)} tracked clicks/mo`,
+    checked: true,
+    icon: <Icons.mousePointerClick className="size-4" />,
+  },
+  {
+    text: `${nFormatter(plan.SL_NewLinks)} new links/mo`,
+    checked: true,
+    icon: <Icons.link className="size-4" />,
+  },
+  {
+    text: `${plan.SL_AnalyticsRetention}-day analytics retention`,
+    checked: true,
+    icon: <Icons.calendar className="size-4" />,
+  },
+  {
+    text: `${nFormatter(plan.EM_EmailAddresses)} email addresses/mo`,
+    checked: true,
+    icon: <Icons.mail className="size-4" />, // Updated icon to be more relevant
+  },
+  {
+    text: `${nFormatter(plan.EM_SendEmails)} send emails/mo`,
+    checked: true,
+    icon: <Icons.send className="size-4" />, // Updated icon to be more relevant
+  },
+  {
+    text: `${plan.SL_Domains === 1 ? "One" : plan.SL_Domains} domain${plan.SL_Domains > 1 ? "s" : ""}`,
+    checked: true,
+    icon: <Icons.globe className="size-4" />,
+  },
+  {
+    text: "Advanced analytics",
+    checked: plan.SL_AdvancedAnalytics,
+    icon: <Icons.lineChart className="size-4" />,
+  },
+  {
+    text: `${plan.APP_Support.charAt(0).toUpperCase() + plan.APP_Support.slice(1)} support`,
+    checked: true,
+    icon: <Icons.help className="size-4" />,
+  },
+  {
+    text: "API Access",
+    checked: plan.APP_ApiAccess,
+    icon: <Icons.unplug className="size-4" />,
+  },
+];
 
 export const PricingSection = () => {
   return (
@@ -25,7 +74,7 @@ export const PricingSection = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           <PriceCard
             tier="Free"
             price="$0/mo"
@@ -35,67 +84,19 @@ export const PricingSection = () => {
                 Get started free
               </Button>
             }
-            benefits={[
-              {
-                text: "100K tracked clicks",
-                checked: true,
-                icon: <Icons.mousePointerClick className="size-4" />,
-              },
-              {
-                text: "1k new links",
-                checked: true,
-                icon: <Icons.link className="size-4" />,
-              },
-              {
-                text: "180-day analytics retention",
-                checked: true,
-                icon: <Icons.calendar className="size-4" />,
-              },
-              {
-                text: "1k emails addresses",
-                checked: true,
-                icon: <Icons.calendar className="size-4" />,
-              },
-              {
-                text: "One domain",
-                checked: true,
-                icon: <Icons.globe className="size-4" />,
-              },
-              {
-                text: "Advanced analytics",
-                checked: true,
-                icon: <Icons.lineChart className="size-4" />,
-              },
-              {
-                text: "Basic support",
-                checked: true,
-                icon: <Icons.help className="size-4" />,
-              },
-              {
-                text: "API Access",
-                checked: true,
-                icon: <Icons.unplug className="size-4" />,
-              },
-            ]}
+            benefits={getBenefits(Team_Plan_Quota.free)}
           />
-          {/* <PriceCard
+          <PriceCard
             tier="Pro"
-            price="$79/mo"
+            price="$5/mo"
             bestFor="Best for 5-50 users"
             CTA={
-              <GhostButton className="w-full bg-zinc-800 text-zinc-50 hover:bg-zinc-700 hover:text-zinc-50 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200 dark:hover:text-zinc-900">
+              <Button className="w-full bg-zinc-800 text-zinc-50 hover:bg-zinc-700 hover:text-zinc-50 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200 dark:hover:text-zinc-900">
                 14-day free trial
-              </GhostButton>
+              </Button>
             }
-            benefits={[
-              { text: "Five workspaces", checked: true },
-              { text: "Email support", checked: true },
-              { text: "7 day data retention", checked: true },
-              { text: "Custom roles", checked: true },
-              { text: "Priority support", checked: false },
-              { text: "SSO", checked: false },
-            ]}
-          /> */}
+            benefits={getBenefits(Team_Plan_Quota.premium)}
+          />
           <PriceCard
             tier="Enterprise"
             price="Contact us"
@@ -105,48 +106,7 @@ export const PricingSection = () => {
                 Contact us
               </Button>
             }
-            benefits={[
-              {
-                text: "Unlimited tracked clicks/mo",
-                checked: true,
-                icon: <Icons.mousePointerClick className="size-4" />,
-              },
-              {
-                text: "Unlimited new links",
-                checked: true,
-                icon: <Icons.link className="size-4" />,
-              },
-              {
-                text: "1-year analytics retention",
-                checked: true,
-                icon: <Icons.calendar className="size-4" />,
-              },
-              {
-                text: "1k emails addresses",
-                checked: true,
-                icon: <Icons.calendar className="size-4" />,
-              },
-              {
-                text: "Three domain",
-                checked: true,
-                icon: <Icons.globe className="size-4" />,
-              },
-              {
-                text: "Advanced analytics",
-                checked: true,
-                icon: <Icons.lineChart className="size-4" />,
-              },
-              {
-                text: "Basic support",
-                checked: true,
-                icon: <Icons.help className="size-4" />,
-              },
-              {
-                text: "API Access",
-                checked: true,
-                icon: <Icons.unplug className="size-4" />,
-              },
-            ]}
+            benefits={getBenefits(Team_Plan_Quota.business)}
           />
         </div>
       </div>

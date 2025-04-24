@@ -4,6 +4,7 @@ import { createUserEmail, getAllUserEmails } from "@/lib/dto/email";
 import { checkUserStatus } from "@/lib/dto/user";
 import { reservedAddressSuffix } from "@/lib/enums";
 import { getCurrentUser } from "@/lib/session";
+import { restrictByTimeRange, Team_Plan_Quota } from "@/lib/team";
 
 // 查询所有 UserEmail 地址
 export async function GET(req: NextRequest) {
@@ -41,6 +42,16 @@ export async function POST(req: NextRequest) {
   const user = checkUserStatus(await getCurrentUser());
   if (user instanceof Response) return user;
 
+  // check limit
+  const limit = await restrictByTimeRange({
+    model: "userEmail",
+    userId: user.id,
+    limit: Team_Plan_Quota[user.team].EM_EmailAddresses,
+    rangeType: "month",
+  });
+  if (limit.status !== 200)
+    return NextResponse.json(limit.statusText, { status: limit.status });
+
   const { emailAddress } = await req.json();
 
   if (!emailAddress) {
@@ -71,6 +82,7 @@ export async function POST(req: NextRequest) {
         status: 409,
       });
     }
+
     return NextResponse.json("Internal Server Error", { status: 500 });
   }
 }

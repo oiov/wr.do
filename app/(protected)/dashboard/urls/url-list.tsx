@@ -64,8 +64,8 @@ export interface UrlListProps {
 
 function TableColumnSekleton() {
   return (
-    <TableRow className="grid grid-cols-3 items-center sm:grid-cols-10">
-      <TableCell className="col-span-1">
+    <TableRow className="grid grid-cols-3 items-center sm:grid-cols-11">
+      <TableCell className="col-span-1 sm:col-span-2">
         <Skeleton className="h-5 w-20" />
       </TableCell>
       <TableCell className="col-span-1 sm:col-span-2">

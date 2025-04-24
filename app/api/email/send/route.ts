@@ -4,7 +4,7 @@ import { getUserSendEmailCount, saveUserSendEmail } from "@/lib/dto/email";
 import { checkUserStatus } from "@/lib/dto/user";
 import { resend } from "@/lib/email";
 import { getCurrentUser } from "@/lib/session";
-import { Team_Plan_Quota } from "@/lib/team";
+import { restrictByTimeRange, Team_Plan_Quota } from "@/lib/team";
 import { isValidEmail } from "@/lib/utils";
 
 export async function POST(req: NextRequest) {
@@ -12,16 +12,15 @@ export async function POST(req: NextRequest) {
     const user = checkUserStatus(await getCurrentUser());
     if (user instanceof Response) return user;
 
-    // check quota
-    const count = await getUserSendEmailCount(user.id, false);
-    if (count >= Team_Plan_Quota[user.team].EM_SendEmails) {
-      return Response.json(
-        `Your email addresses have reached the ${user.team} limit.`,
-        {
-          status: 409,
-        },
-      );
-    }
+    // check limit
+    const limit = await restrictByTimeRange({
+      model: "userSendEmail",
+      userId: user.id,
+      limit: Team_Plan_Quota[user.team].EM_SendEmails,
+      rangeType: "month",
+    });
+    if (limit.status !== 200)
+      return NextResponse.json(limit.statusText, { status: limit.status });
 
     const { from, to, subject, html } = await req.json();
 
@@ -33,7 +32,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json("Invalid email address", { status: 403 });
     }
 
-    const { data, error } = await resend.emails.send({
+    const { error } = await resend.emails.send({
       from,
       to,
       subject,

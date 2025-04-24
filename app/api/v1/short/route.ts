@@ -1,6 +1,6 @@
 import { checkApiKey } from "@/lib/dto/api-key";
 import { createUserShortUrl, getUserShortUrlCount } from "@/lib/dto/short-urls";
-import { Team_Plan_Quota } from "@/lib/team";
+import { restrictByTimeRange, Team_Plan_Quota } from "@/lib/team";
 import { createUrlSchema } from "@/lib/validations/url";
 
 export async function POST(req: Request) {
@@ -21,13 +21,15 @@ export async function POST(req: Request) {
       );
     }
 
-    // check quota
-    const user_urls_count = await getUserShortUrlCount(user.id);
-    if (user_urls_count >= Team_Plan_Quota[user.team || "free"].SL_NewLinks) {
-      return Response.json("Your short urls have reached the free limit.", {
-        status: 403,
-      });
-    }
+    // check limit
+    const limit = await restrictByTimeRange({
+      model: "userUrl",
+      userId: user.id,
+      limit: Team_Plan_Quota[user.team!].SL_NewLinks,
+      rangeType: "month",
+    });
+    if (limit.status !== 200)
+      return Response.json(limit.statusText, { status: limit.status });
 
     const data = await req.json();
 
