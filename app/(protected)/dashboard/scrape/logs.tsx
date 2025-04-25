@@ -101,18 +101,22 @@ const LogsTable = ({ userId, target }) => {
             onChange={(e) => handleFilterChange("ip", e.target.value)}
             className="h-8 max-w-xs placeholder:text-xs"
           />
-          <Input
-            placeholder="Filter by Name..."
-            value={filters.name}
-            onChange={(e) => handleFilterChange("name", e.target.value)}
-            className="h-8 max-w-xs placeholder:text-xs"
-          />
-          <Input
-            placeholder="Filter by Email..."
-            value={filters.email}
-            onChange={(e) => handleFilterChange("email", e.target.value)}
-            className="h-8 max-w-xs placeholder:text-xs"
-          />
+          {
+            <>
+              <Input
+                placeholder="Filter by Name..."
+                value={filters.name}
+                onChange={(e) => handleFilterChange("name", e.target.value)}
+                className="h-8 max-w-xs placeholder:text-xs"
+              />
+              <Input
+                placeholder="Filter by Email..."
+                value={filters.email}
+                onChange={(e) => handleFilterChange("email", e.target.value)}
+                className="h-8 max-w-xs placeholder:text-xs"
+              />
+            </>
+          }
 
           <Button
             variant="outline"
@@ -178,7 +182,7 @@ const LogsTable = ({ userId, target }) => {
                         {log.link}
                       </TableCell>
                       <TableCell className="max-w-md truncate p-2">
-                        {log.user.name || log.user.email}
+                        {log.user?.name || log.user?.email}
                       </TableCell>
                     </TableRow>
                   ))}

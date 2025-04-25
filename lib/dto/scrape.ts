@@ -103,6 +103,12 @@ export async function getScrapeStatsByUserId({
         ip: true,
         link: true,
         createdAt: true,
+        user: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
       },
     }),
   ]);
