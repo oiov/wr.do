@@ -130,17 +130,27 @@ export async function getScrapeStats({
   limit = 20,
   type,
   ip,
+  name,
+  email,
 }: {
   page?: number;
   limit?: number;
   type?: string;
   ip?: string;
+  name?: string;
+  email?: string;
 }) {
   const skip = (page - 1) * limit;
 
   const where = {
     ...(type && { type }),
     ...(ip && { ip }),
+    // ...(name && { name }),
+    // ...(email && { email }),
+    user: {
+      ...(name && { name }),
+      ...(email && { email }),
+    },
   };
 
   const [total, logs] = await Promise.all([
@@ -158,6 +168,12 @@ export async function getScrapeStats({
         ip: true,
         link: true,
         createdAt: true,
+        user: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
       },
     }),
   ]);

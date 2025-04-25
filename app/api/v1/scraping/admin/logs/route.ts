@@ -19,6 +19,8 @@ export interface LogsQueryParams {
   page?: number;
   type?: string;
   ip?: string;
+  name?: string;
+  email?: string;
   limit?: number;
 }
 
@@ -67,6 +69,8 @@ export async function GET(request: NextRequest) {
       page: searchParams.get("page") ? parseInt(searchParams.get("page")!) : 1,
       type: searchParams.get("type") || undefined,
       ip: searchParams.get("ip") || undefined,
+      name: searchParams.get("name") || undefined,
+      email: searchParams.get("email") || undefined,
     };
 
     if (queryParams.page && (isNaN(queryParams.page) || queryParams.page < 1)) {
@@ -75,7 +79,6 @@ export async function GET(request: NextRequest) {
 
     const data = await getScrapeStats(queryParams);
 
-    // 构造响应
     const response: LogsResponse = {
       logs: data.logs,
       total: data.total,

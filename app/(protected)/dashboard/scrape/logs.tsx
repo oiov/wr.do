@@ -15,7 +15,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Icons } from "@/components/shared/icons";
 import { PaginationWrapper } from "@/components/shared/pagination";
 
 export interface LogsTableData {
@@ -31,7 +30,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 const getLogsUrl = (
   userId: string,
   page: number,
-  filters: { type: string; ip: string },
+  filters: { type: string; ip: string; name: string; email: string },
   target: string,
 ) => {
   const params = new URLSearchParams({
@@ -39,6 +38,8 @@ const getLogsUrl = (
     page: page.toString(),
     ...(filters.type && { type: filters.type }),
     ...(filters.ip && { ip: filters.ip }),
+    ...(filters.name && { name: filters.name }),
+    ...(filters.email && { email: filters.email }),
   });
   return `${target}?${params}`;
 };
@@ -48,6 +49,8 @@ const LogsTable = ({ userId, target }) => {
   const [filters, setFilters] = useState({
     type: "",
     ip: "",
+    name: "",
+    email: "",
   });
   const { mutate } = useSWRConfig();
   const { data, error, isLoading } = useSWR(
@@ -85,25 +88,38 @@ const LogsTable = ({ userId, target }) => {
   return (
     <>
       <div className="space-y-4">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <Input
             placeholder="Filter by type..."
             value={filters.type}
             onChange={(e) => handleFilterChange("type", e.target.value)}
-            className="max-w-xs"
+            className="h-8 max-w-xs placeholder:text-xs"
           />
-          {/* <Input
+          <Input
             placeholder="Filter by IP..."
             value={filters.ip}
             onChange={(e) => handleFilterChange("ip", e.target.value)}
-            className="max-w-xs"
-          /> */}
-          <p className="ml-auto text-sm">{data?.total || 0} logs</p>
+            className="h-8 max-w-xs placeholder:text-xs"
+          />
+          <Input
+            placeholder="Filter by Name..."
+            value={filters.name}
+            onChange={(e) => handleFilterChange("name", e.target.value)}
+            className="h-8 max-w-xs placeholder:text-xs"
+          />
+          <Input
+            placeholder="Filter by Email..."
+            value={filters.email}
+            onChange={(e) => handleFilterChange("email", e.target.value)}
+            className="h-8 max-w-xs placeholder:text-xs"
+          />
+
           <Button
             variant="outline"
             onClick={handleRefresh}
             disabled={isLoading}
-            className="ml-2"
+            size={"sm"}
+            className="ml-2 h-8 px-2 py-0"
           >
             {isLoading ? (
               <RefreshCwIcon className={`size-4 animate-spin`} />
@@ -117,10 +133,15 @@ const LogsTable = ({ userId, target }) => {
           <Table>
             <TableHeader className="bg-muted">
               <TableRow className="">
-                <TableHead className="">Date</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead className="">IP</TableHead>
-                <TableHead>Link</TableHead>
+                <TableHead className="hidden items-center justify-start px-2 sm:flex">
+                  Date
+                </TableHead>
+                <TableHead className="px-2">Type</TableHead>
+                <TableHead className="hidden items-center justify-start px-2 sm:flex">
+                  IP
+                </TableHead>
+                <TableHead className="px-2">Link</TableHead>
+                <TableHead className="px-2">User</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -139,11 +160,14 @@ const LogsTable = ({ userId, target }) => {
                       <TableCell>
                         <Skeleton className="h-2 w-[200px]" />
                       </TableCell>
+                      <TableCell>
+                        <Skeleton className="h-2 w-[200px]" />
+                      </TableCell>
                     </TableRow>
                   ))
                 : logs.map((log) => (
                     <TableRow className="text-xs hover:bg-muted" key={log.id}>
-                      <TableCell className="hidden p-2 sm:inline-block">
+                      <TableCell className="hidden truncate p-2 sm:inline-block">
                         {new Date(log.createdAt).toLocaleString()}
                       </TableCell>
                       <TableCell className="p-2">{log.type}</TableCell>
@@ -153,19 +177,25 @@ const LogsTable = ({ userId, target }) => {
                       <TableCell className="max-w-md truncate p-2">
                         {log.link}
                       </TableCell>
+                      <TableCell className="max-w-md truncate p-2">
+                        {log.user.name || log.user.email}
+                      </TableCell>
                     </TableRow>
                   ))}
             </TableBody>
           </Table>
         </div>
 
-        {data && Math.ceil(data.total / 20) > 1 && (
-          <PaginationWrapper
-            total={Math.ceil(data.total / 20)}
-            currentPage={page}
-            setCurrentPage={setPage}
-          />
-        )}
+        <div className="flex items-center justify-between gap-2">
+          <p className="ml-auto text-nowrap text-sm">{data?.total || 0} logs</p>
+          {data && Math.ceil(data.total / 20) > 1 && (
+            <PaginationWrapper
+              total={Math.ceil(data.total / 20)}
+              currentPage={page}
+              setCurrentPage={setPage}
+            />
+          )}
+        </div>
       </div>
     </>
   );

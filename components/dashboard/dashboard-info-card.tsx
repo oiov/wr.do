@@ -73,9 +73,8 @@ export async function DashboardInfoCard({
   icon?: keyof typeof Icons;
 }) {
   const Icon = Icons[icon || "arrowRight"];
-  const isAdmin = link.indexOf("admin") !== -1;
   return (
-    <Card className="grids group bg-gray-50/70 backdrop-blur-lg dark:bg-primary-foreground">
+    <Card className="grids group animate-fade-in bg-gray-50/70 backdrop-blur-lg dark:bg-primary-foreground">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">
           <Link
@@ -93,7 +92,7 @@ export async function DashboardInfoCard({
         ) : (
           <div className="flex items-end gap-2 text-2xl font-bold">
             <CountUp count={monthTotal} />
-            {total !== undefined && !isAdmin && (
+            {total !== undefined && (
               <p className="align-top text-base text-slate-500">
                 / {nFormatter(limit)} <span className="text-xs">(monthly)</span>
               </p>

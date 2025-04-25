@@ -1,4 +1,4 @@
-import { ForwardEmail, UserEmail } from "@prisma/client";
+import { ForwardEmail, UserEmail, UserRole } from "@prisma/client";
 
 import { prisma } from "@/lib/db";
 
@@ -181,8 +181,8 @@ export async function getAllUserEmails(
   page: number,
   size: number,
   search: string,
-  admin: boolean, // 是否是开启管理员查询
-  onlyUnread: boolean = false, // 是否只返回有未读邮件的 UserEmail
+  admin: boolean,
+  onlyUnread: boolean = false,
 ) {
   let whereOptions: any = {};
 
@@ -286,7 +286,10 @@ export async function getAllUserEmails(
 }
 
 // 查询所有 UserEmail 数量
-export async function getAllUserEmailsCount(userId: string) {
+export async function getAllUserEmailsCount(
+  userId: string,
+  role: UserRole = "USER",
+) {
   const now = new Date();
   const start = new Date(now.getFullYear(), now.getMonth(), 1);
   const end = new Date(
@@ -301,10 +304,37 @@ export async function getAllUserEmailsCount(userId: string) {
 
   const [total, month_total] = await prisma.$transaction([
     prisma.userEmail.count({
-      where: { userId, deletedAt: null },
+      where:
+        role === "USER" ? { userId, deletedAt: null } : { deletedAt: null },
     }),
     prisma.userEmail.count({
-      where: { userId, createdAt: { gte: start, lte: end }, deletedAt: null },
+      where:
+        role === "USER"
+          ? { userId, createdAt: { gte: start, lte: end }, deletedAt: null }
+          : { createdAt: { gte: start, lte: end }, deletedAt: null },
+    }),
+  ]);
+  return { total, month_total };
+}
+
+// 查询所有 inbox 数量
+export async function getAllUserInboxEmailsCount() {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), now.getMonth(), 1);
+  const end = new Date(
+    now.getFullYear(),
+    now.getMonth() + 1,
+    0,
+    23,
+    59,
+    59,
+    999,
+  );
+
+  const [total, month_total] = await prisma.$transaction([
+    prisma.forwardEmail.count(),
+    prisma.forwardEmail.count({
+      where: { createdAt: { gte: start, lte: end } },
     }),
   ]);
   return { total, month_total };

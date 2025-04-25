@@ -72,7 +72,6 @@ function TableColumnSekleton({ className }: { className?: string }) {
 }
 
 export default function UsersList({ user }: UrlListProps) {
-  const { isMobile } = useMediaQuery();
   const [isShowForm, setShowForm] = useState(false);
   const [currentEditUser, setcurrentEditUser] = useState<User | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -213,6 +212,8 @@ export default function UsersList({ user }: UrlListProps) {
             <TableBody>
               {isLoading ? (
                 <>
+                  <TableColumnSekleton />
+                  <TableColumnSekleton />
                   <TableColumnSekleton />
                   <TableColumnSekleton />
                   <TableColumnSekleton />
