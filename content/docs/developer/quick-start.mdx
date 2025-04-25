@@ -217,3 +217,16 @@ GITHUB_TOKEN=
 pnpm dev
 ```
 Via [http://localhost:3000](http://localhost:3000)
+
+
+## 9. Problems
+
+### Worker Error - Too many redirects
+
+Via:
+
+```bash
+https://dash.cloudflare.com/[account_id]/[zone_name]/ssl-tls/configuration
+```
+
+Change the `SSL/TLS Encryption` Mode to `Full` in the Cloudflare dashboard.
