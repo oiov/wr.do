@@ -1,4 +1,3 @@
-import { geolocation } from "@vercel/functions";
 import cheerio from "cheerio";
 
 import { checkApiKey } from "@/lib/dto/api-key";
@@ -6,6 +5,7 @@ import { createScrapeMeta } from "@/lib/dto/scrape";
 import { getIpInfo, isLink, removeUrlSuffix } from "@/lib/utils";
 
 export const revalidate = 600;
+export const dynamic = "force-dynamic";
 
 export async function GET(req: Request) {
   try {

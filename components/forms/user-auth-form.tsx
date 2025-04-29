@@ -123,7 +123,11 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
         {isLinuxDoLoading ? (
           <Icons.spinner className="mr-2 size-4 animate-spin" />
         ) : (
-          <img src="/_static/images/linuxdo.webp" className="mr-2 size-4" />
+          <img
+            src="/_static/images/linuxdo.webp"
+            alt="linuxdo"
+            className="mr-2 size-4"
+          />
         )}{" "}
         LinuxDo
       </button>

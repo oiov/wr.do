@@ -78,7 +78,7 @@ export default function EmailManagerInnovate() {
           <input
             type="text"
             placeholder={`Search ${viewMode === "inbox" ? "received" : "sent"} emails...`}
-            className="w-full rounded-full border border-gray-200 bg-white/80 px-4 py-2.5 text-sm text-gray-700 shadow-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-800/80 dark:text-gray-200 dark:placeholder-gray-400 dark:focus:ring-blue-500"
+            className="w-full rounded-full border border-gray-200 bg-white/80 px-4 py-2.5 text-sm text-gray-700 shadow-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-800/80 dark:text-gray-200 dark:placeholder:text-gray-400 dark:focus:ring-blue-500"
           />
           <Link
             href={`/emails`}

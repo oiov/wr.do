@@ -3,9 +3,10 @@ import TurndownService from "turndown";
 
 import { checkApiKey } from "@/lib/dto/api-key";
 import { createScrapeMeta } from "@/lib/dto/scrape";
-import { getIpInfo, isLink, removeUrlSuffix } from "@/lib/utils";
+import { getIpInfo, isLink } from "@/lib/utils";
 
 export const revalidate = 600;
+export const dynamic = "force-dynamic";
 
 const turndownService = new TurndownService();
 

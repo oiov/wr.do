@@ -176,7 +176,7 @@ export default function EmailDetail({
             email.fromName?.[0].toUpperCase() ||
             "U"}
         </div>
-        <div className="max-w-[80%] flex-grow text-neutral-600 dark:text-neutral-300">
+        <div className="max-w-[80%] grow text-neutral-600 dark:text-neutral-300">
           <p className="text-sm">
             <strong>{email.subject}</strong>
           </p>
@@ -209,7 +209,7 @@ export default function EmailDetail({
           )}
         </div>
         <Button
-          className="ml-auto size-8 flex-grow-0 px-1 py-1"
+          className="ml-auto size-8 grow-0 px-1 py-1"
           size={"sm"}
           onClick={onClose}
           variant={"outline"}
@@ -270,7 +270,7 @@ export default function EmailDetail({
                     </div>
                     <Button
                       onClick={() => handleDownload(attachment)}
-                      className="absolute right-0 top-0 hidden transform animate-fade-in px-2 group-hover:block"
+                      className="absolute right-0 top-0 hidden animate-fade-in px-2 group-hover:block"
                       size="sm"
                       variant="ghost"
                     >

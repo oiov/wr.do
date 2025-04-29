@@ -359,7 +359,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                     >
                       <TableCell className="col-span-1 flex items-center gap-1 sm:col-span-2">
                         <Link
-                          className="overflow-hidden overflow-ellipsis whitespace-normal text-slate-600 hover:text-blue-400 hover:underline dark:text-slate-400"
+                          className="overflow-hidden text-ellipsis whitespace-normal text-slate-600 hover:text-blue-400 hover:underline dark:text-slate-400"
                           href={`https://${short.prefix}/s/${short.url}${short.password ? `?password=${short.password}` : ""}`}
                           target="_blank"
                           prefetch={false}

@@ -50,8 +50,7 @@ export default {
       from: "wrdo <support@wr.do>",
       async sendVerificationRequest({ identifier: email, url, provider }) {
         try {
-          // 使用 Resend 发送自定义验证邮件
-          const { data, error } = await resend.emails.send({
+          const { error } = await resend.emails.send({
             from: provider.from || "no-reply@wr.do",
             to: [email],
             subject: "Verify your email address",

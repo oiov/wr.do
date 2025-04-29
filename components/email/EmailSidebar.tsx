@@ -252,7 +252,7 @@ export default function EmailSidebar({
                   }
                 />
               </Button>
-              <div className="relative w-full flex-grow">
+              <div className="relative w-full grow">
                 <Input
                   type="text"
                   value={searchQuery}

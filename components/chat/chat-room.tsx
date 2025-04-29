@@ -673,7 +673,7 @@ export default function ChatRoom() {
           className={`${
             isMobile
               ? "fixed inset-0 z-50 w-full"
-              : "w-[300px] flex-shrink-0 border-r dark:border-neutral-600"
+              : "w-[300px] shrink-0 border-r dark:border-neutral-600"
           } flex animate-fade-in-left flex-col bg-white p-4 transition-all duration-300 dark:bg-neutral-800`}
         >
           <div className="mb-3 flex items-center justify-between">
@@ -816,7 +816,7 @@ export default function ChatRoom() {
                 placeholder="You are the room owner"
                 readOnly
                 disabled
-                className="flex-1 rounded border bg-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-200 dark:placeholder-neutral-400"
+                className="flex-1 rounded border bg-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-200 dark:placeholder:text-neutral-400"
               />
             ) : (
               <Input
@@ -826,7 +826,7 @@ export default function ChatRoom() {
                 placeholder="Enter a room id"
                 readOnly={isConnected}
                 disabled={isConnected}
-                className="flex-1 rounded border bg-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-200 dark:placeholder-neutral-400"
+                className="flex-1 rounded border bg-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-200 dark:placeholder:text-neutral-400"
               />
             )}
             <Button
@@ -860,7 +860,7 @@ export default function ChatRoom() {
                 <>
                   {!msg.isSelf && (
                     <div
-                      className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-white ${generateGradientClasses(
+                      className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white ${generateGradientClasses(
                         msg.username,
                       )}`}
                     >
@@ -905,7 +905,7 @@ export default function ChatRoom() {
                   </div>
                   {msg.isSelf && (
                     <div
-                      className={`mt-1 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-white ${avatarClasses}`}
+                      className={`mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white ${avatarClasses}`}
                     >
                       {username?.slice(0, 1).toUpperCase()}
                     </div>
@@ -926,7 +926,7 @@ export default function ChatRoom() {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder={`Hi ${username || "Loading..."}, send a message to start...`}
-            className="min-h-20 flex-1 rounded-md rounded-t-none border border-t-0 bg-neutral-50 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 dark:border-neutral-600 dark:bg-neutral-600 dark:text-neutral-200 dark:placeholder-neutral-400"
+            className="min-h-20 flex-1 rounded-md rounded-t-none border border-t-0 bg-neutral-50 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 dark:border-neutral-600 dark:bg-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-400"
             onKeyPress={(e) =>
               e.key === "Enter" && !e.shiftKey && sendMessage()
             }

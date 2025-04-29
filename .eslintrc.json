@@ -12,7 +12,9 @@
     "react/jsx-key": "off",
     "tailwindcss/no-custom-classname": "off",
     "tailwindcss/classnames-order": "off",
-    "react/no-unescaped-entities": "off"
+    "tailwindcss/enforces-shorthand": "off",
+    "react/no-unescaped-entities": "off",
+    "@next/next/no-img-element": "off"
   },
   "settings": {
     "tailwindcss": {
