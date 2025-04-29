@@ -278,3 +278,18 @@ CREATE TABLE "user_send_emails"
 );
 
 CREATE INDEX "user_send_emails_userId_idx" ON "user_send_emails" ("userId");
+
+-- CreateIndex
+CREATE INDEX "users_createdAt_idx" ON "users"("created_at");
+
+-- CreateIndex
+CREATE INDEX "user_records_created_on_idx" ON "user_records"("created_on");
+
+-- CreateIndex
+CREATE INDEX "user_urls_createdAt_idx" ON "user_urls"("created_at");
+
+-- CreateIndex
+CREATE INDEX "user_emails_createdAt_idx" ON "user_emails"("createdAt");
+
+-- CreateIndex
+CREATE INDEX "forward_emails_createdAt_idx" ON "forward_emails"("createdAt");

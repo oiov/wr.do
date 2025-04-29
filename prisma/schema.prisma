@@ -70,6 +70,7 @@ model User {
   UserEmail     UserEmail[]
   UserSendEmail UserSendEmail[]
 
+  @@index([createdAt])
   @@map(name: "users")
 }
 
@@ -102,7 +103,7 @@ model UserRecord {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([userId])
+  @@index([userId, created_on])
   @@map(name: "user_records")
 }
 
@@ -123,7 +124,7 @@ model UserUrl {
   user    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   UrlMeta UrlMeta[]
 
-  @@index([userId])
+  @@index([userId, createdAt])
   @@map(name: "user_urls")
 }
 
@@ -205,6 +206,7 @@ model ForwardEmail {
 
   UserEmail UserEmail? @relation(fields: [to], references: [emailAddress])
 
+  @@index([createdAt])
   @@map(name: "forward_emails")
 }
 
@@ -221,6 +223,7 @@ model UserEmail {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
+  @@index([createdAt])
   @@map("user_emails")
 }
 
@@ -241,5 +244,6 @@ model UserSendEmail {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([createdAt])
   @@map("user_send_emails")
 }

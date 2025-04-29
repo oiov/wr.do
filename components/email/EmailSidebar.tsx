@@ -47,6 +47,7 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import { SendEmailModal } from "./SendEmailModal";
+import SendsEmailList from "./SendsEmailList";
 
 interface EmailSidebarProps {
   user: User;
@@ -84,6 +85,8 @@ export default function EmailSidebar({
   const [deleteInput, setDeleteInput] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [onlyUnread, setOnlyUnread] = useState(false);
+
+  const [showSendsModal, setShowSendsModal] = useState(false);
 
   const pageSize = 10;
 
@@ -355,7 +358,16 @@ export default function EmailSidebar({
             </div>
 
             {/* Sent Emails */}
-            <div className="flex cursor-pointer flex-col items-center gap-1 rounded-md bg-neutral-100 px-1 pb-1 pt-2 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-gray-700">
+            <div
+              onClick={() => setShowSendsModal(!showSendsModal)}
+              className={cn(
+                "flex cursor-pointer flex-col items-center gap-1 rounded-md bg-neutral-100 px-1 pb-1 pt-2 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-gray-700",
+                {
+                  "bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-gray-700":
+                    showSendsModal,
+                },
+              )}
+            >
               <div className="flex items-center gap-1">
                 <Icons.send className="size-3" />
                 <p className="line-clamp-1 text-start font-medium">
@@ -536,6 +548,16 @@ export default function EmailSidebar({
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
         />
+      )}
+
+      {showSendsModal && (
+        <Modal
+          className="md:max-w-2xl"
+          showModal={showSendsModal}
+          setShowModal={setShowSendsModal}
+        >
+          <SendsEmailList isAdminModel={isAdminModel} />
+        </Modal>
       )}
 
       {/* 创建\编辑邮箱的 Modal */}

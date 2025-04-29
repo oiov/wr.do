@@ -276,10 +276,10 @@ export default async function AdminPage() {
           </Suspense>
         </ErrorBoundary>
         <ErrorBoundary
-          fallback={<Skeleton className="h-[342px] w-full rounded-lg" />}
+          fallback={<Skeleton className="min-h-[342px] w-full rounded-lg" />}
         >
           <Suspense
-            fallback={<Skeleton className="h-[342px] w-full rounded-lg" />}
+            fallback={<Skeleton className="min-h-[342px] w-full rounded-lg" />}
           >
             <RequestStatsSection />
           </Suspense>

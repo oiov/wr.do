@@ -594,3 +594,47 @@ export async function getUserSendEmailCount(userId: string, admin: boolean) {
   }
   return prisma.userSendEmail.count({ where: { userId } });
 }
+
+export async function getUserSendEmailList(
+  userId: string,
+  admin: boolean,
+  page: number,
+  size: number,
+  search: string,
+) {
+  const select = {
+    from: true,
+    to: true,
+    subject: true,
+    html: true,
+    createdAt: true,
+  };
+  let where: any = {};
+
+  if (admin) {
+    where = {
+      to: { contains: search, mode: "insensitive" },
+    };
+  } else {
+    where = {
+      userId,
+      to: { contains: search, mode: "insensitive" },
+    };
+  }
+
+  const listPromise = prisma.userSendEmail.findMany({
+    where,
+    select,
+    skip: (page - 1) * size,
+    take: size,
+    orderBy: {
+      updatedAt: "desc",
+    },
+  });
+  const totalPromise = prisma.userSendEmail.count({
+    where,
+  });
+
+  const [list, total] = await Promise.all([listPromise, totalPromise]);
+  return { list, total };
+}

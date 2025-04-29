@@ -6,7 +6,7 @@ import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import useSWR from "swr";
 
 import { DATE_DIMENSION_ENUMS } from "@/lib/enums";
-import { fetcher } from "@/lib/utils";
+import { cn, fetcher } from "@/lib/utils";
 import {
   Card,
   CardContent,
@@ -54,6 +54,10 @@ const chartConfig = {
     label: "Inbox",
     color: "hsl(var(--chart-1))",
   },
+  sends: {
+    label: "Sends",
+    color: "hsl(var(--chart-2))",
+  },
 } satisfies ChartConfig;
 
 export function InteractiveBarChart() {
@@ -69,6 +73,7 @@ export function InteractiveBarChart() {
         users: number;
         emails: number;
         inbox: number;
+        sends: number;
         date: string;
       },
     ];
@@ -78,6 +83,15 @@ export function InteractiveBarChart() {
       users: number;
       emails: number;
       inbox: number;
+      sends: number;
+    };
+    growthRates: {
+      records: number;
+      urls: number;
+      users: number;
+      emails: number;
+      inbox: number;
+      sends: number;
     };
   }>(`api/admin?range=${timeRange}`, fetcher, {
     revalidateOnFocus: false,
@@ -94,7 +108,7 @@ export function InteractiveBarChart() {
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
           <CardTitle>Data Increase</CardTitle>
           <CardDescription>
-            Showing data increase in
+            Showing data increase in:
             <Select
               onValueChange={(value: string) => {
                 setTimeRange(value);
@@ -117,24 +131,41 @@ export function InteractiveBarChart() {
         </div>
 
         <div className="flex">
-          {["users", "records", "urls", "emails", "inbox"].map((key) => {
-            const chart = key as keyof typeof chartConfig;
-            return (
-              <button
-                key={chart}
-                data-active={activeChart === chart}
-                className="relative z-30 flex flex-1 flex-col justify-center gap-1 border-l border-t p-4 text-left data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:p-6"
-                onClick={() => setActiveChart(chart)}
-              >
-                <span className="text-xs text-muted-foreground">
-                  {chartConfig[chart].label}
-                </span>
-                <span className="text-lg font-bold leading-none sm:text-3xl">
-                  {data.total[key as keyof typeof data.total].toLocaleString()}
-                </span>
-              </button>
-            );
-          })}
+          {["users", "records", "urls", "emails", "inbox", "sends"].map(
+            (key) => {
+              const chart = key as keyof typeof chartConfig;
+              const growthRate =
+                data.growthRates[key as keyof typeof data.growthRates];
+              return (
+                <button
+                  key={chart}
+                  data-active={activeChart === chart}
+                  className="relative z-30 flex flex-1 flex-col justify-center gap-1 border-l border-t p-4 text-left data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:p-6"
+                  onClick={() => setActiveChart(chart)}
+                >
+                  <span className="text-xs text-muted-foreground">
+                    {chartConfig[chart].label}
+                  </span>
+                  <span className="text-lg font-bold leading-none sm:text-3xl">
+                    {data.total[
+                      key as keyof typeof data.total
+                    ].toLocaleString()}
+                  </span>
+                  <span
+                    className={cn(
+                      "rounded px-1.5 py-1 text-xs font-semibold leading-none",
+                      growthRate > 0 && "bg-green-200 text-green-700",
+                      growthRate < 0 && "bg-red-200 text-red-700",
+                      growthRate === 0 && "bg-neutral-100 text-neutral-700",
+                    )}
+                  >
+                    {growthRate >= 0 ? "+" : ""}
+                    {growthRate.toFixed(1)}%
+                  </span>
+                </button>
+              );
+            },
+          )}
         </div>
       </CardHeader>
       <CardContent className="px-2 sm:p-6">
