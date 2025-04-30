@@ -46,7 +46,7 @@ export default function SendsEmailList({
   };
 
   return (
-    <Card className="mx-auto w-full max-w-4xl">
+    <Card className="mx-auto w-full max-w-4xl border-none">
       <CardHeader>
         <CardTitle>Sent Emails</CardTitle>
       </CardHeader>
@@ -56,7 +56,7 @@ export default function SendsEmailList({
             placeholder="Search by send to email..."
             value={searchQuery}
             onChange={handleSearch}
-            className="max-w-sm"
+            className="w-full bg-neutral-50"
           />
         </div>
         {isLoading ? (

@@ -18,6 +18,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import CountUp from "@/components/dashboard/count-up";
 
 const chartConfig = {
   request: {
@@ -128,7 +129,7 @@ export function DailyPVUVChart({ data }: { data: ScrapeMeta[] }) {
                   {chartConfig[chart].label}
                 </span>
                 <span className="text-lg font-bold leading-none">
-                  {dataTotal[key as keyof typeof dataTotal].toLocaleString()}
+                  <CountUp count={dataTotal[key]} />
                 </span>
               </button>
             );

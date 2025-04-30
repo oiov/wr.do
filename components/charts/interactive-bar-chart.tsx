@@ -21,6 +21,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 
+import CountUp from "../dashboard/count-up";
 import {
   Select,
   SelectContent,
@@ -147,9 +148,7 @@ export function InteractiveBarChart() {
                     {chartConfig[chart].label}
                   </span>
                   <span className="text-lg font-bold leading-none sm:text-3xl">
-                    {data.total[
-                      key as keyof typeof data.total
-                    ].toLocaleString()}
+                    <CountUp count={data.total[key]} />
                   </span>
                   <span
                     className={cn(

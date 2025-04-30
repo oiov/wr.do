@@ -190,12 +190,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
               <span className="font-bold">{data && data.total}</span>
             </CardDescription>
           ) : (
-            <div className="grid gap-2">
-              <CardTitle>Short URLs</CardTitle>
-              <CardDescription className="text-balance">
-                Your Short URLs. Create links manually or use the API.
-              </CardDescription>
-            </div>
+            <CardTitle>Short URLs</CardTitle>
           )}
           <div className="ml-auto flex items-center justify-end gap-3">
             <Button

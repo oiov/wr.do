@@ -4,6 +4,7 @@ import { useState } from "react";
 import { RefreshCwIcon } from "lucide-react";
 import useSWR, { useSWRConfig } from "swr";
 
+import { nFormatter } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -191,7 +192,9 @@ const LogsTable = ({ userId, target }) => {
         </div>
 
         <div className="flex items-center justify-between gap-2">
-          <p className="ml-auto text-nowrap text-sm">{data?.total || 0} logs</p>
+          <p className="ml-auto text-nowrap text-sm">
+            {nFormatter(data?.total || 0)} logs
+          </p>
           {data && Math.ceil(data.total / 20) > 1 && (
             <PaginationWrapper
               total={Math.ceil(data.total / 20)}
