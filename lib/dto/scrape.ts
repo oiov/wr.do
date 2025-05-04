@@ -2,6 +2,8 @@ import { ScrapeMeta } from "@prisma/client";
 
 import { prisma } from "@/lib/db";
 
+import { getStartDate } from "../utils";
+
 export async function createScrapeMeta(
   data: Omit<ScrapeMeta, "id" | "createdAt" | "updatedAt">,
 ) {
@@ -50,10 +52,17 @@ export async function getApiKeyCallCount() {
   }
 }
 
-export async function getScrapeStatsByType(type: string) {
+export async function getScrapeStatsByType(
+  type: string,
+  dateRange: string = "",
+) {
+  const startDate = getStartDate(dateRange);
   return await prisma.scrapeMeta.findMany({
     where: {
       type,
+      ...(startDate && {
+        createdAt: { gte: startDate },
+      }),
     },
   });
 }

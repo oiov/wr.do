@@ -9,7 +9,8 @@ export default function CountUpFn({ count }: { count: number }) {
     <CountUp
       end={count}
       duration={2}
-      formattingFn={(value) => nFormatter(value, 2)}
+      redraw={false}
+      formattingFn={(value) => nFormatter(value)}
     />
   );
 }

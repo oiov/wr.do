@@ -6,7 +6,7 @@ import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import useSWR from "swr";
 
 import { DATE_DIMENSION_ENUMS } from "@/lib/enums";
-import { cn, fetcher } from "@/lib/utils";
+import { cn, fetcher, nFormatter } from "@/lib/utils";
 import {
   Card,
   CardContent,
@@ -148,7 +148,7 @@ export function InteractiveBarChart() {
                     {chartConfig[chart].label}
                   </span>
                   <span className="text-lg font-bold leading-none sm:text-3xl">
-                    <CountUp count={data.total[key]} />
+                    {nFormatter(data.total[key])}
                   </span>
                   <span
                     className={cn(

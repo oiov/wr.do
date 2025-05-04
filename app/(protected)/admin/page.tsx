@@ -119,11 +119,11 @@ async function InteractiveBarChartSection() {
 
 // 请求统计图表组件
 async function RequestStatsSection() {
-  const screenshot_stats = await getScrapeStatsByType("screenshot");
-  const meta_stats = await getScrapeStatsByType("meta-info");
-  const md_stats = await getScrapeStatsByType("markdown");
-  const text_stats = await getScrapeStatsByType("text");
-  const qr_stats = await getScrapeStatsByType("qrcode");
+  const screenshot_stats = await getScrapeStatsByType("screenshot", "90d");
+  const meta_stats = await getScrapeStatsByType("meta-info", "90d");
+  const md_stats = await getScrapeStatsByType("markdown", "90d");
+  const text_stats = await getScrapeStatsByType("text", "90d");
+  const qr_stats = await getScrapeStatsByType("qrcode", "90d");
 
   const hasStats =
     screenshot_stats.length > 0 ||
@@ -155,8 +155,8 @@ async function RadialShapeChartSection() {
 
 // 二维码/截图折线图组件
 async function QrScreenshotChartSection() {
-  const screenshot_stats = await getScrapeStatsByType("screenshot");
-  const qr_stats = await getScrapeStatsByType("qrcode");
+  const screenshot_stats = await getScrapeStatsByType("screenshot", "90d");
+  const qr_stats = await getScrapeStatsByType("qrcode", "90d");
 
   return (
     <LineChartMultiple
@@ -169,8 +169,8 @@ async function QrScreenshotChartSection() {
 
 // 截图/元信息折线图组件
 async function ScreenshotMetaChartSection() {
-  const screenshot_stats = await getScrapeStatsByType("screenshot");
-  const meta_stats = await getScrapeStatsByType("meta-info");
+  const screenshot_stats = await getScrapeStatsByType("screenshot", "90d");
+  const meta_stats = await getScrapeStatsByType("meta-info", "90d");
 
   return (
     <LineChartMultiple
@@ -183,8 +183,8 @@ async function ScreenshotMetaChartSection() {
 
 // Markdown/文本折线图组件
 async function MarkdownTextChartSection() {
-  const md_stats = await getScrapeStatsByType("markdown");
-  const text_stats = await getScrapeStatsByType("text");
+  const md_stats = await getScrapeStatsByType("markdown", "90d");
+  const text_stats = await getScrapeStatsByType("text", "90d");
 
   return (
     <LineChartMultiple

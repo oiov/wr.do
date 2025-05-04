@@ -226,7 +226,6 @@ export async function getUserUrlMetaInfo(
   dateRange: string = "",
 ) {
   const startDate = getStartDate(dateRange);
-
   return await prisma.urlMeta.findMany({
     where: {
       urlId,

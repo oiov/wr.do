@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ScrapeMeta } from "@prisma/client";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
-import { isLink, removeUrlSuffix, timeAgo } from "@/lib/utils";
+import { isLink, nFormatter, removeUrlSuffix, timeAgo } from "@/lib/utils";
 import {
   Card,
   CardContent,
@@ -109,7 +109,7 @@ export function DailyPVUVChart({ data }: { data: ScrapeMeta[] }) {
     <Card>
       <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-2 sm:py-3">
-          <CardTitle>Total Requests of APIs</CardTitle>
+          <CardTitle>Total Requests of APIs in Last 3 Month</CardTitle>
           <CardDescription>
             Last request from <strong>{latestFrom}</strong> api about{" "}
             {latestDate}.
@@ -129,7 +129,7 @@ export function DailyPVUVChart({ data }: { data: ScrapeMeta[] }) {
                   {chartConfig[chart].label}
                 </span>
                 <span className="text-lg font-bold leading-none">
-                  <CountUp count={dataTotal[key]} />
+                  {nFormatter(dataTotal[key])}
                 </span>
               </button>
             );

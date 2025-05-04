@@ -150,7 +150,7 @@ export async function fetcher<JSON = any>(
 export const isValidEmail = (email: string) =>
   /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-export function nFormatter(num: number, digits?: number) {
+export function nFormatter(num: number, digits: number = 2) {
   if (!num) return "0";
   const lookup = [
     { value: 1, symbol: "" },
