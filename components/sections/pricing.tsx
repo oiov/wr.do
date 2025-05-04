@@ -54,7 +54,7 @@ const getBenefits = (plan) => [
     icon: <Icons.help className="size-4" />,
   },
   {
-    text: "API Access",
+    text: "Open API Access",
     checked: plan.APP_ApiAccess,
     icon: <Icons.unplug className="size-4" />,
   },

@@ -15,7 +15,7 @@ export const TeamPlanQuota = {
   premium: {
     SL_TrackedClicks: 1000000,
     SL_NewLinks: 5000,
-    SL_AnalyticsRetention: 360,
+    SL_AnalyticsRetention: 365,
     SL_Domains: 2,
     SL_AdvancedAnalytics: true,
     RC_NewRecords: 2,
@@ -28,7 +28,7 @@ export const TeamPlanQuota = {
   business: {
     SL_TrackedClicks: 10000000,
     SL_NewLinks: 10000,
-    SL_AnalyticsRetention: 360,
+    SL_AnalyticsRetention: 1000,
     SL_Domains: 2,
     SL_AdvancedAnalytics: true,
     RC_NewRecords: 10,

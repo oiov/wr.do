@@ -302,12 +302,12 @@ export const TIME_RANGES: Record<string, number> = {
 };
 
 export const DATE_DIMENSION_ENUMS = [
-  { value: "24h", label: "Last 24 Hours" },
-  { value: "7d", label: "Last 7 Days" },
-  { value: "30d", label: "Last 30 Days" },
-  { value: "60d", label: "Last 2 Months" },
-  { value: "90d", label: "Last 3 Months" },
-  { value: "180d", label: "Last 6 Months" },
-  { value: "365d", label: "Last 1 Year" },
-  { value: "All", label: "All the time" },
+  { value: "24h", label: "Last 24 Hours", key: 1 },
+  { value: "7d", label: "Last 7 Days", key: 7 },
+  { value: "30d", label: "Last 30 Days", key: 30 },
+  { value: "60d", label: "Last 2 Months", key: 60 },
+  { value: "90d", label: "Last 3 Months", key: 90 },
+  { value: "180d", label: "Last 6 Months", key: 180 },
+  { value: "365d", label: "Last 1 Year", key: 365 },
+  { value: "All", label: "All the time", key: 1000 },
 ] as const;

@@ -58,7 +58,7 @@ import { PaginationWrapper } from "@/components/shared/pagination";
 import UserUrlMetaInfo from "./meta";
 
 export interface UrlListProps {
-  user: Pick<User, "id" | "name" | "apiKey" | "role">;
+  user: Pick<User, "id" | "name" | "apiKey" | "role" | "team">;
   action: string;
 }
 
@@ -533,7 +533,11 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                     </TableRow>
                     {isShowStats && selectedUrlId === short.id && (
                       <UserUrlMetaInfo
-                        user={{ id: user.id, name: user.name || "" }}
+                        user={{
+                          id: user.id,
+                          name: user.name || "",
+                          team: user.team,
+                        }}
                         action="/api/url/meta"
                         urlId={short.id!}
                       />

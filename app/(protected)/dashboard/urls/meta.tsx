@@ -4,6 +4,7 @@ import { useState } from "react";
 import { UrlMeta, User } from "@prisma/client";
 import useSWR from "swr";
 
+import { TeamPlanQuota } from "@/config/team";
 import { DATE_DIMENSION_ENUMS } from "@/lib/enums";
 import { fetcher } from "@/lib/utils";
 import {
@@ -19,7 +20,7 @@ import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
 import { DailyPVUVChart } from "./meta-chart";
 
 export interface UrlMetaProps {
-  user: Pick<User, "id" | "name">;
+  user: Pick<User, "id" | "name" | "team">;
   action: string;
   urlId: string;
 }
@@ -57,7 +58,13 @@ export default function UserUrlMetaInfo({ user, action, urlId }: UrlMetaProps) {
             </SelectTrigger>
             <SelectContent>
               {DATE_DIMENSION_ENUMS.map((e) => (
-                <SelectItem key={e.value} value={e.value}>
+                <SelectItem
+                  disabled={
+                    e.key > TeamPlanQuota[user.team!].SL_AnalyticsRetention
+                  }
+                  key={e.value}
+                  value={e.value}
+                >
                   {e.label}
                 </SelectItem>
               ))}
@@ -74,6 +81,7 @@ export default function UserUrlMetaInfo({ user, action, urlId }: UrlMetaProps) {
         data={data}
         timeRange={timeRange}
         setTimeRange={setTimeRange}
+        user={user}
       />
     </div>
   );

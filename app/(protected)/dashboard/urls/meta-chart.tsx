@@ -3,12 +3,13 @@
 import * as React from "react";
 import { useState } from "react";
 import Link from "next/link";
-import { UrlMeta } from "@prisma/client";
+import { UrlMeta, User } from "@prisma/client";
 import { VisSingleContainer, VisTooltip, VisTopoJSONMap } from "@unovis/react";
 import { TopoJSONMap } from "@unovis/ts";
 import { WorldMapTopoJSON } from "@unovis/ts/maps";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
+import { TeamPlanQuota } from "@/config/team";
 import { getCountryName, getDeviceVendor } from "@/lib/contries";
 import { DATE_DIMENSION_ENUMS } from "@/lib/enums";
 import { isLink, removeUrlSuffix, timeAgo } from "@/lib/utils";
@@ -144,10 +145,12 @@ export function DailyPVUVChart({
   data,
   timeRange,
   setTimeRange,
+  user,
 }: {
   data: UrlMeta[];
   timeRange: string;
   setTimeRange: React.Dispatch<React.SetStateAction<string>>;
+  user: Pick<User, "id" | "name" | "team">;
 }) {
   const [activeChart, setActiveChart] =
     React.useState<keyof typeof chartConfig>("pv");
@@ -232,7 +235,13 @@ export function DailyPVUVChart({
             </SelectTrigger>
             <SelectContent>
               {DATE_DIMENSION_ENUMS.map((e) => (
-                <SelectItem key={e.value} value={e.value}>
+                <SelectItem
+                  disabled={
+                    e.key > TeamPlanQuota[user.team!].SL_AnalyticsRetention
+                  }
+                  key={e.value}
+                  value={e.value}
+                >
                   {e.label}
                 </SelectItem>
               ))}

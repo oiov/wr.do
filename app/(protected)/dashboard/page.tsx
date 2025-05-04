@@ -94,7 +94,13 @@ async function LiveLogSection() {
 async function UserUrlsListSection({
   user,
 }: {
-  user: { id: string; name: string; apiKey: string; role: UserRole };
+  user: {
+    id: string;
+    name: string;
+    apiKey: string;
+    role: UserRole;
+    team: string;
+  };
 }) {
   return (
     <UserUrlsList
@@ -103,6 +109,7 @@ async function UserUrlsListSection({
         name: user.name,
         apiKey: user.apiKey,
         role: user.role,
+        team: user.team,
       }}
       action="/api/url"
     />
@@ -185,6 +192,7 @@ export default async function DashboardPage() {
                 name: user.name || "",
                 apiKey: user.apiKey || "",
                 role: user.role,
+                team: user.team,
               }}
             />
           </Suspense>
