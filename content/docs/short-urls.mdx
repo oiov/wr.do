@@ -95,23 +95,55 @@ Add the header `wrdo-api-key: YOUR_API_KEY` to your request.
 }
 ```
 
-## Problems
+## Short Link Issues
 
 ### Expired Links
 
+<img className='size-20 mx-auto mt-4' src="/_static/docs/link/expired.svg"/>
+
+<Callout type="error" twClass="">
 If you see this, it means that this short link has expired. 
 Please contact the creator of this short link to reactivate, or create a new short link.
+</Callout>
 
 ### Missing links
 
+<img className='size-20 mx-auto mt-4' src="/_static/docs/link/error-404.svg"/>
+
+<Callout type="error" twClass="">
 If you see this, it means that this short link does not exist.
 Please contact the creator of this short link to reactivate, or create a new short link.
+</Callout>
 
 ### Disabled links
 
+<img className='size-20 mx-auto mt-4' src="/_static/docs/link/disabled.svg"/>
+
+<Callout type="error" twClass="">
 If you see this, it means that this short link has been disabled.
 Please contact the creator of this short link to reactivate, or create a new short link.
+</Callout>
 
 ### Error links
 
-If you see this, it means that this short link has an error. Please contact administrator.
+<img className='size-20 mx-auto mt-4' src="/_static/docs/link/error.svg"/>
+
+<Callout type="error" twClass="">
+If you see this, it means that this short link has an error. Please contact the creator of this short link or administrator.
+</Callout>
+
+### Password Required
+
+<img className='size-20 mx-auto mt-4' src="/_static/docs/link/password.svg"/>
+
+<Callout type="error" twClass="">
+This short link requires a password. Enter the correct password to access it.
+</Callout>
+
+### Incorrect Password
+
+<img className='size-20 mx-auto mt-4' src="/_static/docs/link/password-error.svg"/>
+
+<Callout type="error" twClass="">
+The password provided is incorrect. Try again or contact the link creator for the correct password.
+</Callout>
