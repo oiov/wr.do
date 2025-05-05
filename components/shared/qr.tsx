@@ -1,7 +1,8 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import Link from "next/link";
+import { debounce } from "lodash";
 import { HexColorPicker } from "react-colorful";
 import { toast } from "sonner";
 
@@ -64,9 +65,12 @@ export default function QRCodeEditor({
     setQrCodeUrl(generateQrCodeUrl());
   }, [params]);
 
-  const handleColorChange = (color: string, type: "fgColor" | "bgColor") => {
-    setParams((prev) => ({ ...prev, [type]: color }));
-  };
+  const handleColorChange = useCallback(
+    debounce((color: string, type: "fgColor" | "bgColor") => {
+      setParams((prev) => ({ ...prev, [type]: color }));
+    }, 300),
+    [],
+  );
 
   const handleToggleLogo = (v: boolean) => {
     setParams((prev) => ({ ...prev, hideLogo: !v }));
@@ -82,6 +86,19 @@ export default function QRCodeEditor({
     navigator.clipboard.writeText(`https://wr.do${qrCodeUrl}`);
     toast.success("Copied to clipboard");
   };
+
+  const handleChangeUrl = useCallback(
+    debounce((value) => {
+      setParams((prev) => ({ ...prev, url: value }));
+    }, 300),
+    [],
+  );
+  const handleChangeLogo = useCallback(
+    debounce((value) => {
+      setParams((prev) => ({ ...prev, logo: value }));
+    }, 300),
+    [],
+  );
 
   const colorOptions = [
     "#000000", // Black
@@ -153,15 +170,12 @@ export default function QRCodeEditor({
         <h3 className="text-nowrap text-sm font-semibold text-neutral-600 transition-all group-hover:ml-1 group-hover:font-bold dark:text-neutral-300">
           Url
         </h3>
-
         <Input
           className="ml-auto w-[60%]"
           type="text"
           placeholder="https://example.com"
           defaultValue={params.url}
-          onChange={(e) => {
-            setParams((prev) => ({ ...prev, url: e.target.value }));
-          }}
+          onChange={(e) => handleChangeUrl(e.target.value)}
         />
       </div>
 
@@ -225,9 +239,7 @@ export default function QRCodeEditor({
             placeholder="https://example.com/logo.png"
             disabled={params.hideLogo}
             defaultValue={WRDO_QR_LOGO}
-            onChange={(e) => {
-              setParams((prev) => ({ ...prev, logo: e.target.value }));
-            }}
+            onChange={(e) => handleChangeLogo(e.target.value)}
           />
         </details>
       </div>
