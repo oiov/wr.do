@@ -101,9 +101,9 @@ export default function QRCodeEditor({
 
       {/* QR Code Preview */}
       <div className="mb-3">
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center justify-between">
           <h3 className="text-sm font-semibold text-neutral-600 dark:text-neutral-300">
-            QR Code Preview
+            Preview
           </h3>
           <Button
             onClick={() => {
@@ -149,8 +149,8 @@ export default function QRCodeEditor({
         </div>
       </div>
 
-      <div className="mb-3 flex items-center justify-between">
-        <h3 className="text-nowrap text-sm font-semibold text-neutral-600 dark:text-neutral-300">
+      <div className="group mb-3 flex items-center justify-between">
+        <h3 className="text-nowrap text-sm font-semibold text-neutral-600 transition-all group-hover:ml-1 group-hover:font-bold dark:text-neutral-300">
           Url
         </h3>
 
@@ -166,8 +166,8 @@ export default function QRCodeEditor({
       </div>
 
       <div className="mb-3">
-        <div className="mb-3 flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-neutral-600 dark:text-neutral-300">
+        <div className="group mb-3 flex items-center justify-between">
+          <h3 className="text-nowrap text-sm font-semibold text-neutral-600 transition-all group-hover:ml-1 group-hover:font-bold dark:text-neutral-300">
             Logo
           </h3>
           <TooltipProvider>
@@ -194,9 +194,9 @@ export default function QRCodeEditor({
             onCheckedChange={(v) => handleToggleLogo(v)}
           />
         </div>
-        <details>
+        <details className="group">
           <summary className="flex w-full cursor-pointer items-center justify-between">
-            <h3 className="text-nowrap text-sm font-semibold text-neutral-600 dark:text-neutral-300">
+            <h3 className="text-nowrap text-sm font-semibold text-neutral-600 transition-all group-hover:ml-1 group-hover:font-bold dark:text-neutral-300">
               Custom Logo
             </h3>
             <TooltipProvider>
@@ -232,9 +232,9 @@ export default function QRCodeEditor({
         </details>
       </div>
 
-      <details className="mb-3" open={true}>
+      <details className="group mb-3" open={true}>
         <summary className="flex w-full cursor-pointer items-center justify-between">
-          <h3 className="text-nowrap text-sm font-semibold text-neutral-600 dark:text-neutral-300">
+          <h3 className="text-nowrap text-sm font-semibold text-neutral-600 transition-all group-hover:ml-1 group-hover:font-bold dark:text-neutral-300">
             Front Color
           </h3>
           <Icons.chevronDown className="ml-auto size-4" />
@@ -286,9 +286,9 @@ export default function QRCodeEditor({
         </div>
       </details>
 
-      <details>
+      <details className="group">
         <summary className="flex w-full cursor-pointer items-center justify-between">
-          <h3 className="text-nowrap text-sm font-semibold text-neutral-600 dark:text-neutral-300">
+          <h3 className="text-nowrap text-sm font-semibold text-neutral-600 transition-all group-hover:ml-1 group-hover:font-bold dark:text-neutral-300">
             Background Color
           </h3>
           <Icons.chevronDown className="ml-auto size-4" />
