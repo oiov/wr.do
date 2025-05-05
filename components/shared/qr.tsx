@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Image from "next/image";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { HexColorPicker } from "react-colorful";
 import { toast } from "sonner";
@@ -9,12 +8,8 @@ import { toast } from "sonner";
 import { WRDO_QR_LOGO } from "@/lib/qr/constants";
 
 import { Button } from "../ui/button";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "../ui/collapsible";
 import { Input } from "../ui/input";
+import { Skeleton } from "../ui/skeleton";
 import { Switch } from "../ui/switch";
 import {
   Tooltip,
@@ -97,10 +92,11 @@ export default function QRCodeEditor({
     "#49a065", // Green
     "#2146b7", // Blue
     "#ae49bf", // Purple
+    "#ffffff",
   ];
 
   return (
-    <div className="mx-auto w-full max-w-lg rounded-lg bg-white p-4 shadow-lg">
+    <div className="w-full max-w-lg rounded-lg bg-white p-4 shadow-lg">
       <h2 className="mb-4 text-lg font-semibold">QR Code Design</h2>
 
       {/* QR Code Preview */}
@@ -136,15 +132,19 @@ export default function QRCodeEditor({
             className="flex size-full items-center justify-center"
             style={{ filter: "blur(0px)", opacity: 1, willChange: "auto" }}
           >
-            {qrCodeUrl && (
-              <BlurImage
-                src={qrCodeUrl}
-                alt="QR Code Preview"
-                width={128}
-                height={128}
-                className="h-auto max-w-full"
-              />
-            )}
+            <Suspense
+              fallback={<Skeleton className="h-32 w-32 rounded shadow" />}
+            >
+              {qrCodeUrl && (
+                <BlurImage
+                  src={qrCodeUrl}
+                  alt="QR Code Preview"
+                  width={128}
+                  height={128}
+                  className="h-auto max-w-full rounded"
+                />
+              )}
+            </Suspense>
           </div>
         </div>
       </div>
@@ -168,13 +168,12 @@ export default function QRCodeEditor({
       <div className="mb-3">
         <div className="mb-3 flex items-center justify-between">
           <h3 className="text-sm font-semibold text-neutral-600">Logo</h3>
-
           <TooltipProvider>
             <Tooltip delayDuration={0}>
               <TooltipTrigger>
                 <Icons.help className="ml-1 size-4 text-neutral-400" />
               </TooltipTrigger>
-              <TooltipContent className="max-w-64">
+              <TooltipContent className="max-w-64 text-left">
                 Display your logo in the center of the QR code.{" "}
                 <Link
                   className="border-b text-neutral-500"
@@ -193,8 +192,8 @@ export default function QRCodeEditor({
             onCheckedChange={(v) => handleToggleLogo(v)}
           />
         </div>
-        <Collapsible>
-          <CollapsibleTrigger className="flex w-full items-center justify-between">
+        <details>
+          <summary className="flex w-full items-center justify-between">
             <h3 className="text-nowrap text-sm font-semibold text-neutral-600">
               Custom Logo
             </h3>
@@ -203,7 +202,7 @@ export default function QRCodeEditor({
                 <TooltipTrigger>
                   <Icons.help className="ml-1 size-4 text-neutral-400" />
                 </TooltipTrigger>
-                <TooltipContent className="max-w-64">
+                <TooltipContent className="max-w-64 text-left">
                   Customize your QR code logo.{" "}
                   <Link
                     className="border-b text-neutral-500"
@@ -217,132 +216,127 @@ export default function QRCodeEditor({
               </Tooltip>
             </TooltipProvider>
             <Icons.chevronDown className="ml-auto size-4" />
-          </CollapsibleTrigger>
-          <CollapsibleContent>
-            <Input
-              className="mt-2"
-              type="text"
-              placeholder="https://example.com/logo.png"
-              disabled={params.hideLogo}
-              defaultValue={WRDO_QR_LOGO}
-              onChange={(e) => {
-                setParams((prev) => ({ ...prev, logo: e.target.value }));
-              }}
-            />
-          </CollapsibleContent>
-        </Collapsible>
+          </summary>
+          <Input
+            className="mt-2"
+            type="text"
+            placeholder="https://example.com/logo.png"
+            disabled={params.hideLogo}
+            defaultValue={WRDO_QR_LOGO}
+            onChange={(e) => {
+              setParams((prev) => ({ ...prev, logo: e.target.value }));
+            }}
+          />
+        </details>
       </div>
 
-      <Collapsible className="mb-3" defaultOpen={true}>
-        <CollapsibleTrigger className="flex w-full items-center justify-between">
+      <details className="mb-3" open={true}>
+        <summary className="flex w-full items-center justify-between">
           <h3 className="text-nowrap text-sm font-semibold text-neutral-600">
             Front Color
           </h3>
           <Icons.chevronDown className="ml-auto size-4" />
-        </CollapsibleTrigger>
-        <CollapsibleContent>
-          <div className="mt-2 flex items-center space-x-4">
-            <TooltipProvider>
-              <Tooltip delayDuration={0}>
-                <TooltipTrigger>
-                  <div className="relative flex h-9 w-32 shrink-0 rounded-md shadow-sm">
-                    <div
-                      className="h-full w-12 rounded-l-md border"
-                      data-state="closed"
-                      style={{
-                        backgroundColor: params.fgColor,
-                        borderColor: params.fgColor,
-                      }}
-                    ></div>
-                    <input
-                      id="color"
-                      className="block w-full rounded-r-md border-2 border-l-0 pl-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-black sm:text-sm"
-                      spellCheck="false"
-                      defaultValue={params.fgColor}
-                      name="color"
-                      style={{ borderColor: params.fgColor }}
-                      onChange={(e) =>
-                        handleColorChange(e.target.value, "fgColor")
-                      }
-                    />
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent className="p-3">
-                  <HexColorPicker
-                    color={params.fgColor}
-                    onChange={(color) => handleColorChange(color, "fgColor")}
+        </summary>
+        <div className="mt-2 flex items-start space-x-4">
+          <TooltipProvider>
+            <Tooltip delayDuration={0}>
+              <TooltipTrigger>
+                <div className="relative flex h-8 w-32 shrink-0 rounded-md shadow-sm">
+                  <div
+                    className="h-full w-10 rounded-l-md border"
+                    data-state="closed"
+                    style={{
+                      backgroundColor: params.fgColor,
+                      borderColor: params.fgColor,
+                    }}
+                  ></div>
+                  <input
+                    id="color"
+                    className="block w-full rounded-r-md border-2 border-l-0 pl-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-black sm:text-sm"
+                    spellCheck="false"
+                    defaultValue={params.fgColor}
+                    name="color"
+                    style={{ borderColor: params.fgColor }}
+                    onChange={(e) =>
+                      handleColorChange(e.target.value, "fgColor")
+                    }
                   />
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-            <div className="flex flex-wrap items-center justify-start gap-2">
-              {colorOptions.map((color) => (
-                <button
-                  key={color}
-                  className="size-7 rounded-full border"
-                  style={{ backgroundColor: color }}
-                  onClick={() => handleColorChange(color, "fgColor")}
+                </div>
+              </TooltipTrigger>
+              <TooltipContent className="p-3">
+                <HexColorPicker
+                  color={params.fgColor}
+                  onChange={(color) => handleColorChange(color, "fgColor")}
                 />
-              ))}
-            </div>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <div className="flex flex-wrap items-center justify-start gap-2">
+            {colorOptions.map((color) => (
+              <button
+                key={color}
+                className="size-[30px] rounded-full border"
+                style={{ backgroundColor: color }}
+                onClick={() => handleColorChange(color, "fgColor")}
+              />
+            ))}
           </div>
-        </CollapsibleContent>
-      </Collapsible>
-      <Collapsible>
-        <CollapsibleTrigger className="flex w-full items-center justify-between">
+        </div>
+      </details>
+
+      <details>
+        <summary className="flex w-full items-center justify-between">
           <h3 className="text-nowrap text-sm font-semibold text-neutral-600">
             Background Color
           </h3>
           <Icons.chevronDown className="ml-auto size-4" />
-        </CollapsibleTrigger>
-        <CollapsibleContent>
-          <div className="my-2 flex items-center space-x-4">
-            <TooltipProvider>
-              <Tooltip delayDuration={0}>
-                <TooltipTrigger>
-                  <div className="relative flex h-9 w-32 shrink-0 rounded-md shadow-sm">
-                    <div
-                      className="h-full w-12 rounded-l-md border"
-                      data-state="closed"
-                      style={{
-                        backgroundColor: params.bgColor,
-                        borderColor: params.bgColor,
-                      }}
-                    ></div>
-                    <input
-                      id="color"
-                      className="block w-full rounded-r-md border-2 border-l-0 pl-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-black sm:text-sm"
-                      spellCheck="false"
-                      defaultValue={params.bgColor}
-                      name="color"
-                      style={{ borderColor: params.bgColor }}
-                      onChange={(e) =>
-                        handleColorChange(e.target.value, "bgColor")
-                      }
-                    />
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent className="p-3">
-                  <HexColorPicker
-                    color={params.bgColor}
-                    onChange={(color) => handleColorChange(color, "bgColor")}
+        </summary>
+        <div className="my-2 flex items-start space-x-4">
+          <TooltipProvider>
+            <Tooltip delayDuration={0}>
+              <TooltipTrigger>
+                <div className="relative flex h-8 w-32 shrink-0 rounded-md shadow-sm">
+                  <div
+                    className="h-full w-10 rounded-l-md border"
+                    data-state="closed"
+                    style={{
+                      backgroundColor: params.bgColor,
+                      borderColor: params.bgColor,
+                    }}
+                  ></div>
+                  <input
+                    id="color"
+                    className="block w-full rounded-r-md border-2 border-l-0 pl-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-black sm:text-sm"
+                    spellCheck="false"
+                    defaultValue={params.bgColor}
+                    name="color"
+                    style={{ borderColor: params.bgColor }}
+                    onChange={(e) =>
+                      handleColorChange(e.target.value, "bgColor")
+                    }
                   />
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-            <div className="flex flex-wrap items-center justify-start gap-2">
-              {colorOptions.map((color) => (
-                <button
-                  key={color}
-                  className="size-7 rounded-full border"
-                  style={{ backgroundColor: color }}
-                  onClick={() => handleColorChange(color, "bgColor")}
+                </div>
+              </TooltipTrigger>
+              <TooltipContent className="p-3">
+                <HexColorPicker
+                  color={params.bgColor}
+                  onChange={(color) => handleColorChange(color, "bgColor")}
                 />
-              ))}
-            </div>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <div className="flex flex-wrap items-center justify-start gap-2">
+            {colorOptions.map((color) => (
+              <button
+                key={color}
+                className="size-[30px] rounded-full border"
+                style={{ backgroundColor: color }}
+                onClick={() => handleColorChange(color, "bgColor")}
+              />
+            ))}
           </div>
-        </CollapsibleContent>
-      </Collapsible>
+        </div>
+      </details>
 
       {/* <div className="flex justify-end space-x-2">
         <Button variant={"outline"}>Cancel</Button>

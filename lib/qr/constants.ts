@@ -21,4 +21,4 @@ export const QR_LEVELS = ["L", "M", "Q", "H"] as const;
 // get an explicit height or width, I'd rather default to something than throw.
 export const DEFAULT_IMG_SCALE = 0.1;
 
-export const WRDO_QR_LOGO = "https://wr.do/_static/logo.png";
+export const WRDO_QR_LOGO = "https://wr.do/logo.png";

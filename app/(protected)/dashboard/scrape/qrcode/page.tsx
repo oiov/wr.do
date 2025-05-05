@@ -5,7 +5,7 @@ import { constructMetadata } from "@/lib/utils";
 import { DashboardHeader } from "@/components/dashboard/header";
 import QRCodeEditor from "@/components/shared/qr";
 
-import { QrCodeScraping } from "../scrapes";
+import { CodeLight, QrCodeScraping } from "../scrapes";
 
 export const metadata = constructMetadata({
   title: "Url to QR Code API - WR.DO",
@@ -19,12 +19,13 @@ export default async function DashboardPage() {
 
   return (
     <>
-      {/* <DashboardHeader
+      <DashboardHeader
         heading="Url&nbsp;&nbsp;to&nbsp;&nbsp;QR&nbsp;&nbsp;Code"
         text="Generate QR Code from URL"
         link="/docs/open-api/qrcode"
         linkText="QR Code API."
-      /> */}
+      />
+      <CodeLight content={`https://wr.do/api/v1/scraping/qrcode`} />
       <QRCodeEditor
         user={{ id: user.id, apiKey: user.apiKey }}
         url="https://github.com/oiov"

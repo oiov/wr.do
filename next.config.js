@@ -33,6 +33,14 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ["@prisma/client"],
   },
+  rewrites() {
+    return [
+      {
+        source: "/logo.png",
+        destination: "/_static/logo.png",
+      },
+    ];
+  },
   redirects() {
     return [
       {
