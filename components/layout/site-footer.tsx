@@ -26,9 +26,10 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
             </Link>
           </div>
           <div className="mt-4 text-sm">
-            Craft DNS Records, Make Short Links. <br />
-            Powerful Screenshot and Meta Scraping API.
-            <br /> Open source.
+            Shorten links with analytics, manage emails, <br />
+            create private chats, and control subdomains
+            <br />
+            —all on one platform.
           </div>
           <GitHubStarsWithSuspense className="mt-4" owner="oiov" repo="wr.do" />
         </div>

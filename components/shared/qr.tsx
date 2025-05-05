@@ -96,7 +96,7 @@ export default function QRCodeEditor({
   ];
 
   return (
-    <div className="w-full max-w-lg rounded-lg bg-white p-4 shadow-lg dark:bg-neutral-900">
+    <div className="relative w-full max-w-lg rounded-lg bg-white p-4 shadow-lg dark:bg-neutral-900">
       <h2 className="mb-4 text-lg font-semibold">QR Code Design</h2>
 
       {/* QR Code Preview */}
@@ -340,15 +340,27 @@ export default function QRCodeEditor({
         </div>
       </details>
 
-      {/* <div className="flex justify-end space-x-2">
-        <Button variant={"outline"}>Cancel</Button>
-        <Button
-          className=""
-          onClick={() => console.log("Save changes", params)} // Replace with actual save logic
-        >
-          Save changes
-        </Button>
-      </div> */}
+      {/* Mask */}
+      {!user.apiKey && (
+        <div className="absolute left-0 top-0 flex size-full flex-col items-center justify-center gap-2 bg-neutral-100/20 px-4 backdrop-blur">
+          <p className="text-center text-sm">
+            Please create a <strong>api key</strong> before use this feature.{" "}
+            <br /> Learn more about{" "}
+            <Link
+              className="py-1 text-blue-600 hover:text-blue-400 hover:underline dark:hover:text-primary-foreground"
+              href={"/docs/open-api#api-key"}
+              target="_blank"
+            >
+              api key
+            </Link>
+            .
+          </p>
+
+          <Link href={"/dashboard/settings"}>
+            <Button>Create Api Key</Button>
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

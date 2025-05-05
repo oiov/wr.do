@@ -410,9 +410,6 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                           onClick={() => {
                             setSelectedUrl(short);
                             setShowQrcode(!isShowQrcode);
-                            // handleQrcode(
-                            //   `https://${short.prefix}/s/${short.url}`,
-                            // );
                           }}
                         >
                           <Icons.qrcode className="mx-0.5 size-4" />
@@ -472,30 +469,9 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
         showModal={isShowQrcode}
         setShowModal={setShowQrcode}
       >
-        {!user.apiKey && (
-          <div className="flex flex-col items-center gap-2">
-            <p className="text-center text-sm">
-              Please generate api key before use this feature. Learn more about{" "}
-              <Link
-                className="py-1 text-blue-600 hover:text-blue-400 hover:underline dark:hover:text-primary-foreground"
-                href={"/docs/open-api#api-key"}
-              >
-                api key
-              </Link>
-              .
-            </p>
-
-            <Link
-              className="flex h-8 items-center justify-center rounded-md bg-blue-500 px-2 py-1 text-xs text-white hover:bg-blue-400 dark:hover:text-primary-foreground"
-              href={"/dashboard/settings"}
-            >
-              Generate Api Key
-            </Link>
-          </div>
-        )}
-        {user.apiKey && selectedUrl && (
+        {selectedUrl && (
           <QRCodeEditor
-            user={{ id: user.id, apiKey: user.apiKey }}
+            user={{ id: user.id, apiKey: user.apiKey || "" }}
             url={`https://${selectedUrl.prefix}/s/${selectedUrl.url}`}
           />
         )}

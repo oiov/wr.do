@@ -1,6 +1,8 @@
 // components/GitHubStarsWrapper.tsx
 import { Suspense } from "react";
 
+import { Skeleton } from "../ui/skeleton";
+import { ErrorBoundary } from "./error-boundary";
 import GitHubStarsButton from "./github-star-button";
 
 interface GitHubResponse {
@@ -53,8 +55,10 @@ async function GitHubStarsWrapper({ owner, repo, className }: Props) {
 // 导出一个包装了 Suspense 的组件
 export default function GitHubStarsWithSuspense(props: Props) {
   return (
-    <Suspense fallback={<GitHubStarsButton {...props} />}>
-      <GitHubStarsWrapper {...props} />
-    </Suspense>
+    <ErrorBoundary fallback={<Skeleton className="h-4 w-12 rounded-lg" />}>
+      <Suspense fallback={<Skeleton className="h-4 w-12 rounded-lg" />}>
+        <GitHubStarsWrapper {...props} />
+      </Suspense>
+    </ErrorBoundary>
   );
 }

@@ -27,7 +27,7 @@ export default async function DashboardPage() {
       />
       <CodeLight content={`https://wr.do/api/v1/scraping/qrcode`} />
       <QRCodeEditor
-        user={{ id: user.id, apiKey: user.apiKey }}
+        user={{ id: user.id, apiKey: user.apiKey || "" }}
         url="https://github.com/oiov"
       />
     </>
