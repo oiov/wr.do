@@ -96,13 +96,13 @@ export default function QRCodeEditor({
   ];
 
   return (
-    <div className="w-full max-w-lg rounded-lg bg-white p-4 shadow-lg">
+    <div className="w-full max-w-lg rounded-lg bg-white p-4 shadow-lg dark:bg-neutral-900">
       <h2 className="mb-4 text-lg font-semibold">QR Code Design</h2>
 
       {/* QR Code Preview */}
       <div className="mb-3">
         <div className="flex items-center justify-between gap-2">
-          <h3 className="text-sm font-semibold text-neutral-600">
+          <h3 className="text-sm font-semibold text-neutral-600 dark:text-neutral-300">
             QR Code Preview
           </h3>
           <Button
@@ -150,7 +150,7 @@ export default function QRCodeEditor({
       </div>
 
       <div className="mb-3 flex items-center justify-between">
-        <h3 className="text-nowrap text-sm font-semibold text-neutral-600">
+        <h3 className="text-nowrap text-sm font-semibold text-neutral-600 dark:text-neutral-300">
           Url
         </h3>
 
@@ -167,7 +167,9 @@ export default function QRCodeEditor({
 
       <div className="mb-3">
         <div className="mb-3 flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-neutral-600">Logo</h3>
+          <h3 className="text-sm font-semibold text-neutral-600 dark:text-neutral-300">
+            Logo
+          </h3>
           <TooltipProvider>
             <Tooltip delayDuration={0}>
               <TooltipTrigger>
@@ -193,8 +195,8 @@ export default function QRCodeEditor({
           />
         </div>
         <details>
-          <summary className="flex w-full items-center justify-between">
-            <h3 className="text-nowrap text-sm font-semibold text-neutral-600">
+          <summary className="flex w-full cursor-pointer items-center justify-between">
+            <h3 className="text-nowrap text-sm font-semibold text-neutral-600 dark:text-neutral-300">
               Custom Logo
             </h3>
             <TooltipProvider>
@@ -231,8 +233,8 @@ export default function QRCodeEditor({
       </div>
 
       <details className="mb-3" open={true}>
-        <summary className="flex w-full items-center justify-between">
-          <h3 className="text-nowrap text-sm font-semibold text-neutral-600">
+        <summary className="flex w-full cursor-pointer items-center justify-between">
+          <h3 className="text-nowrap text-sm font-semibold text-neutral-600 dark:text-neutral-300">
             Front Color
           </h3>
           <Icons.chevronDown className="ml-auto size-4" />
@@ -252,7 +254,7 @@ export default function QRCodeEditor({
                   ></div>
                   <input
                     id="color"
-                    className="block w-full rounded-r-md border-2 border-l-0 pl-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-black sm:text-sm"
+                    className="block w-full rounded-r-md border-2 border-l-0 pl-3 text-neutral-900 placeholder-gray-400 focus:outline-none focus:ring-black dark:text-neutral-300 sm:text-sm"
                     spellCheck="false"
                     defaultValue={params.fgColor}
                     name="color"
@@ -285,8 +287,8 @@ export default function QRCodeEditor({
       </details>
 
       <details>
-        <summary className="flex w-full items-center justify-between">
-          <h3 className="text-nowrap text-sm font-semibold text-neutral-600">
+        <summary className="flex w-full cursor-pointer items-center justify-between">
+          <h3 className="text-nowrap text-sm font-semibold text-neutral-600 dark:text-neutral-300">
             Background Color
           </h3>
           <Icons.chevronDown className="ml-auto size-4" />
@@ -306,7 +308,7 @@ export default function QRCodeEditor({
                   ></div>
                   <input
                     id="color"
-                    className="block w-full rounded-r-md border-2 border-l-0 pl-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-black sm:text-sm"
+                    className="block w-full rounded-r-md border-2 border-l-0 pl-3 text-neutral-900 placeholder-gray-400 focus:outline-none focus:ring-black dark:text-neutral-300 sm:text-sm"
                     spellCheck="false"
                     defaultValue={params.bgColor}
                     name="color"
