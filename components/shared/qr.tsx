@@ -340,7 +340,7 @@ export default function QRCodeEditor({
         </div>
       </details>
 
-      {/* Mask */}
+      {/* Api Key Mask */}
       {!user.apiKey && (
         <div className="absolute left-0 top-0 flex size-full flex-col items-center justify-center gap-2 bg-neutral-100/20 px-4 backdrop-blur">
           <p className="text-center text-sm">
