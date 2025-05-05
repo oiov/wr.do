@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/session";
 import { constructMetadata } from "@/lib/utils";
 import { DashboardHeader } from "@/components/dashboard/header";
+import QRCodeEditor from "@/components/shared/qr";
 
 import { QrCodeScraping } from "../scrapes";
 
@@ -18,13 +19,16 @@ export default async function DashboardPage() {
 
   return (
     <>
-      <DashboardHeader
+      {/* <DashboardHeader
         heading="Url&nbsp;&nbsp;to&nbsp;&nbsp;QR&nbsp;&nbsp;Code"
         text="Generate QR Code from URL"
         link="/docs/open-api/qrcode"
         linkText="QR Code API."
+      /> */}
+      <QRCodeEditor
+        user={{ id: user.id, apiKey: user.apiKey }}
+        url="https://github.com/oiov"
       />
-      <QrCodeScraping user={{ id: user.id, apiKey: user.apiKey }} />
     </>
   );
 }

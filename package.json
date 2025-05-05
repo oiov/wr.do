@@ -84,6 +84,7 @@
     "peerjs": "^1.5.4",
     "prop-types": "^15.8.1",
     "react": "18.3.1",
+    "react-colorful": "^5.6.1",
     "react-countup": "^6.5.3",
     "react-day-picker": "^8.10.1",
     "react-dom": "18.3.1",

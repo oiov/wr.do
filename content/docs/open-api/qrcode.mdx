@@ -1,8 +1,120 @@
 ---
-title: Url to QR Code API
-description: Generate QR Code from URL
+title: Qr Code API
+description: Generate qr code with open api
 ---
+
+# QR Code API
+
+**Generate customizable QR codes for any URL**
+
+This API allows you to create QR codes with customizable options such as size, colors, error correction levels, and logo inclusion. The generated QR code is returned as an image.
+
+## API Endpoint
+
+**Base URL:**
+https://wr.do/api/v1/scraping/qrcode
+
+
+**HTTP Methods:**
+- `GET`: Generate a QR code image.
+- `OPTIONS`: Check CORS support.
+
 
 ## Usage
 
+### Basic Request Format
 
+```bash
+https://wr.do/api/v1/scraping/qrcode?key=your_api_key&url=https://example.com
+```
+
+### Authentication
+
+- The `key` parameter is required for all requests. You can obtain your API key from the Dashboard under Settings.
+
+
+## Query Parameters
+
+| Parameter         | Type     | Required | Default       | Description                                                                                   |
+|-------------------|----------|----------|---------------|-----------------------------------------------------------------------------------------------|
+| `key`             | String   | Yes      | -             | Your API key for authentication. Get it from Dashboard → Settings.                           |
+| `url`             | String   | Yes      | -             | The URL to encode in the QR code. Must be a valid URL.                                       |
+| `logo`            | String   | No       | WRDO_QR_LOGO  | URL of a custom logo to embed in the QR code. Requires a paid plan on Dub.                  |
+| `size`            | Number   | No       | 600           | Size of the QR code in pixels (width and height).                                            |
+| `level`           | String   | No       | "L"           | Error correction level. Options: `"L"`, `"M"`, `"Q"`, `"H"`.                                |
+| `fgColor`         | String   | No       | #000000       | Foreground color of the QR code in hex format (e.g., `#000000`).                            |
+| `bgColor`         | String   | No       | #FFFFFF       | Background color of the QR code in hex format (e.g., `#FFFFFF`).                            |
+| `margin`          | Number   | No       | 2             | Margin size around the QR code in pixels.                                                    |
+| `hideLogo`        | Boolean  | No       | false         | Whether to hide the logo in the QR code. Requires a paid plan on Dub.                       |
+
+### Error Correction Levels (`level`)
+- `L`: Low (7% error correction)
+- `M`: Medium (15% error correction)
+- `Q`: Quartile (25% error correction)
+- `H`: High (30% error correction)
+
+
+## Response
+
+### Success
+- **Status Code**: `200 OK`
+- **Content-Type**: `image/png`
+- **Body**: A PNG image of the generated QR code.
+- **Headers**:
+  - Access-Control-Allow-Origin: *
+  - Access-Control-Allow-Methods: GET, OPTIONS
+
+
+### Errors
+| Status Code | Message                                      | Description                                      |
+|-------------|----------------------------------------------|--------------------------------------------------|
+| `400`       | API key is required...                      | Missing `key` parameter.                         |
+| `401`       | Invalid API key...                          | The provided `key` is invalid.                   |
+| `500`       | Server error                                | An unexpected error occurred on the server.      |
+
+
+## Examples
+
+### Basic QR Code
+Generate a default QR code for a URL:
+```bash
+https://wr.do/api/v1/scraping/qrcode?key=your_api_key&url=https://example.com
+```
+
+### Custom Size and Colors
+Create a 400x400 QR code with a blue foreground and yellow background:
+```bash
+https://wr.do/api/v1/scraping/qrcode?key=your_api_key&url=https://example.com&size=400&fgColor=%230066FF&bgColor=%23FFFF00
+```
+
+### With Custom Logo and High Error Correction
+Add a custom logo and use high error correction (`H`):
+```bash
+https://wr.do/api/v1/scraping/qrcode?key=your_api_key&url=https://example.com&logo=https://your-logo-url.com/logo.png&level=H
+```
+
+### Hide Logo and Add Margin
+Hide the logo and add a larger margin:
+```bash
+https://wr.do/api/v1/scraping/qrcode?key=your_api_key&url=https://example.com&hideLogo=true&margin=10
+```
+
+## Embedding in HTML
+You can directly use the API URL in an `<img>` tag to display the QR code:
+
+```html
+<img
+  src="https://wr.do/api/v1/scraping/qrcode?key=your_api_key&url=https://example.com&size=300&fgColor=%230000FF"
+  alt="QR Code for example.com"
+/>
+```
+
+## Notes
+
+- CORS Support: The API supports CORS, allowing cross-origin requests.
+- Deprecation Notice: The includeMargin parameter is deprecated. Use margin instead.
+{/* - Paid Features: Options like logo and hideLogo require a paid plan on Dub. */}
+{/* - Rate Limits: Usage is subject to your plan's limits. Check your Dashboard for details. */}
+
+## Support
+For issues or questions, contact support at support@wr.do (mailto:support@wr.do) or visit our Help Center.

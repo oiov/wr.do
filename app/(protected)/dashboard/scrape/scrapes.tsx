@@ -460,8 +460,8 @@ export function QrCodeScraping({
   const [isShoting, setIsShoting] = useState(false);
   const [currentScreenshotLink, setCurrentScreenshotLink] =
     useState("vmail.dev");
-  const [screenshotInfo, setScreenshotInfo] = useState({
-    tmp_url: "",
+  const [qrInfo, setQrInfo] = useState({
+    // tmp_url: "",
     payload: "",
   });
 
@@ -473,10 +473,7 @@ export function QrCodeScraping({
       if (!res.ok || res.status !== 200) {
         toast.error(res.statusText);
       } else {
-        // const blob = await res.blob();
-        // const imageUrl = URL.createObjectURL(blob);
-        setScreenshotInfo({
-          tmp_url: await res.text(),
+        setQrInfo({
           payload: `${window.location.origin}${payload}`,
         });
         toast.success("Success!");
@@ -539,14 +536,14 @@ export function QrCodeScraping({
             <JsonView
               className="max-w-2xl overflow-auto p-2"
               style={theme === "dark" ? vscodeTheme : githubLightTheme}
-              value={screenshotInfo}
+              value={qrInfo}
               displayObjectSize={false}
               displayDataTypes={false}
               // shortenTextAfterLength={50}
             />
-            {screenshotInfo.tmp_url && (
+            {qrInfo.payload && (
               <BlurImage
-                src={screenshotInfo.tmp_url}
+                src={qrInfo.payload}
                 alt="ligth preview landing"
                 className="my-4 flex rounded-md border object-contain object-center shadow-md"
                 width={150}

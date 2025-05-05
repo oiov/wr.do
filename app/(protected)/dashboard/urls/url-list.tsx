@@ -29,6 +29,7 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { Input } from "@/components/ui/input";
+import { Modal } from "@/components/ui/modal";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -54,6 +55,7 @@ import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
 import { Icons } from "@/components/shared/icons";
 import { LinkPreviewer } from "@/components/shared/link-previewer";
 import { PaginationWrapper } from "@/components/shared/pagination";
+import QRCodeEditor from "@/components/shared/qr";
 
 import UserUrlMetaInfo from "./meta";
 
@@ -104,10 +106,9 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
   const [isShowStats, setShowStats] = useState(false);
   const [isShowQrcode, setShowQrcode] = useState(false);
   const [qrcodeInfo, setQrcodeInfo] = useState({
-    tmp_url: "",
     payload: "",
   });
-  const [selectedUrlId, setSelectedUrlId] = useState("");
+  const [selectedUrl, setSelectedUrl] = useState<ShortUrlFormData | null>(null);
   const [searchParams, setSearchParams] = useState({
     slug: "",
     target: "",
@@ -115,7 +116,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
   });
 
   const { mutate } = useSWRConfig();
-  const { data, error, isLoading } = useSWR<{
+  const { data, isLoading } = useSWR<{
     total: number;
     list: ShortUrlFormData[];
   }>(
@@ -133,35 +134,6 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
     );
   };
 
-  const handleQrcode = async (link: string) => {
-    if (link && user.apiKey) {
-      // setIsShoting(true);
-      const payload = `/api/v1/scraping/qrcode?url=${link}&key=${user.apiKey}`;
-      const res = await fetch(payload);
-      if (!res.ok || res.status !== 200) {
-        toast.error(res.statusText);
-      } else {
-        // const blob = await res.blob();
-        // const imageUrl = URL.createObjectURL(blob);
-        setQrcodeInfo({
-          tmp_url: await res.text(),
-          payload: `${window.location.origin}${payload}`,
-        });
-        // toast.success("Success!");
-      }
-      // setIsShoting(false);
-    }
-  };
-  const handleDownloadQrCode = (url: string) => {
-    const link = document.createElement("a");
-    link.download = `wrdo-${url}.png`;
-    link.href = qrcodeInfo.tmp_url;
-    link.click();
-  };
-  const handleCopyQrCode = (url: string) => {
-    navigator.clipboard.writeText(qrcodeInfo.payload);
-    toast.success("Copied to clipboard");
-  };
   const handleChangeStatu = async (checked: boolean, id: string) => {
     const res = await fetch(`/api/url/update/active`, {
       method: "POST",
@@ -431,97 +403,27 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                           <p className="hidden sm:block">Edit</p>
                           <PenLine className="mx-0.5 size-4 sm:ml-1 sm:size-3" />
                         </Button>
-                        <HoverCard
-                          open={isShowQrcode && selectedUrlId === short.id}
+                        <Button
+                          className="h-7 px-1 text-xs hover:bg-slate-100 dark:hover:text-primary-foreground"
+                          size="sm"
+                          variant={"outline"}
+                          onClick={() => {
+                            setSelectedUrl(short);
+                            setShowQrcode(!isShowQrcode);
+                            // handleQrcode(
+                            //   `https://${short.prefix}/s/${short.url}`,
+                            // );
+                          }}
                         >
-                          <HoverCardTrigger>
-                            <Button
-                              className="h-7 px-1 text-xs hover:bg-slate-100 dark:hover:text-primary-foreground"
-                              size="sm"
-                              variant={"outline"}
-                              onClick={() => {
-                                setSelectedUrlId(short.id!);
-                                setShowQrcode(!isShowQrcode);
-                                handleQrcode(
-                                  `https://${short.prefix}/s/${short.url}`,
-                                );
-                              }}
-                            >
-                              <Icons.qrcode className="mx-0.5 size-4" />
-                            </Button>
-                          </HoverCardTrigger>
-                          <HoverCardContent
-                            className="flex w-64 flex-col items-center justify-center gap-2"
-                            onMouseLeave={() => setShowQrcode(false)}
-                          >
-                            {!user.apiKey && (
-                              <div className="flex flex-col items-center gap-2">
-                                <p className="text-center text-sm">
-                                  Please generate api key before use this
-                                  feature. Learn more about{" "}
-                                  <Link
-                                    className="py-1 text-blue-600 hover:text-blue-400 hover:underline dark:hover:text-primary-foreground"
-                                    href={"/docs/open-api#api-key"}
-                                  >
-                                    api key
-                                  </Link>
-                                  .
-                                </p>
-
-                                <Link
-                                  className="flex h-8 items-center justify-center rounded-md bg-blue-500 px-2 py-1 text-xs text-white hover:bg-blue-400 dark:hover:text-primary-foreground"
-                                  href={"/dashboard/settings"}
-                                >
-                                  Generate Api Key
-                                </Link>
-                              </div>
-                            )}
-                            {user.apiKey && (
-                              <BlurImg
-                                src={qrcodeInfo.tmp_url}
-                                alt="ligth preview landing"
-                                className="rounded-md border"
-                                width={200}
-                                height={200}
-                                priority
-                                placeholder="blur"
-                              />
-                            )}
-                            {user.apiKey && (
-                              <div className="flex items-center justify-center gap-2">
-                                <Button
-                                  onClick={() => {
-                                    handleDownloadQrCode(short.url);
-                                  }}
-                                  className="h-8 py-1 text-xs hover:bg-blue-400 dark:hover:text-primary-foreground"
-                                  size="sm"
-                                  variant={"blue"}
-                                >
-                                  Download
-                                  <Icons.download className="ml-1 size-4" />
-                                </Button>
-                                <Button
-                                  onClick={() => {
-                                    handleCopyQrCode(short.url);
-                                  }}
-                                  className="h-8 py-1 text-xs hover:bg-gray-400 dark:hover:text-primary-foreground"
-                                  size="sm"
-                                  variant={"default"}
-                                >
-                                  Copy Link
-                                  <Icons.copy className="ml-1 size-4" />
-                                </Button>
-                              </div>
-                            )}
-                          </HoverCardContent>
-                        </HoverCard>
+                          <Icons.qrcode className="mx-0.5 size-4" />
+                        </Button>
                         <Button
                           className="h-7 px-1 text-xs hover:bg-slate-100 dark:hover:text-primary-foreground"
                           size="sm"
                           variant="outline"
                           onClick={() => {
-                            setSelectedUrlId(short.id!);
-                            if (isShowStats && selectedUrlId !== short.id) {
+                            setSelectedUrl(short);
+                            if (isShowStats && selectedUrl?.id !== short.id) {
                             } else {
                               setShowStats(!isShowStats);
                             }
@@ -531,7 +433,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                         </Button>
                       </TableCell>
                     </TableRow>
-                    {isShowStats && selectedUrlId === short.id && (
+                    {isShowStats && selectedUrl?.id === short.id && (
                       <UserUrlMetaInfo
                         user={{
                           id: user.id,
@@ -564,6 +466,40 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
           </Table>
         </CardContent>
       </Card>
+
+      <Modal
+        className="md:max-w-lg"
+        showModal={isShowQrcode}
+        setShowModal={setShowQrcode}
+      >
+        {!user.apiKey && (
+          <div className="flex flex-col items-center gap-2">
+            <p className="text-center text-sm">
+              Please generate api key before use this feature. Learn more about{" "}
+              <Link
+                className="py-1 text-blue-600 hover:text-blue-400 hover:underline dark:hover:text-primary-foreground"
+                href={"/docs/open-api#api-key"}
+              >
+                api key
+              </Link>
+              .
+            </p>
+
+            <Link
+              className="flex h-8 items-center justify-center rounded-md bg-blue-500 px-2 py-1 text-xs text-white hover:bg-blue-400 dark:hover:text-primary-foreground"
+              href={"/dashboard/settings"}
+            >
+              Generate Api Key
+            </Link>
+          </div>
+        )}
+        {user.apiKey && selectedUrl && (
+          <QRCodeEditor
+            user={{ id: user.id, apiKey: user.apiKey }}
+            url={`https://${selectedUrl.prefix}/s/${selectedUrl.url}`}
+          />
+        )}
+      </Modal>
     </>
   );
 }

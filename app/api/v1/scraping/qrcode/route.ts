@@ -1,36 +1,25 @@
-import QRCode from "qrcode";
+import { ImageResponse } from "@vercel/og";
 
 import { checkApiKey } from "@/lib/dto/api-key";
 import { createScrapeMeta } from "@/lib/dto/scrape";
-import { getIpInfo, isLink } from "@/lib/utils";
+import { WRDO_QR_LOGO } from "@/lib/qr/constants";
+import { QRCodeSVG } from "@/lib/qr/utils";
+import { getIpInfo, getSearchParams } from "@/lib/utils";
+import { getQRCodeQuerySchema } from "@/lib/validations/qr";
 
-export const revalidate = 60;
-
-// export const runtime = "edge";
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, OPTIONS",
+};
 
 export async function GET(req: Request) {
   try {
-    const url = new URL(req.url);
-    const link = url.searchParams.get("url");
-    const width = parseInt(url.searchParams.get("width") || "200");
-    const margin = parseInt(url.searchParams.get("margin") || "4");
-    const dark = url.searchParams.get("dark") || "#000000";
-    const light = url.searchParams.get("light") || "#ffffff";
-    const type = url.searchParams.get("type") || "png"; // png  | jpeg | webp | string
-
-    // Check if the url is valid
-    if (!link || !isLink(link)) {
-      return Response.json(
-        { statusText: "Url is required" },
-        {
-          status: 400,
-        },
-      );
-    }
+    const paramsParsed = getQRCodeQuerySchema.parse(getSearchParams(req.url));
+    const { key, logo, url, size, level, fgColor, bgColor, margin, hideLogo } =
+      paramsParsed;
 
     // Get the API key from the request
-    const custom_apiKey = url.searchParams.get("key");
-    if (!custom_apiKey) {
+    if (!key) {
       return Response.json(
         {
           statusText:
@@ -41,7 +30,7 @@ export async function GET(req: Request) {
     }
 
     // Check if the API key is valid
-    const user_apiKey = await checkApiKey(custom_apiKey);
+    const user_apiKey = await checkApiKey(key);
     if (!user_apiKey?.id) {
       return Response.json(
         {
@@ -50,27 +39,6 @@ export async function GET(req: Request) {
         },
         { status: 401 },
       );
-    }
-
-    let qrResult: any;
-    if (type === "string") {
-      qrResult = QRCode.toString(link);
-    } else {
-      qrResult = await QRCode.toDataURL(link, {
-        width,
-        margin,
-        color: {
-          dark,
-          light,
-        },
-        errorCorrectionLevel: "H", // Optional: L, M, Q, H
-        type:
-          type === "png"
-            ? "image/png"
-            : type === "jepg"
-              ? "image/jpeg"
-              : "image/webp",
-      });
     }
 
     const stats = getIpInfo(req);
@@ -88,12 +56,42 @@ export async function GET(req: Request) {
       browser: stats.browser,
       click: 1,
       userId: user_apiKey.id,
-      apiKey: custom_apiKey,
-      link,
+      apiKey: key,
+      link: url,
     });
 
-    return new Response(qrResult);
+    return new ImageResponse(
+      QRCodeSVG({
+        value: url,
+        size,
+        level,
+        fgColor,
+        bgColor,
+        margin,
+        ...(!hideLogo && {
+          imageSettings: {
+            src: logo || WRDO_QR_LOGO,
+            height: size / 4,
+            width: size / 4,
+            excavate: true,
+          },
+        }),
+        isOGContext: true,
+      }),
+      {
+        width: size,
+        height: size,
+        headers: CORS_HEADERS,
+      },
+    );
   } catch (error) {
     return Response.json({ statusText: "Server error" }, { status: 500 });
   }
+}
+
+export function OPTIONS() {
+  return new Response(null, {
+    status: 204,
+    headers: CORS_HEADERS,
+  });
 }

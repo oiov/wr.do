@@ -14,7 +14,8 @@
     "tailwindcss/classnames-order": "off",
     "tailwindcss/enforces-shorthand": "off",
     "react/no-unescaped-entities": "off",
-    "@next/next/no-img-element": "off"
+    "@next/next/no-img-element": "off",
+    "@typescript-eslint/no-unused-vars": "off"
   },
   "settings": {
     "tailwindcss": {

@@ -24,6 +24,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "email-attachment.wr.do",
       },
+      {
+        protocol: "http",
+        hostname: "localhost",
+      },
     ],
   },
   experimental: {
