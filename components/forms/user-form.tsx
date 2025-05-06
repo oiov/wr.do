@@ -111,142 +111,144 @@ export function UserForm({
   };
 
   return (
-    <form
-      className="mb-4 rounded-lg border border-dashed p-4 shadow-sm animate-in fade-in-50"
-      onSubmit={onSubmit}
-    >
-      <div className="items-center justify-start gap-4 md:flex">
-        <FormSectionColumns title="Email">
-          <div className="flex w-full items-center gap-2">
-            <Label className="sr-only" htmlFor="email">
-              Email
+    <div>
+      <div className="rounded-t-lg bg-muted px-4 py-2 text-lg font-semibold">
+        Edit User
+      </div>
+      <form className="max-w-2xl p-4" onSubmit={onSubmit}>
+        <div className="items-center justify-start gap-4 md:flex">
+          <FormSectionColumns title="Email" required>
+            <div className="flex w-full items-center gap-2">
+              <Label className="sr-only" htmlFor="email">
+                Email
+              </Label>
+              <Input
+                id="email"
+                className="flex-1 shadow-inner"
+                size={32}
+                disabled
+                {...register("email")}
+              />
+            </div>
+            {errors?.email && (
+              <p className="p-1 text-[13px] text-red-600">
+                {errors.email.message}
+              </p>
+            )}
+          </FormSectionColumns>
+          <FormSectionColumns title="Name">
+            <Label className="sr-only" htmlFor="name">
+              Name
             </Label>
             <Input
-              id="email"
+              id="name"
               className="flex-1 shadow-inner"
-              size={32}
-              disabled
-              {...register("email")}
+              size={20}
+              {...register("name")}
             />
-          </div>
-          {errors?.email && (
-            <p className="p-1 text-[13px] text-red-600">
-              {errors.email.message}
-            </p>
-          )}
-        </FormSectionColumns>
-        <FormSectionColumns title="Name">
-          <Label className="sr-only" htmlFor="name">
-            Name
-          </Label>
-          <Input
-            id="name"
-            className="flex-1 shadow-inner"
-            size={20}
-            {...register("name")}
-          />
-          {errors?.name && (
-            <p className="p-1 text-[13px] text-red-600">
-              {errors.name.message}
-            </p>
-          )}
-        </FormSectionColumns>
-        <FormSectionColumns title="Active">
-          <div className="flex w-full items-center gap-2">
-            <Label className="sr-only" htmlFor="active">
-              Active
-            </Label>
-            <Switch
-              id="active"
-              {...register("active")}
-              defaultChecked={initData?.active === 1}
-              onCheckedChange={(value) => setValue("active", value ? 1 : 0)}
-            />
-          </div>
-        </FormSectionColumns>
-      </div>
+            {errors?.name && (
+              <p className="p-1 text-[13px] text-red-600">
+                {errors.name.message}
+              </p>
+            )}
+          </FormSectionColumns>
+        </div>
 
-      <div className="items-center justify-start gap-4 md:flex">
-        <FormSectionColumns title="Role">
-          <Select
-            onValueChange={(value: string) => {
-              setValue("role", value as UserRole);
-            }}
-            name="role"
-            defaultValue={`${initData?.role}` || "USER"}
-          >
-            <SelectTrigger className="w-full shadow-inner">
-              <SelectValue placeholder="Select a role" />
-            </SelectTrigger>
-            <SelectContent>
-              {ROLE_ENUM.map((role) => (
-                <SelectItem key={role.value} value={role.value}>
-                  {role.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </FormSectionColumns>
-        <FormSectionColumns title="Plan">
-          <Select
-            onValueChange={(value: string) => {
-              setValue("team", value);
-            }}
-            name="team"
-            defaultValue={`${initData?.team}` || "free"}
-          >
-            <SelectTrigger className="w-full shadow-inner">
-              <SelectValue placeholder="Select a plan" />
-            </SelectTrigger>
-            <SelectContent>
-              {["free", "premium", "business"].map((role) => (
-                <SelectItem key={role} value={role}>
-                  {role}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </FormSectionColumns>
-      </div>
+        <div className="items-center justify-start gap-4 md:flex">
+          <FormSectionColumns title="Role">
+            <Select
+              onValueChange={(value: string) => {
+                setValue("role", value as UserRole);
+              }}
+              name="role"
+              defaultValue={`${initData?.role}` || "USER"}
+            >
+              <SelectTrigger className="w-full shadow-inner">
+                <SelectValue placeholder="Select a role" />
+              </SelectTrigger>
+              <SelectContent>
+                {ROLE_ENUM.map((role) => (
+                  <SelectItem key={role.value} value={role.value}>
+                    {role.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </FormSectionColumns>
+          <FormSectionColumns title="Plan">
+            <Select
+              onValueChange={(value: string) => {
+                setValue("team", value);
+              }}
+              name="team"
+              defaultValue={`${initData?.team}` || "free"}
+            >
+              <SelectTrigger className="w-full shadow-inner">
+                <SelectValue placeholder="Select a plan" />
+              </SelectTrigger>
+              <SelectContent>
+                {["free", "premium", "business"].map((role) => (
+                  <SelectItem key={role} value={role}>
+                    {role}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </FormSectionColumns>
+          <FormSectionColumns title="Active">
+            <div className="flex w-full items-center gap-2">
+              <Label className="sr-only" htmlFor="active">
+                Active
+              </Label>
+              <Switch
+                id="active"
+                {...register("active")}
+                defaultChecked={initData?.active === 1}
+                onCheckedChange={(value) => setValue("active", value ? 1 : 0)}
+              />
+            </div>
+          </FormSectionColumns>
+        </div>
 
-      {/* Action buttons */}
-      <div className="mt-3 flex justify-end gap-3">
-        {type === "edit" && (
+        {/* Action buttons */}
+        <div className="mt-3 flex justify-end gap-3">
+          {type === "edit" && (
+            <Button
+              type="button"
+              variant="destructive"
+              className="mr-auto w-[80px] px-0"
+              onClick={() => handleDelete()}
+              disabled={isDeleting}
+            >
+              {isDeleting ? (
+                <Icons.spinner className="size-4 animate-spin" />
+              ) : (
+                <p>Delete</p>
+              )}
+            </Button>
+          )}
           <Button
-            type="button"
-            variant="destructive"
-            className="mr-auto w-[80px] px-0"
-            onClick={() => handleDelete()}
-            disabled={isDeleting}
+            type="reset"
+            variant="outline"
+            className="w-[80px] px-0"
+            onClick={() => setShowForm(false)}
           >
-            {isDeleting ? (
+            Cancle
+          </Button>
+          <Button
+            type="submit"
+            variant="blue"
+            disabled={isPending}
+            className="w-[80px] shrink-0 px-0"
+          >
+            {isPending ? (
               <Icons.spinner className="size-4 animate-spin" />
             ) : (
-              <p>Delete</p>
+              <p>{type === "edit" ? "Update" : "Save"}</p>
             )}
           </Button>
-        )}
-        <Button
-          type="reset"
-          variant="outline"
-          className="w-[80px] px-0"
-          onClick={() => setShowForm(false)}
-        >
-          Cancle
-        </Button>
-        <Button
-          type="submit"
-          variant="blue"
-          disabled={isPending}
-          className="w-[80px] shrink-0 px-0"
-        >
-          {isPending ? (
-            <Icons.spinner className="size-4 animate-spin" />
-          ) : (
-            <p>{type === "edit" ? "Update" : "Save"}</p>
-          )}
-        </Button>
-      </div>
-    </form>
+        </div>
+      </form>
+    </div>
   );
 }

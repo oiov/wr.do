@@ -19,6 +19,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Modal } from "@/components/ui/modal";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -190,17 +191,6 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
           </div>
         </CardHeader>
         <CardContent>
-          {isShowForm && (
-            <RecordForm
-              user={{ id: user.id, name: user.name || "" }}
-              isShowForm={isShowForm}
-              setShowForm={setShowForm}
-              type={formType}
-              initData={currentEditRecord}
-              action={action}
-              onRefresh={handleRefresh}
-            />
-          )}
           <Table>
             <TableHeader className="bg-gray-100/50 dark:bg-primary-foreground">
               <TableRow className="grid grid-cols-3 items-center sm:grid-cols-8">
@@ -351,6 +341,22 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
           </Table>
         </CardContent>
       </Card>
+
+      <Modal
+        className="md:max-w-2xl"
+        showModal={isShowForm}
+        setShowModal={setShowForm}
+      >
+        <RecordForm
+          user={{ id: user.id, name: user.name || "" }}
+          isShowForm={isShowForm}
+          setShowForm={setShowForm}
+          type={formType}
+          initData={currentEditRecord}
+          action={action}
+          onRefresh={handleRefresh}
+        />
+      </Modal>
     </>
   );
 }

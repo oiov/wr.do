@@ -23,6 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { Switch } from "../ui/switch";
 
 export type FormData = CreateDNSRecord;
 
@@ -155,13 +156,13 @@ export function RecordForm({
   };
 
   return (
-    <div className="mb-4 rounded-lg border border-dashed shadow-sm animate-in fade-in-50">
+    <div>
       <div className="rounded-t-lg bg-muted px-4 py-2 text-lg font-semibold">
         {type === "add" ? "Create" : "Edit"} record
       </div>
       <form className="p-4" onSubmit={onSubmit}>
         <div className="items-center justify-start gap-4 md:flex">
-          <FormSectionColumns title="Type">
+          <FormSectionColumns title="Type" required>
             <Select
               onValueChange={(value: RecordType) => {
                 setValue("type", value);
@@ -183,12 +184,12 @@ export function RecordForm({
             </Select>
             <p className="p-1 text-[13px] text-muted-foreground">Required.</p>
           </FormSectionColumns>
-          <FormSectionColumns title="Name">
+          <FormSectionColumns title="Name" required>
             <div className="flex w-full items-center gap-2">
               <Label className="sr-only" htmlFor="name">
                 Name (required)
               </Label>
-              <div className="relative">
+              <div className="relative w-full">
                 <Input
                   id="name"
                   className="flex-1 shadow-inner"
@@ -214,6 +215,32 @@ export function RecordForm({
                 </p>
               )}
             </div>
+          </FormSectionColumns>
+        </div>
+
+        <div className="items-center justify-start gap-4 md:flex">
+          <FormSectionColumns title="TTL" required>
+            <Select
+              onValueChange={(value: string) => {
+                setValue("ttl", Number(value));
+              }}
+              name="ttl"
+              defaultValue={String(initData?.ttl || 1)}
+            >
+              <SelectTrigger className="w-full shadow-inner">
+                <SelectValue placeholder="Select a time" />
+              </SelectTrigger>
+              <SelectContent>
+                {TTL_ENUMS.map((ttl) => (
+                  <SelectItem key={ttl.value} value={ttl.value}>
+                    {ttl.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <p className="p-1 text-[13px] text-muted-foreground">
+              Optional. Time To Live.
+            </p>
           </FormSectionColumns>
           <FormSectionColumns
             title={
@@ -254,29 +281,6 @@ export function RecordForm({
         </div>
 
         <div className="items-center justify-start gap-4 md:flex">
-          <FormSectionColumns title="TTL">
-            <Select
-              onValueChange={(value: string) => {
-                setValue("ttl", Number(value));
-              }}
-              name="ttl"
-              defaultValue={String(initData?.ttl || 1)}
-            >
-              <SelectTrigger className="w-full shadow-inner">
-                <SelectValue placeholder="Select a time" />
-              </SelectTrigger>
-              <SelectContent>
-                {TTL_ENUMS.map((ttl) => (
-                  <SelectItem key={ttl.value} value={ttl.value}>
-                    {ttl.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <p className="p-1 text-[13px] text-muted-foreground">
-              Optional. Time To Live.
-            </p>
-          </FormSectionColumns>
           <FormSectionColumns title="Comment">
             <div className="flex items-center gap-2">
               <Label className="sr-only" htmlFor="comment">
@@ -293,15 +297,17 @@ export function RecordForm({
               Enter your comment here (up to 100 characters)
             </p>
           </FormSectionColumns>
-          {/* <FormSectionColumns title="Proxy">
-          <div className="flex w-full items-center gap-2">
-            <Label className="sr-only" htmlFor="proxy">
-              Proxy
-            </Label>
-            <Switch id="proxied" {...register("proxied")} />
-          </div>
-          <p className="p-1 text-[13px] text-muted-foreground">Proxy status</p>
-        </FormSectionColumns> */}
+          <FormSectionColumns title="Proxy">
+            <div className="flex w-full items-center gap-2">
+              <Label className="sr-only" htmlFor="proxy">
+                Proxy
+              </Label>
+              <Switch id="proxied" {...register("proxied")} />
+            </div>
+            <p className="p-1 text-[13px] text-muted-foreground">
+              Proxy status
+            </p>
+          </FormSectionColumns>
         </div>
 
         {/* Action buttons */}

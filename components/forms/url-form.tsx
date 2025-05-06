@@ -154,13 +154,13 @@ export function UrlForm({
   };
 
   return (
-    <div className="mb-4 rounded-lg border border-dashed shadow-sm animate-in fade-in-50">
+    <div>
       <div className="rounded-t-lg bg-muted px-4 py-2 text-lg font-semibold">
         {type === "add" ? "Create" : "Edit"} short link
       </div>
       <form className="p-4" onSubmit={onSubmit}>
         <div className="items-center justify-start gap-4 md:flex">
-          <FormSectionColumns title="Target URL">
+          <FormSectionColumns title="Target URL" required>
             <div className="flex w-full items-center gap-2">
               <Label className="sr-only" htmlFor="target">
                 Target
@@ -184,13 +184,13 @@ export function UrlForm({
               )}
             </div>
           </FormSectionColumns>
-          <FormSectionColumns title="Short Link">
+          <FormSectionColumns title="Short Link" required>
             <div className="flex w-full items-center gap-2">
               <Label className="sr-only" htmlFor="url">
                 Url
               </Label>
 
-              <div className="relative flex items-center">
+              <div className="relative flex w-full items-center">
                 <Select
                   onValueChange={(value: string) => {
                     setValue("prefix", value);
@@ -210,12 +210,9 @@ export function UrlForm({
                     ))}
                   </SelectContent>
                 </Select>
-                {/* <span className="pointer-events-none absolute left-20 whitespace-nowrap text-sm text-gray-400">
-                /s/
-              </span> */}
                 <Input
                   id="url"
-                  className="w-3/5 flex-1 rounded-none pl-[8px] shadow-inner"
+                  className="w-full rounded-none pl-[8px] shadow-inner"
                   size={20}
                   {...register("url")}
                   disabled={type === "edit"}
@@ -276,7 +273,7 @@ export function UrlForm({
               )}
             </div>
           </FormSectionColumns>
-          <FormSectionColumns title="Expiration">
+          <FormSectionColumns title="Expiration" required>
             <Select
               onValueChange={(value: string) => {
                 setValue("expiration", value);
@@ -285,7 +282,7 @@ export function UrlForm({
               defaultValue={initData?.expiration || "-1"}
             >
               <SelectTrigger className="w-full shadow-inner">
-                <SelectValue placeholder="Select a time" />
+                <SelectValue placeholder="Select a time range" />
               </SelectTrigger>
               <SelectContent>
                 {EXPIRATION_ENUMS.map((e) => (

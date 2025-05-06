@@ -23,11 +23,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -46,10 +41,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import StatusDot from "@/components/dashboard/status-dot";
 import { FormType } from "@/components/forms/record-form";
 import { UrlForm } from "@/components/forms/url-form";
-import { BlurImg } from "@/components/shared/blur-image";
 import { CopyButton } from "@/components/shared/copy-button";
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
 import { Icons } from "@/components/shared/icons";
@@ -105,9 +98,6 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
   const [pageSize, setPageSize] = useState(10);
   const [isShowStats, setShowStats] = useState(false);
   const [isShowQrcode, setShowQrcode] = useState(false);
-  const [qrcodeInfo, setQrcodeInfo] = useState({
-    payload: "",
-  });
   const [selectedUrl, setSelectedUrl] = useState<ShortUrlFormData | null>(null);
   const [searchParams, setSearchParams] = useState({
     slug: "",
@@ -191,17 +181,6 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
           </div>
         </CardHeader>
         <CardContent>
-          {isShowForm && (
-            <UrlForm
-              user={{ id: user.id, name: user.name || "" }}
-              isShowForm={isShowForm}
-              setShowForm={setShowForm}
-              type={formType}
-              initData={currentEditUrl}
-              action={action}
-              onRefresh={handleRefresh}
-            />
-          )}
           <div className="mb-2 flex-row items-center gap-2 space-y-2 sm:flex sm:space-y-0">
             <div className="relative w-full">
               <Input
@@ -392,12 +371,6 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                             setShowForm(false);
                             setFormType("edit");
                             setShowForm(!isShowForm);
-                            if (!isShowForm) {
-                              window.scrollTo({
-                                top: 0,
-                                behavior: "smooth",
-                              });
-                            }
                           }}
                         >
                           <p className="hidden sm:block">Edit</p>
@@ -464,6 +437,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
         </CardContent>
       </Card>
 
+      {/* QR code editor */}
       <Modal
         className="md:max-w-lg"
         showModal={isShowQrcode}
@@ -475,6 +449,23 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
             url={`https://${selectedUrl.prefix}/s/${selectedUrl.url}`}
           />
         )}
+      </Modal>
+
+      {/* Url form */}
+      <Modal
+        className="md:max-w-2xl"
+        showModal={isShowForm}
+        setShowModal={setShowForm}
+      >
+        <UrlForm
+          user={{ id: user.id, name: user.name || "" }}
+          isShowForm={isShowForm}
+          setShowForm={setShowForm}
+          type={formType}
+          initData={currentEditUrl}
+          action={action}
+          onRefresh={handleRefresh}
+        />
       </Modal>
     </>
   );

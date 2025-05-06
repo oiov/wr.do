@@ -38,8 +38,8 @@ export default async function HeroLanding() {
         </h1>
 
         <p className="max-w-2xl text-balance text-muted-foreground sm:text-lg">
-          Link shortening, domain hosting, email receivers or senders <br /> and
-          screenshot api, everything you need to build better.
+          Link shortening, domain hosting, email manager and <br />
+          open api, everything you need to build better.
         </p>
 
         <div className="flex items-center justify-center gap-4">

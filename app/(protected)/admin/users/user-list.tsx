@@ -16,7 +16,9 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Modal } from "@/components/ui/modal";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Switch } from "@/components/ui/switch";
 import {
   Table,
   TableBody,
@@ -82,7 +84,7 @@ export default function UsersList({ user }: UrlListProps) {
   });
 
   const { mutate } = useSWRConfig();
-  const { data, error, isLoading } = useSWR<{ total: number; list: User[] }>(
+  const { data, isLoading } = useSWR<{ total: number; list: User[] }>(
     `/api/user/admin?page=${currentPage}&size=${pageSize}&email=${searchParams.email}&userName=${searchParams.userName}`,
     fetcher,
     {
@@ -122,16 +124,6 @@ export default function UsersList({ user }: UrlListProps) {
           </div>
         </CardHeader>
         <CardContent>
-          {isShowForm && (
-            <UserForm
-              user={{ id: user.id, name: user.name || "" }}
-              isShowForm={isShowForm}
-              setShowForm={setShowForm}
-              type="edit"
-              initData={currentEditUser}
-              onRefresh={handleRefresh}
-            />
-          )}
           <div className="mb-2 flex-row items-center gap-2 space-y-2 sm:flex sm:space-y-0">
             <div className="relative w-full">
               <Input
@@ -257,7 +249,7 @@ export default function UsersList({ user }: UrlListProps) {
                       </Badge>
                     </TableCell>
                     <TableCell className="col-span-1 hidden justify-center sm:flex">
-                      <StatusDot status={user.active} />
+                      <Switch defaultChecked={user.active === 1} />
                     </TableCell>
                     <TableCell className="col-span-1 hidden justify-center sm:flex">
                       {timeAgo(user.createdAt || "")}
@@ -299,6 +291,21 @@ export default function UsersList({ user }: UrlListProps) {
           </Table>
         </CardContent>
       </Card>
+
+      <Modal
+        className="md:max-w-2xl"
+        showModal={isShowForm}
+        setShowModal={setShowForm}
+      >
+        <UserForm
+          user={{ id: user.id, name: user.name || "" }}
+          isShowForm={isShowForm}
+          setShowForm={setShowForm}
+          type="edit"
+          initData={currentEditUser}
+          onRefresh={handleRefresh}
+        />
+      </Modal>
     </>
   );
 }
