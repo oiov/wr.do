@@ -1,14 +1,29 @@
 "use client";
 
-import { Suspense, useCallback, useEffect, useState } from "react";
+import {
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Link from "next/link";
 import { debounce } from "lodash";
 import { HexColorPicker } from "react-colorful";
 import { toast } from "sonner";
 
+import { getQRAsCanvas, getQRAsSVGDataUri, getQRData } from "@/lib/qr";
 import { WRDO_QR_LOGO } from "@/lib/qr/constants";
+import { extractHost } from "@/lib/utils";
 
 import { Button } from "../ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 import { Input } from "../ui/input";
 import { Skeleton } from "../ui/skeleton";
 import { Switch } from "../ui/switch";
@@ -19,6 +34,7 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import BlurImage from "./blur-image";
+import { CopyButton } from "./copy-button";
 import { Icons } from "./icons";
 
 export default function QRCodeEditor({
@@ -33,7 +49,7 @@ export default function QRCodeEditor({
     url,
     logo: "",
     size: 600,
-    level: "L",
+    level: "Q",
     fgColor: "#d1ffb5",
     bgColor: "#000000",
     margin: 2,
@@ -41,6 +57,7 @@ export default function QRCodeEditor({
   });
 
   const [qrCodeUrl, setQrCodeUrl] = useState("");
+  const anchorRef = useRef<HTMLAnchorElement>(null);
 
   const generateQrCodeUrl = () => {
     const queryParams = new URLSearchParams({
@@ -76,16 +93,12 @@ export default function QRCodeEditor({
     setParams((prev) => ({ ...prev, hideLogo: !v }));
   };
 
-  const handleDownloadQrCode = () => {
-    const link = document.createElement("a");
-    link.download = `qr-${params.url}.png`;
-    link.href = qrCodeUrl;
-    link.click();
-  };
-  const handleCopyQrCode = () => {
-    navigator.clipboard.writeText(`https://wr.do${qrCodeUrl}`);
-    toast.success("Copied to clipboard");
-  };
+  function download(url: string, extension: string) {
+    if (!anchorRef.current) return;
+    anchorRef.current.href = url;
+    anchorRef.current.download = `${extractHost(params.url)}-qrcode.${extension}`;
+    anchorRef.current.click();
+  }
 
   const handleChangeUrl = useCallback(
     debounce((value) => {
@@ -112,36 +125,88 @@ export default function QRCodeEditor({
     "#ffffff",
   ];
 
+  const qrData = useMemo(
+    () =>
+      url
+        ? getQRData({
+            url: params.url,
+            bgColor: params.bgColor,
+            fgColor: params.fgColor,
+            logo: params.logo,
+            size: params.size,
+            level: params.level,
+            margin: params.margin,
+            hideLogo: params.hideLogo,
+          })
+        : null,
+    [url, params],
+  );
+
   return (
     <div className="relative w-full max-w-lg rounded-lg bg-white p-4 shadow-lg dark:bg-neutral-900">
       <h2 className="mb-4 text-lg font-semibold">QR Code Design</h2>
 
       {/* QR Code Preview */}
       <div className="mb-3">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-1">
           <h3 className="text-sm font-semibold text-neutral-600 dark:text-neutral-300">
             Preview
           </h3>
-          <Button
-            onClick={() => {
-              handleDownloadQrCode();
-            }}
-            className="ml-auto h-8 px-2 py-1"
-            size="sm"
-            variant={"ghost"}
-          >
-            <Icons.download className="size-4" />
-          </Button>
-          <Button
-            onClick={() => {
-              handleCopyQrCode();
-            }}
-            className="h-8 px-2 py-1"
-            size="sm"
-            variant={"ghost"}
-          >
-            <Icons.copy className="size-4" />
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger className="ml-auto px-2 py-2 hover:bg-accent hover:text-accent-foreground">
+              <Icons.download className="size-4" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem
+                asChild
+                onClick={async () => {
+                  qrData && download(await getQRAsSVGDataUri(qrData), "svg");
+                }}
+              >
+                <div className="flex items-center gap-2 text-neutral-500">
+                  <Icons.media className="size-4" />
+                  <span className="font-semibold">Download SVG</span>
+                </div>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                asChild
+                onClick={async () => {
+                  qrData &&
+                    download(
+                      (await getQRAsCanvas(qrData, "image/png")) as string,
+                      "png",
+                    );
+                }}
+              >
+                <div className="flex items-center gap-2 text-neutral-500">
+                  <Icons.media className="size-4" />
+                  <span className="font-semibold">Download PNG</span>
+                </div>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                asChild
+                onClick={async () => {
+                  qrData &&
+                    download(
+                      (await getQRAsCanvas(qrData, "image/jpeg")) as string,
+                      "jpg",
+                    );
+                }}
+              >
+                <div className="flex items-center gap-2 text-neutral-500">
+                  <Icons.media className="size-4" />
+                  <span className="font-semibold">Download JPG</span>
+                </div>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <a
+            className="hidden"
+            download={`${params.url}-qrcode.svg`}
+            ref={anchorRef}
+          />
+
+          <CopyButton value={`https://wr.do${qrCodeUrl}`}></CopyButton>
         </div>
         <div className="relative mt-2 flex h-40 items-center justify-center overflow-hidden rounded-md border border-gray-300">
           <div className="absolute inset-0 h-full w-full bg-neutral-50/60 bg-[radial-gradient(#d7d9dd_1px,transparent_1px)] [background-size:8px_9px]"></div>
@@ -244,7 +309,7 @@ export default function QRCodeEditor({
         </details>
       </div>
 
-      <details className="group mb-3" open={true}>
+      <details className="group mb-3">
         <summary className="flex w-full cursor-pointer items-center justify-between">
           <h3 className="text-nowrap text-sm font-semibold text-neutral-600 transition-all group-hover:ml-1 group-hover:font-bold dark:text-neutral-300">
             Front Color
@@ -298,7 +363,7 @@ export default function QRCodeEditor({
         </div>
       </details>
 
-      <details className="group">
+      <details className="group" open={true}>
         <summary className="flex w-full cursor-pointer items-center justify-between">
           <h3 className="text-nowrap text-sm font-semibold text-neutral-600 transition-all group-hover:ml-1 group-hover:font-bold dark:text-neutral-300">
             Background Color

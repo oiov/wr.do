@@ -108,7 +108,7 @@ export function DailyPVUVChart({ data }: { data: ScrapeMeta[] }) {
   return (
     <Card>
       <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
-        <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-2 sm:py-3">
+        <div className="flex flex-1 flex-col justify-center gap-1 px-5 py-4">
           <CardTitle>Total Requests of APIs in Last 3 Month</CardTitle>
           <CardDescription>
             Last request from <strong>{latestFrom}</strong> api about{" "}
