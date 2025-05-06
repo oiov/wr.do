@@ -431,6 +431,8 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                 total={Math.ceil(data.total / pageSize)}
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
+                pageSize={pageSize}
+                setPageSize={setPageSize}
               />
             )}
           </Table>

@@ -336,6 +336,8 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                 total={Math.ceil(data.total / pageSize)}
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
+                pageSize={pageSize}
+                setPageSize={setPageSize}
               />
             )}
           </Table>

@@ -543,10 +543,11 @@ export default function EmailSidebar({
       {/* Pagination */}
       {!isCollapsed && data && totalPages > 1 && (
         <PaginationWrapper
-          className="m-0 scale-75 justify-center"
+          className="m-0 scale-75"
           total={totalPages}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
+          layout="center"
         />
       )}
 

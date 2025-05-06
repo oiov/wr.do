@@ -286,6 +286,8 @@ export default function UsersList({ user }: UrlListProps) {
                 total={Math.ceil(data.total / pageSize)}
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
+                pageSize={pageSize}
+                setPageSize={setPageSize}
               />
             )}
           </Table>
