@@ -342,7 +342,7 @@ export function getQRData({
   hideLogo,
   logo,
   margin,
-  size,
+  size = 600,
   level,
 }: {
   url: string;
@@ -365,8 +365,8 @@ export function getQRData({
     ...(!hideLogo && {
       imageSettings: {
         src: logo || WRDO_QR_LOGO,
-        height: 256,
-        width: 256,
+        height: size / 4,
+        width: size / 4,
         excavate: true,
       },
     }),
