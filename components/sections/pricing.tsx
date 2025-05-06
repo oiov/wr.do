@@ -29,14 +29,19 @@ const getBenefits = (plan) => [
     icon: <Icons.calendar className="size-4" />,
   },
   {
+    text: `Customize short link QR code`,
+    checked: true,
+    icon: <Icons.qrcode className="size-4" />,
+  },
+  {
     text: `${nFormatter(plan.EM_EmailAddresses)} email addresses/mo`,
     checked: true,
-    icon: <Icons.mail className="size-4" />, // Updated icon to be more relevant
+    icon: <Icons.mail className="size-4" />,
   },
   {
     text: `${nFormatter(plan.EM_SendEmails)} send emails/mo`,
     checked: true,
-    icon: <Icons.send className="size-4" />, // Updated icon to be more relevant
+    icon: <Icons.send className="size-4" />,
   },
   {
     text: `${plan.SL_Domains === 1 ? "One" : plan.SL_Domains} domain${plan.SL_Domains > 1 ? "s" : ""}`,
@@ -99,7 +104,7 @@ export const PricingSection = () => {
             CTA={
               <Link href={"/pricing"}>
                 <Button className="w-full bg-zinc-800 text-zinc-50 hover:bg-zinc-700 hover:text-zinc-50 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200 dark:hover:text-zinc-900">
-                  14-day free trial
+                  Get free trial
                 </Button>
               </Link>
             }

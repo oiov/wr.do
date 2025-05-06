@@ -29,6 +29,11 @@ export const sidebarLinks: SidebarNavItem[] = [
         title: "Screenshot",
       },
       {
+        href: "/dashboard/scrape/qrcode",
+        icon: "qrcode",
+        title: "QR Code",
+      },
+      {
         href: "/dashboard/scrape/meta-info",
         icon: "globe",
         title: "Meta Info",
@@ -37,11 +42,6 @@ export const sidebarLinks: SidebarNavItem[] = [
         href: "/dashboard/scrape/markdown",
         icon: "fileText",
         title: "Markdown",
-      },
-      {
-        href: "/dashboard/scrape/qrcode",
-        icon: "qrcode",
-        title: "QR Code",
       },
     ],
   },
