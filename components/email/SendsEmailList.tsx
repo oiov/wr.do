@@ -60,7 +60,7 @@ export default function SendsEmailList({
           />
         </div>
         {isLoading ? (
-          <div className="space-y-1">
+          <div className="space-y-1.5">
             {[...Array(5)].map((_, i) => (
               <Skeleton key={i} className="h-16 w-full rounded-lg" />
             ))}
@@ -75,38 +75,38 @@ export default function SendsEmailList({
           </div>
         ) : (
           <div className="scrollbar-hidden max-h-[50vh] overflow-y-auto">
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               {data.list.map((email) => (
                 <Collapsible
-                  className="w-full rounded-lg border bg-white p-2 transition-all duration-200 hover:bg-gray-50"
+                  className="w-full rounded-lg border bg-white transition-all duration-200 hover:bg-gray-50"
                   key={email.id}
                 >
                   <CollapsibleTrigger className="w-full">
-                    <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2">
+                    <div className="grids flex items-center justify-between rounded-t-lg bg-neutral-300/70 px-2 py-1.5">
+                      <span className="truncate text-xs font-semibold text-neutral-600 dark:text-neutral-200">
+                        {email.from}
+                      </span>
+                      <span className="text-xs text-neutral-800 dark:text-neutral-300">
+                        {formatDate(email.createdAt as any)}
+                      </span>
+                    </div>
+                    <div className="grid w-full grid-cols-1 gap-3 p-2 sm:grid-cols-2">
                       <div className="text-start">
                         <div className="truncate text-xs font-semibold text-neutral-600 dark:text-neutral-200">
-                          <strong>From:</strong> {email.from}
+                          <strong>Send To:</strong> {email.to}
                         </div>
-                        <div className="truncate text-xs font-semibold text-neutral-600 dark:text-neutral-200">
-                          <strong>To:</strong> {email.to}
-                        </div>
-                        <div className="text-xs text-neutral-600 dark:text-neutral-400">
-                          <strong>Date:</strong>{" "}
-                          {formatDate(email.createdAt as any)}
-                        </div>
-                      </div>
-                      <div className="text-start">
-                        <p className="line-clamp-1 truncate text-sm font-semibold text-neutral-600 dark:text-neutral-400">
+                        <p className="line-clamp-1 truncate text-xs font-semibold text-neutral-600 dark:text-neutral-400">
+                          <strong>Subject:</strong>{" "}
                           {email.subject || "No subject"}
                         </p>
-                        <p className="line-clamp-2 break-all text-xs text-neutral-500">
-                          {htmlToText(email.html || "")}
-                        </p>
                       </div>
+                      <p className="line-clamp-2 break-all text-start text-xs text-neutral-500">
+                        {htmlToText(email.html || "")}
+                      </p>
                     </div>
                   </CollapsibleTrigger>
                   <CollapsibleContent>
-                    <div className="mt-2 animate-fade-in break-all text-sm text-neutral-500">
+                    <div className="animate-fade-in break-all border-t border-dashed p-2 text-sm text-neutral-500">
                       {htmlToText(email.html || "")}
                     </div>
                   </CollapsibleContent>

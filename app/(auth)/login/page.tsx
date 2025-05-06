@@ -44,6 +44,11 @@ export default function LoginPage() {
         <Suspense>
           <UserAuthForm />
         </Suspense>
+        <p className="mt-4 break-all rounded-md border border-dashed bg-neutral-50 p-2 text-left text-sm text-gray-600 dark:border-neutral-600 dark:bg-neutral-800 dark:text-zinc-400">
+          📢 To prevent abuse of free resources, registration is limited to 200
+          new accounts per day.
+        </p>
+
         <p className="px-8 text-center text-sm text-muted-foreground">
           By clicking continue, you agree to our{" "}
           <Link
