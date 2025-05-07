@@ -200,6 +200,7 @@ const LogsTable = ({ userId, target }) => {
               total={Math.ceil(data.total / 20)}
               currentPage={page}
               setCurrentPage={setPage}
+              layout="right"
             />
           )}
         </div>

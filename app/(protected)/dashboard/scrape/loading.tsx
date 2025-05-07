@@ -4,8 +4,22 @@ import { DashboardHeader } from "@/components/dashboard/header";
 export default function DashboardRecordsLoading() {
   return (
     <>
-      <DashboardHeader heading="Scraping API" text="" />
-      <Skeleton className="h-full w-full rounded-lg" />
+      <DashboardHeader
+        heading="Scraping&nbsp;&nbsp;API&nbsp;&nbsp;Overview"
+        text="Quickly extract valuable structured website data. It's free and unlimited to use!"
+      />
+      <div className="flex flex-col gap-5">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 lg:grid-cols-3">
+          <Skeleton className="h-32 w-full rounded-lg" />
+          <Skeleton className="h-32 w-full rounded-lg" />
+          <Skeleton className="h-32 w-full rounded-lg" />
+        </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <Skeleton className="h-32 w-full rounded-lg" />
+          <Skeleton className="h-32 w-full rounded-lg" />
+        </div>
+        <Skeleton className="h-[400px] w-full rounded-lg" />
+      </div>
     </>
   );
 }
