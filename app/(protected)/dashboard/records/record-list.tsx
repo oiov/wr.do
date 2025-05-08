@@ -333,7 +333,7 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
             </TableBody>
             {data && Math.ceil(data.total / pageSize) > 1 && (
               <PaginationWrapper
-                total={Math.ceil(data.total / pageSize)}
+                total={data.total}
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
                 pageSize={pageSize}

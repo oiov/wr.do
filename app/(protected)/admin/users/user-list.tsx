@@ -283,7 +283,7 @@ export default function UsersList({ user }: UrlListProps) {
             </TableBody>
             {data && Math.ceil(data.total / pageSize) > 1 && (
               <PaginationWrapper
-                total={Math.ceil(data.total / pageSize)}
+                total={data.total}
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
                 pageSize={pageSize}

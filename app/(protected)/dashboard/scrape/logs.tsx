@@ -197,7 +197,7 @@ const LogsTable = ({ userId, target }) => {
           </p>
           {data && Math.ceil(data.total / 20) > 1 && (
             <PaginationWrapper
-              total={Math.ceil(data.total / 20)}
+              total={data.total}
               currentPage={page}
               setCurrentPage={setPage}
               layout="right"

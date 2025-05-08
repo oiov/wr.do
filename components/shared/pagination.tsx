@@ -24,7 +24,7 @@ export function PaginationWrapper({
   total,
   currentPage,
   setCurrentPage,
-  pageSize = 10,
+  pageSize = 20,
   setPageSize,
   layout = "split",
   size = "medium",

@@ -309,7 +309,7 @@ export default function EmailList({
       {data && Math.ceil(data.total / pageSize) > 1 && (
         <PaginationWrapper
           className="mx-2 my-1"
-          total={Math.ceil(data.total / pageSize)}
+          total={data.total}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           pageSize={pageSize}

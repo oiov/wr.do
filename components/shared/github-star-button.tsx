@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 
-import { cn } from "@/lib/utils";
+import { cn, nFormatter } from "@/lib/utils";
 
 import { buttonVariants } from "../ui/button";
 
@@ -91,7 +91,7 @@ const GitHubStarsButton: React.FC<GitHubStarsButtonProps> = ({
           <span className="h-7 w-20 animate-pulse rounded-[16px] bg-gray-200/80" />
         ) : (
           <span className="animate-fade-in rounded-[16px] bg-gray-200/80 px-3 py-1 text-sm font-bold text-slate-600">
-            {new Intl.NumberFormat().format(stars)} stars
+            {nFormatter(stars)} stars
           </span>
         )}
       </span>
