@@ -122,6 +122,7 @@ export default function SendsEmailList({
                 setCurrentPage={setCurrentPage}
                 pageSize={pageSize}
                 setPageSize={setPageSize}
+                layout="split"
               />
             )}
           </div>
