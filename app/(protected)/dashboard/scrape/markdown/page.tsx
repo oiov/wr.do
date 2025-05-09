@@ -27,12 +27,12 @@ export default async function DashboardPage() {
         linkText="Markdown API."
       />
       <ApiReference
-        badge="POST /api/v1/scraping/markdown"
+        badge="GET /api/v1/scraping/markdown"
         target="extracting url as markdown"
         link="/docs/open-api/markdown"
       />
       <ApiReference
-        badge="POST /api/v1/scraping/text"
+        badge="GET /api/v1/scraping/text"
         target="extracting url as text"
         link="/docs/open-api/text"
       />

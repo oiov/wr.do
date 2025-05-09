@@ -27,7 +27,7 @@ export default async function DashboardPage() {
         linkText="QR Code API."
       />
       <ApiReference
-        badge="POST /api/v1/scraping/qrcode"
+        badge="GET /api/v1/scraping/qrcode"
         target="extracting url as QR code"
         link="/docs/open-api/qrcode"
       />

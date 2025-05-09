@@ -28,7 +28,7 @@ export default async function DashboardPage() {
         linkText="Screenshot API."
       />
       <ApiReference
-        badge="POST /api/v1/scraping/screenshot"
+        badge="GET /api/v1/scraping/screenshot"
         target="extracting url as screenshot"
         link="/docs/open-api/screenshot"
       />

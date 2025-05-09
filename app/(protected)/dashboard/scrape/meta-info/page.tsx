@@ -27,7 +27,7 @@ export default async function DashboardPage() {
         linkText="Meta Info API."
       />
       <ApiReference
-        badge="POST /api/v1/scraping/meta"
+        badge="GET /api/v1/scraping/meta"
         target="extracting url as meta info"
         link="/docs/open-api/meta-info"
       />
