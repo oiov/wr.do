@@ -299,6 +299,7 @@ export const TIME_RANGES: Record<string, number> = {
   "90d": 90 * 24 * 60 * 60 * 1000,
   "180d": 180 * 24 * 60 * 60 * 1000,
   "365d": 365 * 24 * 60 * 60 * 1000,
+  All: 3650 * 24 * 60 * 60 * 1000,
 };
 
 export const DATE_DIMENSION_ENUMS = [

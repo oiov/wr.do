@@ -116,7 +116,7 @@ export default function SendsEmailList({
             </div>
             {data && totalPages > 1 && (
               <PaginationWrapper
-                className="m-0 mt-6 scale-75 justify-center"
+                className="m-0 mt-6"
                 total={data.total}
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
