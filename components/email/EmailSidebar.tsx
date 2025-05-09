@@ -18,7 +18,7 @@ import { siteConfig } from "@/config/site";
 import { TeamPlanQuota } from "@/config/team";
 import { UserEmailList } from "@/lib/dto/email";
 import { reservedAddressSuffix } from "@/lib/enums";
-import { cn, fetcher, timeAgo } from "@/lib/utils";
+import { cn, fetcher, nFormatter, timeAgo } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import ApiReference from "@/app/emails/api-reference";
 
@@ -88,7 +88,7 @@ export default function EmailSidebar({
 
   const [showSendsModal, setShowSendsModal] = useState(false);
 
-  const pageSize = 10;
+  const [pageSize, setPageSize] = useState(10);
 
   const { data, isLoading, error, mutate } = useSWR<{
     list: UserEmailList[];
@@ -309,7 +309,7 @@ export default function EmailSidebar({
                 </p>
               </div>
               <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                <CountUp count={data ? data.total : 0} />
+                {nFormatter(data ? data.total : 0)}
               </p>
             </div>
 
@@ -322,7 +322,7 @@ export default function EmailSidebar({
                 </p>
               </div>
               <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                <CountUp count={data ? data.totalInboxCount : 0} />
+                {nFormatter(data ? data.totalInboxCount : 0)}
               </p>
             </div>
 
@@ -345,7 +345,7 @@ export default function EmailSidebar({
                 </p>
               </div>
               <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                <CountUp count={data ? data.totalUnreadCount : 0} />
+                {nFormatter(data ? data.totalUnreadCount : 0)}
               </p>
               <TooltipProvider>
                 <Tooltip>
@@ -375,7 +375,7 @@ export default function EmailSidebar({
                 </p>
               </div>
               <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                <CountUp count={sendEmails || 0} />
+                {nFormatter(sendEmails || 0)}
               </p>
             </div>
           </div>
@@ -547,6 +547,8 @@ export default function EmailSidebar({
           total={data.total}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
+          pageSize={pageSize}
+          setPageSize={setPageSize}
           layout="center"
         />
       )}

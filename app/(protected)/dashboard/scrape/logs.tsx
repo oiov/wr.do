@@ -47,6 +47,8 @@ const getLogsUrl = (
 
 const LogsTable = ({ userId, target }) => {
   const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
+
   const [filters, setFilters] = useState({
     type: "",
     ip: "",
@@ -195,11 +197,13 @@ const LogsTable = ({ userId, target }) => {
           <p className="ml-auto text-nowrap text-sm">
             {nFormatter(data?.total || 0)} logs
           </p>
-          {data && Math.ceil(data.total / 20) > 1 && (
+          {data && Math.ceil(data.total / pageSize) > 1 && (
             <PaginationWrapper
               total={data.total}
               currentPage={page}
               setCurrentPage={setPage}
+              pageSize={pageSize}
+              setPageSize={setPageSize}
               layout="right"
             />
           )}

@@ -21,8 +21,9 @@ export default function SendsEmailList({
 }: {
   isAdminModel: boolean;
 }) {
-  const pageSize = 10;
   const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+
   const [searchQuery, setSearchQuery] = useState("");
 
   const { data, isLoading, error } = useSWR<{
@@ -116,9 +117,11 @@ export default function SendsEmailList({
             {data && totalPages > 1 && (
               <PaginationWrapper
                 className="m-0 mt-6 scale-75 justify-center"
-                total={totalPages}
+                total={data.total}
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
+                pageSize={pageSize}
+                setPageSize={setPageSize}
               />
             )}
           </div>
