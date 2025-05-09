@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/session";
 import { constructMetadata } from "@/lib/utils";
 import { DashboardHeader } from "@/components/dashboard/header";
+import ApiReference from "@/components/shared/api-reference";
 import QRCodeEditor from "@/components/shared/qr";
 
 import { CodeLight, QrCodeScraping } from "../scrapes";
@@ -24,6 +25,11 @@ export default async function DashboardPage() {
         text="Generate QR Code from URL"
         link="/docs/open-api/qrcode"
         linkText="QR Code API."
+      />
+      <ApiReference
+        badge="POST /api/v1/scraping/qrcode"
+        target="extracting url as QR code"
+        link="/docs/open-api/qrcode"
       />
       <CodeLight content={`https://wr.do/api/v1/scraping/qrcode`} />
       <QRCodeEditor

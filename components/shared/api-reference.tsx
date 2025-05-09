@@ -9,23 +9,31 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export default function ApiReference() {
+export default function ApiReference({
+  badge,
+  target,
+  link,
+}: {
+  badge: string;
+  target: string;
+  link: string;
+}) {
   return (
     <Card>
       <CardHeader>
         <CardTitle>API Reference</CardTitle>
       </CardHeader>
       <CardContent>
-        <Badge>POST /api/v1/short</Badge>
+        <Badge>{badge}</Badge>
         <div className="mt-2">
-          We provide a simple API for creating short URLs. See usage
-          instructions at{" "}
+          <span style={{ fontFamily: "Bahamas Bold" }}>WR.DO</span> provide a
+          api for {target}. View the usage tutorial document{" "}
           <Link
-            href={"/docs/short-urls#api-reference"}
+            href={link}
             target="_blank"
             className="font-semibold after:content-['_↗'] hover:text-blue-500 hover:underline"
           >
-            api reference
+            here
           </Link>
           .
         </div>

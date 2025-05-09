@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/session";
 import { constructMetadata } from "@/lib/utils";
 import { DashboardHeader } from "@/components/dashboard/header";
+import ApiReference from "@/components/shared/api-reference";
 
 import { MarkdownScraping, TextScraping } from "../scrapes";
 
@@ -21,9 +22,19 @@ export default async function DashboardPage() {
     <>
       <DashboardHeader
         heading="Url&nbsp;&nbsp;to&nbsp;&nbsp;Markdown"
-        text="Quickly extract website content and convert it to Markdown format. It's free and unlimited to use!"
+        text="Quickly extract website content and convert it to Markdown format."
         link="/docs/open-api/markdown"
         linkText="Markdown API."
+      />
+      <ApiReference
+        badge="POST /api/v1/scraping/markdown"
+        target="extracting url as markdown"
+        link="/docs/open-api/markdown"
+      />
+      <ApiReference
+        badge="POST /api/v1/scraping/text"
+        target="extracting url as text"
+        link="/docs/open-api/text"
       />
       <MarkdownScraping user={{ id: user.id, apiKey: user.apiKey }} />
       <TextScraping user={{ id: user.id, apiKey: user.apiKey }} />

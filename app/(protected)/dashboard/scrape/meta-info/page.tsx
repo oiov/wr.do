@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/session";
 import { constructMetadata } from "@/lib/utils";
 import { DashboardHeader } from "@/components/dashboard/header";
+import ApiReference from "@/components/shared/api-reference";
 
 import DashboardScrapeCharts from "../charts";
 import { MetaScraping } from "../scrapes";
@@ -21,9 +22,14 @@ export default async function DashboardPage() {
     <>
       <DashboardHeader
         heading="Url&nbsp;&nbsp;to&nbsp;&nbsp;Meta&nbsp;&nbsp;Info"
-        text="Quickly extract valuable structured website data. It's free and unlimited to use!"
+        text="Quickly extract valuable structured website data."
         link="/docs/open-api/meta-info"
         linkText="Meta Info API."
+      />
+      <ApiReference
+        badge="POST /api/v1/scraping/meta"
+        target="extracting url as meta info"
+        link="/docs/open-api/meta-info"
       />
       <MetaScraping user={{ id: user.id, apiKey: user.apiKey }} />
     </>

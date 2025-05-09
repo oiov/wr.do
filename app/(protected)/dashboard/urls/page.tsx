@@ -4,7 +4,7 @@ import { getCurrentUser } from "@/lib/session";
 import { constructMetadata } from "@/lib/utils";
 import { DashboardHeader } from "@/components/dashboard/header";
 
-import ApiReference from "./api-reference";
+import ApiReference from "../../../../components/shared/api-reference";
 import LiveLog from "./live-logs";
 import UserUrlsList from "./url-list";
 
@@ -37,7 +37,11 @@ export default async function DashboardPage() {
         action="/api/url"
       />
       <LiveLog admin={false} />
-      <ApiReference />
+      <ApiReference
+        badge="POST /api/v1/short"
+        target="creating short urls"
+        link="/docs/short-urls#api-reference"
+      />
     </>
   );
 }

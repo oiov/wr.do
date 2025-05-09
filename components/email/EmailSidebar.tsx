@@ -548,7 +548,6 @@ export default function EmailSidebar({
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           pageSize={pageSize}
-          setPageSize={setPageSize}
           layout="center"
         />
       )}
