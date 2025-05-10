@@ -9,7 +9,8 @@ const email_r2_domain = env.NEXT_PUBLIC_EMAIL_R2_DOMAIN || "";
 
 export const siteConfig: SiteConfig = {
   name: "WR.DO",
-  description: "A DNS record distribution system",
+  description:
+    "Shorten links with analytics, manage emails and control subdomains—all on one platform.",
   url: site_url,
   ogImage: `${site_url}/_static/og.jpg`,
   links: {
