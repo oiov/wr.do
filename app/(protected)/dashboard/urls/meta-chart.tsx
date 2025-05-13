@@ -7,7 +7,7 @@ import { UrlMeta, User } from "@prisma/client";
 import { VisSingleContainer, VisTooltip, VisTopoJSONMap } from "@unovis/react";
 import { TopoJSONMap } from "@unovis/ts";
 import { WorldMapTopoJSON } from "@unovis/ts/maps";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import { TeamPlanQuota } from "@/config/team";
 import { getCountryName, getDeviceVendor } from "@/lib/contries";
@@ -40,7 +40,7 @@ const chartConfig = {
     color: "hsl(var(--chart-2))",
   },
   uv: {
-    label: "Visitors",
+    label: "Visits",
     color: "hsl(var(--chart-1))",
   },
 };
@@ -256,7 +256,7 @@ export function DailyPVUVChart({
                 className="relative z-30 flex flex-1 flex-col items-center justify-center gap-1 border-t px-6 py-2 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-3"
                 onClick={() => setActiveChart(chart)}
               >
-                <span className="text-xs text-muted-foreground">
+                <span className="text-sm font-semibold text-muted-foreground">
                   {chartConfig[chart].label}
                 </span>
                 <span className="text-lg font-bold leading-none">
@@ -323,6 +323,7 @@ export function DailyPVUVChart({
                 });
               }}
             />
+            <YAxis width={20} axisLine={false} tickLine={false} />
             <ChartTooltip
               content={
                 <ChartTooltipContent

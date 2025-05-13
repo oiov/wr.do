@@ -307,12 +307,6 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                           setShowForm(false);
                           setFormType("edit");
                           setShowForm(!isShowForm);
-                          if (!isShowForm) {
-                            window.scrollTo({
-                              top: 0,
-                              behavior: "smooth",
-                            });
-                          }
                         }}
                       >
                         <p>Edit</p>

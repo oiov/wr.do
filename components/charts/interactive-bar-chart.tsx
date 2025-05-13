@@ -106,29 +106,29 @@ export function InteractiveBarChart() {
   return (
     <Card>
       <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
-        <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
-          <CardTitle>Data Increase</CardTitle>
-          <CardDescription>
-            Showing data increase in:
-            <Select
-              onValueChange={(value: string) => {
-                setTimeRange(value);
-              }}
-              name="time range"
-              defaultValue={timeRange}
-            >
-              <SelectTrigger className="mt-1 w-40 shadow-inner">
-                <SelectValue placeholder="Select a time" />
-              </SelectTrigger>
-              <SelectContent>
-                {DATE_DIMENSION_ENUMS.map((e) => (
-                  <SelectItem key={e.value} value={e.value}>
-                    {e.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </CardDescription>
+        <div className="flex w-full flex-1 justify-between gap-2 px-6 py-5 sm:flex-col sm:py-6">
+          <div className="flex flex-col justify-center gap-1">
+            <CardTitle>Data Increase</CardTitle>
+            <CardDescription>Showing data increase in:</CardDescription>
+          </div>
+          <Select
+            onValueChange={(value: string) => {
+              setTimeRange(value);
+            }}
+            name="time range"
+            defaultValue={timeRange}
+          >
+            <SelectTrigger className="w-44 shadow-inner">
+              <SelectValue placeholder="Select a time" />
+            </SelectTrigger>
+            <SelectContent>
+              {DATE_DIMENSION_ENUMS.map((e) => (
+                <SelectItem key={e.value} value={e.value}>
+                  {e.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="flex">
