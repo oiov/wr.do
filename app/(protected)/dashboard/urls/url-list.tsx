@@ -298,11 +298,8 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                 </>
               ) : data && data.list && data.list.length ? (
                 data.list.map((short) => (
-                  <>
-                    <TableRow
-                      key={short.id}
-                      className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-11"
-                    >
+                  <div className="border-b" key={short.id}>
+                    <TableRow className="grid grid-cols-3 items-center sm:grid-cols-11">
                       <TableCell className="col-span-1 flex items-center gap-1 sm:col-span-2">
                         <Link
                           className="overflow-hidden text-ellipsis whitespace-normal text-slate-600 hover:text-blue-400 hover:underline dark:text-slate-400"
@@ -414,7 +411,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                         urlId={short.id!}
                       />
                     )}
-                  </>
+                  </div>
                 ))
               ) : (
                 <EmptyPlaceholder>
@@ -447,7 +444,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
       >
         {selectedUrl && (
           <QRCodeEditor
-            user={{ id: user.id, apiKey: user.apiKey || "" }}
+            user={{ id: user.id, apiKey: user.apiKey || "", team: user.team! }}
             url={`https://${selectedUrl.prefix}/s/${selectedUrl.url}`}
           />
         )}

@@ -17,6 +17,7 @@ import { getQRAsCanvas, getQRAsSVGDataUri, getQRData } from "@/lib/qr";
 import { WRDO_QR_LOGO } from "@/lib/qr/constants";
 import { extractHost } from "@/lib/utils";
 
+import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import {
   DropdownMenu,
@@ -41,7 +42,7 @@ export default function QRCodeEditor({
   user,
   url,
 }: {
-  user: { id: string; apiKey: string };
+  user: { id: string; apiKey: string; team: string };
   url: string;
 }) {
   const [params, setParams] = useState({
@@ -281,7 +282,13 @@ export default function QRCodeEditor({
             <TooltipProvider>
               <Tooltip delayDuration={0}>
                 <TooltipTrigger>
-                  <Icons.help className="ml-1 size-4 text-neutral-400" />
+                  <Badge
+                    variant={"outline"}
+                    className="ml-1 text-xs font-semibold"
+                  >
+                    <Icons.crown className="mr-1 size-3" />
+                    Premium
+                  </Badge>
                 </TooltipTrigger>
                 <TooltipContent className="max-w-64 text-left">
                   Customize your QR code logo.{" "}
@@ -302,7 +309,7 @@ export default function QRCodeEditor({
             className="mt-2"
             type="text"
             placeholder="https://example.com/logo.png"
-            disabled={params.hideLogo}
+            disabled={user.team === "free" || params.hideLogo}
             defaultValue={WRDO_QR_LOGO}
             onChange={(e) => handleChangeLogo(e.target.value)}
           />

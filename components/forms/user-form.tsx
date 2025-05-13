@@ -153,7 +153,6 @@ export function UserForm({
             )}
           </FormSectionColumns>
         </div>
-
         <div className="items-center justify-start gap-4 md:flex">
           <FormSectionColumns title="Role">
             <Select
@@ -195,6 +194,8 @@ export function UserForm({
               </SelectContent>
             </Select>
           </FormSectionColumns>
+        </div>
+        <div className="items-center justify-start gap-4 md:flex">
           <FormSectionColumns title="Active">
             <div className="flex w-full items-center gap-2">
               <Label className="sr-only" htmlFor="active">

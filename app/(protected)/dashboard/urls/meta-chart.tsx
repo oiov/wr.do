@@ -33,6 +33,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Icons } from "@/components/shared/icons";
 
 const chartConfig = {
   pv: {
@@ -242,7 +243,13 @@ export function DailyPVUVChart({
                   key={e.value}
                   value={e.value}
                 >
-                  {e.label}
+                  <span className="flex items-center gap-1">
+                    {e.label}
+                    {e.key >
+                      TeamPlanQuota[user.team!].SL_AnalyticsRetention && (
+                      <Icons.crown className="size-3" />
+                    )}
+                  </span>
                 </SelectItem>
               ))}
             </SelectContent>

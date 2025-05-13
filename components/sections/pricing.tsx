@@ -30,7 +30,7 @@ const getBenefits = (plan) => [
   },
   {
     text: `Customize short link QR code`,
-    checked: true,
+    checked: plan.SL_CustomQrCodeLogo,
     icon: <Icons.qrcode className="size-4" />,
   },
   {

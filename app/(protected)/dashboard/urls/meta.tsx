@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
+import { Icons } from "@/components/shared/icons";
 
 import { DailyPVUVChart } from "./meta-chart";
 
@@ -59,13 +60,20 @@ export default function UserUrlMetaInfo({ user, action, urlId }: UrlMetaProps) {
             <SelectContent>
               {DATE_DIMENSION_ENUMS.map((e) => (
                 <SelectItem
+                  className=""
                   disabled={
                     e.key > TeamPlanQuota[user.team!].SL_AnalyticsRetention
                   }
                   key={e.value}
                   value={e.value}
                 >
-                  {e.label}
+                  <span className="flex items-center gap-1">
+                    {e.label}
+                    {e.key >
+                      TeamPlanQuota[user.team!].SL_AnalyticsRetention && (
+                      <Icons.crown className="size-3" />
+                    )}
+                  </span>
                 </SelectItem>
               ))}
             </SelectContent>
