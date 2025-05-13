@@ -119,17 +119,18 @@ async function InteractiveBarChartSection() {
 
 // 请求统计图表组件
 async function RequestStatsSection() {
-  const screenshot_stats = await getScrapeStatsByType("screenshot", "90d");
-  const meta_stats = await getScrapeStatsByType("meta-info", "90d");
-  const md_stats = await getScrapeStatsByType("markdown", "90d");
-  const text_stats = await getScrapeStatsByType("text", "90d");
-  const qr_stats = await getScrapeStatsByType("qrcode", "90d");
+  const screenshot_stats = await getScrapeStatsByType("screenshot", "30d");
+  const meta_stats = await getScrapeStatsByType("meta-info", "30d");
+  const md_stats = await getScrapeStatsByType("markdown", "30d");
+  const text_stats = await getScrapeStatsByType("text", "30d");
+  const qr_stats = await getScrapeStatsByType("qrcode", "30d");
 
   const hasStats =
     screenshot_stats.length > 0 ||
     meta_stats.length > 0 ||
     md_stats.length > 0 ||
-    text_stats.length > 0;
+    text_stats.length > 0 ||
+    qr_stats.length > 0;
 
   return hasStats ? (
     <>

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useState } from "react";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import useSWR from "swr";
 
 import { DATE_DIMENSION_ENUMS } from "@/lib/enums";
@@ -195,6 +195,7 @@ export function InteractiveBarChart() {
                 });
               }}
             />
+            <YAxis width={20} axisLine={false} tickLine={false} />
             <ChartTooltip
               content={
                 <ChartTooltipContent

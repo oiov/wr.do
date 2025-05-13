@@ -22,7 +22,7 @@ export default async function DashboardPage() {
         heading="Manage&nbsp;&nbsp;DNS&nbsp;&nbsp;Records"
         text="List and manage records."
         link="/docs/dns-records"
-        linkText="DNS Records."
+        linkText="DNS records."
       />
       <UserRecordsList
         user={{ id: user.id, name: user.name || "", apiKey: user.apiKey || "" }}

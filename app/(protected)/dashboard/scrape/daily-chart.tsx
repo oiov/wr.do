@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { ScrapeMeta } from "@prisma/client";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import { isLink, nFormatter, removeUrlSuffix, timeAgo } from "@/lib/utils";
 import {
@@ -109,7 +109,7 @@ export function DailyPVUVChart({ data }: { data: ScrapeMeta[] }) {
     <Card>
       <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
         <div className="flex flex-1 flex-col justify-center gap-1 px-5 py-4">
-          <CardTitle>Total Requests of APIs in Last 3 Month</CardTitle>
+          <CardTitle>Total Requests of APIs in Last 30 Days</CardTitle>
           <CardDescription>
             Last request from <strong>{latestFrom}</strong> api about{" "}
             {latestDate}.
@@ -192,6 +192,7 @@ export function DailyPVUVChart({ data }: { data: ScrapeMeta[] }) {
                 });
               }}
             />
+            <YAxis width={20} axisLine={false} tickLine={false} />
             <ChartTooltip
               content={
                 <ChartTooltipContent

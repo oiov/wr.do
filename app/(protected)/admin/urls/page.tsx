@@ -23,7 +23,7 @@ export default async function DashboardPage() {
         heading="Manage&nbsp;Short&nbsp;URLs"
         text="List and manage short urls."
         link="/docs/short-urls"
-        linkText="Short urls."
+        linkText="short urls."
       />
       <UserUrlsList
         user={{
