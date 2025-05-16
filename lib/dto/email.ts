@@ -462,7 +462,9 @@ export async function markEmailAsRead(emailId: string, userId: string) {
     });
 
     if (!email) {
-      throw new Error("邮件已读不存在或您没有权限访问此邮件");
+      throw new Error(
+        "There are no valid emails to mark as read or you do not have permission",
+      );
     }
 
     // 更新邮件的 readAt 字段为当前时间
@@ -504,7 +506,9 @@ export async function markEmailsAsRead(emailIds: string[], userId: string) {
     const validEmailIds = emails.map((email) => email.id);
 
     if (validEmailIds.length === 0) {
-      throw new Error("没有找到可标记的邮件或您没有权限");
+      throw new Error(
+        "There are no valid emails to mark as read or you do not have permission",
+      );
     }
 
     // 批量更新邮件的 readAt 字段
@@ -519,7 +523,7 @@ export async function markEmailsAsRead(emailIds: string[], userId: string) {
 
     return {
       updatedCount: updateResult.count,
-      message: `成功将 ${updateResult.count} 封邮件标记为已读`,
+      message: `Successfully marked ${updateResult.count} emails as read`,
     };
   } catch (error) {
     console.error("批量标记邮件为已读失败:", error);
@@ -544,7 +548,9 @@ export async function markAllEmailsAsRead(userEmailId: string, userId: string) {
     });
 
     if (!userEmail) {
-      throw new Error("邮箱不存在或您没有权限");
+      throw new Error(
+        "There are no valid emails or you do not have permission",
+      );
     }
 
     // 更新该邮箱下所有未读邮件
@@ -560,7 +566,7 @@ export async function markAllEmailsAsRead(userEmailId: string, userId: string) {
 
     return {
       updatedCount: updateResult.count,
-      message: `成功将 ${updateResult.count} 封邮件标记为已读`,
+      message: `Successfully marked ${updateResult.count} emails as read`,
     };
   } catch (error) {
     console.error("标记所有邮件为已读失败:", error);

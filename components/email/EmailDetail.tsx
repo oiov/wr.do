@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ForwardEmail } from "@prisma/client";
 import {
   File,
@@ -13,13 +13,7 @@ import {
 } from "lucide-react";
 
 import { siteConfig } from "@/config/site";
-import {
-  cn,
-  downloadFile,
-  downloadFileFromUrl,
-  formatDate,
-  formatFileSize,
-} from "@/lib/utils";
+import { cn, downloadFile, formatDate, formatFileSize } from "@/lib/utils";
 import { Icons } from "@/components/shared/icons";
 
 import { BlurImg } from "../shared/blur-image";
@@ -31,6 +25,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
+import EmailViewer from "./EmailViewer";
 
 interface EmailDetailProps {
   email: ForwardEmail | undefined;
@@ -218,16 +213,17 @@ export default function EmailDetail({
         </Button>
       </div>
 
-      <div className="scrollbar-hidden flex h-full flex-col justify-between overflow-y-auto px-2 py-3">
-        <div
+      <div className="scrollbar-hidden flex h-full flex-col justify-between overflow-y-auto">
+        {/* <div
           className=""
           dangerouslySetInnerHTML={{
             __html: processContent(email.html || email.text || ""),
           }}
-        />
+        /> */}
+        <EmailViewer email={processContent(email.html || email.text || "")} />
 
         {attachments.length > 0 && (
-          <div className="mt-auto border-t border-dashed py-3">
+          <div className="mt-auto border-t border-dashed px-2 py-3">
             <h3 className="mb-2 text-sm font-semibold text-neutral-700 dark:text-neutral-400">
               Attachments ({attachments.length})
             </h3>

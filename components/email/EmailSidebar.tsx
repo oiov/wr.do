@@ -522,13 +522,13 @@ export default function EmailSidebar({
             </div>
             {!isCollapsed && (
               <div className="mt-2 flex items-center justify-between gap-2 text-xs text-gray-500">
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1 text-nowrap">
                   {email.unreadCount > 0 && (
                     <Badge variant="default">{email.unreadCount}</Badge>
                   )}
                   {email.count} recived
                 </div>
-                <span>
+                <span className="line-clamp-1 hover:line-clamp-none">
                   {isAdminModel
                     ? `Created by ${email.user || email.email.slice(0, 5)} at`
                     : ""}{" "}

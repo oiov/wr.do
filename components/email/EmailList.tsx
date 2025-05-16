@@ -220,7 +220,7 @@ export default function EmailList({
                   </Button>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
+                <DropdownMenuItem asChild disabled>
                   <Button variant="ghost" size="sm" className="w-full">
                     <span className="text-xs">Delete selected</span>
                   </Button>
