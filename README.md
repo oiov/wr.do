@@ -69,6 +69,9 @@ pnpm dev
 ## Community Group
 
 - Discord: https://discord.gg/AHPQYuZu3m
+- 微信群：
+
+![](https://wr.do/s/group)
 
 ## License
 
