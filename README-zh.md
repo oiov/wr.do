@@ -59,6 +59,9 @@ pnpm dev
 ## 社区群组
 
 - Discord: https://discord.gg/AHPQYuZu3m
+- 微信群：
+
+![](https://wr.do/s/group)
 
 ## 许可证
 
