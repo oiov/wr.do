@@ -162,16 +162,16 @@ export function LinkInfoPreviewer({
           {metaInfo.title ? (
             <>
               <BlurImage
-                className="rounded-md border bg-primary-foreground group-hover:scale-95 group-hover:opacity-95"
+                className="rounded-md bg-primary-foreground group-hover:scale-95 group-hover:opacity-95"
                 src={metaInfo.image || placeholdImage}
                 alt={`Preview of ${url}`}
                 fill
               />
               <div className="absolute bottom-0 w-full rounded-b-md p-2 backdrop-blur">
-                <p className="mb-1 line-clamp-1 text-xs font-semibold text-neutral-600 dark:text-neutral-300">
+                <p className="mb-1 line-clamp-1 text-sm font-semibold text-neutral-600 dark:text-neutral-300">
                   {metaInfo.title}
                 </p>
-                <p className="line-clamp-1 text-xs text-muted-foreground text-neutral-400 dark:text-neutral-400">
+                <p className="line-clamp-1 text-xs text-neutral-500 dark:text-neutral-400">
                   {metaInfo.description}
                 </p>
               </div>
