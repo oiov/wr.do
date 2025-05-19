@@ -46,7 +46,10 @@ import { UrlForm } from "@/components/forms/url-form";
 import { CopyButton } from "@/components/shared/copy-button";
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
 import { Icons } from "@/components/shared/icons";
-import { LinkPreviewer } from "@/components/shared/link-previewer";
+import {
+  LinkInfoPreviewer,
+  LinkPreviewer,
+} from "@/components/shared/link-previewer";
 import { PaginationWrapper } from "@/components/shared/pagination";
 import QRCodeEditor from "@/components/shared/qr";
 
@@ -322,7 +325,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                         )}
                       </TableCell>
                       <TableCell className="col-span-1 flex items-center justify-start sm:col-span-2">
-                        <LinkPreviewer
+                        <LinkInfoPreviewer
                           apiKey={user.apiKey ?? ""}
                           url={short.target}
                           formatUrl={removeUrlSuffix(short.target)}

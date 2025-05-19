@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Link from "next/link";
 
+import { MetaScrapingProps } from "@/app/(protected)/dashboard/scrape/scrapes";
+
 import { Skeleton } from "../ui/skeleton";
 import {
   Tooltip,
@@ -87,4 +89,98 @@ export function LinkPreviewer({
     </TooltipProvider>
   );
 }
-0;
+
+export function LinkInfoPreviewer({
+  apiKey,
+  url,
+  formatUrl,
+}: {
+  apiKey: string;
+  url: string;
+  formatUrl: string;
+}) {
+  const placeholdImage = "/_static/illustrations/rocket-crashed.svg";
+  const [metaInfo, setMetaInfo] = useState<MetaScrapingProps>({
+    title: "",
+    description: "",
+    image: "",
+    icon: "",
+    url: "",
+    lang: "",
+    author: "",
+    timestamp: "",
+    payload: "",
+  });
+
+  const handleScrapingInfo = async () => {
+    if (url) {
+      const res = await fetch(`/api/v1/scraping/meta?url=${url}&key=${apiKey}`);
+      if (!res.ok || res.status !== 200) {
+        setMetaInfo({
+          title: url,
+          description: "",
+          image: placeholdImage,
+          icon: "",
+          url: "",
+          lang: "",
+          author: "",
+          timestamp: "",
+          payload: "",
+        });
+      } else {
+        const data = await res.json();
+        setMetaInfo({ ...data, title: data.title || url });
+      }
+    }
+  };
+
+  const handleOpenChange = (open: boolean) => {
+    if (open) {
+      handleScrapingInfo();
+    }
+  };
+
+  return (
+    <TooltipProvider>
+      <Tooltip delayDuration={200} onOpenChange={handleOpenChange}>
+        <TooltipTrigger className="w-full hover:text-blue-400 hover:underline">
+          <Link
+            className="flex items-center"
+            target="_blank"
+            href={url}
+            title={url}
+          >
+            <span className="truncate">{formatUrl}</span>
+            <Icons.outLink className="ml-0.5 mt-0.5 size-3 shrink-0" />
+          </Link>
+        </TooltipTrigger>
+        <TooltipContent
+          align="start"
+          className="group flex h-[187px] w-[300px] flex-col items-center justify-center rounded-lg bg-gradient-to-br from-gray-500 to-gray-300 p-0 shadow-inner transition-all duration-200"
+        >
+          <TooltipArrow className="fill-gray-400" />
+          {metaInfo.title ? (
+            <>
+              <BlurImage
+                className="rounded-md border bg-primary-foreground group-hover:scale-95 group-hover:opacity-95"
+                src={metaInfo.image || placeholdImage}
+                alt={`Preview of ${url}`}
+                fill
+              />
+              <div className="absolute bottom-0 w-full rounded-b-md p-2 backdrop-blur">
+                <p className="mb-1 line-clamp-1 text-xs font-semibold text-neutral-600 dark:text-neutral-300">
+                  {metaInfo.title}
+                </p>
+                <p className="line-clamp-1 text-xs text-muted-foreground text-neutral-400 dark:text-neutral-400">
+                  {metaInfo.description}
+                </p>
+              </div>
+            </>
+          ) : (
+            <Skeleton className="h-[187px] w-[300px]" />
+          )}
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+}

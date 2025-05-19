@@ -47,9 +47,9 @@ export async function GET(req: Request) {
     const res = await fetch(link);
     if (!res.ok) {
       return Response.json(
-        { statusText: "Failed to fetch url" },
+        { statusText: `Failed to fetch url. ${res.statusText}` },
         {
-          status: 405,
+          status: res.status || 405,
         },
       );
     }

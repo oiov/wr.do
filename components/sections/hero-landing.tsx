@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+import { siteConfig } from "@/config/site";
 import { getCurrentUser } from "@/lib/session";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
@@ -16,16 +17,16 @@ export default async function HeroLanding() {
     <section className="custom-bg relative space-y-6 py-12 sm:py-20 lg:py-24">
       <div className="container flex max-w-screen-lg flex-col items-center gap-5 text-center">
         <Link
-          href="/dashboard"
+          href={siteConfig.links.github}
           target="_blank"
           className={cn(
             buttonVariants({ variant: "outline", size: "sm", rounded: "xl" }),
             "px-4",
           )}
         >
-          <span className="mr-3">🎉</span>Email features are&nbsp;
+          <span className="mr-1">🚀</span>Deploy with&nbsp;
           <span className="font-bold" style={{ fontFamily: "Bahamas Bold" }}>
-            available
+            Vercel
           </span>
           &nbsp;now!
         </Link>
