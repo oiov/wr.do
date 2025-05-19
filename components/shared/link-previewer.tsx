@@ -168,12 +168,14 @@ export function LinkInfoPreviewer({
                 fill
               />
               <div className="absolute bottom-0 w-full rounded-b-md p-2 backdrop-blur">
-                <p className="mb-1 line-clamp-1 text-sm font-semibold text-neutral-600 dark:text-neutral-300">
+                <p className="line-clamp-1 text-sm font-semibold text-neutral-600 dark:text-neutral-300">
                   {metaInfo.title}
                 </p>
-                <p className="line-clamp-1 text-xs text-neutral-500 dark:text-neutral-400">
-                  {metaInfo.description}
-                </p>
+                {metaInfo.description && (
+                  <p className="mt-1 line-clamp-1 text-xs text-neutral-500 dark:text-neutral-400">
+                    {metaInfo.description}
+                  </p>
+                )}
               </div>
             </>
           ) : (
