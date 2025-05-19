@@ -39,7 +39,10 @@ import {
 import { FormType, RecordForm } from "@/components/forms/record-form";
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
 import { Icons } from "@/components/shared/icons";
-import { LinkPreviewer } from "@/components/shared/link-previewer";
+import {
+  LinkInfoPreviewer,
+  LinkPreviewer,
+} from "@/components/shared/link-previewer";
 import { PaginationWrapper } from "@/components/shared/pagination";
 
 export interface RecordListProps {
@@ -238,14 +241,10 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                       </Badge>
                     </TableCell>
                     <TableCell className="col-span-1">
-                      <LinkPreviewer
+                      <LinkInfoPreviewer
                         apiKey={user.apiKey ?? ""}
                         url={"https://" + record.name}
-                        formatUrl={
-                          "https://" + record.name.endsWith(".wr.do")
-                            ? record.name.slice(0, -6)
-                            : record.name
-                        }
+                        formatUrl={record.name}
                       />
                     </TableCell>
                     <TableCell className="col-span-2 hidden truncate text-nowrap sm:inline-block">
