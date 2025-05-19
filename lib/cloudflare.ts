@@ -2,6 +2,7 @@ export const CLOUDFLARE_API_URL = "https://api.cloudflare.com/client/v4";
 
 export interface CreateDNSRecord {
   id: string;
+  zone_name: string;
   type: string;
   name: string;
   content: string;

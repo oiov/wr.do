@@ -1,6 +1,7 @@
 import * as z from "zod";
 
 export const createRecordSchema = z.object({
+  zone_name: z.string().min(1).max(32),
   type: z
     .string()
     .regex(/^[a-zA-Z0-9]+$/, "Invalid characters")

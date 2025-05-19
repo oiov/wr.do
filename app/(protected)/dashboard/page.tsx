@@ -119,7 +119,7 @@ async function UserUrlsListSection({
 async function UserRecordsListSection({
   user,
 }: {
-  user: { id: string; name: string; apiKey: string };
+  user: { id: string; name: string; apiKey: string; email: string };
 }) {
   return (
     <UserRecordsList
@@ -127,6 +127,7 @@ async function UserRecordsListSection({
         id: user.id,
         name: user.name,
         apiKey: user.apiKey,
+        email: user.email,
       }}
       action="/api/record"
     />
@@ -208,6 +209,7 @@ export default async function DashboardPage() {
                 id: user.id,
                 name: user.name || "",
                 apiKey: user.apiKey || "",
+                email: user.email || "",
               }}
             />
           </Suspense>

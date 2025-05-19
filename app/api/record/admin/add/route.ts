@@ -6,7 +6,7 @@ import {
   getUserRecordByTypeNameContent,
   getUserRecordCount,
 } from "@/lib/dto/cloudflare-dns-record";
-import { checkUserStatus } from "@/lib/dto/user";
+import { checkUserStatus, getUserByEmail } from "@/lib/dto/user";
 import { reservedDomains } from "@/lib/enums";
 import { getCurrentUser } from "@/lib/session";
 import { generateSecret, parseZones } from "@/lib/utils";
@@ -15,6 +15,12 @@ export async function POST(req: Request) {
   try {
     const user = checkUserStatus(await getCurrentUser());
     if (user instanceof Response) return user;
+    if (user.role !== "ADMIN") {
+      return Response.json("Unauthorized", {
+        status: 401,
+        statusText: "Admin access required",
+      });
+    }
 
     const { CLOUDFLARE_ZONE, CLOUDFLARE_API_KEY, CLOUDFLARE_EMAIL } = env;
     const zones = parseZones(CLOUDFLARE_ZONE || "[]");
@@ -26,17 +32,22 @@ export async function POST(req: Request) {
       });
     }
 
-    const { total } = await getUserRecordCount(user.id);
-    if (
-      user.role !== "ADMIN" &&
-      total >= TeamPlanQuota[user.team].RC_NewRecords
-    ) {
+    const { records, email } = await req.json();
+    const target_user = await getUserByEmail(email);
+    if (!target_user) {
+      return Response.json("User not found", {
+        status: 404,
+        statusText: "User not found",
+      });
+    }
+
+    const { total } = await getUserRecordCount(target_user.id);
+    if (total >= TeamPlanQuota[target_user.team!].RC_NewRecords) {
       return Response.json("Your records have reached the free limit.", {
         status: 409,
       });
     }
 
-    const { records } = await req.json();
     const record = {
       ...records[0],
       id: generateSecret(16),
@@ -72,7 +83,7 @@ export async function POST(req: Request) {
     }
 
     const user_record = await getUserRecordByTypeNameContent(
-      user.id,
+      target_user.id,
       record.type,
       record_name,
       record.content,
@@ -92,12 +103,12 @@ export async function POST(req: Request) {
     );
 
     if (!data.success || !data.result?.id) {
-      console.log("[data]", data);
+      // console.log("[data]", data);
       return Response.json(data.messages, {
         status: 501,
       });
     } else {
-      const res = await createUserRecord(user.id, {
+      const res = await createUserRecord(target_user.id, {
         record_id: data.result.id,
         zone_id: matchedZone.zone_id,
         zone_name: matchedZone.zone_name,

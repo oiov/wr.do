@@ -48,7 +48,8 @@ Copy/paste the `.env.example` in the `.env` file:
 | GITHUB_ID | `123465` | The ID of the GitHub OAuth client. |
 | GITHUB_SECRET | `123465` | The secret of the GitHub OAuth client. |
 | RESEND_API_KEY | `123465` | The API key for Resend. |
-| CLOUDFLARE_ZONE_ID | `123465` | The zone ID for Cloudflare. |
+| CLOUDFLARE_ZONE | `[{"zone_id":"abc465","zone_name":"example.com"}]` | The zone info for Cloudflare. |
+| NEXT_PUBLIC_CLOUDFLARE_ZONE_NAME | `example.com,example2.com` | The zone name for Cloudflare. |
 | CLOUDFLARE_API_KEY | `123465` | The API key for Cloudflare. |
 | CLOUDFLARE_EMAIL | `123465` | The email for Cloudflare. |
 | NEXT_PUBLIC_OPEN_SIGNUP | `1` | Open signup. |
@@ -61,7 +62,7 @@ Copy/paste the `.env.example` in the `.env` file:
 
 - How to get `GOOGLE_CLIENT_ID`、`GITHUB_ID`, see [Authentification](/docs/developer/authentification).
 - How to get `RESEND_API_KEY`, see [Email](/docs/developer/email).
-- How to get `CLOUDFLARE_ZONE_ID`、`CLOUDFLARE_API_KEY`、`CLOUDFLARE_EMAIL`, see [Cloudflare Configs](/docs/developer/cloudflare).
+- How to get `CLOUDFLARE_ZONE`、`CLOUDFLARE_API_KEY`、`CLOUDFLARE_EMAIL`、`NEXT_PUBLIC_CLOUDFLARE_ZONE_NAME`, see [Cloudflare Configs](/docs/developer/cloudflare).
 - How to get `DATABASE_URL`, see [Database](/docs/developer/database).
 - How to active email worker, see [Email Worker](/docs/developer/cloudflare-email-worker).
 

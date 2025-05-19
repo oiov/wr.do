@@ -43,7 +43,7 @@ import { LinkPreviewer } from "@/components/shared/link-previewer";
 import { PaginationWrapper } from "@/components/shared/pagination";
 
 export interface RecordListProps {
-  user: Pick<User, "id" | "name" | "apiKey">;
+  user: Pick<User, "id" | "name" | "apiKey" | "email">;
   action: string;
 }
 
@@ -344,7 +344,7 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
         setShowModal={setShowForm}
       >
         <RecordForm
-          user={{ id: user.id, name: user.name || "" }}
+          user={{ id: user.id, name: user.name || "", email: user.email || "" }}
           isShowForm={isShowForm}
           setShowForm={setShowForm}
           type={formType}

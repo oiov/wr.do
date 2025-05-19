@@ -8,23 +8,51 @@ Before you start, you must have a Cloudflare account and be hosted on Cloudflare
 In this section, you can update these variables:
 
 ```js title=".env"
-CLOUDFLARE_ZONE_ID=abcdef1234567890
+CLOUDFLARE_ZONE=[{"zone_id":"abc465","zone_name":"example.com"},{"zone_id":"abc465","zone_name":"example2.com"}]
 CLOUDFLARE_API_KEY=1234567890abcdef1234567890abcdef
 CLOUDFLARE_EMAIL=user@example.com
-CLOUDFLARE_ZONE_NAME=wr.do
+NEXT_PUBLIC_CLOUDFLARE_ZONE_NAME=example.com,example2.com
 ```
 
-### Variable Descriptions
 
-- **CLOUDFLARE_ZONE_ID**: This is the unique identifier for your Cloudflare zone. You can find it in the Cloudflare dashboard under the Overview section of your domain.
+## Variable Descriptions
 
-> Follow [this way](https://dash.cloudflare.com/Your_Acount_Id/wr.do), and scroll down to `Zone ID`.
-  
-- **CLOUDFLARE_API_KEY**: This is the API key that you use to authenticate requests to the Cloudflare API. You can generate or find your API key in the Cloudflare dashboard under the `profile` -> `api-tokens` section.
+### CLOUDFLARE_ZONE
 
-> Follow [https://dash.cloudflare.com/profile/api-tokens](https://dash.cloudflare.com/profile/api-tokens), and scroll down to `API Token`, the `Global API Key` should be used.
-  
-- **CLOUDFLARE_EMAIL**: This is the email address associated with your Cloudflare account. It is used for authentication alongside the API key.
+- Description: A JSON array of objects, each containing a zone_id and zone_name for your Cloudflare zones. The zone_id is the unique identifier for a domain, and the zone_name is the domain name (e.g., example.com).
+- Where to find: In the Cloudflare dashboard, go to your domain’s Overview section and locate the Zone ID.
+- Example: `[{"zone_id":"abc465","zone_name":"example.com"},{"zone_id":"def789","zone_name":"example2.com"}]`
+- Note: Ensure the zone_name values match the domains listed in NEXT_PUBLIC_CLOUDFLARE_ZONE_NAME.
 
-- **CLOUDFLARE_ZONE_NAME**: This is the name of your Cloudflare zone. It is used to specify the zone in the Cloudflare API requests.
+> Instructions: Navigate to Cloudflare Dashboard, select your account, and find the Zone ID under the Overview tab of your domain.
 
+### CLOUDFLARE_API_KEY
+
+- Description: The API key used to authenticate requests to the Cloudflare API.
+- Where to find: In the Cloudflare dashboard, go to Profile > API Tokens and locate your Global API Key.
+- Example: 1234567890abcdef1234567890abcdef
+- Security Note: Keep this key confidential and never expose it in client-side code.
+
+> Instructions: Visit https://dash.cloudflare.com/profile/api-tokens, and find the Global API Key under the API Tokens section.
+
+### CLOUDFLARE_EMAIL
+
+- Description: The email address associated with your Cloudflare account, used for API authentication alongside the API key.
+- Example: `user@example.com`
+
+### NEXT_PUBLIC_CLOUDFLARE_ZONE_NAME
+- Description: A comma-separated list of domain names (e.g., `example.com,example2.com`) used for frontend display. These must correspond to the zone_name values in CLOUDFLARE_ZONE.
+- Example: example.com,example2.com
+- Note: Since this variable is prefixed with NEXT_PUBLIC_, it is exposed to the frontend. Ensure it only contains domain names and no sensitive information.
+
+### Important Notes
+
+- Correspondence: The zone_name in `CLOUDFLARE_ZONE` must match the domains listed in NEXT_PUBLIC_CLOUDFLARE_ZONE_NAME. For example, if CLOUDFLARE_ZONE includes `{"zone_id":"abc465","zone_name":"example.com"}`, then `NEXT_PUBLIC_CLOUDFLARE_ZONE_NAME` should include example.com.
+- Security: Never expose `CLOUDFLARE_API_KEY` or `CLOUDFLARE_ZONE` in frontend code, as they contain sensitive information. Only `NEXT_PUBLIC_CLOUDFLARE_ZONE_NAME` is safe for frontend use.
+- Validation: Ensure the zone_id and zone_name in `CLOUDFLARE_ZONE` are correct, as incorrect values will cause API requests to fail.
+
+### Troubleshooting
+
+- API Key Issues: If API requests fail, verify your `CLOUDFLARE_API_KEY` and `CLOUDFLARE_EMAIL` are correct and have the necessary permissions.
+- Zone Mismatch: If the frontend displays incorrect domains, ensure `NEXT_PUBLIC_CLOUDFLARE_ZONE_NAME` matches the zone_name values in `CLOUDFLARE_ZONE`.
+- Finding Zone ID: If you can’t locate your Zone ID, check the Overview tab of your domain in the Cloudflare dashboard.

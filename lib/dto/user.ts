@@ -12,8 +12,11 @@ export const getUserByEmail = async (email: string) => {
         email: email,
       },
       select: {
+        id: true,
         name: true,
         emailVerified: true,
+        active: true,
+        team: true,
       },
     });
 

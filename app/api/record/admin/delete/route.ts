@@ -3,6 +3,7 @@ import { deleteDNSRecord } from "@/lib/cloudflare";
 import { deleteUserRecord } from "@/lib/dto/cloudflare-dns-record";
 import { checkUserStatus } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";
+import { parseZones } from "@/lib/utils";
 
 export async function POST(req: Request) {
   try {
@@ -11,44 +12,57 @@ export async function POST(req: Request) {
     if (user.role !== "ADMIN") {
       return Response.json("Unauthorized", {
         status: 401,
+        statusText: "Admin access required",
       });
     }
 
     const { record_id, zone_id, userId, active } = await req.json();
-    if (!record_id || !userId) {
-      return Response.json("RecordId and userId are required", {
+    if (!record_id || !userId || !zone_id) {
+      return Response.json("record_id, userId, and zone_id are required", {
         status: 400,
+        statusText: "Invalid request body",
       });
     }
 
-    const { CLOUDFLARE_ZONE_ID, CLOUDFLARE_API_KEY, CLOUDFLARE_EMAIL } = env;
-    if (!CLOUDFLARE_ZONE_ID || !CLOUDFLARE_API_KEY || !CLOUDFLARE_EMAIL) {
-      return Response.json("API key、zone iD and email are required", {
+    const { CLOUDFLARE_ZONE, CLOUDFLARE_API_KEY, CLOUDFLARE_EMAIL } = env;
+    const zones = parseZones(CLOUDFLARE_ZONE || "[]");
+
+    if (!zones.length || !CLOUDFLARE_API_KEY || !CLOUDFLARE_EMAIL) {
+      return Response.json(
+        "API key, zone configuration, and email are required",
+        {
+          status: 400,
+          statusText: "Missing required configuration",
+        },
+      );
+    }
+
+    const matchedZone = zones.find((zone) => zone.zone_id === zone_id);
+    if (!matchedZone) {
+      return Response.json(`Invalid or unsupported zone_id: ${zone_id}`, {
         status: 400,
+        statusText: "Invalid zone_id",
       });
     }
 
-    // Delete cf dns record first.
-    const res = await deleteDNSRecord(
-      CLOUDFLARE_ZONE_ID,
+    // force delete
+    await deleteUserRecord(userId, record_id, zone_id, active);
+    await deleteDNSRecord(
+      matchedZone.zone_id,
       CLOUDFLARE_API_KEY,
       CLOUDFLARE_EMAIL,
       record_id,
     );
-    if (res && res.result?.id) {
-      // Then delete user record.
-      await deleteUserRecord(userId, record_id, zone_id, active);
-      return Response.json("success", {
-        status: 200,
-      });
-    }
-    return Response.json("Not Implemented", {
-      status: 501,
+
+    return Response.json("success", {
+      status: 200,
+      statusText: "success",
     });
   } catch (error) {
-    console.error(error);
-    return Response.json(error?.statusText || error, {
-      status: error.status || 500,
+    console.error("[Error]", error);
+    return Response.json(error.message || "Server error", {
+      status: error?.status || 500,
+      statusText: error?.statusText || "Server error",
     });
   }
 }

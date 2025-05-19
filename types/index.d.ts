@@ -19,6 +19,7 @@ export type SiteConfig = {
   openSignup: boolean;
   shortDomains: string[];
   emailDomains: string[];
+  recordDomains: string[];
   emailR2Domain: string;
 };
 

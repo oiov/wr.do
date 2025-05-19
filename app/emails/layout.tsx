@@ -32,8 +32,8 @@ export default async function Dashboard({ children }: ProtectedLayoutProps) {
       <DashboardSidebar links={filteredLinks} />
 
       <div className="flex flex-1 flex-col">
-        <header className="sticky top-0 z-50 flex h-14 border-b bg-background px-4 lg:h-[60px] xl:px-8">
-          <MaxWidthWrapper className="flex max-w-7xl items-center gap-x-3 px-0">
+        <header className="sticky top-0 z-50 flex h-14 border-b bg-background px-4 lg:h-[60px]">
+          <MaxWidthWrapper className="flex max-w-full items-center gap-x-3 px-0">
             <MobileSheetSidebar links={filteredLinks} />
 
             <div className="w-full flex-1">

@@ -6,6 +6,7 @@ import { User } from "@prisma/client";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
+import { siteConfig } from "@/config/site";
 import { CreateDNSRecord, RecordType } from "@/lib/cloudflare";
 import { UserRecordFormData } from "@/lib/dto/cloudflare-dns-record";
 import { RECORD_TYPE_ENUMS, TTL_ENUMS } from "@/lib/enums";
@@ -30,7 +31,7 @@ export type FormData = CreateDNSRecord;
 export type FormType = "add" | "edit";
 
 export interface RecordFormProps {
-  user: Pick<User, "id" | "name">;
+  user: Pick<User, "id" | "name" | "email">;
   isShowForm: boolean;
   setShowForm: Dispatch<SetStateAction<boolean>>;
   type: FormType;
@@ -53,24 +54,25 @@ export function RecordForm({
   const [currentRecordType, setCurrentRecordType] = useState(
     initData?.type || "CNAME",
   );
+  const [currentZoneName, setCurrentZoneName] = useState(
+    initData?.zone_name || "wr.do",
+  );
+  const [email, setEmail] = useState(user.email);
 
   const {
     handleSubmit,
     register,
     formState: { errors },
-    getValues,
     setValue,
   } = useForm<FormData>({
     resolver: zodResolver(createRecordSchema),
     defaultValues: {
+      zone_name: initData?.zone_name || "wr.do",
       type: initData?.type || "CNAME",
       ttl: initData?.ttl || 1,
       proxied: initData?.proxied || false,
-      comment: initData?.comment || "",
-      name:
-        (initData?.name.endsWith(".wr.do")
-          ? initData?.name.slice(0, -6)
-          : initData?.name) || "",
+      comment: "Created by wr.do",
+      name: initData?.name ? initData.name.split(".")[0] : "",
       content: initData?.content || "",
     },
   });
@@ -89,6 +91,7 @@ export function RecordForm({
         method: "POST",
         body: JSON.stringify({
           records: [data],
+          email,
         }),
       });
 
@@ -161,7 +164,62 @@ export function RecordForm({
         {type === "add" ? "Create" : "Edit"} record
       </div>
       <form className="p-4" onSubmit={onSubmit}>
+        {action.indexOf("admin") > -1 && (
+          <div className="items-center justify-start gap-4 md:flex">
+            <FormSectionColumns required title="User email">
+              <div className="flex w-full items-center gap-2">
+                <Label className="sr-only" htmlFor="content">
+                  User email
+                </Label>
+                <Input
+                  id="email"
+                  className="flex-1 shadow-inner"
+                  size={32}
+                  defaultValue={email || ""}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col justify-between p-1">
+                {errors?.content ? (
+                  <p className="pb-0.5 text-[13px] text-red-600">
+                    {errors.content.message}
+                  </p>
+                ) : (
+                  <p className="pb-0.5 text-[13px] text-muted-foreground">
+                    Required. Enter user email
+                  </p>
+                )}
+              </div>
+            </FormSectionColumns>
+          </div>
+        )}
+
         <div className="items-center justify-start gap-4 md:flex">
+          <FormSectionColumns title="Domain" required>
+            <Select
+              onValueChange={(value: string) => {
+                setValue("zone_name", value);
+                setCurrentZoneName(value);
+              }}
+              name="zone_name"
+              defaultValue={String(initData?.zone_name || "wr.do")}
+              disabled={type === "edit"}
+            >
+              <SelectTrigger className="w-full shadow-inner">
+                <SelectValue placeholder="Select a domain" />
+              </SelectTrigger>
+              <SelectContent>
+                {siteConfig.recordDomains.map((v) => (
+                  <SelectItem key={v} value={v}>
+                    {v}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <p className="p-1 text-[13px] text-muted-foreground">
+              Required. Select a domain.
+            </p>
+          </FormSectionColumns>
           <FormSectionColumns title="Type" required>
             <Select
               onValueChange={(value: RecordType) => {
@@ -184,6 +242,9 @@ export function RecordForm({
             </Select>
             <p className="p-1 text-[13px] text-muted-foreground">Required.</p>
           </FormSectionColumns>
+        </div>
+
+        <div className="items-center justify-start gap-4 md:flex">
           <FormSectionColumns title="Name" required>
             <div className="flex w-full items-center gap-2">
               <Label className="sr-only" htmlFor="name">
@@ -196,12 +257,12 @@ export function RecordForm({
                   size={32}
                   {...register("name")}
                 />
-                {currentRecordType === "CNAME" ||
-                  (currentRecordType === "A" && (
-                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-sm text-slate-500">
-                      .wr.do
-                    </span>
-                  ))}
+                {(currentRecordType === "CNAME" ||
+                  currentRecordType === "A") && (
+                  <span className="absolute right-2 top-1/2 -translate-y-1/2 text-sm text-slate-500">
+                    .{currentZoneName}
+                  </span>
+                )}
               </div>
             </div>
             <div className="flex flex-col justify-between p-1">
@@ -211,38 +272,13 @@ export function RecordForm({
                 </p>
               ) : (
                 <p className="pb-0.5 text-[13px] text-muted-foreground">
-                  Required. Use @ for root.
+                  Required. E.g. www.
                 </p>
               )}
             </div>
           </FormSectionColumns>
-        </div>
-
-        <div className="items-center justify-start gap-4 md:flex">
-          <FormSectionColumns title="TTL" required>
-            <Select
-              onValueChange={(value: string) => {
-                setValue("ttl", Number(value));
-              }}
-              name="ttl"
-              defaultValue={String(initData?.ttl || 1)}
-            >
-              <SelectTrigger className="w-full shadow-inner">
-                <SelectValue placeholder="Select a time" />
-              </SelectTrigger>
-              <SelectContent>
-                {TTL_ENUMS.map((ttl) => (
-                  <SelectItem key={ttl.value} value={ttl.value}>
-                    {ttl.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <p className="p-1 text-[13px] text-muted-foreground">
-              Optional. Time To Live.
-            </p>
-          </FormSectionColumns>
           <FormSectionColumns
+            required
             title={
               currentRecordType === "CNAME"
                 ? "Content"
@@ -281,7 +317,7 @@ export function RecordForm({
         </div>
 
         <div className="items-center justify-start gap-4 md:flex">
-          <FormSectionColumns title="Comment">
+          {/* <FormSectionColumns title="Comment">
             <div className="flex items-center gap-2">
               <Label className="sr-only" htmlFor="comment">
                 Comment
@@ -296,16 +332,43 @@ export function RecordForm({
             <p className="p-1 text-[13px] text-muted-foreground">
               Enter your comment here (up to 100 characters)
             </p>
+          </FormSectionColumns> */}
+          <FormSectionColumns title="TTL" required>
+            <Select
+              onValueChange={(value: string) => {
+                setValue("ttl", Number(value));
+              }}
+              name="ttl"
+              defaultValue={String(initData?.ttl || 1)}
+            >
+              <SelectTrigger className="w-full shadow-inner">
+                <SelectValue placeholder="Select a time" />
+              </SelectTrigger>
+              <SelectContent>
+                {TTL_ENUMS.map((ttl) => (
+                  <SelectItem key={ttl.value} value={ttl.value}>
+                    {ttl.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <p className="p-1 text-[13px] text-muted-foreground">
+              Optional. Time To Live.
+            </p>
           </FormSectionColumns>
           <FormSectionColumns title="Proxy">
             <div className="flex w-full items-center gap-2">
               <Label className="sr-only" htmlFor="proxy">
                 Proxy
               </Label>
-              <Switch id="proxied" {...register("proxied")} />
+              <Switch
+                id="proxied"
+                {...register("proxied")}
+                onCheckedChange={(value) => setValue("proxied", value)}
+              />
             </div>
             <p className="p-1 text-[13px] text-muted-foreground">
-              Proxy status
+              Proxy status.
             </p>
           </FormSectionColumns>
         </div>
