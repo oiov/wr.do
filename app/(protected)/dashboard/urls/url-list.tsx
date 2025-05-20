@@ -345,7 +345,6 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                       </TableCell>
                       <TableCell className="col-span-1 hidden sm:flex">
                         <Switch
-                          className="data-[state=checked]:bg-blue-500"
                           defaultChecked={short.active === 1}
                           onCheckedChange={(value) =>
                             handleChangeStatu(value, short.id || "")
