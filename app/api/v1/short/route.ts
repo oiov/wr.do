@@ -1,5 +1,6 @@
 import { TeamPlanQuota } from "@/config/team";
 import { checkApiKey } from "@/lib/dto/api-key";
+import { getDomainsByFeature } from "@/lib/dto/domains";
 import { createUserShortUrl } from "@/lib/dto/short-urls";
 import { restrictByTimeRange } from "@/lib/team";
 import { createUrlSchema } from "@/lib/validations/url";
@@ -38,6 +39,17 @@ export async function POST(req: Request) {
     if (!target || !url) {
       return Response.json("Target url and slug are required", {
         status: 400,
+      });
+    }
+
+    const zones = await getDomainsByFeature("enable_short_link");
+    if (
+      !zones.length ||
+      !zones.map((zone) => zone.domain_name).includes(prefix)
+    ) {
+      return Response.json("Invalid domain", {
+        status: 409,
+        statusText: "Invalid domain",
       });
     }
 

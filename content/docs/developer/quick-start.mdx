@@ -136,40 +136,7 @@ RESEND_API_KEY = re_your_resend_api_key;
 
 </Steps>
 
-## 3. Cloudflare Configs
-
-Before you start, you must have a Cloudflare account and be hosted on Cloudflare.
-
-### Add the CLOUDFLARE_ZONE Environment Variable
-
-A JSON array of objects, each containing a zone_id and zone_name for your Cloudflare zones. The zone_id is the unique identifier for a domain, and the zone_name is the domain name (e.g., example.com).
-
-> Follow [this way](https://dash.cloudflare.com/Your_Acount_Id/wr.do), and scroll down to `Zone ID`.
-
-### Add the CLOUDFLARE_API_KEY Environment Variable
-
- This is the API key that you use to authenticate requests to the Cloudflare API. You can generate or find your API key in the Cloudflare dashboard under the `profile` -> `api-tokens` section.
-
- > Follow [https://dash.cloudflare.com/profile/api-tokens](https://dash.cloudflare.com/profile/api-tokens), and scroll down to `API Token`, the `Global API Key` should be used.
-
-### Add the CLOUDFLARE_EMAIL Environment Variable
-
-This is the email address associated with your Cloudflare account. It is used for authentication alongside the API key.
-
-### Add the NEXT_PUBLIC_CLOUDFLARE_ZONE_NAME Environment Variable
-
-A comma-separated list of domain names (e.g., `example.com,example2.com`) used for frontend display. These must correspond to the zone_name values in CLOUDFLARE_ZONE.
-
-In this section, you can update these variables:
-
-```js title=".env"
-CLOUDFLARE_ZONE=[{"zone_id":"abc465","zone_name":"example.com"},{"zone_id":"abc465","zone_name":"example2.com"}]
-NEXT_PUBLIC_CLOUDFLARE_ZONE_NAME=example.com,example2.com
-CLOUDFLARE_API_KEY=1234567890abcdef1234567890abcdef
-CLOUDFLARE_EMAIL=user@example.com
-```
-
-## 4. Email Worker Configs
+## 3. Email Worker Configs
 
 See detail in [Email Worker](/docs/developer/cloudflare-email-worker).
 
@@ -187,20 +154,14 @@ Via:
 NEXT_PUBLIC_EMAIL_R2_DOMAIN=https://email-attachment.wr.do
 ```
 
-## 5. Add the Bussiness Configs
+## 4. Add the Bussiness Configs
 
 ```js title=".env"
 # Allow anyone to sign up
 NEXT_PUBLIC_OPEN_SIGNUP=1
-
-# Short domains. Separated by `,`
-NEXT_PUBLIC_SHORT_DOMAINS=wr.do,uv.do
-
-# Email domains. Separated by `,`
-NEXT_PUBLIC_EMAIL_DOMAINS=wr.do,uv.do
 ```
 
-## 6. Add the SCREENSHOTONE_BASE_URL Environment Variable
+## 5. Add the SCREENSHOTONE_BASE_URL Environment Variable
 
 It's the base URL for the screenshotone API.
 
@@ -211,20 +172,36 @@ Deploy docs via [here](https://jasonraimondi.github.io/url-to-png/)
 SCREENSHOTONE_BASE_URL=https://api.screenshotone.com
 ```
 
-## 7. Add the GITHUB_TOKEN Environment Variable
+## 6. Add the GITHUB_TOKEN Environment Variable
 
 Via https://github.com/settings/tokens to get your token.
 
 ```js title=".env"
 GITHUB_TOKEN=
 ```
-## 8. Start the Dev Server
+
+## 7. Start the Dev Server
 
 ```bash
 pnpm dev
 ```
 Via [http://localhost:3000](http://localhost:3000)
 
+## 8. Setup System
+
+#### Create the first account and Change the account's role to ADMIN
+
+Follow the steps below:
+
+- 1. Via [http://localhost:3000/login](http://localhost:3000/login), login with your account.
+- 2. Via [http://localhost:3000/setup](http://localhost:3000/setup), change the account's role to ADMIN.
+- 3. Then follow the **panel guide** to config the system and add the first domain. 
+
+<Callout type="info">
+  After change change the account's role to ADMIN, and then you can refresh the website and access http://localhost:3000/admin.
+
+  <strong>You must add at least one domain to start using short links, email or subdomain management functions.</strong>
+</Callout>
 
 ## Q & A
  

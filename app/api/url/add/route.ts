@@ -1,4 +1,5 @@
 import { TeamPlanQuota } from "@/config/team";
+import { getDomainsByFeature } from "@/lib/dto/domains";
 import { createUserShortUrl } from "@/lib/dto/short-urls";
 import { checkUserStatus } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";
@@ -23,6 +24,18 @@ export async function POST(req: Request) {
 
     const { target, url, prefix, visible, active, expiration, password } =
       createUrlSchema.parse(data);
+
+    const zones = await getDomainsByFeature("enable_short_link");
+    if (
+      !zones.length ||
+      !zones.map((zone) => zone.domain_name).includes(prefix)
+    ) {
+      return Response.json("Invalid domain", {
+        status: 400,
+        statusText: "Invalid domain",
+      });
+    }
+
     const res = await createUserShortUrl({
       userId: user.id,
       userName: user.name || "Anonymous",

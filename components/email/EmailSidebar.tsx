@@ -77,9 +77,7 @@ export default function EmailSidebar({
   const [isEdit, setIsEdit] = useState(false);
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const [domainSuffix, setDomainSuffix] = useState<string | null>(
-    siteConfig.shortDomains[0],
-  );
+  const [domainSuffix, setDomainSuffix] = useState<string | null>("wr.do");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [emailToDelete, setEmailToDelete] = useState<string | null>(null);
   const [deleteInput, setDeleteInput] = useState("");
@@ -108,6 +106,13 @@ export default function EmailSidebar({
       dedupingInterval: 5000,
     },
   );
+
+  const { data: emailDomains, isLoading: isLoadingDomains } = useSWR<
+    { domain_name: string }[]
+  >("/api/domain?feature=email", fetcher, {
+    revalidateOnFocus: false,
+    dedupingInterval: 10000,
+  });
 
   if (!selectedEmailAddress && data && data.list.length > 0) {
     onSelectEmail(data.list[0].emailAddress);
@@ -595,25 +600,36 @@ export default function EmailSidebar({
                       isEdit ? selectedEmailAddress?.split("@")[0] || "" : ""
                     }
                   />
-                  <Select
-                    onValueChange={(value: string) => {
-                      setDomainSuffix(value);
-                    }}
-                    name="suffix"
-                    defaultValue={domainSuffix || siteConfig.emailDomains[0]}
-                    disabled={isEdit}
-                  >
-                    <SelectTrigger className="w-1/3 rounded-none border-x-0 shadow-inner">
-                      <SelectValue placeholder="Select a domain" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {siteConfig.emailDomains.map((v) => (
-                        <SelectItem key={v} value={v}>
-                          @{v}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  {isLoadingDomains ? (
+                    <Skeleton className="h-9 w-1/3 rounded-none border-x-0 shadow-inner" />
+                  ) : (
+                    emailDomains && (
+                      <Select
+                        onValueChange={(value: string) => {
+                          setDomainSuffix(value);
+                        }}
+                        name="suffix"
+                        defaultValue={
+                          domainSuffix || emailDomains[0].domain_name
+                        }
+                        disabled={isEdit}
+                      >
+                        <SelectTrigger className="w-1/3 rounded-none border-x-0 shadow-inner">
+                          <SelectValue placeholder="Select a domain" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {emailDomains.map((v) => (
+                            <SelectItem
+                              key={v.domain_name}
+                              value={v.domain_name}
+                            >
+                              @{v.domain_name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )
+                  )}
                   <Button
                     className="rounded-l-none"
                     type="button"

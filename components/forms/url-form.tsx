@@ -6,11 +6,12 @@ import { User } from "@prisma/client";
 import { Sparkles } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import useSWR from "swr";
 
 import { siteConfig } from "@/config/site";
 import { ShortUrlFormData } from "@/lib/dto/short-urls";
 import { EXPIRATION_ENUMS } from "@/lib/enums";
-import { generateUrlSuffix } from "@/lib/utils";
+import { fetcher, generateUrlSuffix } from "@/lib/utils";
 import { createUrlSchema } from "@/lib/validations/url";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,7 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { Switch } from "../ui/switch";
+import { Skeleton } from "../ui/skeleton";
 
 export type FormData = ShortUrlFormData;
 
@@ -64,12 +65,21 @@ export function UrlForm({
       target: initData?.target || "",
       url: initData?.url || "",
       active: initData?.active || 1,
-      prefix: initData?.prefix || siteConfig.shortDomains[0],
+      prefix: initData?.prefix || "wr.do",
       visible: initData?.visible || 0,
       expiration: initData?.expiration || "-1",
       password: initData?.password || "",
     },
   });
+
+  const { data: shortDomains, isLoading } = useSWR<{ domain_name: string }[]>(
+    "/api/domain?feature=short",
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      dedupingInterval: 10000,
+    },
+  );
 
   const onSubmit = handleSubmit((data) => {
     if (type === "add") {
@@ -191,25 +201,33 @@ export function UrlForm({
               </Label>
 
               <div className="relative flex w-full items-center">
-                <Select
-                  onValueChange={(value: string) => {
-                    setValue("prefix", value);
-                  }}
-                  name="prefix"
-                  defaultValue={initData?.prefix || siteConfig.shortDomains[0]}
-                  disabled={type === "edit"}
-                >
-                  <SelectTrigger className="w-1/3 rounded-r-none border-r-0 shadow-inner">
-                    <SelectValue placeholder="Select a domain" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {siteConfig.shortDomains.map((v) => (
-                      <SelectItem key={v} value={v}>
-                        {v}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                {isLoading ? (
+                  <Skeleton className="h-9 w-1/3 rounded-r-none border-r-0 shadow-inner" />
+                ) : (
+                  shortDomains && (
+                    <Select
+                      onValueChange={(value: string) => {
+                        setValue("prefix", value);
+                      }}
+                      name="prefix"
+                      defaultValue={
+                        initData?.prefix || shortDomains[0].domain_name
+                      }
+                      disabled={type === "edit"}
+                    >
+                      <SelectTrigger className="w-1/3 rounded-r-none border-r-0 shadow-inner">
+                        <SelectValue placeholder="Select a domain" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {shortDomains.map((v) => (
+                          <SelectItem key={v.domain_name} value={v.domain_name}>
+                            {v.domain_name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )
+                )}
                 <Input
                   id="url"
                   className="w-full rounded-none pl-[8px] shadow-inner"
@@ -296,48 +314,6 @@ export function UrlForm({
               Expiration time, default for never.
             </p>
           </FormSectionColumns>
-
-          {/* <div>
-          <p className="text-sm text-gray-700 dark:text-white">
-            Your Final URL:
-          </p>
-          <p className="text-sm text-gray-700 dark:text-white">
-            {getValues("prefix")}/s/{getValues("url")}
-          </p>
-        </div> */}
-          {/* <FormSectionColumns title="Visible">
-          <div className="flex w-full items-center gap-2">
-            <Label className="sr-only" htmlFor="visible">
-              Visible
-            </Label>
-            <Switch
-              id="visible"
-              {...register("visible")}
-              disabled
-              defaultChecked={initData?.visible === 1 || false}
-              onCheckedChange={(value) => setValue("visible", value ? 1 : 0)}
-            />
-          </div>
-          <p className="p-1 text-[13px] text-muted-foreground">
-            Public or private short url.
-          </p>
-        </FormSectionColumns> */}
-          {/* <FormSectionColumns title="Active">
-          <div className="flex w-full items-center gap-2">
-            <Label className="sr-only" htmlFor="active">
-              Active
-            </Label>
-            <Switch
-              id="active"
-              {...register("active")}
-              defaultChecked={initData?.active === 1 || true}
-              onCheckedChange={(value) => setValue("active", value ? 1 : 0)}
-            />
-          </div>
-          <p className="p-1 text-[13px] text-muted-foreground">
-            Enable or disable short url.
-          </p>
-        </FormSectionColumns> */}
         </div>
 
         {/* Action buttons */}

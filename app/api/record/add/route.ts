@@ -1,4 +1,3 @@
-import { env } from "@/env.mjs";
 import { TeamPlanQuota } from "@/config/team";
 import { createDNSRecord } from "@/lib/cloudflare";
 import {
@@ -6,31 +5,27 @@ import {
   getUserRecordByTypeNameContent,
   getUserRecordCount,
 } from "@/lib/dto/cloudflare-dns-record";
+import { getDomainsByFeature } from "@/lib/dto/domains";
 import { checkUserStatus } from "@/lib/dto/user";
 import { reservedDomains } from "@/lib/enums";
 import { getCurrentUser } from "@/lib/session";
-import { generateSecret, parseZones } from "@/lib/utils";
+import { generateSecret } from "@/lib/utils";
 
 export async function POST(req: Request) {
   try {
     const user = checkUserStatus(await getCurrentUser());
     if (user instanceof Response) return user;
 
-    const { CLOUDFLARE_ZONE, CLOUDFLARE_API_KEY, CLOUDFLARE_EMAIL } = env;
-    const zones = parseZones(CLOUDFLARE_ZONE || "[]");
-
-    if (!zones.length || !CLOUDFLARE_API_KEY || !CLOUDFLARE_EMAIL) {
-      return Response.json("API key、zone iD and email are required", {
+    const zones = await getDomainsByFeature("enable_dns", true);
+    if (!zones.length) {
+      return Response.json("Please add at least one domain", {
         status: 400,
-        statusText: "API key、zone iD and email are required",
+        statusText: "Please add at least one domain",
       });
     }
 
     const { total } = await getUserRecordCount(user.id);
-    if (
-      user.role !== "ADMIN" &&
-      total >= TeamPlanQuota[user.team].RC_NewRecords
-    ) {
+    if (total >= TeamPlanQuota[user.team].RC_NewRecords) {
       return Response.json("Your records have reached the free limit.", {
         status: 409,
       });
@@ -49,7 +44,7 @@ export async function POST(req: Request) {
     let matchedZone;
 
     for (const zone of zones) {
-      if (record.zone_name === zone.zone_name) {
+      if (record.zone_name === zone.domain_name) {
         matchedZone = zone;
         break;
       }
@@ -85,22 +80,22 @@ export async function POST(req: Request) {
     }
 
     const data = await createDNSRecord(
-      matchedZone.zone_id,
-      CLOUDFLARE_API_KEY,
-      CLOUDFLARE_EMAIL,
+      matchedZone.cf_zone_id,
+      matchedZone.cf_api_key,
+      matchedZone.cf_email,
       record,
     );
 
     if (!data.success || !data.result?.id) {
-      console.log("[data]", data);
+      // console.log("[data]", data);
       return Response.json(data.messages, {
         status: 501,
       });
     } else {
       const res = await createUserRecord(user.id, {
         record_id: data.result.id,
-        zone_id: matchedZone.zone_id,
-        zone_name: matchedZone.zone_name,
+        zone_id: matchedZone.cf_zone_id,
+        zone_name: matchedZone.domain_name,
         name: data.result.name,
         type: data.result.type,
         content: data.result.content,

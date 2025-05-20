@@ -189,7 +189,7 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                 setShowForm(!isShowForm);
               }}
             >
-              Add record
+              Add Record
             </Button>
           </div>
         </CardHeader>

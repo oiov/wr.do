@@ -179,7 +179,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                 setShowForm(!isShowForm);
               }}
             >
-              Add url
+              Add URL
             </Button>
           </div>
         </CardHeader>

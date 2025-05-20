@@ -1,0 +1,147 @@
+import { NextRequest } from "next/server";
+
+import {
+  createDomain,
+  deleteDomain,
+  getAllDomains,
+  invalidateDomainConfigCache,
+  updateDomain,
+} from "@/lib/dto/domains";
+import { checkUserStatus } from "@/lib/dto/user";
+import { getCurrentUser } from "@/lib/session";
+
+// Get domains list
+export async function GET(req: NextRequest) {
+  try {
+    const user = checkUserStatus(await getCurrentUser());
+    if (user instanceof Response) return user;
+    if (user.role !== "ADMIN") {
+      return Response.json("Unauthorized", { status: 401 });
+    }
+
+    // TODO: Add pagination
+    const domains = await getAllDomains();
+
+    return Response.json(
+      { list: domains, total: domains.length },
+      { status: 200 },
+    );
+  } catch (error) {
+    console.error("[Error]", error);
+    return Response.json(error.message || "Server error", { status: 500 });
+  }
+}
+
+// Create domain
+export async function POST(req: NextRequest) {
+  try {
+    const user = checkUserStatus(await getCurrentUser());
+    if (user instanceof Response) return user;
+    if (user.role !== "ADMIN") {
+      return Response.json("Unauthorized", { status: 401 });
+    }
+
+    const { data } = await req.json();
+    if (!data || !data.domain_name) {
+      return Response.json("domain_name is required", { status: 400 });
+    }
+
+    const newDomain = await createDomain({
+      domain_name: data.domain_name,
+      enable_short_link: !!data.enable_short_link,
+      enable_email: !!data.enable_email,
+      enable_dns: !!data.enable_dns,
+      cf_zone_id: data.cf_zone_id,
+      cf_api_key: data.cf_api_key,
+      cf_email: data.cf_email,
+      cf_api_key_encrypted: false,
+      max_short_links: data.max_short_links,
+      max_email_forwards: data.max_email_forwards,
+      max_dns_records: data.max_dns_records,
+      active: true,
+    });
+
+    invalidateDomainConfigCache();
+
+    return Response.json(newDomain, { status: 200 });
+  } catch (error) {
+    console.error("[Error]", error);
+    return Response.json(error.message || "Server error", { status: 500 });
+  }
+}
+
+// Update domain
+export async function PUT(req: NextRequest) {
+  try {
+    const user = checkUserStatus(await getCurrentUser());
+    if (user instanceof Response) return user;
+    if (user.role !== "ADMIN") {
+      return Response.json("Unauthorized", { status: 401 });
+    }
+
+    const {
+      domain_name,
+      enable_short_link,
+      enable_email,
+      enable_dns,
+      cf_zone_id,
+      cf_api_key,
+      cf_email,
+      max_short_links,
+      max_email_forwards,
+      max_dns_records,
+      active,
+      id,
+    } = await req.json();
+    if (!id) {
+      return Response.json("domain id is required", { status: 400 });
+    }
+
+    const updatedDomain = await updateDomain(id, {
+      domain_name,
+      enable_short_link: !!enable_short_link,
+      enable_email: !!enable_email,
+      enable_dns: !!enable_dns,
+      active: !!active,
+      cf_zone_id,
+      cf_api_key,
+      cf_email,
+      cf_api_key_encrypted: false,
+      max_short_links,
+      max_email_forwards,
+      max_dns_records,
+    });
+
+    invalidateDomainConfigCache();
+
+    return Response.json(updatedDomain, { status: 200 });
+  } catch (error) {
+    console.error("[Error]", error);
+    return Response.json(error.message || "Server error", { status: 500 });
+  }
+}
+
+// Delete domain
+export async function DELETE(req: NextRequest) {
+  try {
+    const user = checkUserStatus(await getCurrentUser());
+    if (user instanceof Response) return user;
+    if (user.role !== "ADMIN") {
+      return Response.json("Unauthorized", { status: 401 });
+    }
+
+    const { domain_name } = await req.json();
+    if (!domain_name) {
+      return Response.json("domain_name is required", { status: 400 });
+    }
+
+    const deletedDomain = await deleteDomain(domain_name);
+
+    invalidateDomainConfigCache();
+
+    return Response.json(deletedDomain, { status: 200 });
+  } catch (error) {
+    console.error("[Error]", error);
+    return Response.json(error.message || "Server error", { status: 500 });
+  }
+}
