@@ -26,7 +26,6 @@ export default function StepGuide({
   const [currentStep, setCurrentStep] = useState(1);
   const [direction, setDirection] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
-  const [isMobile, setIsMobile] = useState(false);
 
   const steps = [
     {
@@ -51,19 +50,6 @@ export default function StepGuide({
       component: () => <Congrats />,
     },
   ];
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-
-    return () => {
-      window.removeEventListener("resize", checkMobile);
-    };
-  }, []);
 
   const goToNextStep = () => {
     if (currentStep < steps.length) {
@@ -130,7 +116,7 @@ export default function StepGuide({
               className="flex flex-col justify-center gap-6"
             >
               <div className="flex h-full w-full flex-col">
-                <div className="mb-2 flex items-center gap-1 rounded-lg bg-neutral-100 p-2">
+                <div className="mb-2 flex items-center gap-1 rounded-lg bg-neutral-100 p-2 dark:bg-neutral-800">
                   <span className="flex size-5 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
                     {currentStep}
                   </span>
@@ -213,16 +199,16 @@ function SetAdminRole({ id, email }: { id: string; email: string }) {
   );
 
   return (
-    <div className="flex flex-col gap-4 rounded-lg bg-neutral-50 p-4">
+    <div className="flex flex-col gap-4 rounded-lg bg-neutral-50 p-4 dark:bg-neutral-900">
       <div className="flex items-center justify-between">
-        <span className="text-sm font-semibold text-neutral-500">
+        <span className="text-sm font-semibold text-muted-foreground">
           Allow Sign Up:
         </span>
         {siteConfig.openSignup ? ReadyBadge : <Skeleton className="h-4 w-12" />}
       </div>
 
       <div className="flex items-center justify-between">
-        <span className="text-sm font-semibold text-neutral-500">
+        <span className="text-sm font-semibold text-muted-foreground">
           Set {email} as ADMIN:
         </span>
         {isAdmin ? (
@@ -306,7 +292,7 @@ function AddDomain({ onNextStep }: { onNextStep: () => void }) {
     });
   };
   return (
-    <div className="flex flex-col gap-4 rounded-lg bg-neutral-50 p-4">
+    <div className="flex flex-col gap-4 rounded-lg bg-neutral-50 p-4 dark:bg-neutral-900">
       <FormSectionColumns title="Domain Name">
         <div className="flex w-full flex-col items-start justify-between gap-2">
           <Label className="sr-only" htmlFor="domain_name">
@@ -315,7 +301,7 @@ function AddDomain({ onNextStep }: { onNextStep: () => void }) {
           <div className="w-full">
             <Input
               id="target"
-              className="flex-1 bg-neutral-50 shadow-inner"
+              className="flex-1 bg-neutral-50 shadow-inner dark:bg-neutral-600"
               size={32}
               placeholder="example.com"
               onChange={(e) => setDomain(e.target.value)}
