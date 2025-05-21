@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 
-import { FeatureMap, getDomainsByFeature } from "@/lib/dto/domains";
+import { FeatureMap, getDomainsByFeatureClient } from "@/lib/dto/domains";
 import { checkUserStatus } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";
 
@@ -22,7 +22,8 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const domainList = await getDomainsByFeature(FeatureMap[feature]);
+    const domainList = await getDomainsByFeatureClient(FeatureMap[feature]);
+
     return Response.json(domainList, { status: 200 });
   } catch (error) {
     console.error("[Error]", error);

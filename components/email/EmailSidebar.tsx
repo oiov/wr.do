@@ -603,32 +603,34 @@ export default function EmailSidebar({
                   {isLoadingDomains ? (
                     <Skeleton className="h-9 w-1/3 rounded-none border-x-0 shadow-inner" />
                   ) : (
-                    emailDomains && (
-                      <Select
-                        onValueChange={(value: string) => {
-                          setDomainSuffix(value);
-                        }}
-                        name="suffix"
-                        defaultValue={
-                          domainSuffix || emailDomains[0].domain_name
-                        }
-                        disabled={isEdit}
-                      >
-                        <SelectTrigger className="w-1/3 rounded-none border-x-0 shadow-inner">
-                          <SelectValue placeholder="Select a domain" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {emailDomains.map((v) => (
+                    <Select
+                      onValueChange={(value: string) => {
+                        setDomainSuffix(value);
+                      }}
+                      name="suffix"
+                      defaultValue={domainSuffix || "wr.do"}
+                      disabled={isEdit}
+                    >
+                      <SelectTrigger className="w-1/3 rounded-none border-x-0 shadow-inner">
+                        <SelectValue placeholder="Select a domain" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {emailDomains && emailDomains.length > 0 ? (
+                          emailDomains.map((v) => (
                             <SelectItem
                               key={v.domain_name}
                               value={v.domain_name}
                             >
                               @{v.domain_name}
                             </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    )
+                          ))
+                        ) : (
+                          <Button className="w-full" variant="ghost">
+                            No domain
+                          </Button>
+                        )}
+                      </SelectContent>
+                    </Select>
                   )}
                   <Button
                     className="rounded-l-none"

@@ -81,6 +81,20 @@ export async function getDomainsByFeature(
   }
 }
 
+export async function getDomainsByFeatureClient(feature: string) {
+  try {
+    const domains = await prisma.domain.findMany({
+      where: { [feature]: true },
+      select: {
+        domain_name: true,
+      },
+    });
+    return domains;
+  } catch (error) {
+    throw new Error(`Failed to fetch domain config: ${error.message}`);
+  }
+}
+
 export async function createDomain(data: DomainConfig) {
   try {
     const createdDomain = await prisma.domain.create({ data });

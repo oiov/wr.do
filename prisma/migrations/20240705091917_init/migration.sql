@@ -274,7 +274,7 @@ CREATE TABLE "user_send_emails"
     "html" TEXT DEFAULT '',
     "replyTo" TEXT DEFAULT '',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE INDEX "user_send_emails_userId_idx" ON "user_send_emails" ("userId");

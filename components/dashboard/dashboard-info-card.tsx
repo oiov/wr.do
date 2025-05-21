@@ -145,14 +145,12 @@ export function HeroCard({
   );
 }
 
-export async function ScrapeInfoCard({
-  userId,
+export async function StaticInfoCard({
   title,
   desc,
   link,
   icon = "users",
 }: {
-  userId: string;
   title: string;
   desc?: string;
   link: string;

@@ -57,6 +57,17 @@ pnpm install
 pnpm dev
 ```
 
+#### Init database
+
+```bash
+pnpm postinstall
+pnpm db:push
+```
+
+#### Setup Admin Panel
+
+Follow https://localhost:3000/setup
+
 ## Legitimacy review
 
 - To avoid abuse, applications without website content will be rejected

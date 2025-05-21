@@ -56,6 +56,17 @@ pnpm install
 pnpm dev
 ```
 
+#### 初始化数据库
+
+```bash
+pnpm postinstall
+pnpm db:push
+```
+
+#### 激活管理员面板
+
+Follow https://localhost:3000/setup
+
 ## 社区群组
 
 - Discord: https://discord.gg/AHPQYuZu3m

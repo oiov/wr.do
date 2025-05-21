@@ -2,20 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Domain, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import { PenLine, RefreshCwIcon } from "lucide-react";
 import { toast } from "sonner";
 import useSWR, { useSWRConfig } from "swr";
 
 import { DomainFormData } from "@/lib/dto/domains";
-import { ShortUrlFormData } from "@/lib/dto/short-urls";
-import {
-  cn,
-  expirationTime,
-  fetcher,
-  removeUrlSuffix,
-  timeAgo,
-} from "@/lib/utils";
+import { fetcher, timeAgo } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,7 +16,6 @@ import {
   CardDescription,
   CardHeader,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
@@ -81,10 +73,10 @@ export default function DomainList({ user, action }: DomainListProps) {
     useState<DomainFormData | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [isShowDomainInfo, setShowDomainInfo] = useState(false);
-  const [selectedDomain, setSelectedDomain] = useState<DomainFormData | null>(
-    null,
-  );
+  // const [isShowDomainInfo, setShowDomainInfo] = useState(false);
+  // const [selectedDomain, setSelectedDomain] = useState<DomainFormData | null>(
+  //   null,
+  // );
   const [searchParams, setSearchParams] = useState({
     slug: "",
     target: "",
@@ -169,7 +161,7 @@ export default function DomainList({ user, action }: DomainListProps) {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="mb-2 flex-row items-center gap-2 space-y-2 sm:flex sm:space-y-0">
+          {/* <div className="mb-2 flex-row items-center gap-2 space-y-2 sm:flex sm:space-y-0">
             <div className="relative w-full">
               <Input
                 className="h-8 text-xs md:text-xs"
@@ -192,7 +184,7 @@ export default function DomainList({ user, action }: DomainListProps) {
                 </Button>
               )}
             </div>
-          </div>
+          </div> */}
 
           <Table>
             <TableHeader className="bg-gray-100/50 dark:bg-primary-foreground">
@@ -274,6 +266,7 @@ export default function DomainList({ user, action }: DomainListProps) {
                       </TableCell>
                       <TableCell className="col-span-1 flex items-center gap-1">
                         <Switch
+                          disabled
                           defaultChecked={domain.active}
                           onCheckedChange={(value) =>
                             handleChangeStatus(value, "active", domain)

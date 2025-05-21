@@ -205,6 +205,7 @@ export function DomainForm({
               {...register("active")}
               defaultChecked={initData?.active ?? true}
               onCheckedChange={(value) => setValue("active", value)}
+              disabled
             />
           </div>
         </div>

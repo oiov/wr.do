@@ -204,29 +204,31 @@ export function UrlForm({
                 {isLoading ? (
                   <Skeleton className="h-9 w-1/3 rounded-r-none border-r-0 shadow-inner" />
                 ) : (
-                  shortDomains && (
-                    <Select
-                      onValueChange={(value: string) => {
-                        setValue("prefix", value);
-                      }}
-                      name="prefix"
-                      defaultValue={
-                        initData?.prefix || shortDomains[0].domain_name
-                      }
-                      disabled={type === "edit"}
-                    >
-                      <SelectTrigger className="w-1/3 rounded-r-none border-r-0 shadow-inner">
-                        <SelectValue placeholder="Select a domain" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {shortDomains.map((v) => (
+                  <Select
+                    onValueChange={(value: string) => {
+                      setValue("prefix", value);
+                    }}
+                    name="prefix"
+                    defaultValue={initData?.prefix || "wr.do"}
+                    disabled={type === "edit"}
+                  >
+                    <SelectTrigger className="w-1/3 rounded-r-none border-r-0 shadow-inner">
+                      <SelectValue placeholder="Select a domain" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {shortDomains && shortDomains.length > 0 ? (
+                        shortDomains.map((v) => (
                           <SelectItem key={v.domain_name} value={v.domain_name}>
                             {v.domain_name}
                           </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  )
+                        ))
+                      ) : (
+                        <Button className="w-full" variant="ghost">
+                          No domain
+                        </Button>
+                      )}
+                    </SelectContent>
+                  </Select>
                 )}
                 <Input
                   id="url"

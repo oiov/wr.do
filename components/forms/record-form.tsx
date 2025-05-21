@@ -212,28 +212,32 @@ export function RecordForm({
             {isLoading ? (
               <Skeleton className="h-9 w-full" />
             ) : (
-              recordDomains && (
-                <Select
-                  onValueChange={(value: string) => {
-                    setValue("zone_name", value);
-                    setCurrentZoneName(value);
-                  }}
-                  name="zone_name"
-                  defaultValue={String(initData?.zone_name || "wr.do")}
-                  disabled={type === "edit"}
-                >
-                  <SelectTrigger className="w-full shadow-inner">
-                    <SelectValue placeholder="Select a domain" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {recordDomains.map((v) => (
+              <Select
+                onValueChange={(value: string) => {
+                  setValue("zone_name", value);
+                  setCurrentZoneName(value);
+                }}
+                name="zone_name"
+                defaultValue={String(initData?.zone_name || "wr.do")}
+                disabled={type === "edit"}
+              >
+                <SelectTrigger className="w-full shadow-inner">
+                  <SelectValue placeholder="Select a domain" />
+                </SelectTrigger>
+                <SelectContent>
+                  {recordDomains && recordDomains.length > 0 ? (
+                    recordDomains.map((v) => (
                       <SelectItem key={v.domain_name} value={v.domain_name}>
                         {v.domain_name}
                       </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )
+                    ))
+                  ) : (
+                    <Button className="w-full" variant="ghost">
+                      No domain
+                    </Button>
+                  )}
+                </SelectContent>
+              </Select>
             )}
             <p className="p-1 text-[13px] text-muted-foreground">
               Required. Select a domain.

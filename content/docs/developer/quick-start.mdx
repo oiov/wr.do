@@ -45,17 +45,15 @@ DATABASE_URL=
 
 ### Deploy Postgres
 
-#### Manually install (Recommended)
-
-Via [migration.sql](https://github.com/oiov/wr.do/blob/main/prisma/migrations/20240705091917_init/migration.sql), 
-copy the sql code to the database to initialize the database schema.
-
-#### or
-
 ```bash
 pnpm postinstall
 pnpm db:push
 ```
+
+#### Or manually init 
+
+Via [migration.sql](https://github.com/oiov/wr.do/blob/main/prisma/migrations), 
+copy the sql code to the database to initialize the database schema.
 
 ### Add the AUTH_SECRET Environment Variable
 
@@ -63,7 +61,7 @@ The `AUTH_SECRET` environment variable is used to encrypt tokens and email verif
 You can generate one from https://generate-secret.vercel.app/32:
 
 ```js title=".env"
-AUTH_SECRET=a3e686f39b2a878c6866e4604e6f1b1b
+AUTH_SECRET=10000032bsfasfafk4lkkfsa
 ```
 
 ## 2. Configure Authentication Service
@@ -197,10 +195,14 @@ Follow the steps below:
 - 2. Via [http://localhost:3000/setup](http://localhost:3000/setup), change the account's role to ADMIN.
 - 3. Then follow the **panel guide** to config the system and add the first domain. 
 
-<Callout type="info">
-  After change change the account's role to ADMIN, and then you can refresh the website and access http://localhost:3000/admin.
+![](/_static/docs/setup-1.png)
 
-  <strong>You must add at least one domain to start using short links, email or subdomain management functions.</strong>
+![](/_static/docs/setup-2.png)
+
+<Callout type="info">
+  After change the account's role to ADMIN, then you can refresh the website and access http://localhost:3000/admin.
+
+  <strong>You must add at least one domain to start using short links, email or subdomain management features.</strong>
 </Callout>
 
 ## Q & A
@@ -214,17 +216,6 @@ https://dash.cloudflare.com/[account_id]/[zone_name]/ssl-tls/configuration
 ```
 
 Change the `SSL/TLS Encryption` Mode to `Full` in the Cloudflare dashboard.
-
-### How can I access the admin panel after first deployment?
-
-You need to first register an account and log in, 
-and modify the `role` field of this account to `ADMIN` in the `users` table of the database. 
-Then, refresh the website and access http://localhost:3000/admin.
-
-<Callout type="note">
-Although it may not be convenient to do so, this is currently the fastest way to become an administrator. 
-In future versions, we will implement the function of automatically setting up administrators as soon as possible.
-</Callout>
 
 ### How can I change the team plan quota?
 
