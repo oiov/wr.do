@@ -4,12 +4,11 @@ import { getCurrentUser } from "@/lib/session";
 import { constructMetadata } from "@/lib/utils";
 import { DashboardHeader } from "@/components/dashboard/header";
 
-import UserRecordsList from "../../dashboard/records/record-list";
 import DomainList from "./domain-list";
 
 export const metadata = constructMetadata({
-  title: "DNS Records - WR.DO",
-  description: "List and manage records.",
+  title: "Domains - WR.DO",
+  description: "List and manage domains.",
 });
 
 export default async function DashboardPage() {
