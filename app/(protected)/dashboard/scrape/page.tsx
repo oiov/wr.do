@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 
 import { getCurrentUser } from "@/lib/session";
 import { constructMetadata } from "@/lib/utils";
-import { ScrapeInfoCard } from "@/components/dashboard/dashboard-info-card";
+import { StaticInfoCard } from "@/components/dashboard/dashboard-info-card";
 import { DashboardHeader } from "@/components/dashboard/header";
 
 import DashboardScrapeCharts from "./charts";
@@ -26,22 +26,19 @@ export default async function DashboardPage() {
         linkText="Open API."
       />
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <ScrapeInfoCard
-          userId={user.id}
+        <StaticInfoCard
           title="Url to Screenshot"
           desc="Take a screenshot of the webpage."
           link="/dashboard/scrape/screenshot"
           icon="camera"
         />
-        <ScrapeInfoCard
-          userId={user.id}
+        <StaticInfoCard
           title="Url to Meta Info"
           desc="Extract website metadata."
           link="/dashboard/scrape/meta-info"
           icon="globe"
         />
-        <ScrapeInfoCard
-          userId={user.id}
+        <StaticInfoCard
           title="Url to QR Code"
           desc="Generate QR Code from URL."
           link="/dashboard/scrape/qrcode"
@@ -49,15 +46,13 @@ export default async function DashboardPage() {
         />
       </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <ScrapeInfoCard
-          userId={user.id}
+        <StaticInfoCard
           title="Url to Markdown"
           desc="Convert website content to Markdown format."
           link="/dashboard/scrape/markdown"
           icon="heading1"
         />
-        <ScrapeInfoCard
-          userId={user.id}
+        <StaticInfoCard
           title="Url to Text"
           desc="Extract website text."
           link="/dashboard/scrape/markdown"

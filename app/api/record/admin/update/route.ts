@@ -1,9 +1,8 @@
-import { env } from "@/env.mjs";
 import { updateDNSRecord } from "@/lib/cloudflare";
 import { updateUserRecord } from "@/lib/dto/cloudflare-dns-record";
+import { getDomainsByFeature } from "@/lib/dto/domains";
 import { checkUserStatus } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";
-import { parseZones } from "@/lib/utils";
 
 export async function POST(req: Request) {
   try {
@@ -16,16 +15,11 @@ export async function POST(req: Request) {
       });
     }
 
-    const { CLOUDFLARE_ZONE, CLOUDFLARE_API_KEY, CLOUDFLARE_EMAIL } = env;
-    const zones = parseZones(CLOUDFLARE_ZONE || "[]");
-
-    if (!zones.length || !CLOUDFLARE_API_KEY || !CLOUDFLARE_EMAIL) {
+    const zones = await getDomainsByFeature("enable_dns", true);
+    if (!zones.length) {
       return Response.json(
         "API key, zone configuration, and email are required",
-        {
-          status: 400,
-          statusText: "Missing required configuration",
-        },
+        { status: 401, statusText: "Missing required configuration" },
       );
     }
 
@@ -44,7 +38,7 @@ export async function POST(req: Request) {
     let matchedZone;
 
     for (const zone of zones) {
-      if (record.zone_name === zone.zone_name) {
+      if (record.zone_name === zone.domain_name) {
         matchedZone = zone;
         break;
       }
@@ -61,9 +55,9 @@ export async function POST(req: Request) {
     }
 
     const data = await updateDNSRecord(
-      matchedZone.zone_id,
-      CLOUDFLARE_API_KEY,
-      CLOUDFLARE_EMAIL,
+      matchedZone.cf_zone_id,
+      matchedZone.cf_api_key,
+      matchedZone.cf_email,
       recordId,
       { ...record, name: record_name },
     );
@@ -80,8 +74,8 @@ export async function POST(req: Request) {
 
     const res = await updateUserRecord(userId, {
       record_id: data.result.id,
-      zone_id: matchedZone.zone_id,
-      zone_name: matchedZone.zone_name,
+      zone_id: matchedZone.cf_zone_id,
+      zone_name: matchedZone.domain_name,
       name: data.result.name,
       type: data.result.type,
       content: data.result.content,

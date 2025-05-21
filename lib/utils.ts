@@ -388,25 +388,3 @@ export function extractHost(url: string): string {
   const match = url.match(regex);
   return match ? match[1] : "";
 }
-
-// 解析 CLOUDFLARE_ZONE 环境变量并返回结构化的域名配置
-export function parseZones(raw: string) {
-  let zones;
-
-  try {
-    zones = JSON.parse(raw);
-  } catch (error) {
-    return [];
-  }
-
-  if (!Array.isArray(zones)) {
-    return [];
-  }
-
-  const parsedZones = zones.map((zone) => {
-    const { zone_id, zone_name } = zone;
-    return { zone_id, zone_name };
-  });
-
-  return parsedZones;
-}

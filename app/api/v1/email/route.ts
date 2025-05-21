@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { siteConfig } from "@/config/site";
 import { TeamPlanQuota } from "@/config/team";
 import { checkApiKey } from "@/lib/dto/api-key";
+import { getDomainsByFeature } from "@/lib/dto/domains";
 import { createUserEmail, deleteUserEmailByAddress } from "@/lib/dto/email";
 import { reservedAddressSuffix } from "@/lib/enums";
 import { restrictByTimeRange } from "@/lib/team";
@@ -53,7 +54,12 @@ export async function POST(req: NextRequest) {
       status: 400,
     });
   }
-  if (!siteConfig.emailDomains.includes(suffix)) {
+
+  const zones = await getDomainsByFeature("enable_email", true);
+  if (
+    !zones.length ||
+    !zones.map((zone) => zone.domain_name).includes(suffix)
+  ) {
     return NextResponse.json("Invalid email suffix address", { status: 400 });
   }
 

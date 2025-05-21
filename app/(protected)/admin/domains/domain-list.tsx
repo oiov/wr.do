@@ -1,0 +1,357 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import { User } from "@prisma/client";
+import { PenLine, RefreshCwIcon } from "lucide-react";
+import { toast } from "sonner";
+import useSWR, { useSWRConfig } from "swr";
+
+import { DomainFormData } from "@/lib/dto/domains";
+import { fetcher, timeAgo } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+} from "@/components/ui/card";
+import { Modal } from "@/components/ui/modal";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Switch } from "@/components/ui/switch";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { DomainForm } from "@/components/forms/domain-form";
+import { FormType } from "@/components/forms/record-form";
+import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
+import { Icons } from "@/components/shared/icons";
+import { PaginationWrapper } from "@/components/shared/pagination";
+
+export interface DomainListProps {
+  user: Pick<User, "id" | "name" | "email" | "apiKey" | "role" | "team">;
+  action: string;
+}
+
+function TableColumnSekleton() {
+  return (
+    <TableRow className="grid grid-cols-7 items-center">
+      <TableCell className="col-span-1 flex">
+        <Skeleton className="h-5 w-20" />
+      </TableCell>
+      <TableCell className="col-span-1 flex">
+        <Skeleton className="h-5 w-16" />
+      </TableCell>
+      <TableCell className="col-span-1 flex">
+        <Skeleton className="h-5 w-16" />
+      </TableCell>
+      <TableCell className="col-span-1 flex">
+        <Skeleton className="h-5 w-16" />
+      </TableCell>
+      <TableCell className="col-span-1 flex">
+        <Skeleton className="h-5 w-16" />
+      </TableCell>
+      <TableCell className="col-span-1 hidden sm:flex">
+        <Skeleton className="h-5 w-16" />
+      </TableCell>
+      <TableCell className="col-span-1 flex">
+        <Skeleton className="h-5 w-32" />
+      </TableCell>
+    </TableRow>
+  );
+}
+
+export default function DomainList({ user, action }: DomainListProps) {
+  const [isShowForm, setShowForm] = useState(false);
+  const [formType, setFormType] = useState<FormType>("add");
+  const [currentEditDomain, setCurrentEditDomain] =
+    useState<DomainFormData | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  // const [isShowDomainInfo, setShowDomainInfo] = useState(false);
+  // const [selectedDomain, setSelectedDomain] = useState<DomainFormData | null>(
+  //   null,
+  // );
+  const [searchParams, setSearchParams] = useState({
+    slug: "",
+    target: "",
+    userName: "",
+  });
+
+  const { mutate } = useSWRConfig();
+  const { data, isLoading } = useSWR<{
+    total: number;
+    list: DomainFormData[];
+  }>(
+    `${action}?page=${currentPage}&size=${pageSize}&slug=${searchParams.slug}&userName=${searchParams.userName}&target=${searchParams.target}`,
+    fetcher,
+  );
+
+  const handleRefresh = () => {
+    mutate(
+      `${action}?page=${currentPage}&size=${pageSize}&slug=${searchParams.slug}&userName=${searchParams.userName}&target=${searchParams.target}`,
+      undefined,
+    );
+  };
+
+  const handleChangeStatus = async (
+    checked: boolean,
+    target: string,
+    domain: DomainFormData,
+  ) => {
+    const res = await fetch(action, {
+      method: "PUT",
+      body: JSON.stringify({
+        id: domain.id,
+        enable_short_link:
+          target === "enable_short_link" ? checked : domain.enable_short_link,
+        enable_email: target === "enable_email" ? checked : domain.enable_email,
+        enable_dns: target === "enable_dns" ? checked : domain.enable_dns,
+        active: target === "active" ? checked : domain.active,
+      }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data) {
+        toast.success("Successed!");
+      }
+    } else {
+      toast.error("Activation failed!");
+    }
+  };
+
+  return (
+    <>
+      <Card className="xl:col-span-2">
+        <CardHeader className="flex flex-row items-center">
+          <CardDescription className="text-balance text-lg font-bold">
+            <span>Total Domains:</span>{" "}
+            <span className="font-bold">{data && data.total}</span>
+          </CardDescription>
+
+          <div className="ml-auto flex items-center justify-end gap-3">
+            <Button
+              variant={"outline"}
+              onClick={() => handleRefresh()}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <RefreshCwIcon className="size-4 animate-spin" />
+              ) : (
+                <RefreshCwIcon className="size-4" />
+              )}
+            </Button>
+            <Button
+              className="w-[120px] shrink-0 gap-1"
+              variant="default"
+              onClick={() => {
+                setCurrentEditDomain(null);
+                setShowForm(false);
+                setFormType("add");
+                setShowForm(!isShowForm);
+              }}
+            >
+              Add Domain
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {/* <div className="mb-2 flex-row items-center gap-2 space-y-2 sm:flex sm:space-y-0">
+            <div className="relative w-full">
+              <Input
+                className="h-8 text-xs md:text-xs"
+                placeholder="Search by slug..."
+                value={searchParams.slug}
+                onChange={(e) => {
+                  setSearchParams({
+                    ...searchParams,
+                    slug: e.target.value,
+                  });
+                }}
+              />
+              {searchParams.slug && (
+                <Button
+                  className="absolute right-2 top-1/2 h-6 -translate-y-1/2 rounded-full px-1 text-gray-500 hover:text-gray-700"
+                  onClick={() => setSearchParams({ ...searchParams, slug: "" })}
+                  variant={"ghost"}
+                >
+                  <Icons.close className="size-3" />
+                </Button>
+              )}
+            </div>
+          </div> */}
+
+          <Table>
+            <TableHeader className="bg-gray-100/50 dark:bg-primary-foreground">
+              <TableRow className="grid grid-cols-7 items-center text-xs">
+                <TableHead className="col-span-1 flex items-center font-bold">
+                  Domain
+                </TableHead>
+                <TableHead className="col-span-1 flex items-center text-nowrap font-bold">
+                  Shorten Service
+                </TableHead>
+                <TableHead className="col-span-1 flex items-center text-nowrap font-bold">
+                  Email Service
+                </TableHead>
+                <TableHead className="col-span-1 flex items-center text-nowrap font-bold">
+                  DNS Service
+                </TableHead>
+                <TableHead className="col-span-1 flex items-center text-nowrap font-bold">
+                  Active
+                </TableHead>
+                <TableHead className="col-span-1 hidden items-center font-bold sm:flex">
+                  Updated
+                </TableHead>
+                <TableHead className="col-span-1 flex items-center font-bold">
+                  Actions
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {isLoading ? (
+                <>
+                  <TableColumnSekleton />
+                  <TableColumnSekleton />
+                  <TableColumnSekleton />
+                  <TableColumnSekleton />
+                  <TableColumnSekleton />
+                </>
+              ) : data && data.list && data.list.length ? (
+                data.list.map((domain) => (
+                  <div className="border-b" key={domain.id}>
+                    <TableRow className="grid grid-cols-7 items-center">
+                      <TableCell className="col-span-1 flex items-center gap-1">
+                        <Link
+                          className="overflow-hidden text-ellipsis whitespace-normal text-slate-600 hover:text-blue-400 hover:underline dark:text-slate-400"
+                          href={`https://${domain.domain_name}`}
+                          target="_blank"
+                          prefetch={false}
+                          title={domain.domain_name}
+                        >
+                          {domain.domain_name}
+                        </Link>
+                      </TableCell>
+                      <TableCell className="col-span-1 flex items-center gap-1">
+                        <Switch
+                          defaultChecked={domain.enable_short_link}
+                          onCheckedChange={(value) =>
+                            handleChangeStatus(
+                              value,
+                              "enable_short_link",
+                              domain,
+                            )
+                          }
+                        />
+                      </TableCell>
+                      <TableCell className="col-span-1 flex items-center gap-1">
+                        <Switch
+                          defaultChecked={domain.enable_email}
+                          onCheckedChange={(value) =>
+                            handleChangeStatus(value, "enable_email", domain)
+                          }
+                        />
+                      </TableCell>
+                      <TableCell className="col-span-1 flex items-center gap-1">
+                        <Switch
+                          defaultChecked={domain.enable_dns}
+                          onCheckedChange={(value) =>
+                            handleChangeStatus(value, "enable_dns", domain)
+                          }
+                        />
+                      </TableCell>
+                      <TableCell className="col-span-1 flex items-center gap-1">
+                        <Switch
+                          disabled
+                          defaultChecked={domain.active}
+                          onCheckedChange={(value) =>
+                            handleChangeStatus(value, "active", domain)
+                          }
+                        />
+                      </TableCell>
+                      <TableCell className="col-span-1 hidden truncate sm:flex">
+                        {timeAgo(domain.updatedAt as Date)}
+                      </TableCell>
+                      <TableCell className="col-span-1 flex items-center gap-1">
+                        <Button
+                          className="h-7 px-1 text-xs hover:bg-slate-100 dark:hover:text-primary-foreground"
+                          size="sm"
+                          variant={"outline"}
+                          onClick={() => {
+                            setCurrentEditDomain(domain);
+                            setShowForm(false);
+                            setFormType("edit");
+                            setShowForm(!isShowForm);
+                          }}
+                        >
+                          <p className="hidden sm:block">Edit</p>
+                          <PenLine className="mx-0.5 size-4 sm:ml-1 sm:size-3" />
+                        </Button>
+                        {domain.cf_zone_id &&
+                          domain.cf_api_key &&
+                          domain.cf_email && (
+                            <Button
+                              className="h-7 px-1 text-xs hover:bg-slate-100 dark:hover:text-primary-foreground"
+                              size="sm"
+                              variant="ghost"
+                            >
+                              <Icons.cloudflare className="mx-0.5 size-4" />
+                            </Button>
+                          )}
+                      </TableCell>
+                    </TableRow>
+                    {/* {isShowDomainInfo && selectedDomain?.id === domain.id && (
+                      <DomainInfo domain={domain} />
+                    )} */}
+                  </div>
+                ))
+              ) : (
+                <EmptyPlaceholder>
+                  <EmptyPlaceholder.Icon name="globeLock" />
+                  <EmptyPlaceholder.Title>No Domains</EmptyPlaceholder.Title>
+                  <EmptyPlaceholder.Description>
+                    You don&apos;t have any domains yet. Start creating one.
+                  </EmptyPlaceholder.Description>
+                </EmptyPlaceholder>
+              )}
+            </TableBody>
+            {data && Math.ceil(data.total / pageSize) > 1 && (
+              <PaginationWrapper
+                total={data.total}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                pageSize={pageSize}
+                setPageSize={setPageSize}
+              />
+            )}
+          </Table>
+        </CardContent>
+      </Card>
+
+      {/* form */}
+      <Modal
+        className="max-h-[90vh] overflow-y-auto md:max-w-2xl"
+        showModal={isShowForm}
+        setShowModal={setShowForm}
+      >
+        <DomainForm
+          user={{ id: user.id, name: user.name || "" }}
+          isShowForm={isShowForm}
+          setShowForm={setShowForm}
+          type={formType}
+          initData={currentEditDomain}
+          action={action}
+          onRefresh={handleRefresh}
+        />
+      </Modal>
+    </>
+  );
+}
+
+export function DomainInfo({ domain }: { domain: DomainFormData }) {
+  return <>{domain.domain_name}</>;
+}

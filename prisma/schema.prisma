@@ -247,3 +247,24 @@ model UserSendEmail {
   @@index([createdAt])
   @@map("user_send_emails")
 }
+
+model Domain {
+  id                   String  @id @default(uuid())
+  domain_name          String  @unique
+  enable_short_link    Boolean @default(false)
+  enable_email         Boolean @default(false)
+  enable_dns           Boolean @default(false)
+  cf_zone_id           String?
+  cf_api_key           String?
+  cf_email             String?
+  cf_api_key_encrypted Boolean
+  max_short_links      Int?
+  max_email_forwards   Int?
+  max_dns_records      Int?
+  active               Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@map("domains")
+}

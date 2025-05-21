@@ -33,7 +33,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import StatusDot from "@/components/dashboard/status-dot";
 import { UserForm } from "@/components/forms/user-form";
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
 import { Icons } from "@/components/shared/icons";
