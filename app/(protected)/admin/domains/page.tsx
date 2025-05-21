@@ -22,7 +22,7 @@ export default async function DashboardPage() {
       <DashboardHeader
         heading="Manage&nbsp;&nbsp;Domains"
         text="List and manage domains."
-        link="/docs/domains"
+        link="/docs/developer/cloudflare"
         linkText="domains."
       />
       <DomainList

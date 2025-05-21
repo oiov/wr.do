@@ -180,7 +180,7 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
               )}
             </Button>
             <Button
-              className="w-[120px] shrink-0 gap-1"
+              className="flex shrink-0 gap-1"
               variant="default"
               onClick={() => {
                 setCurrentEditRecord(null);
@@ -189,7 +189,8 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                 setShowForm(!isShowForm);
               }}
             >
-              Add Record
+              <Icons.add className="size-4" />
+              <span className="hidden sm:inline">Add Record</span>
             </Button>
           </div>
         </CardHeader>
@@ -316,7 +317,7 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                 ))
               ) : (
                 <EmptyPlaceholder>
-                  <EmptyPlaceholder.Icon name="globeLock" />
+                  <EmptyPlaceholder.Icon name="globe" />
                   <EmptyPlaceholder.Title>No records</EmptyPlaceholder.Title>
                   <EmptyPlaceholder.Description>
                     You don&apos;t have any record yet. Start creating record.

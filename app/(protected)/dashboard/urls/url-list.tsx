@@ -170,7 +170,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
               )}
             </Button>
             <Button
-              className="w-[120px] shrink-0 gap-1"
+              className="flex shrink-0 gap-1"
               variant="default"
               onClick={() => {
                 setCurrentEditUrl(null);
@@ -179,7 +179,8 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                 setShowForm(!isShowForm);
               }}
             >
-              Add URL
+              <Icons.add className="size-4" />
+              <span className="hidden sm:inline">Add URL</span>
             </Button>
           </div>
         </CardHeader>

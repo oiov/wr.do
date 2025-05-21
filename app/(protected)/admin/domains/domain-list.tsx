@@ -74,10 +74,6 @@ export default function DomainList({ user, action }: DomainListProps) {
     useState<DomainFormData | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  // const [isShowDomainInfo, setShowDomainInfo] = useState(false);
-  // const [selectedDomain, setSelectedDomain] = useState<DomainFormData | null>(
-  //   null,
-  // );
   const [searchParams, setSearchParams] = useState({
     slug: "",
     target: "",
@@ -95,7 +91,7 @@ export default function DomainList({ user, action }: DomainListProps) {
 
   const handleRefresh = () => {
     mutate(
-      `${action}?page=${currentPage}&size=${pageSize}&slug=${searchParams.slug}&userName=${searchParams.userName}&target=${searchParams.target}`,
+      `${action}?page=${currentPage}&size=${pageSize}&target=${searchParams.target}`,
       undefined,
     );
   };
@@ -120,6 +116,7 @@ export default function DomainList({ user, action }: DomainListProps) {
       const data = await res.json();
       if (data) {
         toast.success("Successed!");
+        handleRefresh();
       }
     } else {
       toast.error("Activation failed!");
@@ -129,13 +126,13 @@ export default function DomainList({ user, action }: DomainListProps) {
   return (
     <>
       <Card className="xl:col-span-2">
-        <CardHeader className="flex flex-row items-center">
-          <div className="flex items-center gap-1 text-balance text-lg font-bold">
-            <span>Total Domains:</span>{" "}
+        <CardHeader className="flex flex-row items-center gap-2">
+          <div className="flex items-center gap-1 text-lg font-bold">
+            <span className="text-nowrap">Total Domains:</span>
             {isLoading ? (
               <Skeleton className="h-6 w-16" />
             ) : (
-              <span className="font-bold">{data && data.total}</span>
+              <span>{data && data.total}</span>
             )}
           </div>
 
@@ -152,7 +149,7 @@ export default function DomainList({ user, action }: DomainListProps) {
               )}
             </Button>
             <Button
-              className="w-[120px] shrink-0 gap-1"
+              className="flex shrink-0 gap-1"
               variant="default"
               onClick={() => {
                 setCurrentEditDomain(null);
@@ -161,7 +158,8 @@ export default function DomainList({ user, action }: DomainListProps) {
                 setShowForm(!isShowForm);
               }}
             >
-              Add Domain
+              <Icons.add className="size-4" />
+              <span className="hidden sm:inline">Add Domain</span>
             </Button>
           </div>
         </CardHeader>
