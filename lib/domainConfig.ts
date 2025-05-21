@@ -1,4 +1,4 @@
-import { getAllDomains, invalidateDomainConfigCache } from "@/lib/dto/domains";
+import { getAllDomains } from "@/lib/dto/domains";
 
 export async function getDomainConfig() {
   return await getAllDomains();
@@ -7,7 +7,7 @@ export async function getDomainConfig() {
 export async function getCloudflareCredentials(domain_name: string) {
   try {
     const domains = await getAllDomains();
-    const domain = domains.find((d) => d.domain_name === domain_name);
+    const domain = domains.list.find((d) => d.domain_name === domain_name);
     if (!domain || !domain.cf_api_key || !domain.cf_email) {
       throw new Error(
         `No Cloudflare credentials found for domain: ${domain_name}`,
@@ -32,5 +32,3 @@ export async function getCloudflareCredentials(domain_name: string) {
 function decrypt(encryptedKey: string) {
   return encryptedKey; // Replace with actual decryption logic
 }
-
-export { invalidateDomainConfigCache };

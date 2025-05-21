@@ -4,7 +4,6 @@ import {
   createDomain,
   deleteDomain,
   getAllDomains,
-  invalidateDomainConfigCache,
   updateDomain,
 } from "@/lib/dto/domains";
 import { checkUserStatus } from "@/lib/dto/user";
@@ -19,13 +18,18 @@ export async function GET(req: NextRequest) {
       return Response.json("Unauthorized", { status: 401 });
     }
 
-    // TODO: Add pagination
-    const domains = await getAllDomains();
+    const url = new URL(req.url);
+    const page = url.searchParams.get("page");
+    const size = url.searchParams.get("size");
+    const target = url.searchParams.get("target") || "";
 
-    return Response.json(
-      { list: domains, total: domains.length },
-      { status: 200 },
+    const data = await getAllDomains(
+      Number(page || "1"),
+      Number(size || "10"),
+      target,
     );
+
+    return Response.json(data, { status: 200 });
   } catch (error) {
     console.error("[Error]", error);
     return Response.json(error.message || "Server error", { status: 500 });
@@ -60,8 +64,6 @@ export async function POST(req: NextRequest) {
       max_dns_records: data.max_dns_records,
       active: true,
     });
-
-    invalidateDomainConfigCache();
 
     return Response.json(newDomain, { status: 200 });
   } catch (error) {
@@ -112,8 +114,6 @@ export async function PUT(req: NextRequest) {
       max_dns_records,
     });
 
-    invalidateDomainConfigCache();
-
     return Response.json(updatedDomain, { status: 200 });
   } catch (error) {
     console.error("[Error]", error);
@@ -136,8 +136,6 @@ export async function DELETE(req: NextRequest) {
     }
 
     const deletedDomain = await deleteDomain(domain_name);
-
-    invalidateDomainConfigCache();
 
     return Response.json(deletedDomain, { status: 200 });
   } catch (error) {

@@ -16,6 +16,7 @@ import {
   CardDescription,
   CardHeader,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
@@ -88,7 +89,7 @@ export default function DomainList({ user, action }: DomainListProps) {
     total: number;
     list: DomainFormData[];
   }>(
-    `${action}?page=${currentPage}&size=${pageSize}&slug=${searchParams.slug}&userName=${searchParams.userName}&target=${searchParams.target}`,
+    `${action}?page=${currentPage}&size=${pageSize}&target=${searchParams.target}`,
     fetcher,
   );
 
@@ -129,10 +130,14 @@ export default function DomainList({ user, action }: DomainListProps) {
     <>
       <Card className="xl:col-span-2">
         <CardHeader className="flex flex-row items-center">
-          <CardDescription className="text-balance text-lg font-bold">
+          <div className="flex items-center gap-1 text-balance text-lg font-bold">
             <span>Total Domains:</span>{" "}
-            <span className="font-bold">{data && data.total}</span>
-          </CardDescription>
+            {isLoading ? (
+              <Skeleton className="h-6 w-16" />
+            ) : (
+              <span className="font-bold">{data && data.total}</span>
+            )}
+          </div>
 
           <div className="ml-auto flex items-center justify-end gap-3">
             <Button
@@ -161,30 +166,32 @@ export default function DomainList({ user, action }: DomainListProps) {
           </div>
         </CardHeader>
         <CardContent>
-          {/* <div className="mb-2 flex-row items-center gap-2 space-y-2 sm:flex sm:space-y-0">
+          <div className="mb-2 flex-row items-center gap-2 space-y-2 sm:flex sm:space-y-0">
             <div className="relative w-full">
               <Input
                 className="h-8 text-xs md:text-xs"
-                placeholder="Search by slug..."
-                value={searchParams.slug}
+                placeholder="Search by domain name..."
+                value={searchParams.target}
                 onChange={(e) => {
                   setSearchParams({
                     ...searchParams,
-                    slug: e.target.value,
+                    target: e.target.value,
                   });
                 }}
               />
-              {searchParams.slug && (
+              {searchParams.target && (
                 <Button
                   className="absolute right-2 top-1/2 h-6 -translate-y-1/2 rounded-full px-1 text-gray-500 hover:text-gray-700"
-                  onClick={() => setSearchParams({ ...searchParams, slug: "" })}
+                  onClick={() =>
+                    setSearchParams({ ...searchParams, target: "" })
+                  }
                   variant={"ghost"}
                 >
                   <Icons.close className="size-3" />
                 </Button>
               )}
             </div>
-          </div> */}
+          </div>
 
           <Table>
             <TableHeader className="bg-gray-100/50 dark:bg-primary-foreground">

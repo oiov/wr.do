@@ -5,7 +5,7 @@ import { prisma } from "../db";
 // In-memory cache
 let domainConfigCache: Domain[] | null = null;
 let lastCacheUpdate = 0;
-const CACHE_DURATION = 60 * 1000; // Cache for 1 minute in memory
+const CACHE_DURATION = 60 * 1000;
 
 export const FeatureMap = {
   short: "enable_short_link",
@@ -34,20 +34,33 @@ export interface DomainFormData extends DomainConfig {
   updatedAt: Date;
 }
 
-export async function getAllDomains() {
+export async function getAllDomains(page = 1, size = 10, target: string = "") {
   try {
-    const now = Date.now();
-    if (domainConfigCache && now - lastCacheUpdate < CACHE_DURATION) {
-      return domainConfigCache;
+    let option: any;
+
+    if (target) {
+      option = {
+        domain_name: {
+          contains: target,
+        },
+      };
     }
 
-    const domains = await prisma.domain.findMany({
-      // where: { active: true },
-    });
+    const [total, list] = await prisma.$transaction([
+      prisma.domain.count({
+        where: option,
+      }),
+      prisma.domain.findMany({
+        where: option,
+        skip: (page - 1) * size,
+        take: size,
+        orderBy: {
+          updatedAt: "desc",
+        },
+      }),
+    ]);
 
-    domainConfigCache = domains;
-    lastCacheUpdate = now;
-    return domains;
+    return { list, total };
   } catch (error) {
     throw new Error(`Failed to fetch domain config: ${error.message}`);
   }
@@ -58,11 +71,6 @@ export async function getDomainsByFeature(
   admin: boolean = false,
 ) {
   try {
-    const now = Date.now();
-    if (domainConfigCache && now - lastCacheUpdate < CACHE_DURATION) {
-      return domainConfigCache;
-    }
-
     const domains = await prisma.domain.findMany({
       where: { [feature]: true },
       select: {
@@ -128,9 +136,4 @@ export async function deleteDomain(domain_name: string) {
   } catch (error) {
     throw new Error(`Failed to delete domain`);
   }
-}
-
-export function invalidateDomainConfigCache() {
-  domainConfigCache = null;
-  lastCacheUpdate = 0;
 }
