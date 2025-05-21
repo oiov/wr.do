@@ -379,21 +379,23 @@ export function RecordForm({
               Optional. Time To Live.
             </p>
           </FormSectionColumns>
-          <FormSectionColumns title="Proxy">
-            <div className="flex w-full items-center gap-2">
-              <Label className="sr-only" htmlFor="proxy">
-                Proxy
-              </Label>
-              <Switch
-                id="proxied"
-                {...register("proxied")}
-                onCheckedChange={(value) => setValue("proxied", value)}
-              />
-            </div>
-            <p className="p-1 text-[13px] text-muted-foreground">
-              Proxy status.
-            </p>
-          </FormSectionColumns>
+          {["A", "CNAME"].includes(currentRecordType) && (
+            <FormSectionColumns title="Proxy">
+              <div className="flex w-full items-center gap-2">
+                <Label className="sr-only" htmlFor="proxy">
+                  Proxy
+                </Label>
+                <Switch
+                  id="proxied"
+                  {...register("proxied")}
+                  onCheckedChange={(value) => setValue("proxied", value)}
+                />
+              </div>
+              <p className="p-1 text-[13px] text-muted-foreground">
+                Proxy status.
+              </p>
+            </FormSectionColumns>
+          )}
         </div>
 
         {/* Action buttons */}
