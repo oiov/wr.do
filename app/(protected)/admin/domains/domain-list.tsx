@@ -40,23 +40,23 @@ export interface DomainListProps {
 
 function TableColumnSekleton() {
   return (
-    <TableRow className="grid grid-cols-7 items-center">
+    <TableRow className="grid grid-cols-4 items-center sm:grid-cols-7">
       <TableCell className="col-span-1 flex">
         <Skeleton className="h-5 w-20" />
       </TableCell>
-      <TableCell className="col-span-1 flex">
-        <Skeleton className="h-5 w-16" />
-      </TableCell>
-      <TableCell className="col-span-1 flex">
-        <Skeleton className="h-5 w-16" />
-      </TableCell>
-      <TableCell className="col-span-1 flex">
-        <Skeleton className="h-5 w-16" />
-      </TableCell>
-      <TableCell className="col-span-1 flex">
+      <TableCell className="col-span-1 hidden sm:flex">
         <Skeleton className="h-5 w-16" />
       </TableCell>
       <TableCell className="col-span-1 hidden sm:flex">
+        <Skeleton className="h-5 w-16" />
+      </TableCell>
+      <TableCell className="col-span-1 hidden sm:flex">
+        <Skeleton className="h-5 w-16" />
+      </TableCell>
+      <TableCell className="col-span-1 flex">
+        <Skeleton className="h-5 w-16" />
+      </TableCell>
+      <TableCell className="col-span-1 flex">
         <Skeleton className="h-5 w-16" />
       </TableCell>
       <TableCell className="col-span-1 flex">
@@ -188,23 +188,23 @@ export default function DomainList({ user, action }: DomainListProps) {
 
           <Table>
             <TableHeader className="bg-gray-100/50 dark:bg-primary-foreground">
-              <TableRow className="grid grid-cols-7 items-center text-xs">
+              <TableRow className="grid grid-cols-4 items-center text-xs sm:grid-cols-7">
                 <TableHead className="col-span-1 flex items-center font-bold">
                   Domain
                 </TableHead>
-                <TableHead className="col-span-1 flex items-center text-nowrap font-bold">
+                <TableHead className="col-span-1 hidden items-center text-nowrap font-bold sm:flex">
                   Shorten Service
                 </TableHead>
-                <TableHead className="col-span-1 flex items-center text-nowrap font-bold">
+                <TableHead className="col-span-1 hidden items-center text-nowrap font-bold sm:flex">
                   Email Service
                 </TableHead>
-                <TableHead className="col-span-1 flex items-center text-nowrap font-bold">
+                <TableHead className="col-span-1 hidden items-center text-nowrap font-bold sm:flex">
                   DNS Service
                 </TableHead>
                 <TableHead className="col-span-1 flex items-center text-nowrap font-bold">
                   Active
                 </TableHead>
-                <TableHead className="col-span-1 hidden items-center font-bold sm:flex">
+                <TableHead className="col-span-1 flex items-center font-bold">
                   Updated
                 </TableHead>
                 <TableHead className="col-span-1 flex items-center font-bold">
@@ -224,7 +224,7 @@ export default function DomainList({ user, action }: DomainListProps) {
               ) : data && data.list && data.list.length ? (
                 data.list.map((domain) => (
                   <div className="border-b" key={domain.id}>
-                    <TableRow className="grid grid-cols-7 items-center">
+                    <TableRow className="grid grid-cols-4 items-center sm:grid-cols-7">
                       <TableCell className="col-span-1 flex items-center gap-1">
                         <Link
                           className="overflow-hidden text-ellipsis whitespace-normal text-slate-600 hover:text-blue-400 hover:underline dark:text-slate-400"
@@ -236,7 +236,7 @@ export default function DomainList({ user, action }: DomainListProps) {
                           {domain.domain_name}
                         </Link>
                       </TableCell>
-                      <TableCell className="col-span-1 flex items-center gap-1">
+                      <TableCell className="col-span-1 hidden items-center gap-1 sm:flex">
                         <Switch
                           defaultChecked={domain.enable_short_link}
                           onCheckedChange={(value) =>
@@ -248,7 +248,7 @@ export default function DomainList({ user, action }: DomainListProps) {
                           }
                         />
                       </TableCell>
-                      <TableCell className="col-span-1 flex items-center gap-1">
+                      <TableCell className="col-span-1 hidden items-center gap-1 sm:flex">
                         <Switch
                           defaultChecked={domain.enable_email}
                           onCheckedChange={(value) =>
@@ -256,7 +256,7 @@ export default function DomainList({ user, action }: DomainListProps) {
                           }
                         />
                       </TableCell>
-                      <TableCell className="col-span-1 flex items-center gap-1">
+                      <TableCell className="col-span-1 hidden items-center gap-1 sm:flex">
                         <Switch
                           defaultChecked={domain.enable_dns}
                           onCheckedChange={(value) =>
@@ -273,7 +273,7 @@ export default function DomainList({ user, action }: DomainListProps) {
                           }
                         />
                       </TableCell>
-                      <TableCell className="col-span-1 hidden truncate sm:flex">
+                      <TableCell className="col-span-1 flex items-center truncate">
                         {timeAgo(domain.updatedAt as Date)}
                       </TableCell>
                       <TableCell className="col-span-1 flex items-center gap-1">
