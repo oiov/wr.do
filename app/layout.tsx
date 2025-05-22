@@ -25,8 +25,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <head>
           <script
             defer
-            src="https://umami.oiov.dev/script.js"
-            data-website-id="56549e9d-61df-470d-a1b1-cbf12cfafe9d"
+            src="https://umami.biuxin.com/script.js"
+            data-website-id="e6f3625a-d2a2-48be-a00a-cc227c9355ea"
           ></script>
         </head>
         <body

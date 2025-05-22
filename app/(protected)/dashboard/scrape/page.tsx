@@ -8,7 +8,7 @@ import { DashboardHeader } from "@/components/dashboard/header";
 import DashboardScrapeCharts from "./charts";
 
 export const metadata = constructMetadata({
-  title: "Scraping API - WR.DO",
+  title: "Scraping API - BiuXin",
   description: "Quickly extract valuable structured website data",
 });
 

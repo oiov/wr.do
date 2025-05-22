@@ -21,7 +21,7 @@ import LiveLog from "./urls/live-logs";
 import UserUrlsList from "./urls/url-list";
 
 export const metadata = constructMetadata({
-  title: "Dashboard - WR.DO",
+  title: "Dashboard - ",
   description: "List and manage records.",
 });
 

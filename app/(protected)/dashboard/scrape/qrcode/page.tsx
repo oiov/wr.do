@@ -9,7 +9,7 @@ import QRCodeEditor from "@/components/shared/qr";
 import { CodeLight, QrCodeScraping } from "../scrapes";
 
 export const metadata = constructMetadata({
-  title: "Url to QR Code API - WR.DO",
+  title: "Url to QR Code API - BiuXin",
   description: "Generate QR Code from URL",
 });
 
@@ -34,7 +34,7 @@ export default async function DashboardPage() {
       <CodeLight content={`https://wr.do/api/v1/scraping/qrcode`} />
       <QRCodeEditor
         user={{ id: user.id, apiKey: user.apiKey || "", team: user.team }}
-        url="https://github.com/oiov"
+        url="https://github.com/damizai"
       />
     </>
   );

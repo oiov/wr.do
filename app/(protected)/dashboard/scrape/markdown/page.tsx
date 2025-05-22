@@ -8,7 +8,7 @@ import ApiReference from "@/components/shared/api-reference";
 import { MarkdownScraping, TextScraping } from "../scrapes";
 
 export const metadata = constructMetadata({
-  title: "Url to Markdown API - WR.DO",
+  title: "Url to Markdown API - BiuXin",
   description:
     "Quickly extract website content and convert it to Markdown format",
 });

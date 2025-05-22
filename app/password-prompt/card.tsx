@@ -162,7 +162,7 @@ export default function PasswordPrompt() {
         Powered by{" "}
         <Link
           className="hover:underline"
-          href={"https://wr.do"}
+          href={"https://mail.biuxin.com"}
           target="_blank"
           style={{ fontFamily: "Bahamas Bold" }}
         >

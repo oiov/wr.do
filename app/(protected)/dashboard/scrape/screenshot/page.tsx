@@ -9,7 +9,7 @@ import DashboardScrapeCharts from "../charts";
 import { ScreenshotScraping } from "../scrapes";
 
 export const metadata = constructMetadata({
-  title: "Url to Screenshot API - WR.DO",
+  title: "Url to Screenshot API - BiuXin",
   description:
     "Quickly extract website screenshots. It's free and unlimited to use!",
 });

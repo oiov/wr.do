@@ -57,14 +57,14 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
       <div className="border-t py-4">
         <div className="container flex max-w-6xl items-center justify-between">
           <p className="font-mono text-sm text-muted-foreground/70">
-            &copy; 2024{" "}
+            &copy; 2025{" "}
             <Link
               href={siteConfig.links.github}
               target="_blank"
               rel="noreferrer"
               className="font-medium text-primary underline underline-offset-2"
             >
-              oiov
+              BiuXin
             </Link>
             . <br className="block sm:hidden" /> Built with{" "}
             <Link

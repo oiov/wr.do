@@ -7,7 +7,7 @@ import { DashboardHeader } from "@/components/dashboard/header";
 import DomainList from "./domain-list";
 
 export const metadata = constructMetadata({
-  title: "Domains - WR.DO",
+  title: "Domains - BiuXin",
   description: "List and manage domains.",
 });
 

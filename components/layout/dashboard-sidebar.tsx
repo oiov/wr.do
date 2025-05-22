@@ -164,14 +164,14 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
 
               {isSidebarExpanded && (
                 <p className="mx-3 mt-auto pb-3 pt-6 font-mono text-xs text-muted-foreground/70">
-                  &copy; 2024{" "}
+                  &copy; 2025{" "}
                   <Link
                     href={siteConfig.links.github}
                     target="_blank"
                     rel="noreferrer"
                     className="font-medium text-primary underline underline-offset-2"
                   >
-                    oiov
+                    BiuXin
                   </Link>
                   .{/* <br /> Built with{" "} */}
                   {/* <Link

@@ -8,7 +8,7 @@ import LiveLog from "../../dashboard/urls/live-logs";
 import UserUrlsList from "../../dashboard/urls/url-list";
 
 export const metadata = constructMetadata({
-  title: "Short URLs - WR.DO",
+  title: "Short URLs - BiuXin",
   description: "List and manage records.",
 });
 

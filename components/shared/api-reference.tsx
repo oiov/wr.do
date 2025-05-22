@@ -26,7 +26,7 @@ export default function ApiReference({
       <CardContent>
         <Badge>{badge}</Badge>
         <div className="mt-2">
-          <span style={{ fontFamily: "Bahamas Bold" }}>WR.DO</span> provide a
+          <span style={{ fontFamily: "Bahamas Bold" }}>BiuXin.COM</span> provide a
           api for {target}. View the usage tutorial document{" "}
           <Link
             href={link}
