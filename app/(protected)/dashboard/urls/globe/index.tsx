@@ -487,14 +487,14 @@ export default function Realtime({ isAdmin = false }: { isAdmin?: boolean }) {
   };
 
   return (
-    <div className="relative">
+    <div className="relative w-full">
       <RealtimeTimePicker
         timeRange={timeRange}
         setTimeRange={handleTimeRangeChange}
       />
-      <div className="p-4 sm:relative">
+      <div className="sm:relative sm:p-4">
         <RealtimeChart
-          className="left-0 top-2 z-10 sm:absolute"
+          className="left-0 top-0 z-10 rounded-t-none text-left sm:absolute"
           chartData={chartData}
           totalClicks={stats.totalClicks}
         />
@@ -506,7 +506,7 @@ export default function Realtime({ isAdmin = false }: { isAdmin?: boolean }) {
           setHandleTrafficEvent={(fn) => (handleTrafficEventRef.current = fn)}
         />
         <RealtimeLogs
-          className="right-0 top-2 z-10 sm:absolute"
+          className="-top-9 right-0 z-10 sm:absolute"
           locations={locations}
         />
       </div>
@@ -523,7 +523,7 @@ export function RealtimeTimePicker({
 }) {
   return (
     <Select onValueChange={setTimeRange} name="time range" value={timeRange}>
-      <SelectTrigger className="absolute -top-[46px] right-0 z-20 hidden w-60 sm:inline-flex">
+      <SelectTrigger className="rounded-b-none border-b-0 sm:w-[326px]">
         <SelectValue placeholder="Select a time range" />
       </SelectTrigger>
       <SelectContent>

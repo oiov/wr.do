@@ -2,11 +2,8 @@ import { redirect } from "next/navigation";
 
 import { getCurrentUser } from "@/lib/session";
 import { constructMetadata } from "@/lib/utils";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DashboardHeader } from "@/components/dashboard/header";
 
-import Globe from "../../dashboard/urls/globe";
-import LiveLog from "../../dashboard/urls/live-logs";
 import UserUrlsList from "../../dashboard/urls/url-list";
 
 export const metadata = constructMetadata({
@@ -28,28 +25,16 @@ export default async function DashboardPage() {
         linkText="short urls."
       />
 
-      <Tabs defaultValue="Links">
-        <TabsList>
-          <TabsTrigger value="Links">Links</TabsTrigger>
-          <TabsTrigger value="Realtime">Realtime</TabsTrigger>
-        </TabsList>
-        <TabsContent className="space-y-3" value="Links">
-          <UserUrlsList
-            user={{
-              id: user.id,
-              name: user.name || "",
-              apiKey: user.apiKey || "",
-              role: user.role,
-              team: user.team,
-            }}
-            action="/api/url/admin"
-          />
-          <LiveLog admin={true} />
-        </TabsContent>
-        <TabsContent value="Realtime">
-          <Globe isAdmin />
-        </TabsContent>
-      </Tabs>
+      <UserUrlsList
+        user={{
+          id: user.id,
+          name: user.name || "",
+          apiKey: user.apiKey || "",
+          role: user.role,
+          team: user.team,
+        }}
+        action="/api/url/admin"
+      />
     </>
   );
 }

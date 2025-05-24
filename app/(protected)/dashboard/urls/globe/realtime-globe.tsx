@@ -123,7 +123,7 @@ export default function RealtimeGlobe({
       globe = new Globe(container)
         .width(wrapperWidth)
         .height(wrapperWidth > 728 ? wrapperWidth * 0.9 : wrapperWidth)
-        .globeOffset([0, -100])
+        .globeOffset([0, -130])
         .atmosphereColor("rgba(170, 170, 200, 0.8)")
         .backgroundColor("rgba(0,0,0,0)")
         .globeMaterial(
@@ -295,7 +295,7 @@ export default function RealtimeGlobe({
   }, [cleanup]);
 
   return (
-    <div ref={wrapperRef} className="relative">
+    <div ref={wrapperRef} className="relative max-h-screen overflow-hidden">
       <div
         ref={globeRef}
         className="flex justify-center"
