@@ -40,13 +40,8 @@ export default function RealtimeGlobe({
   const [countries, setCountries] = useState<any>({});
   const [currentLocation, setCurrentLocation] = useState<any>({});
   const [hexAltitude, setHexAltitude] = useState(0.001);
-  const {
-    ref: wrapperRef,
-    width: wrapperWidth,
-    height: wrapperHeight,
-  } = useElementSize();
+  const { ref: wrapperRef, width: wrapperWidth } = useElementSize();
   const [isLoaded, setIsLoaded] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const highest =
     locations.reduce((acc, curr) => Math.max(acc, curr.count), 0) || 1;
@@ -62,8 +57,7 @@ export default function RealtimeGlobe({
       const { MeshPhongMaterial } = await import("three");
       return { Globe, MeshPhongMaterial };
     } catch (err) {
-      console.error("Failed to load Globe.gl:", err);
-      setError("Failed to load Globe.gl library");
+      // console.error("Failed to load Globe.gl:", err);
       return null;
     }
   }, []);
@@ -128,7 +122,8 @@ export default function RealtimeGlobe({
 
       globe = new Globe(container)
         .width(wrapperWidth)
-        .height(wrapperWidth > 728 ? wrapperWidth * 0.8 : wrapperWidth)
+        .height(wrapperWidth)
+        .globeOffset([0, -100])
         .atmosphereColor("rgba(170, 170, 200, 0.8)")
         .backgroundColor("rgba(0,0,0,0)")
         .globeMaterial(
@@ -188,7 +183,6 @@ export default function RealtimeGlobe({
         }
 
         setIsLoaded(true);
-        setError(null);
       });
 
       if (globe.controls()) {
@@ -214,14 +208,7 @@ export default function RealtimeGlobe({
       }
 
       globeInstanceRef.current = globe;
-
-      // console.log("Globe initialization complete");
-    } catch (err) {
-      // console.error("Error initializing globe:", err);
-      setError(
-        err instanceof Error ? err.message : "Failed to initialize globe",
-      );
-    }
+    } catch (err) {}
   }, [
     countries,
     locations,
@@ -308,16 +295,11 @@ export default function RealtimeGlobe({
   }, [cleanup]);
 
   return (
-    <div ref={wrapperRef} className="relative -mt-10">
+    <div ref={wrapperRef} className="relative">
       <div
         ref={globeRef}
         className="flex justify-center"
         style={{
-          // width: `${wrapperWidth}px`,
-          // height:
-          //   wrapperWidth > 728
-          //     ? `${wrapperWidth * 0.8}px`
-          //     : `${wrapperWidth}px`,
           maxWidth: `${wrapperWidth}px`, // 比较疑惑
           minHeight: "100px",
         }}

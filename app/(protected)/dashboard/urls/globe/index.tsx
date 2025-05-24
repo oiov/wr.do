@@ -2,6 +2,18 @@
 
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import {
+  addHours,
+  addMinutes,
+  differenceInDays,
+  differenceInHours,
+  differenceInMinutes,
+  format,
+  startOfDay,
+  startOfHour,
+  startOfMinute,
+} from "date-fns";
+import { create } from "lodash";
 
 import { DAILY_DIMENSION_ENUMS } from "@/lib/enums";
 import {
@@ -25,6 +37,7 @@ export interface Location {
   city?: string;
   country?: string;
   lastUpdate?: Date;
+  createdAt?: Date;
   updatedAt?: Date;
   device?: string;
   browser?: string;
@@ -43,6 +56,7 @@ interface DatabaseLocation {
   country: string;
   lastUpdate: Date;
   updatedAt: Date;
+  createdAt: Date;
   device?: string;
   browser?: string;
   userUrl?: {
@@ -89,60 +103,128 @@ export default function Realtime({ isAdmin = false }: { isAdmin?: boolean }) {
   };
 
   const processChartData = (locations: Location[]): ChartData[] => {
-    const countBySegment: {
-      [key: string]: { count: number; timestamp: number };
-    } = {};
-    const timestamps = locations
-      .filter((loc) => loc.updatedAt)
-      .map((loc) => new Date(loc.updatedAt || "").getTime());
+    // 过滤有效数据
+    const validLocations = locations.filter((loc) => loc.createdAt);
+    if (validLocations.length === 0) return [];
 
-    if (timestamps.length === 0) return [];
+    // 获取时间范围
+    const dates = validLocations.map((loc) => new Date(loc.createdAt!));
+    const minDate = new Date(Math.min(...dates.map((d) => d.getTime())));
+    const maxDate = new Date(Math.max(...dates.map((d) => d.getTime())));
 
-    const minTime = Math.min(...timestamps);
-    const maxTime = Math.max(...timestamps);
-    const timeRangeMinutes = (maxTime - minTime) / (1000 * 60);
-    console.log("[sss]", timeRangeMinutes);
+    // 根据时间跨度选择分组策略
+    const totalMinutes = differenceInMinutes(maxDate, minDate);
+    const totalHours = differenceInHours(maxDate, minDate);
+    const totalDays = differenceInDays(maxDate, minDate);
 
-    let segmentSizeMinutes: number;
-    if (timeRangeMinutes <= 30) segmentSizeMinutes = 0.5;
-    else if (timeRangeMinutes <= 60) segmentSizeMinutes = 2;
-    else if (timeRangeMinutes <= 360) segmentSizeMinutes = 12;
-    else if (timeRangeMinutes <= 720) segmentSizeMinutes = 24;
-    else if (timeRangeMinutes <= 1440) segmentSizeMinutes = 36;
-    else {
-      segmentSizeMinutes = Math.ceil(timeRangeMinutes / 30);
-      segmentSizeMinutes = Math.ceil(segmentSizeMinutes / 60) * 60;
+    let groupByFn: (date: Date) => Date;
+    let formatFn: (date: Date) => string;
+    let intervalFn: (date: Date, interval: number) => Date;
+    let interval: number;
+
+    // 30分钟内：按1分钟分组
+    if (totalMinutes <= 30) {
+      groupByFn = startOfMinute;
+      formatFn = (date) => format(date, "MM-dd HH:mm");
+      intervalFn = addMinutes;
+      interval = 1;
+    } else if (totalMinutes <= 60) {
+      // 1小时内：按2分钟分组
+      groupByFn = (date) => {
+        const minutes = Math.floor(date.getMinutes() / 2) * 2;
+        const grouped = startOfMinute(date);
+        grouped.setMinutes(minutes);
+        return grouped;
+      };
+      formatFn = (date) => format(date, "MM-dd HH:mm");
+      intervalFn = addMinutes;
+      interval = 2;
+    } else if (totalHours <= 2) {
+      // 2小时内：按4分钟分组
+      groupByFn = (date) => {
+        const minutes = Math.floor(date.getMinutes() / 4) * 4;
+        const grouped = startOfMinute(date);
+        grouped.setMinutes(minutes);
+        return grouped;
+      };
+      formatFn = (date) => format(date, "MM-dd HH:mm");
+      intervalFn = addMinutes;
+      interval = 4;
+    } else if (totalHours <= 6) {
+      // 6小时内：按12分钟分组
+      groupByFn = (date) => {
+        const minutes = Math.floor(date.getMinutes() / 12) * 12;
+        const grouped = startOfMinute(date);
+        grouped.setMinutes(minutes);
+        return grouped;
+      };
+      formatFn = (date) => format(date, "MM-dd HH:mm");
+      intervalFn = addMinutes;
+      interval = 12;
+    } else if (totalHours <= 12) {
+      // 12小时内：按24分钟分组
+      groupByFn = (date) => {
+        const minutes = Math.floor(date.getMinutes() / 24) * 24;
+        const grouped = startOfMinute(date);
+        grouped.setMinutes(minutes);
+        return grouped;
+      };
+      formatFn = (date) => format(date, "MM-dd HH:mm");
+      intervalFn = addMinutes;
+      interval = 24;
+    } else if (totalHours <= 24) {
+      // 24小时内：按48分钟分组
+      groupByFn = (date) => {
+        const minutes = Math.floor(date.getMinutes() / 48) * 48;
+        const grouped = startOfMinute(date);
+        grouped.setMinutes(minutes);
+        return grouped;
+      };
+      formatFn = (date) => format(date, "MM-dd HH:mm");
+      intervalFn = addMinutes;
+      interval = 48;
+    } else if (totalDays <= 7) {
+      // 7天内：按天分组
+      groupByFn = startOfDay;
+      formatFn = (date) => format(date, "MM-dd");
+      intervalFn = addHours;
+      interval = 24;
+    } else {
+      // 更长时间：按天分组
+      groupByFn = startOfDay;
+      formatFn = (date) => format(date, "MM-dd");
+      intervalFn = addHours;
+      interval = 24;
     }
 
-    locations.forEach((loc) => {
-      if (!loc.updatedAt) return;
-      const date = new Date(loc.updatedAt);
-      const minutesSinceStart = Math.floor(
-        (date.getTime() - minTime) / (1000 * 60),
-      );
-      const segmentIndex = Math.floor(minutesSinceStart / segmentSizeMinutes);
-      const segmentStartMinutes = segmentIndex * segmentSizeMinutes;
-      const segmentDate = new Date(minTime + segmentStartMinutes * 60 * 1000);
-      const timeKey = `${segmentDate.getHours().toString().padStart(2, "0")}:${segmentDate
-        .getMinutes()
-        .toString()
-        .padStart(2, "0")}`;
+    // 分组聚合数据
+    const groupedData = new Map<string, number>();
 
-      if (!countBySegment[timeKey]) {
-        countBySegment[timeKey] = {
-          count: 0,
-          timestamp: segmentDate.getTime(),
-        };
-      }
-      countBySegment[timeKey].count += loc.count;
+    validLocations.forEach((loc) => {
+      const date = new Date(loc.createdAt!);
+      const groupedDate = groupByFn(date);
+      const key = groupedDate.getTime().toString();
+
+      groupedData.set(key, (groupedData.get(key) || 0) + loc.count);
     });
 
-    return Object.keys(countBySegment)
-      .sort((a, b) => countBySegment[a].timestamp - countBySegment[b].timestamp)
-      .map((time) => ({
-        time,
-        count: countBySegment[time].count,
-      }));
+    // 填充时间间隔，确保连续性
+    const result: ChartData[] = [];
+    const startGroup = groupByFn(minDate);
+    const endGroup = groupByFn(maxDate);
+
+    let current = startGroup;
+    // 过滤掉count为0 的数据
+    while (current <= endGroup) {
+      const key = current.getTime().toString();
+      result.push({
+        time: formatFn(current),
+        count: groupedData.get(key) || 0,
+      });
+      current = intervalFn(current, interval);
+    }
+
+    return result;
   };
 
   const appendLocationData = (
@@ -176,6 +258,7 @@ export default function Realtime({ isAdmin = false }: { isAdmin?: boolean }) {
           browser: item.browser,
           userUrl: item.userUrl,
           updatedAt: item.updatedAt,
+          createdAt: item.createdAt,
         });
       }
       totalNewClicks += clickCount;
@@ -216,7 +299,7 @@ export default function Realtime({ isAdmin = false }: { isAdmin?: boolean }) {
       const result = await response.json();
 
       if (result.error) {
-        console.error("API Error:", result.error);
+        // console.error("API Error:", result.error);
         return;
       }
 

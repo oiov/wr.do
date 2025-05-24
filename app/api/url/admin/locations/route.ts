@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { create } from "lodash";
 
 import { prisma } from "@/lib/db";
 import { checkUserStatus } from "@/lib/dto/user";
@@ -41,7 +42,7 @@ export async function GET(request: NextRequest) {
 
     const whereClause: any = {
       ...(isAdmin === "true" ? {} : { userUrl: { userId: user.id } }),
-      updatedAt: {
+      createdAt: {
         gte: startDate,
         lte: endDate,
       },
@@ -67,6 +68,7 @@ export async function GET(request: NextRequest) {
         country: true,
         device: true,
         browser: true,
+        createdAt: true,
         updatedAt: true,
         userUrl: {
           select: {
@@ -92,6 +94,7 @@ export async function GET(request: NextRequest) {
         country: string;
         lastUpdate: Date;
         updatedAt: Date;
+        createdAt: Date;
         device: string;
         browser: string;
         userUrl: {
@@ -125,6 +128,7 @@ export async function GET(request: NextRequest) {
             country: item.country || "",
             lastUpdate: item.updatedAt,
             updatedAt: item.updatedAt,
+            createdAt: item.createdAt,
             device: item.device || "",
             browser: item.browser || "",
             userUrl: item.userUrl,
@@ -211,7 +215,7 @@ export async function POST(request: NextRequest) {
 
     const whereClause: any = {
       ...(isAdmin ? {} : { userUrl: { userId: user.id } }),
-      updatedAt: {
+      createdAt: {
         gt: sinceDate,
       },
       latitude: {
@@ -232,6 +236,7 @@ export async function POST(request: NextRequest) {
         country: true,
         device: true,
         browser: true,
+        createdAt: true,
         updatedAt: true,
         userUrl: {
           select: {

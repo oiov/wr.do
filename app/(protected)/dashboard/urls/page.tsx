@@ -34,7 +34,7 @@ export default async function DashboardPage() {
           <TabsTrigger value="Realtime">Realtime</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="Links">
+        <TabsContent className="space-y-3" value="Links">
           <UserUrlsList
             user={{
               id: user.id,
