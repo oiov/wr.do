@@ -37,7 +37,6 @@ export const RealtimeChart = ({
   };
 
   // console.log("chartData", chartData);
-  // 过滤掉为count=0的数据，但是最后一个数据为0时不要剔除
   const filteredChartData = chartData.filter((item, index) => {
     return item.count !== 0 || index === chartData.length - 1;
   });
@@ -93,7 +92,7 @@ export const RealtimeChart = ({
         />
         <Bar
           dataKey="count"
-          fill="#36d399"
+          fill="#2d9af9"
           radius={[1, 1, 0, 0]}
           maxBarSize={20}
         />

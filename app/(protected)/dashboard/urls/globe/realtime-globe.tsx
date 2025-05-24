@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useElementSize } from "@mantine/hooks";
 import { scaleSequentialSqrt } from "d3-scale";
-import { interpolateYlOrRd } from "d3-scale-chromatic";
+import { interpolateTurbo } from "d3-scale-chromatic";
 import { GlobeInstance } from "globe.gl";
 import { debounce } from "lodash-es";
 
@@ -45,7 +45,7 @@ export default function RealtimeGlobe({
 
   const highest =
     locations.reduce((acc, curr) => Math.max(acc, curr.count), 0) || 1;
-  const weightColor = scaleSequentialSqrt(interpolateYlOrRd).domain([
+  const weightColor = scaleSequentialSqrt(interpolateTurbo).domain([
     0,
     highest * 15,
   ]);
@@ -122,7 +122,7 @@ export default function RealtimeGlobe({
 
       globe = new Globe(container)
         .width(wrapperWidth)
-        .height(wrapperWidth)
+        .height(wrapperWidth > 728 ? wrapperWidth * 0.9 : wrapperWidth)
         .globeOffset([0, -100])
         .atmosphereColor("rgba(170, 170, 200, 0.8)")
         .backgroundColor("rgba(0,0,0,0)")
@@ -141,7 +141,7 @@ export default function RealtimeGlobe({
           .hexPolygonMargin(0.2)
           .hexPolygonAltitude(() => hexAltitude)
           .hexPolygonColor(
-            () => `rgba(54, 211, 153, ${Math.random() / 1.5 + 0.5})`,
+            () => `rgba(45, 154, 249, ${Math.random() / 1.5 + 0.5})`,
           );
       }
 
