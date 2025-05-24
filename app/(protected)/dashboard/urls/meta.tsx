@@ -11,6 +11,7 @@ import {
   Select,
   SelectContent,
   SelectItem,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -58,23 +59,26 @@ export default function UserUrlMetaInfo({ user, action, urlId }: UrlMetaProps) {
               <SelectValue placeholder="Select a time" />
             </SelectTrigger>
             <SelectContent>
-              {DATE_DIMENSION_ENUMS.map((e) => (
-                <SelectItem
-                  className=""
-                  disabled={
-                    e.key > TeamPlanQuota[user.team!].SL_AnalyticsRetention
-                  }
-                  key={e.value}
-                  value={e.value}
-                >
-                  <span className="flex items-center gap-1">
-                    {e.label}
-                    {e.key >
-                      TeamPlanQuota[user.team!].SL_AnalyticsRetention && (
-                      <Icons.crown className="size-3" />
-                    )}
-                  </span>
-                </SelectItem>
+              {DATE_DIMENSION_ENUMS.map((e, i) => (
+                <div key={e.value}>
+                  <SelectItem
+                    disabled={
+                      e.key > TeamPlanQuota[user.team!].SL_AnalyticsRetention
+                    }
+                    value={e.value}
+                  >
+                    <span className="flex items-center gap-1">
+                      {e.label}
+                      {e.key >
+                        TeamPlanQuota[user.team!].SL_AnalyticsRetention && (
+                        <Icons.crown className="size-3" />
+                      )}
+                    </span>
+                  </SelectItem>
+                  {i % 2 === 0 && i !== DATE_DIMENSION_ENUMS.length - 1 && (
+                    <SelectSeparator />
+                  )}
+                </div>
               ))}
             </SelectContent>
           </Select>

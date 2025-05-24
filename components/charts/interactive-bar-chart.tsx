@@ -26,6 +26,7 @@ import {
   Select,
   SelectContent,
   SelectItem,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
@@ -122,10 +123,13 @@ export function InteractiveBarChart() {
               <SelectValue placeholder="Select a time" />
             </SelectTrigger>
             <SelectContent>
-              {DATE_DIMENSION_ENUMS.map((e) => (
-                <SelectItem key={e.value} value={e.value}>
-                  {e.label}
-                </SelectItem>
+              {DATE_DIMENSION_ENUMS.map((e, i) => (
+                <div key={e.value}>
+                  <SelectItem value={e.value}>{e.label}</SelectItem>
+                  {i % 2 === 0 && i !== DATE_DIMENSION_ENUMS.length - 1 && (
+                    <SelectSeparator />
+                  )}
+                </div>
               ))}
             </SelectContent>
           </Select>

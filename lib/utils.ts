@@ -88,6 +88,18 @@ export function formatDate(input: string | number): string {
   });
 }
 
+export function formatTime(input: string | number): string {
+  const date = new Date(input);
+
+  const locale = navigator.language || "en-US";
+
+  return date.toLocaleTimeString(locale, {
+    second: "numeric",
+    minute: "numeric",
+    hour: "numeric",
+  });
+}
+
 export function absoluteUrl(path: string) {
   return `${env.NEXT_PUBLIC_APP_URL}${path}`;
 }

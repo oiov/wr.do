@@ -2,8 +2,10 @@ import { redirect } from "next/navigation";
 
 import { getCurrentUser } from "@/lib/session";
 import { constructMetadata } from "@/lib/utils";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DashboardHeader } from "@/components/dashboard/header";
 
+import Globe from "../../dashboard/urls/globe";
 import LiveLog from "../../dashboard/urls/live-logs";
 import UserUrlsList from "../../dashboard/urls/url-list";
 
@@ -25,17 +27,29 @@ export default async function DashboardPage() {
         link="/docs/short-urls"
         linkText="short urls."
       />
-      <UserUrlsList
-        user={{
-          id: user.id,
-          name: user.name || "",
-          apiKey: user.apiKey || "",
-          role: user.role,
-          team: user.team,
-        }}
-        action="/api/url/admin"
-      />
-      <LiveLog admin={true} />
+
+      <Tabs defaultValue="Links">
+        <TabsList>
+          <TabsTrigger value="Links">Links</TabsTrigger>
+          <TabsTrigger value="Realtime">Realtime</TabsTrigger>
+        </TabsList>
+        <TabsContent value="Links">
+          <UserUrlsList
+            user={{
+              id: user.id,
+              name: user.name || "",
+              apiKey: user.apiKey || "",
+              role: user.role,
+              team: user.team,
+            }}
+            action="/api/url/admin"
+          />
+          <LiveLog admin={true} />
+        </TabsContent>
+        <TabsContent value="Realtime">
+          <Globe isAdmin />
+        </TabsContent>
+      </Tabs>
     </>
   );
 }
