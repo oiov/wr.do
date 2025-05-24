@@ -198,13 +198,13 @@ export default function DomainList({ user, action }: DomainListProps) {
                   Domain
                 </TableHead>
                 <TableHead className="col-span-1 hidden items-center text-nowrap font-bold sm:flex">
-                  Shorten Service
+                  Shorten
                 </TableHead>
                 <TableHead className="col-span-1 hidden items-center text-nowrap font-bold sm:flex">
-                  Email Service
+                  Email
                 </TableHead>
                 <TableHead className="col-span-1 hidden items-center text-nowrap font-bold sm:flex">
-                  DNS Service
+                  Subdomain
                 </TableHead>
                 <TableHead className="col-span-1 flex items-center text-nowrap font-bold">
                   Active

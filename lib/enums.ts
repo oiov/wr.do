@@ -312,3 +312,13 @@ export const DATE_DIMENSION_ENUMS = [
   { value: "365d", label: "Last 1 Year", key: 365 },
   { value: "All", label: "All the time", key: 1000 },
 ] as const;
+
+export const DAILY_DIMENSION_ENUMS = [
+  { value: "5min", label: "Last 5 Minutes", key: 5 },
+  { value: "10min", label: "Last 10 Minutes", key: 10 },
+  { value: "30min", label: "Last 30 Minutes", key: 30 },
+  { value: "1h", label: "Last 1 Hour", key: 60 },
+  { value: "6h", label: "Last 6 Hours", key: 360 },
+  { value: "12h", label: "Last 12 Hours", key: 720 },
+  { value: "24h", label: "Last 24 Hours", key: 1440 },
+] as const;

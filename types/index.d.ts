@@ -47,3 +47,5 @@ export type DocsConfig = {
   mainNav: MainNavItem[];
   sidebarNav: SidebarNavItem[];
 };
+
+// declare module "globe.gl";

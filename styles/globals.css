@@ -88,6 +88,16 @@
   }
 }
 
+.globe-tooltip {
+  background: rgba(0, 0, 0, 0.8) !important;
+  color: white !important;
+  padding: 8px !important;
+  border-radius: 4px !important;
+  font-size: 12px !important;
+  z-index: 1000 !important;
+  pointer-events: none !important;
+}
+
 .text-gradient_indigo-purple {
   background: linear-gradient(90deg, #6366f1 0%, rgb(168 85 247 / 0.8) 100%);
   -webkit-background-clip: text;
