@@ -20,8 +20,8 @@ WORKDIR /app
 RUN npm install -g pnpm
 
 ARG NEXT_PUBLIC_APP_URL="http://localhost:3000"
-ARG RESEND_API_KEY=""
-ARG DATABASE_URL=""
+ARG RESEND_API_KEY="re_123"
+ARG DATABASE_URL="postgres://postgres:postgres@postgres:5432/wrdo"
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
