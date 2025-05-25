@@ -18,6 +18,9 @@
     "email": "email dev --dir emails --port 3333",
     "remove-content": "node ./setup.mjs"
   },
+  "prisma": {
+    "schema": "./prisma/schema.prisma"
+  },
   "dependencies": {
     "@auth/prisma-adapter": "^2.4.1",
     "@hookform/resolvers": "^3.9.0",

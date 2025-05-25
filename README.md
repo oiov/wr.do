@@ -46,13 +46,15 @@ See docs about [email worker](https://wr.do/docs/developer/cloudflare-email-work
 
 ## Local development
 
-copy `.env.example` to `.env` and fill in the necessary environment variables.
-
 ```bash
 git clone https://github.com/oiov/wr.do
 cd wr.do
 pnpm install
+```
 
+copy `.env.example` to `.env` and fill in the necessary environment variables.
+
+```bash
 # run on localhost:3000
 pnpm dev
 ```
@@ -67,6 +69,37 @@ pnpm db:push
 #### Setup Admin Panel
 
 Follow https://localhost:3000/setup
+
+### Start on Docker 
+
+#### Dockerfile 
+
+```bash
+git clone https://github.com/oiov/wr.do
+cd wr.do
+```
+
+Fill in the environment variables in the `Dockerfile`, then build and run.
+
+```bash
+# Build image
+docker build -t wrdo .
+# Run 
+docker run -p 3000:3000 wrdo
+```
+
+#### Docker Compose
+
+```bash
+git clone https://github.com/oiov/wr.do
+cd wr.do
+```
+
+Fill in the environment variables in the `env` file, then: 
+
+```bash
+docker compose up -d
+```
 
 ## Legitimacy review
 
