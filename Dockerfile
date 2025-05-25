@@ -16,7 +16,7 @@ COPY . .
 
 RUN pnpm config set registry https://registry.npmmirror.com
 
-COPY prisma ./prisma
+# COPY prisma ./prisma
 COPY package.json pnpm-lock.yaml* .npmrc* ./
 RUN pnpm i --frozen-lockfile
 
