@@ -1,13 +1,11 @@
-version: "3.8"
-
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        RESEND_API_KEY: ${RESEND_API_KEY}
-    # image: ghcr.io/oiov/wr.do/wrdo:${TAG:-latest}
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    # args:
+    #   RESEND_API_KEY: ${RESEND_API_KEY}
+    image: ghcr.io/oiov/wr.do/wrdo:${TAG:-latest}
     container_name: wrdo
     ports:
       - "3000:3000"
@@ -36,7 +34,6 @@ services:
     networks:
       - wrdo-network
     restart: unless-stopped
-    # command: ["bash", "-c", "pnpm db:push && node server.js"]
 
   # If you want to use local database, uncomment the following line
   # postgres:

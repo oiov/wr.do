@@ -1,4 +1,4 @@
-FROM node:22-alpine AS base
+FROM node:20-alpine AS base
 
 FROM base AS deps
 RUN apk add --no-cache libc6-compat
@@ -19,21 +19,9 @@ WORKDIR /app
 
 RUN npm install -g pnpm
 
-# ARG NEXT_PUBLIC_APP_URL="http://localhost:3000"
-# ARG RESEND_API_KEY="re_"
-# ARG DATABASE_URL=""
-# ARG NEXT_PUBLIC_OPEN_SIGNUP="1"
-# ARG GITHUB_TOKEN=""
-# ARG AUTH_SECRET=""
-# ARG GOOGLE_CLIENT_ID=""
-# ARG GOOGLE_CLIENT_SECRET=""
-# ARG GITHUB_ID=""
-# ARG GITHUB_SECRET=""
-# ARG LinuxDo_CLIENT_ID=""
-# ARG LinuxDo_CLIENT_SECRET=""
-# ARG NEXT_PUBLIC_EMAIL_R2_DOMAIN=""
-# ARG NEXT_PUBLIC_GOOGLE_ID=""
-# ARG SCREENSHOTONE_BASE_URL=""
+ARG NEXT_PUBLIC_APP_URL="http://localhost:3000"
+ARG RESEND_API_KEY=""
+ARG DATABASE_URL=""
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .

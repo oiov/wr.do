@@ -1,69 +1,64 @@
-name: Build and Push Docker Image
+name: Build and Push Docker Image to GHCR
 
 on:
   push:
     branches:
-      - '**'
-  workflow_dispatch:
-    inputs:
-      version:
-        description: '镜像版本号'
-        required: false
-        default: 'latest'
-      environment:
-        description: '部署环境'
-        required: false
-        default: 'production'
-        type: choice
-        options:
-        - production
-        - staging
-        - development
+      - main
+    tags:
+      - 'v*.*.*' 
+  pull_request:
+    branches:
+      - main
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}/wrdo
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
-    
+    permissions:
+      contents: read
+      packages: write
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      
-      # 设置 QEMU 以支持多平台构建
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-      
-      # 设置 Docker Buildx
+      # 检出代码
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 设置 Docker Buildx（支持多平台构建）
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
+
+      # 登录到 GitHub Container Registry
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
         with:
-          driver-opts: |
-            image=moby/buildkit:master
-            network=host
-      
-      - name: Login to DockerHub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      
-      - name: Extract metadata
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # 提取 Docker 镜像元数据（标签、版本等）
+      - name: Extract Docker metadata
         id: meta
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
-          images: oiovwr/wrdo
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=${{ github.event.inputs.version || 'latest' }}
-            type=raw,value=latest
-      
-      - name: Build and push
-        uses: docker/build-push-action@v4
+            type=sha,format=short  
+            type=ref,event=branch,prefix=  
+            type=ref,event=tag 
+
+      # 构建并推送 Docker 镜像
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
         with:
           context: .
-          push: true
-          platforms: linux/amd64,linux/arm64
+          file: ./Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}  # 仅在 push 时推送
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha,scope=${{ github.workflow }}-${{ github.ref }}
-          cache-to: type=gha,mode=max,scope=${{ github.workflow }}-${{ github.ref }}
           build-args: |
             ENVIRONMENT=${{ github.event.inputs.environment || 'production' }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
