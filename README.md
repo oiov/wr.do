@@ -53,6 +53,7 @@ Remember to fill in the necessary environment variables.
 Fill in the environment variables in the `docker-compose.yml`, then: 
 
 ```bash
+# Image: ghcr.io/oiov/wr.do/wrdo
 docker compose up -d
 ```
 

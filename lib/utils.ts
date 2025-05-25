@@ -94,7 +94,7 @@ export function formatTime(input: string | number): string {
   const locale = navigator.language || "en-US";
 
   return date.toLocaleTimeString(locale, {
-    second: "numeric",
+    // second: "numeric",
     minute: "numeric",
     hour: "numeric",
   });

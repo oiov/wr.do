@@ -1,54 +1,63 @@
+version: "3.8"
+
 services:
-  wrdo:
+  app:
     build:
       context: .
       dockerfile: Dockerfile
-    image: ghcr.io/oiov/wr.do/wrdo:${TAG:-latest}
+      args:
+        RESEND_API_KEY: ${RESEND_API_KEY}
+    # image: ghcr.io/oiov/wr.do/wrdo:${TAG:-latest}
     container_name: wrdo
     ports:
       - "3000:3000"
     environment:
-      - NODE_ENV=production
-      - IS_DOCKER=true
-      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/wrdo
-      - AUTH_SECRET=${AUTH_SECRET:-your-auth-secret}
-      - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
-      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-}
-      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET:-}
-      - GITHUB_ID=${GITHUB_ID:-}
-      - GITHUB_SECRET=${GITHUB_SECRET:-}
-      - LinuxDo_CLIENT_ID=${LinuxDo_CLIENT_ID:-}
-      - LinuxDo_CLIENT_SECRET=${LinuxDo_CLIENT_SECRET:-}
-      - RESEND_API_KEY=${RESEND_API_KEY:-}
-      - NEXT_PUBLIC_EMAIL_R2_DOMAIN=${NEXT_PUBLIC_EMAIL_R2_DOMAIN:-}
-      - NEXT_PUBLIC_OPEN_SIGNUP=${NEXT_PUBLIC_OPEN_SIGNUP:-1}
-      - NEXT_PUBLIC_GOOGLE_ID=${NEXT_PUBLIC_GOOGLE_ID:-}
-      - SCREENSHOTONE_BASE_URL=${SCREENSHOTONE_BASE_URL:-}
-      - GITHUB_TOKEN=${GITHUB_TOKEN:-}
-    depends_on:
-      - postgres
+      NODE_ENV: production
+      DATABASE_URL: ${DATABASE_URL}
+      # If you want to use local database, uncomment the following line
+      # DATABASE_URL: postgres://postgres:postgres@postgres:5432/wrdo
+      AUTH_SECRET: ${AUTH_SECRET:-your-auth-secret}
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL}
+      NEXT_PUBLIC_OPEN_SIGNUP: ${NEXT_PUBLIC_OPEN_SIGNUP}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      GITHUB_ID: ${GITHUB_ID}
+      GITHUB_SECRET: ${GITHUB_SECRET}
+      LinuxDo_CLIENT_ID: ${LinuxDo_CLIENT_ID}
+      LinuxDo_CLIENT_SECRET: ${LinuxDo_CLIENT_SECRET}
+      RESEND_API_KEY: ${RESEND_API_KEY}
+      NEXT_PUBLIC_EMAIL_R2_DOMAIN: ${NEXT_PUBLIC_EMAIL_R2_DOMAIN}
+      NEXT_PUBLIC_GOOGLE_ID: ${NEXT_PUBLIC_GOOGLE_ID}
+      SCREENSHOTONE_BASE_URL: ${SCREENSHOTONE_BASE_URL}
+      GITHUB_TOKEN: ${GITHUB_TOKEN}
+    # If you want to use local database, uncomment the following line
+    # depends_on:
+    #   - postgres
     networks:
       - wrdo-network
     restart: unless-stopped
+    # command: ["bash", "-c", "pnpm db:push && node server.js"]
 
-  postgres:
-    image: postgres:16-alpine
-    container_name: postgres
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=wrdo
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    networks:
-      - wrdo-network
-    restart: unless-stopped
+  # If you want to use local database, uncomment the following line
+  # postgres:
+  #   image: postgres:16-alpine
+  #   container_name: postgres
+  #   environment:
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_PASSWORD=postgres
+  #     - POSTGRES_DB=wrdo
+  #   volumes:
+  #     - postgres-data:/var/lib/postgresql/data
+  #   ports:
+  #     - "5432:5432"
+  #   networks:
+  #     - wrdo-network
+  #   restart: unless-stopped
 
-volumes:
-  postgres-data:
-    name: wrdo-postgres-data
+# If you want to use local database, uncomment the following line
+# volumes:
+#   postgres-data:
+#     name: wrdo-postgres-data
 
 networks:
   wrdo-network:
