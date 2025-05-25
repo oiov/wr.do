@@ -27,10 +27,6 @@
 
 ## Quick Start
 
-See usage docs about [guide](https://wr.do/docs/quick-start) for quick start.
-
-## Self-hosted Tutorial
-
 See step by step installation tutorial at [Quick Start for Developer](https://wr.do/docs/developer/quick-start).
 
 ### Requirements
@@ -43,6 +39,22 @@ See more docs about [developer](https://wr.do/docs/developer/installation).
 ### Email worker
 
 See docs about [email worker](https://wr.do/docs/developer/cloudflare-email-worker).
+
+## Self-hosted
+
+### Deploy with Vercel
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/oiov/wr.do.git&project-name=wrdo&env=DATABASE_URL&env=AUTH_SECRET&env=RESEND_API_KEY&env=NEXT_PUBLIC_EMAIL_R2_DOMAIN&env=NEXT_PUBLIC_OPEN_SIGNUP&env=GITHUB_TOKEN)
+
+Remember to fill in the necessary environment variables.
+
+### Deploy with Docker Compose
+
+Fill in the environment variables in the `docker-compose.yml`, then: 
+
+```bash
+docker compose up -d
+```
 
 ## Local development
 
@@ -88,18 +100,6 @@ docker build -t wrdo .
 docker run -p 3000:3000 wrdo
 ```
 
-#### Docker Compose
-
-```bash
-git clone https://github.com/oiov/wr.do
-cd wr.do
-```
-
-Fill in the environment variables in the `env` file, then: 
-
-```bash
-docker compose up -d
-```
 
 ## Legitimacy review
 

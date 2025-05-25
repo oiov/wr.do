@@ -10,27 +10,19 @@ interface GitHubResponse {
 }
 
 async function getGitHubStars(owner: string, repo: string) {
-  const githubToken = process.env.GITHUB_TOKEN;
-
-  if (!githubToken) {
-    throw new Error("GitHub token is not configured");
-  }
-
-  const res = await fetch(`https://api.github.com/repos/${owner}/${repo}`, {
-    headers: {
-      Accept: "application/vnd.github.v3+json",
-      Authorization: `token ${githubToken}`,
-      "User-Agent": "NextJS-App",
+  const res = await fetch(
+    `https://wr.do/api/github?owner=${owner}&repo=${repo}`,
+    {
+      next: { revalidate: 3600 },
     },
-    next: { revalidate: 3600 },
-  });
+  );
 
   if (!res.ok) {
     throw new Error("Failed to fetch GitHub stars");
   }
 
-  const data: GitHubResponse = await res.json();
-  return data.stargazers_count;
+  const data = await res.json();
+  return data.stars;
 }
 
 interface Props {
