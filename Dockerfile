@@ -3,7 +3,7 @@ FROM node:22-alpine AS base
 FROM base AS deps
 
 RUN apk update && apk upgrade
-RUN apk add --no-cache openssl3-compat
+RUN apk add --no-cache openssl3
 RUN apk add --no-cache libc6-compat
 
 WORKDIR /app
