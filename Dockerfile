@@ -11,7 +11,7 @@ COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc* ./
 RUN pnpm config set registry https://registry.npmmirror.com
 
 COPY prisma ./prisma
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc* ./
+COPY package.json pnpm-lock.yaml* .npmrc* ./
 RUN pnpm i --frozen-lockfile
 
 FROM base AS builder
