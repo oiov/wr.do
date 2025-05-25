@@ -1,9 +1,8 @@
-FROM node:22-alpine AS base
+FROM node:20-alpine AS base
 
 FROM base AS deps
 
-RUN apk update && apk upgrade
-RUN apk add --no-cache openssl3
+RUN apk add --no-cache openssl
 RUN apk add --no-cache libc6-compat
 
 WORKDIR /app
@@ -25,6 +24,8 @@ RUN pnpm i --frozen-lockfile
 FROM base AS builder
 WORKDIR /app
 
+RUN apk add --no-cache openssl
+
 RUN npm install -g pnpm
 
 ARG NEXT_PUBLIC_APP_URL="http://localhost:3000"
@@ -41,7 +42,10 @@ COPY . .
 RUN pnpm run build
 
 FROM base AS runner
+
 WORKDIR /app
+
+RUN apk add --no-cache openssl
 
 RUN npm install -g pnpm
 
