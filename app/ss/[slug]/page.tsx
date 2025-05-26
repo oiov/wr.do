@@ -5,15 +5,6 @@ import UAParser from "ua-parser-js";
 import { siteConfig } from "@/config/site";
 import { extractRealIP, getClientGeolocation } from "@/lib/geo";
 
-export const redirectMap = {
-  "Missing[0000]": "/docs/short-urls#missing-links",
-  "Expired[0001]": "/docs/short-urls#expired-links",
-  "Disabled[0002]": "/docs/short-urls#disabled-links",
-  "Error[0003]": "/docs/short-urls#error-links",
-  "PasswordRequired[0004]": "/password-prompt?error=0&slug=",
-  "IncorrectPassword[0005]": "/password-prompt?error=1&slug=",
-};
-
 interface PageProps {
   params: {
     slug: string;
