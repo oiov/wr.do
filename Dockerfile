@@ -23,7 +23,7 @@ RUN apk add --no-cache openssl
 
 RUN npm install -g pnpm
 
-ARG NEXT_PUBLIC_APP_URL="http://localhost:3000"
+ARG NEXT_PUBLIC_APP_URL="http://localhost:3001"
 ARG RESEND_API_KEY="re_your_resend_api_key"
 ARG DATABASE_URL="postgres://postgres:postgres@postgres:5432/wrdo"
 
