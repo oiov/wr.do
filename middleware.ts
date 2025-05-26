@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { ipAddress } from "@vercel/functions";
 import { auth } from "auth";
 import { NextAuthRequest } from "next-auth/lib";
 
@@ -8,6 +9,8 @@ import { extractRealIP, getGeolocation, getUserAgent } from "./lib/geo";
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
+
+const isVercel = process.env.VERCEL;
 
 const redirectMap = {
   "Missing[0000]": "/docs/short-urls#missing-links",
@@ -26,8 +29,8 @@ async function handleShortUrl(req: NextAuthRequest) {
     return NextResponse.redirect(`${siteConfig.url}/docs/short-urls`, 302);
 
   const headers = req.headers;
-  const ip = extractRealIP(headers);
   const geo = await getGeolocation(req);
+  const ip = isVercel ? ipAddress(req) : geo?.ip;
   const ua = getUserAgent(req);
 
   const url = new URL(req.url);

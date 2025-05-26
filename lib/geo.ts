@@ -1,11 +1,17 @@
 import { userAgent } from "next/server";
-import { Geo, geolocation } from "@vercel/functions";
+import { Geo, geolocation, ipAddress } from "@vercel/functions";
 import { NextAuthRequest } from "next-auth/lib";
 import UAParser from "ua-parser-js";
 
+interface GeoLocation extends Geo {
+  ip?: string;
+}
+
 const isVercel = process.env.VERCEL;
 
-export async function getGeolocation(req: NextAuthRequest) {
+export async function getGeolocation(
+  req: NextAuthRequest,
+): Promise<GeoLocation | null> {
   console.log("[Runtime Env]", isVercel ? "Vercel" : "Other");
 
   if (isVercel) {
@@ -33,7 +39,7 @@ export function getUserAgent(req: NextAuthRequest) {
   }
 }
 
-export async function getClientGeolocation(): Promise<Geo | null> {
+export async function getClientGeolocation(): Promise<GeoLocation | null> {
   const response = await fetch("https://ip.wr.do/api", {
     signal: AbortSignal.timeout(3000),
   });
@@ -42,7 +48,6 @@ export async function getClientGeolocation(): Promise<Geo | null> {
 }
 
 export function extractRealIP(headers: Headers): string {
-  // 按优先级检查不同的IP头
   const ipHeaders = [
     "X-Forwarded-For",
     "X-Real-IP",
@@ -54,7 +59,6 @@ export function extractRealIP(headers: Headers): string {
   for (const header of ipHeaders) {
     const value = headers.get(header);
     if (value) {
-      // X-Forwarded-For 可能包含多个IP，取第一个
       const ip = value.split(",")[0].trim();
       if (isValidIP(ip)) {
         return ip;
@@ -77,8 +81,8 @@ function isValidIP(ip: string): boolean {
 
 export async function getIpInfo(req) {
   const headers = req.headers;
-  const ip = extractRealIP(headers);
   const geo = await getGeolocation(req);
+  const ip = isVercel ? ipAddress(req) : geo?.ip;
   const ua = getUserAgent(req);
 
   const userLanguage =
@@ -86,7 +90,7 @@ export async function getIpInfo(req) {
 
   return {
     referer: headers.get("referer") || "(None)",
-    ip,
+    ip: isVercel ? ip : geo?.ip,
     city: geo?.city || "",
     region: geo?.region || "",
     country: geo?.country || "",
