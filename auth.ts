@@ -22,7 +22,7 @@ export const {
   handlers: { GET, POST },
   auth,
 } = NextAuth({
-  trustHost: true,
+  trustHost: true, // TODO: Test with docker
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
   pages: {

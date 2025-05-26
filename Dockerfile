@@ -9,17 +9,12 @@ WORKDIR /app
 
 RUN npm install -g pnpm
 
-# COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc*  ./
-# 复制根目录下的所有文件
 COPY . .
 
 RUN pnpm config set registry https://registry.npmmirror.com
 
-# COPY prisma ./prisma
-COPY package.json pnpm-lock.yaml* .npmrc* ./
+# COPY package.json pnpm-lock.yaml* .npmrc* ./
 RUN pnpm i --frozen-lockfile
-
-# RUN pnpm postinstall
 
 FROM base AS builder
 WORKDIR /app
@@ -60,9 +55,9 @@ COPY --from=builder /app/prisma ./prisma
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+ENV NODE_OPTIONS="--network-family-autoselection-attempt-timeout=500"
 EXPOSE 3000
 
 ENV PORT=3000
 
-# ENV HOSTNAME="0.0.0.0"
 CMD ["node", "server.js"]
