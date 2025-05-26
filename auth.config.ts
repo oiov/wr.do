@@ -54,7 +54,10 @@ export default {
             from: provider.from || "no-reply@wr.do",
             to: [email],
             subject: "Verify your email address",
-            html: getVerificationEmailHtml({ url, appName: siteConfig.name }),
+            html: getVerificationEmailHtml({
+              url: siteConfig.url,
+              appName: siteConfig.name,
+            }),
           });
 
           if (error) {
