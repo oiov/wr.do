@@ -18,7 +18,7 @@ export async function getGeolocation(
   if (isVercel) {
     return geolocation(req);
   } else {
-    return await getClientGeolocation(req, ip);
+    return await getClientGeolocationWithIpApi(ip);
   }
 }
 
@@ -44,15 +44,51 @@ export async function getClientGeolocation(
   req,
   ip,
 ): Promise<GeoLocation | null> {
-  const new_headers = new Headers();
-  new_headers.set("X-Forwarded-For", ip);
-  new_headers.set("User-Agent", req.headers.get("user-agent") || "");
-  const response = await fetch(`https://ip.wr.do/api?ip=${ip}`, {
-    // signal: AbortSignal.timeout(3000),
-    headers: new_headers,
-  });
+  // const new_headers = new Headers();
+  // new_headers.set("X-Forwarded-For", ip);
+  // new_headers.set("User-Agent", req.headers.get("user-agent") || "");
+  const response = await fetch(`https://ip.wr.do/api?ip=${ip}`);
   if (!response.ok) return null;
   return await response.json();
+}
+export async function getClientGeolocationWithIpApi(ip: string) {
+  const response = await fetch(`http://ip-api.com/json/${ip}`);
+  if (!response.ok) return null;
+  const res = await response.json();
+  //   {
+  //     "query": "154.64.226.29",
+  //     "status": "success",
+  //     "continent": "North America",
+  //     "continentCode": "NA",
+  //     "country": "United States",
+  //     "countryCode": "US",
+  //     "region": "CA",
+  //     "regionName": "California",
+  //     "city": "Los Angeles",
+  //     "district": "",
+  //     "zip": "90009",
+  //     "lat": 34.0549,
+  //     "lon": -118.243,
+  //     "timezone": "America/Los_Angeles",
+  //     "offset": -25200,
+  //     "currency": "USD",
+  //     "isp": "Cogent Communications",
+  //     "org": "NetLab Global",
+  //     "as": "AS51847 Nearoute Limited",
+  //     "asname": "NEAROUTE",
+  //     "mobile": true,
+  //     "proxy": true,
+  //     "hosting": false
+  // }
+  return {
+    ip: res.query,
+    country: res.country,
+    region: res.region,
+    city: res.city,
+    latitude: res.lat,
+    longitude: res.lon,
+    timezone: res.timezone,
+  };
 }
 
 export function extractRealIP(headers: Headers): string {
