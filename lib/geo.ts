@@ -11,13 +11,14 @@ const isVercel = process.env.VERCEL;
 
 export async function getGeolocation(
   req: NextAuthRequest,
+  ip: string,
 ): Promise<GeoLocation | null> {
   console.log("[Runtime Env]", isVercel ? "Vercel" : "Other");
 
   if (isVercel) {
     return geolocation(req);
   } else {
-    return await getClientGeolocation();
+    return await getClientGeolocation(req, ip);
   }
 }
 
@@ -39,9 +40,16 @@ export function getUserAgent(req: NextAuthRequest) {
   }
 }
 
-export async function getClientGeolocation(): Promise<GeoLocation | null> {
-  const response = await fetch("https://ip.wr.do/api", {
-    signal: AbortSignal.timeout(3000),
+export async function getClientGeolocation(
+  req,
+  ip,
+): Promise<GeoLocation | null> {
+  const new_headers = new Headers();
+  new_headers.set("X-Forwarded-For", ip);
+  new_headers.set("User-Agent", req.headers.get("user-agent") || "");
+  const response = await fetch(`https://ip.wr.do/api?ip=${ip}`, {
+    // signal: AbortSignal.timeout(3000),
+    headers: new_headers,
   });
   if (!response.ok) return null;
   return await response.json();
@@ -81,9 +89,9 @@ function isValidIP(ip: string): boolean {
 
 export async function getIpInfo(req) {
   const headers = req.headers;
-  const geo = await getGeolocation(req);
-  const ip = isVercel ? ipAddress(req) : geo?.ip;
+  const ip = isVercel ? ipAddress(req) : extractRealIP(headers);
   const ua = getUserAgent(req);
+  const geo = await getGeolocation(req, ip || "::1");
 
   const userLanguage =
     req.headers.get("accept-language")?.split(",")[0] || "en-US";

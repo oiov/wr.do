@@ -29,9 +29,10 @@ async function handleShortUrl(req: NextAuthRequest) {
     return NextResponse.redirect(`${siteConfig.url}/docs/short-urls`, 302);
 
   const headers = req.headers;
-  const geo = await getGeolocation(req);
   const ip = isVercel ? ipAddress(req) : extractRealIP(headers);
   const ua = getUserAgent(req);
+
+  const geo = await getGeolocation(req, ip || "::1");
 
   const url = new URL(req.url);
   const password = url.searchParams.get("password") || "";
