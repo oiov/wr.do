@@ -13,7 +13,7 @@
     "start": "next start",
     "lint": "next lint",
     "preview": "next build && next start",
-    "db:generate": "prisma generate",
+    "postinstall": "prisma generate",
     "db:push": "npx prisma migrate deploy",
     "email": "email dev --dir emails --port 3333",
     "remove-content": "node ./setup.mjs"
