@@ -73,7 +73,7 @@ export async function GET(req: Request) {
 
     const stats = await getIpInfo(req);
     await createScrapeMeta({
-      ip: stats.ip,
+      ip: stats.ip || "::1",
       type: "markdown",
       referer: stats.referer,
       city: stats.city,
