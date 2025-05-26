@@ -84,9 +84,10 @@ export async function getClientGeolocationWithIpApi(ip: string) {
     ip: res.query,
     country: res.country,
     region: res.region,
+    regionName: res.regionName,
     city: res.city,
-    latitude: res.lat,
-    longitude: res.lon,
+    latitude: res.lat.toString(),
+    longitude: res.lon.toString(),
     timezone: res.timezone,
   };
 }

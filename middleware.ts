@@ -47,7 +47,7 @@ async function handleShortUrl(req: NextAuthRequest) {
     latitude: geo?.latitude,
     longitude: geo?.longitude,
     flag: geo?.flag,
-    lang: headers.get("accept-language")?.split(",")[0],
+    lang: headers.get("accept-language")?.split(",")[0] || "Unknown",
     device: ua.device.model || "Unknown",
     browser: ua.browser.name || "Unknown",
     engine: ua.engine.name || "",
