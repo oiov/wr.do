@@ -40,7 +40,7 @@ export function extractRealIP(headers: Headers): string {
     }
   }
 
-  return "";
+  return "::1";
 }
 
 function isValidIP(ip: string): boolean {
