@@ -1,16 +1,9 @@
-import { NextResponse, userAgent } from "next/server";
-import { geolocation } from "@vercel/functions";
+import { NextResponse } from "next/server";
 import { auth } from "auth";
 import { NextAuthRequest } from "next-auth/lib";
-import UAParser from "ua-parser-js";
 
 import { siteConfig } from "./config/site";
-import {
-  extractRealIP,
-  getClientGeolocation,
-  getGeolocation,
-  getUserAgent,
-} from "./lib/geo";
+import { extractRealIP, getGeolocation, getUserAgent } from "./lib/geo";
 
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],

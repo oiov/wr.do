@@ -6,6 +6,8 @@ import UAParser from "ua-parser-js";
 const isVercel = process.env.VERCEL;
 
 export async function getGeolocation(req: NextAuthRequest) {
+  console.log("[Runtime Env]", isVercel ? "Vercel" : "Other");
+
   if (isVercel) {
     return geolocation(req);
   } else {
