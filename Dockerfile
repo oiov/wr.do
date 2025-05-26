@@ -13,7 +13,6 @@ COPY . .
 
 RUN pnpm config set registry https://registry.npmmirror.com
 
-# COPY package.json pnpm-lock.yaml* .npmrc* ./
 RUN pnpm i --frozen-lockfile
 
 FROM base AS builder
@@ -22,14 +21,6 @@ WORKDIR /app
 RUN apk add --no-cache openssl
 
 RUN npm install -g pnpm
-
-# ARG NEXT_PUBLIC_APP_URL="http://localhost:3001"
-# ARG RESEND_API_KEY="re_your_resend_api_key"
-# ARG DATABASE_URL="postgres://postgres:postgres@postgres:5432/wrdo"
-
-# ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
-# ENV RESEND_API_KEY=$RESEND_API_KEY
-# ENV DATABASE_URL=$DATABASE_URL
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
@@ -55,9 +46,9 @@ COPY --from=builder /app/prisma ./prisma
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# ENV NODE_OPTIONS="--network-family-autoselection-attempt-timeout=500"
 EXPOSE 3000
 
+# ENV HOSTNAME=0.0.0.0
 ENV PORT=3000
 
 CMD ["node", "server.js"]

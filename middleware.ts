@@ -4,7 +4,7 @@ import { auth } from "auth";
 import { NextAuthRequest } from "next-auth/lib";
 
 import { siteConfig } from "./config/site";
-import { extractRealIP, getGeolocation, getUserAgent } from "./lib/geo";
+import { getGeolocation, getUserAgent } from "./lib/geo";
 
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
