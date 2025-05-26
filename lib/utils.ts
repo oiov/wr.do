@@ -100,10 +100,6 @@ export function formatTime(input: string | number): string {
   });
 }
 
-export function absoluteUrl(path: string) {
-  return `${env.NEXT_PUBLIC_APP_URL}${path}`;
-}
-
 // Utils from precedent.dev
 export const timeAgo = (timestamp: Date, timeOnly?: boolean): string => {
   if (!timestamp) return "never";
