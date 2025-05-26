@@ -53,7 +53,6 @@ Remember to fill in the necessary environment variables.
 Fill in the environment variables in the `docker-compose.yml`, then: 
 
 ```bash
-# Image: ghcr.io/oiov/wr.do/wrdo
 docker compose up -d
 ```
 
@@ -82,34 +81,6 @@ pnpm db:push
 #### Setup Admin Panel
 
 Follow https://localhost:3000/setup
-
-### Start on Docker 
-
-#### Dockerfile 
-
-```bash
-git clone https://github.com/oiov/wr.do
-cd wr.do
-```
-
-Fill in the environment variables in the `Dockerfile`, then build and run.
-
-```bash
-# Build image
-docker build -t wrdo .
-# Run 
-docker run -p 3000:3000 wrdo
-```
-
-
-## Legitimacy review
-
-- To avoid abuse, applications without website content will be rejected
-- To avoid domain name conflicts, please check before applying
-- Completed website construction or released open source project (ready to build website for open source project)
-- Political sensitivity, violence, pornography, link jumping, VPN, reverse proxy services, and other illegal or sensitive content must not appear on the website
-
-**Administrators will conduct domain name checks periodically to clean up domain names that violate the above rules, have no content, and are not open source related**
 
 ## Community Group
 

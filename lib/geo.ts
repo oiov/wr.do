@@ -82,7 +82,8 @@ export async function getClientGeolocationWithIpApi(ip: string) {
   // }
   return {
     ip: res.query,
-    country: res.country,
+    country: res.countryCode,
+    countryName: res.country,
     region: res.region,
     regionName: res.regionName,
     city: res.city,
