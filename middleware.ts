@@ -4,7 +4,7 @@ import { auth } from "auth";
 import { NextAuthRequest } from "next-auth/lib";
 
 import { siteConfig } from "./config/site";
-import { getGeolocation, getUserAgent } from "./lib/geo";
+import { extractRealIP, getGeolocation, getUserAgent } from "./lib/geo";
 
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
@@ -30,7 +30,7 @@ async function handleShortUrl(req: NextAuthRequest) {
 
   const headers = req.headers;
   const geo = await getGeolocation(req);
-  const ip = isVercel ? ipAddress(req) : geo?.ip;
+  const ip = isVercel ? ipAddress(req) : extractRealIP(headers);
   const ua = getUserAgent(req);
 
   const url = new URL(req.url);
