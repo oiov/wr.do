@@ -1,17 +1,37 @@
-interface GeoData {
-  ip: string;
-  ipVersion?: string;
-  country: string;
-  city: string;
-  region: string;
-  timezone?: string;
-  isp?: string;
-  asn?: number;
-  latitude: string;
-  longitude: string;
+import { userAgent } from "next/server";
+import { Geo, geolocation } from "@vercel/functions";
+import { NextAuthRequest } from "next-auth/lib";
+import UAParser from "ua-parser-js";
+
+const isVercel = process.env.VERCEL;
+
+export async function getGeolocation(req: NextAuthRequest) {
+  if (isVercel) {
+    return geolocation(req);
+  } else {
+    return await getClientGeolocation();
+  }
 }
 
-export async function getClientGeolocation(): Promise<GeoData | null> {
+export function getUserAgent(req: NextAuthRequest) {
+  if (isVercel) {
+    return userAgent(req);
+  } else {
+    const headers = req.headers;
+    const userAgent = headers.get("user-agent") || "";
+    const parser = new UAParser(userAgent);
+    return {
+      browser: parser.getBrowser(),
+      device: parser.getDevice(),
+      os: parser.getOS(),
+      engine: parser.getEngine(),
+      cpu: parser.getCPU(),
+      isBot: false,
+    };
+  }
+}
+
+export async function getClientGeolocation(): Promise<Geo | null> {
   const response = await fetch("https://ip.wr.do/api", {
     signal: AbortSignal.timeout(3000),
   });
@@ -51,4 +71,28 @@ function isValidIP(ip: string): boolean {
   const ipv6Regex = /^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$/;
 
   return ipv4Regex.test(ip) || ipv6Regex.test(ip);
+}
+
+export async function getIpInfo(req) {
+  const headers = req.headers;
+  const ip = extractRealIP(headers);
+  const geo = await getGeolocation(req);
+  const ua = getUserAgent(req);
+
+  const userLanguage =
+    req.headers.get("accept-language")?.split(",")[0] || "en-US";
+
+  return {
+    referer: headers.get("referer") || "(None)",
+    ip,
+    city: geo?.city || "",
+    region: geo?.region || "",
+    country: geo?.country || "",
+    latitude: geo?.latitude || "",
+    longitude: geo?.longitude || "",
+    flag: geo?.flag,
+    lang: userLanguage,
+    device: ua.device.model || "Unknown",
+    browser: ua.browser.name || "Unknown",
+  };
 }

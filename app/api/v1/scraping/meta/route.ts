@@ -2,7 +2,8 @@ import cheerio from "cheerio";
 
 import { checkApiKey } from "@/lib/dto/api-key";
 import { createScrapeMeta } from "@/lib/dto/scrape";
-import { getIpInfo, isLink, removeUrlSuffix } from "@/lib/utils";
+import { getIpInfo } from "@/lib/geo";
+import { isLink, removeUrlSuffix } from "@/lib/utils";
 
 export const revalidate = 600;
 export const dynamic = "force-dynamic";
@@ -84,7 +85,7 @@ export async function GET(req: Request) {
       $("meta[name='author']").attr("content") ||
       $("meta[property='author']").attr("content");
 
-    const stats = getIpInfo(req);
+    const stats = await getIpInfo(req);
     await createScrapeMeta({
       ip: stats.ip,
       type: "meta-info",

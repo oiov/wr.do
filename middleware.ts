@@ -2,8 +2,15 @@ import { NextResponse, userAgent } from "next/server";
 import { geolocation } from "@vercel/functions";
 import { auth } from "auth";
 import { NextAuthRequest } from "next-auth/lib";
+import UAParser from "ua-parser-js";
 
 import { siteConfig } from "./config/site";
+import {
+  extractRealIP,
+  getClientGeolocation,
+  getGeolocation,
+  getUserAgent,
+} from "./lib/geo";
 
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
@@ -25,9 +32,10 @@ async function handleShortUrl(req: NextAuthRequest) {
   if (!slug)
     return NextResponse.redirect(`${siteConfig.url}/docs/short-urls`, 302);
 
-  const geo = geolocation(req);
   const headers = req.headers;
-  const ua = userAgent(req);
+  const ip = extractRealIP(headers);
+  const geo = await getGeolocation(req);
+  const ua = getUserAgent(req);
 
   const url = new URL(req.url);
   const password = url.searchParams.get("password") || "";
@@ -35,7 +43,7 @@ async function handleShortUrl(req: NextAuthRequest) {
   const trackingData = {
     slug,
     referer: headers.get("referer") || "(None)",
-    ip: headers.get("X-Forwarded-For"),
+    ip,
     city: geo?.city,
     region: geo?.region,
     country: geo?.country,
@@ -94,7 +102,6 @@ async function handleShortUrl(req: NextAuthRequest) {
   return NextResponse.redirect(target, 302);
 }
 
-// 提取 slug
 function extractSlug(url: string): string | null {
   const match = url.match(/([^/?]+)(?:\?.*)?$/);
   return match ? match[1] : null;

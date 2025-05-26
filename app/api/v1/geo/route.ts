@@ -1,14 +1,11 @@
-import { ipAddress } from "@vercel/functions";
-
-import { getIpInfo } from "@/lib/utils";
+import { getIpInfo } from "@/lib/geo";
 
 export async function GET(req: Request) {
   try {
-    const data = getIpInfo(req);
-    const ip = ipAddress(req);
+    const data = await getIpInfo(req);
 
     return Response.json({
-      ip,
+      ip: data.ip,
       city: data.city,
       region: data.region,
       country: data.country,

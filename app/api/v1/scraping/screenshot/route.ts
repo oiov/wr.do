@@ -1,7 +1,8 @@
 import { env } from "@/env.mjs";
 import { checkApiKey } from "@/lib/dto/api-key";
 import { createScrapeMeta } from "@/lib/dto/scrape";
-import { getIpInfo, isLink } from "@/lib/utils";
+import { getIpInfo } from "@/lib/geo";
+import { isLink } from "@/lib/utils";
 
 export const revalidate = 60;
 
@@ -69,7 +70,7 @@ export async function GET(req: Request) {
       );
     }
 
-    const stats = getIpInfo(req);
+    const stats = await getIpInfo(req);
     await createScrapeMeta({
       ip: stats.ip,
       type: "screenshot",

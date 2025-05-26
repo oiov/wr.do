@@ -2,7 +2,8 @@ import cheerio from "cheerio";
 
 import { checkApiKey } from "@/lib/dto/api-key";
 import { createScrapeMeta } from "@/lib/dto/scrape";
-import { getIpInfo, isLink } from "@/lib/utils";
+import { getIpInfo } from "@/lib/geo";
+import { isLink } from "@/lib/utils";
 
 export const revalidate = 600;
 export const dynamic = "force-dynamic";
@@ -63,7 +64,7 @@ export async function GET(req: Request) {
     $("style").remove();
     const text = $("body").text().trim();
 
-    const stats = getIpInfo(req);
+    const stats = await getIpInfo(req);
     await createScrapeMeta({
       ip: stats.ip,
       type: "text",
