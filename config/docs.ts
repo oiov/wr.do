@@ -117,6 +117,11 @@ export const docsConfig: DocsConfig = {
           icon: "page",
         },
         {
+          title: "Deploy Guide",
+          href: "/docs/developer/deploy",
+          icon: "page",
+        },
+        {
           title: "Cloudflare",
           href: "/docs/developer/cloudflare",
           icon: "page",
