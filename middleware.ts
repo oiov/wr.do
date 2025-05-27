@@ -57,7 +57,7 @@ async function handleShortUrl(req: NextAuthRequest) {
     password,
   };
 
-  console.log("Tracking data:", trackingData, siteConfig.url);
+  // console.log("Tracking data:", trackingData, siteConfig.url);
 
   const res = await fetch(`${siteConfig.url}/api/s`, {
     method: "POST",

@@ -17,13 +17,21 @@
 
 ## Screenshots
 
-![screenshot](https://wr.do/_static/images/light-preview.png)
+<table>
+  <tr>
+    <td><img src="https://wr.do/_static/images/light-preview.png" /></td>
+    <td><img src="https://wr.do/_static/images/example_02.png" /></td>
+  </tr>
+  <tr>
+    <td><img src="https://wr.do/_static/images/example_01.png" /></td>
+    <td><img src="https://wr.do/_static/images/realtime-globe.png" /></td>
+  </tr>
+  <tr>
+    <td><img src="https://wr.do/_static/images/example_03.png" /></td>
+    <td><img src="https://wr.do/_static/images/domains.png" /></td>
+  </tr>
+</table>
 
-![screenshot](https://wr.do/_static/images/example_02.png)
-
-![screenshot](https://wr.do/_static/images/example_01.png)
-
-![screenshot](https://wr.do/_static/images/example_03.png)
 
 ## Quick Start
 
@@ -50,7 +58,9 @@ Remember to fill in the necessary environment variables.
 
 ### Deploy with Docker Compose
 
-Fill in the environment variables in the `docker-compose.yml`, then: 
+Create a new folder and copy the `docker-compose.yml` file to the folder.
+
+Touch a `.env` file at the same level and fill in the environment variables, then: 
 
 ```bash
 docker compose up -d
@@ -87,7 +97,7 @@ Follow https://localhost:3000/setup
 - Discord: https://discord.gg/AHPQYuZu3m
 - 微信群：
 
-![](https://wr.do/s/group)
+<img width="300" src="https://wr.do/s/group" />
 
 ## License
 

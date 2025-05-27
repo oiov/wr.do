@@ -14,15 +14,22 @@
 - �😀 **权限管理**：方便审核的管理员面板
 - 🔒 **安全可靠**：基于 Cloudflare 强大的 DNS API
 
-## Screenshots
+## 截图预览
 
-![screenshot](https://wr.do/_static/images/light-preview.png)
-
-![screenshot](https://wr.do/_static/images/example_01.png)
-
-![screenshot](https://wr.do/_static/images/example_02.png)
-
-![screenshot](https://wr.do/_static/images/example_03.png)
+<table>
+  <tr>
+    <td><img src="https://wr.do/_static/images/light-preview.png" /></td>
+    <td><img src="https://wr.do/_static/images/example_02.png" /></td>
+  </tr>
+  <tr>
+    <td><img src="https://wr.do/_static/images/example_01.png" /></td>
+    <td><img src="https://wr.do/_static/images/realtime-globe.png" /></td>
+  </tr>
+  <tr>
+    <td><img src="https://wr.do/_static/images/example_03.png" /></td>
+    <td><img src="https://wr.do/_static/images/domains.png" /></td>
+  </tr>
+</table>
 
 ## 快速开始
 
