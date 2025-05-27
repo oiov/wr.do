@@ -37,17 +37,6 @@
 
 See step by step installation tutorial at [Quick Start for Developer](https://wr.do/docs/developer/quick-start).
 
-### Requirements
-
-- [Vercel](https://vercel.com) to deploy app
-- A **domain** name hosted on [Cloudflare](https://dash.cloudflare.com/)
-
-See more docs about [developer](https://wr.do/docs/developer/installation).
-
-### Email worker
-
-See docs about [email worker](https://wr.do/docs/developer/cloudflare-email-worker).
-
 ## Self-hosted
 
 ### Deploy with Vercel
