@@ -13,7 +13,7 @@ export async function getGeolocation(
   req: NextAuthRequest,
   ip: string,
 ): Promise<GeoLocation | null> {
-  console.log("[Runtime Env]", isVercel ? "Vercel" : "Other");
+  // console.log("[Runtime Env]", isVercel ? "Vercel" : "Other");
 
   if (isVercel) {
     return geolocation(req);

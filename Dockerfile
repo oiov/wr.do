@@ -38,6 +38,8 @@ RUN npm install -g pnpm
 ENV NODE_ENV=production
 ENV IS_DOCKER=true
 
+RUN pnpm add npm-run-all dotenv @prisma/client@5.17.0
+
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/prisma ./prisma
 
@@ -47,12 +49,12 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # Check db
-COPY scripts/entrypoint.sh /app/scripts/entrypoint.sh
-RUN chmod +x /app/scripts/entrypoint.sh
+COPY scripts/check-db.js /app/scripts/check-db.js
 
 EXPOSE 3000
 
 ENV HOSTNAME=0.0.0.0
 ENV PORT=3000
 
-CMD ["node", "server.js"]
+# CMD ["node", "server.js"]
+CMD ["pnpm", "start-docker"]

@@ -140,12 +140,12 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
         <CardHeader className="flex flex-row items-center">
           {action.includes("/admin") ? (
             <CardDescription className="text-balance text-lg font-bold">
-              <span>Total Records:</span>{" "}
+              <span>Total Subdomains:</span>{" "}
               <span className="font-bold">{data && data.total}</span>
             </CardDescription>
           ) : (
             <div className="grid gap-2">
-              <CardTitle>DNS Records</CardTitle>
+              <CardTitle>Subdomains</CardTitle>
               <CardDescription className="hidden text-balance sm:block">
                 Please read the{" "}
                 <Link

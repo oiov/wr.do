@@ -11,9 +11,15 @@ Remember to fill in the necessary environment variables.
 
 ## Deploy with Docker Compose
 
-Create a new folder and copy the `docker-compose.yml` file to the folder.
+Create a new folder and copy the `docker-compose.yml`、`.env` file to the folder.
 
-Touch a `.env` file at the same level and fill in the environment variables, then: 
+```bash
+- wrdo
+  | - docker-compose.yml
+  | - .env
+```
+
+Fill in the environment variables in the `.env` file, then: 
 
 ```bash
 docker compose up -d
