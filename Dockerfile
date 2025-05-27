@@ -38,7 +38,7 @@ RUN npm install -g pnpm
 ENV NODE_ENV=production
 ENV IS_DOCKER=true
 
-RUN pnpm add npm-run-all dotenv prisma@5.17.0
+RUN pnpm add npm-run-all dotenv prisma@5.17.0 @prisma/client@5.17.0
 
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/prisma ./prisma

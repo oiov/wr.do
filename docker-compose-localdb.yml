@@ -21,6 +21,8 @@ services:
       NEXT_PUBLIC_GOOGLE_ID: ${NEXT_PUBLIC_GOOGLE_ID}
       SCREENSHOTONE_BASE_URL: ${SCREENSHOTONE_BASE_URL}
       GITHUB_TOKEN: ${GITHUB_TOKEN}
+      SKIP_DB_CHECK: ${SKIP_DB_CHECK}
+      SKIP_DB_MIGRATION: ${SKIP_DB_MIGRATION}
     depends_on:
       - postgres
     networks:
