@@ -223,3 +223,29 @@ export const getDNSRecordDetail = async (
     throw error;
   }
 };
+
+export const getZoneDetail = async (
+  zoneId: string,
+  apiKey: string,
+  email: string,
+) => {
+  try {
+    const url = `${CLOUDFLARE_API_URL}/zones/${zoneId}`;
+
+    const headers = {
+      "X-Auth-Email": email,
+      "X-Auth-Key": apiKey,
+    };
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers,
+    });
+
+    console.log(response.status);
+
+    return response.status;
+  } catch (error) {
+    throw error;
+  }
+};

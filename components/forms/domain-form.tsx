@@ -1,17 +1,21 @@
 "use client";
 
-import { Dispatch, SetStateAction, useState, useTransition } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+  useTransition,
+} from "react";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";
-import { Sparkles } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { siteConfig } from "@/config/site";
+import { getZoneDetail } from "@/lib/cloudflare";
 import { DomainFormData } from "@/lib/dto/domains";
-import { EXPIRATION_ENUMS } from "@/lib/enums";
-import { generateUrlSuffix } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { createDomainSchema } from "@/lib/validations/domain";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -50,9 +54,11 @@ export function DomainForm({
 }: DomainFormProps) {
   const [isPending, startTransition] = useTransition();
   const [isDeleting, startDeleteTransition] = useTransition();
+  const [isChecking, startCheckTransition] = useTransition();
   const [currentRecordStatus, setCurrentRecordStatus] = useState(
     initData?.enable_dns || false,
   );
+  const [isChecked, setIsChecked] = useState(false);
 
   const {
     handleSubmit,
@@ -152,10 +158,47 @@ export function DomainForm({
     }
   };
 
+  const handleCheckAccess = async (event) => {
+    event?.stopPropagation();
+    if (!currentRecordStatus) return;
+
+    if (isChecked) {
+      setIsChecked(false);
+    }
+
+    startCheckTransition(async () => {
+      const values = getValues(["cf_zone_id", "cf_api_key", "cf_email"]);
+      const res = await fetch(
+        `/api/domain/access-check?zone_id=${values[0]}&api_key=${values[1]}&email=${values[2]}`,
+      );
+      if (res.ok) {
+        const data = await res.json();
+        if (data === 200) {
+          setIsChecked(true);
+          return;
+        }
+      }
+      setIsChecked(false);
+      toast.error("Access Failed", {
+        description: "Please check your Cloudflare settings and try again.",
+      });
+    });
+  };
+
   const ReadyBadge = (
-    <Badge className="text-xs font-semibold" variant="green">
-      <Icons.check className="mr-1 size-3" />
-      Ready
+    <Badge
+      className={cn(
+        "ml-auto text-xs font-semibold",
+        !currentRecordStatus && "text-muted-foreground",
+      )}
+      variant={
+        currentRecordStatus ? (isChecked ? "green" : "default") : "outline"
+      }
+      onClick={(event) => handleCheckAccess(event)}
+    >
+      {isChecking && <Icons.spinner className="mr-1 size-3 animate-spin" />}
+      {isChecked && !isChecking && <Icons.check className="mr-1 size-3" />}
+      {isChecked ? "Ready" : "Access Check"}
     </Badge>
   );
 
@@ -257,10 +300,11 @@ export function DomainForm({
 
         <Collapsible className="relative mt-2 rounded-md bg-neutral-100 p-4 dark:bg-neutral-800">
           <CollapsibleTrigger className="flex w-full items-center justify-between">
-            <h2 className="absolute left-2 top-4 text-xs font-semibold text-neutral-400">
+            <h2 className="absolute left-2 top-5 text-xs font-semibold text-neutral-400">
               Cloudflare Configs(Optional)
             </h2>
-            <Icons.chevronDown className="ml-auto size-4" />
+            {ReadyBadge}
+            <Icons.chevronDown className="ml-2 size-4" />
           </CollapsibleTrigger>
           <CollapsibleContent>
             {!currentRecordStatus && (
