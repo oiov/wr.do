@@ -2,6 +2,7 @@ import { userAgent } from "next/server";
 import { Geo, geolocation, ipAddress } from "@vercel/functions";
 import { NextAuthRequest } from "next-auth/lib";
 import UAParser from "ua-parser-js";
+import { isBot } from "next/dist/server/web/spec-extension/user-agent";
 
 interface GeoLocation extends Geo {
   ip?: string;
@@ -35,7 +36,7 @@ export function getUserAgent(req: NextAuthRequest) {
       os: parser.getOS(),
       engine: parser.getEngine(),
       cpu: parser.getCPU(),
-      isBot: false,
+      isBot: parser.getResult().ua.includes("bot") || parser.getResult().ua.includes("crawler"),
     };
   }
 }
@@ -90,6 +91,10 @@ export async function getClientGeolocationWithIpApi(ip: string) {
     latitude: res.lat.toString(),
     longitude: res.lon.toString(),
     timezone: res.timezone,
+    isp: res.isp,
+    asnName: res.asname,
+    proxy: res.proxy,
+    hosting: res.hosting,
   };
 }
 
@@ -146,5 +151,6 @@ export async function getIpInfo(req) {
     lang: userLanguage,
     device: ua.device.model || "Unknown",
     browser: ua.browser.name || "Unknown",
+    isBot: ua.isBot || false,
   };
 }

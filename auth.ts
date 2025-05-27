@@ -22,7 +22,6 @@ export const {
   handlers: { GET, POST },
   auth,
 } = NextAuth({
-  trustHost: true, // TODO: Test with docker
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
   pages: {
@@ -65,7 +64,7 @@ export const {
       token.email = dbUser.email;
       token.picture = dbUser.image;
       token.role = dbUser.role;
-      token.active = dbUser.active;
+      token.active = dbUser.active ? 1 : 0;
       token.team = dbUser.team || "free";
       token.apiKey = dbUser.apiKey;
 

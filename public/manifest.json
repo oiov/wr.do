@@ -1,8 +1,8 @@
 {
-  "name": "WR.DO",
-  "short_name": "WR.DO",
+  "name": "SOCIONITY PRO",
+  "short_name": "SOCIONITY",
   "description": "Shorten links with analytics, manage emails and control subdomains—all on one platform.",
-  "appid": "com.wr.do",
+  "appid": "com.socio.site",
   "versionName": "0.6.2",
   "versionCode": "1",
   "start_url": "/",

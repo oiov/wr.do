@@ -58,7 +58,7 @@ export function RecordForm({
     initData?.type || "CNAME",
   );
   const [currentZoneName, setCurrentZoneName] = useState(
-    initData?.zone_name || "wr.do",
+    initData?.zone_name || "socio.site",
   );
   const [email, setEmail] = useState(user.email);
 
@@ -70,11 +70,11 @@ export function RecordForm({
   } = useForm<FormData>({
     resolver: zodResolver(createRecordSchema),
     defaultValues: {
-      zone_name: initData?.zone_name || "wr.do",
+      zone_name: initData?.zone_name || "socio.site",
       type: initData?.type || "CNAME",
       ttl: initData?.ttl || 1,
       proxied: initData?.proxied || false,
-      comment: "Created by wr.do",
+      comment: "Created by Socionity",
       name: initData?.name ? initData.name.split(".")[0] : "",
       content: initData?.content || "",
     },
@@ -218,7 +218,7 @@ export function RecordForm({
                   setCurrentZoneName(value);
                 }}
                 name="zone_name"
-                defaultValue={String(initData?.zone_name || "wr.do")}
+                defaultValue={String(initData?.zone_name || "socio.site")}
                 disabled={type === "edit"}
               >
                 <SelectTrigger className="w-full shadow-inner">

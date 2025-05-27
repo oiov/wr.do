@@ -17,8 +17,19 @@ export async function POST(req: Request) {
       });
     }
 
-    const { target, url, prefix, visible, active, id, expiration, password } =
-      createUrlSchema.parse(data);
+    const {
+      target,
+      url,
+      prefix,
+      title,
+      description,
+      image,
+      visible,
+      active,
+      id,
+      expiration,
+      password,
+    } = createUrlSchema.parse(data);
     const res = await updateUserShortUrl({
       id,
       userId: user.id,
@@ -26,6 +37,9 @@ export async function POST(req: Request) {
       target,
       prefix,
       url,
+      title,
+      description,
+      image,
       visible,
       active,
       expiration,

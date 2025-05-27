@@ -47,11 +47,11 @@ export default {
     }),
     Resend({
       apiKey: env.RESEND_API_KEY,
-      from: "wrdo <support@wr.do>",
+      from: "Socionity <support@email.socio.site>",
       async sendVerificationRequest({ identifier: email, url, provider }) {
         try {
           const { error } = await resend.emails.send({
-            from: provider.from || "no-reply@wr.do",
+            from: provider.from || "no-reply@email.socio.site",
             to: [email],
             subject: "Verify your email address",
             html: getVerificationEmailHtml({ url, appName: siteConfig.name }),

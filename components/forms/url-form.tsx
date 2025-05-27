@@ -27,6 +27,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Skeleton } from "../ui/skeleton";
+import { Textarea } from "../ui/textarea";
 
 export type FormData = ShortUrlFormData;
 
@@ -63,9 +64,12 @@ export function UrlForm({
     defaultValues: {
       id: initData?.id || "",
       target: initData?.target || "",
-      url: initData?.url || "",
+      url: initData?.url || generateUrlSuffix(6),
       active: initData?.active || 1,
-      prefix: initData?.prefix || "wr.do",
+      prefix: initData?.prefix || "socio.site",
+      title: initData?.title || "",
+      description: initData?.description || "",
+      image: initData?.image || "",
       visible: initData?.visible || 0,
       expiration: initData?.expiration || "-1",
       password: initData?.password || "",
@@ -165,11 +169,11 @@ export function UrlForm({
 
   return (
     <div>
-      <div className="rounded-t-lg bg-muted px-4 py-2 text-lg font-semibold">
+      <div className="rounded-t-lg bg-muted px-4 py-2 text-lg font-semibold ">
         {type === "add" ? "Create" : "Edit"} short link
       </div>
-      <form className="p-4" onSubmit={onSubmit}>
-        <div className="items-center justify-start gap-4 md:flex">
+      <form className="p-4 overflow-auto text-md" onSubmit={onSubmit}>
+        <div className="items-center justify-start gap-4 md:flex ">
           <FormSectionColumns title="Target URL" required>
             <div className="flex w-full items-center gap-2">
               <Label className="sr-only" htmlFor="target">
@@ -194,7 +198,7 @@ export function UrlForm({
               )}
             </div>
           </FormSectionColumns>
-          <FormSectionColumns title="Short Link" required>
+          <FormSectionColumns title="Short Link (Slug)" required>
             <div className="flex w-full items-center gap-2">
               <Label className="sr-only" htmlFor="url">
                 Url
@@ -209,7 +213,7 @@ export function UrlForm({
                       setValue("prefix", value);
                     }}
                     name="prefix"
-                    defaultValue={initData?.prefix || "wr.do"}
+                    defaultValue={initData?.prefix || "socio.site"}
                     disabled={type === "edit"}
                   >
                     <SelectTrigger className="w-1/3 rounded-r-none border-r-0 shadow-inner">
@@ -258,14 +262,116 @@ export function UrlForm({
                 </p>
               ) : (
                 <p className="pb-0.5 text-[13px] text-muted-foreground">
-                  A random url suffix. Final url like「wr.do/s/suffix」
+                  A random url suffix. like「socio.site/suffix」
                 </p>
               )}
             </div>
           </FormSectionColumns>
         </div>
-
         <div className="items-center justify-start gap-4 md:flex">
+          <FormSectionColumns title="Title">
+            <div className="flex w-full items-center gap-2">
+              <Label className="sr-only" htmlFor="title">
+                Title
+              </Label>
+              <Input
+                id="title"
+                className="flex-1 shadow-inner"
+                size={32}
+                type="text"
+                placeholder="Enter a title for the link"
+                {...register("title")}
+              />
+            </div>
+            <div className="flex flex-col justify-between p-1">
+              {errors?.title ? (
+                <p className="pb-0.5 text-[13px] text-red-600">
+                  {errors.title.message}
+                </p>
+              ) : (
+                <p className="text-[13px] text-muted-foreground"></p>
+              )}
+            </div>
+          </FormSectionColumns>
+        </div>
+        <FormSectionColumns title="Description">
+          <div className="flex w-full items-center gap-2">
+            <Label className="sr-only" htmlFor="description">
+              Description
+            </Label>
+            <Textarea
+              id="description"
+              className="flex-1 shadow-inner text-md"
+              placeholder="Enter a description for the link"
+              {...register("description")}
+            />
+          </div>
+          <div className="flex flex-col justify-between p-1">
+            {errors?.description ? (
+              <p className="pb-0.5 text-[13px] text-red-600">
+                {errors.description.message}
+              </p>
+            ) : (
+              <p className="text-[13px] text-muted-foreground"></p>
+            )}
+          </div>
+        </FormSectionColumns>
+        <div className="items-center justify-start gap-4 md:flex">
+          <FormSectionColumns title="Image URL">
+            <div className="flex w-full items-center gap-2">
+              <Label className="sr-only" htmlFor="image">
+                Image
+              </Label>
+              <Input
+                id="image"
+                className="flex-1 shadow-inner"
+                size={32}
+                type="text"
+                placeholder="Enter a image url for the link preview"
+                {...register("image")}
+              />
+            </div>
+            <div className="flex flex-col justify-between p-1">
+              {errors?.image ? (
+                <p className="pb-0.5 text-[13px] text-red-600">
+                  {errors.image.message}
+                </p>
+              ) : (
+                <p className="pb-0.5 text-[13px] text-muted-foreground">
+                  Optional. The image url of the link preview.
+                </p>
+              )}
+            </div>
+          </FormSectionColumns>
+          {/* <FormSectionColumns title="or Image Upload">
+            <div className="flex w-full items-center gap-2">
+              <Label className="sr-only" htmlFor="imageUpload">
+                Image Upload
+              </Label>
+              <Input
+                id="imageUpload"
+                className="flex-1 shadow-inner"
+                size={32}
+                type="file"
+                placeholder="Choose a image file for the link preview"
+                {...register("image")}
+              />
+            </div>
+            <div className="flex flex-col justify-between p-1">
+              {errors?.image ? (
+                <p className="pb-0.5 text-[13px] text-red-600">
+                  {errors.image.message}
+                </p>
+              ) : (
+                <p className="pb-0.5 text-[13px] text-muted-foreground">
+                  Optional. The image file of the link preview.
+                </p>
+              )}
+            </div>
+          </FormSectionColumns> */}
+        </div>
+
+        <div className="hidden items-center justify-start gap-4">
           <FormSectionColumns title="Password (Optional)">
             <div className="flex w-full items-center gap-2">
               <Label className="sr-only" htmlFor="password">

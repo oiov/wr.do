@@ -22,7 +22,7 @@ export function FormSectionColumns({
         className,
       )}
     >
-      <div className="col-span-4 flex items-start gap-0.5 text-sm leading-none">
+      <div className="col-span-4 flex items-start gap-0.5 text-md leading-none">
         <h2 className="font-semibold">{title}</h2>
         {required && (
           <span className="text-neutral-500 dark:text-neutral-300">*</span>

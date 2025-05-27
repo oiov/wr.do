@@ -16,11 +16,14 @@ export async function POST(req: Request) {
     const res = await updateUser(id, {
       name: data.name,
       email: data.email,
+      phone: data.phone,
       role: data.role,
       active: data.active,
       team: data.team,
       image: data.image,
       apiKey: data.apiKey,
+      adsterraApiKey: data.adsterraApiKey,
+      adsterraDomainId: data.adsterraDomainId,
     });
     if (!res?.id) {
       return Response.json("An error occurred", {

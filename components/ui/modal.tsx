@@ -47,7 +47,7 @@ export function Modal({
   };
   const { isMobile } = useMediaQuery();
 
-  if (isMobile && !desktopOnly) {
+  if (!isMobile && desktopOnly) {
     return (
       <Drawer.Root
         open={setShowModal ? showModal : true}

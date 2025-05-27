@@ -55,9 +55,12 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+  phone         String?   @unique
   active        Int       @default(1) // 0 封禁，1 正常
   team          String?   @default("free")
   apiKey        String?
+  adsterraApiKey String? @default("")
+  adsterraDomainId String? @default("")
   createdAt     DateTime  @default(now()) @map(name: "created_at")
   updatedAt     DateTime  @default(now()) @map(name: "updated_at")
   role          UserRole  @default(USER)
@@ -114,6 +117,9 @@ model UserUrl {
   target     String
   url        String   @unique // slug
   prefix     String
+  title      String   @default("")
+  description String  @default("")
+  image      String   @default("")
   visible    Int      @default(0)
   active     Int      @default(1)
   expiration String   @default("-1")

@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { siteConfig } from "@/config/site";
+// import { siteConfig } from "@/config/site";
 import { getCurrentUser } from "@/lib/session";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
@@ -16,7 +16,7 @@ export default async function HeroLanding() {
   return (
     <section className="custom-bg relative space-y-6 py-12 sm:py-20 lg:py-24">
       <div className="container flex max-w-screen-lg flex-col items-center gap-5 text-center">
-        <Link
+        {/* <Link
           href={siteConfig.links.github}
           target="_blank"
           className={cn(
@@ -29,18 +29,18 @@ export default async function HeroLanding() {
             Vercel
           </span>
           &nbsp;now!
-        </Link>
+        </Link> */}
 
         <h1 className="text-balance font-satoshi text-[40px] font-black leading-[1.15] tracking-tight sm:text-5xl md:text-6xl md:leading-[1.15]">
-          One platform powers{" "}
+          Socionity speed version{" "}
           <span className="bg-gradient-to-r from-violet-600 via-blue-600 to-cyan-500 bg-clip-text text-transparent">
             endless solutions
           </span>
         </h1>
 
         <p className="max-w-2xl text-balance text-muted-foreground sm:text-lg">
-          Link shortening, domain hosting, email manager and <br />
-          open api, everything you need to build better.
+          Link shortening, cloaking services <br />
+          and everything you need to build better.
         </p>
 
         <div className="flex items-center justify-center gap-4">

@@ -22,8 +22,18 @@ export async function POST(req: Request) {
 
     const { data } = await req.json();
 
-    const { target, url, prefix, visible, active, expiration, password } =
-      createUrlSchema.parse(data);
+    const {
+      target,
+      url,
+      prefix,
+      title,
+      description,
+      image,
+      visible,
+      active,
+      expiration,
+      password,
+    } = createUrlSchema.parse(data);
 
     const zones = await getDomainsByFeature("enable_short_link");
     if (
@@ -42,6 +52,9 @@ export async function POST(req: Request) {
       target,
       url,
       prefix,
+      title,
+      description,
+      image,
       visible,
       active,
       expiration,

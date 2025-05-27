@@ -11,6 +11,9 @@ export interface ShortUrlFormData {
   target: string;
   url: string;
   prefix: string;
+  title: string;
+  description: string;
+  image: string;
   visible: number;
   active: number;
   expiration: string;
@@ -33,6 +36,9 @@ export async function getUserShortUrls(
   userName: string = "",
   url: string = "",
   target: string = "",
+  title: string = "",
+  description: string = "",
+  image: string = "",
 ) {
   let option: any =
     role === "USER"
@@ -55,6 +61,21 @@ export async function getUserShortUrls(
   if (target) {
     option.target = {
       contains: target,
+    };
+  }
+  if (title) {
+    option.title = {
+      contains: title,
+    };
+  }
+  if (description) {
+    option.description = {
+      contains: description,
+    };
+  }
+  if (image) {
+    option.image = {
+      contains: image,
     };
   }
 
@@ -133,6 +154,9 @@ export async function createUserShortUrl(data: ShortUrlFormData) {
         target: data.target,
         url: data.url,
         prefix: data.prefix,
+        title: data.title,
+        description: data.description,
+        image: data.image,
         visible: data.visible,
         active: data.active,
         expiration: data.expiration,
@@ -159,6 +183,9 @@ export async function updateUserShortUrl(data: ShortUrlFormData) {
         url: data.url,
         visible: data.visible,
         prefix: data.prefix,
+        title: data.title,
+        description: data.description,
+        image: data.image,
         // active: data.active,
         expiration: data.expiration,
         password: data.password,
@@ -245,6 +272,9 @@ export async function getUrlBySuffix(suffix: string) {
     select: {
       id: true,
       target: true,
+      title: true,
+      description: true,
+      image: true,
       active: true,
       prefix: true,
       expiration: true,
@@ -310,6 +340,9 @@ export async function getUrlMetaLiveLog(userId?: string) {
         select: {
           url: true,
           target: true,
+          title: true,
+          description: true,
+          image: true,
         },
       },
     },
@@ -319,6 +352,9 @@ export async function getUrlMetaLiveLog(userId?: string) {
     ...log,
     slug: log.userUrl.url,
     target: log.userUrl.target,
+    title: log.userUrl.title,
+    description: log.userUrl.description,
+    image: log.userUrl.image,
   }));
 
   return formattedLogs;

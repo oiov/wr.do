@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     const user = await checkApiKey(custom_api_key);
     if (!user?.id) {
       return Response.json(
-        "Invalid API key. You can get your API key from https://wr.do/dashboard/settings.",
+        "Invalid API key. You can get your API key from https://socio.site/dashboard/settings.",
         { status: 401 },
       );
     }
@@ -34,8 +34,18 @@ export async function POST(req: Request) {
 
     const data = await req.json();
 
-    const { target, url, prefix, visible, active, expiration, password } =
-      createUrlSchema.parse(data);
+    const {
+      target,
+      url,
+      prefix,
+      title,
+      description,
+      image,
+      visible,
+      active,
+      expiration,
+      password,
+    } = createUrlSchema.parse(data);
     if (!target || !url) {
       return Response.json("Target url and slug are required", {
         status: 400,
@@ -59,6 +69,9 @@ export async function POST(req: Request) {
       target,
       url,
       prefix,
+      title,
+      description,
+      image,
       visible,
       active,
       expiration,

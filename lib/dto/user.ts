@@ -1,3 +1,4 @@
+
 import { User, UserRole } from "@prisma/client";
 
 import { prisma } from "@/lib/db";
@@ -40,6 +41,7 @@ export const getAllUsers = async (
   page: number,
   size: number,
   email?: string,
+  phone?: string,
   userName?: string,
 ) => {
   try {
@@ -53,6 +55,28 @@ export const getAllUsers = async (
     if (email && userName) {
       options = {
         where: { email: { contains: email }, name: { contains: userName } },
+      };
+    }
+    if (phone) {
+      options = { where: { phone: { contains: phone } } };
+    }
+    if (email && phone) {
+      options = {
+        where: { email: { contains: email }, phone: { contains: phone } },
+      };
+    }
+    if (userName && phone) {
+      options = {
+        where: { name: { contains: userName }, phone: { contains: phone } },
+      };
+    }
+    if (email && userName && phone) {
+      options = {
+        where: {
+          email: { contains: email },
+          name: { contains: userName },
+          phone: { contains: phone },
+        },
       };
     }
 
