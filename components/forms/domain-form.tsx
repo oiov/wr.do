@@ -217,7 +217,7 @@ export function DomainForm({
               <Label className="mt-2.5 text-nowrap" htmlFor="domain_name">
                 Domain Name:
               </Label>
-              <div className="w-full sm:w-[60%]">
+              <div className="w-full sm:w-3/5">
                 <Input
                   id="target"
                   className="flex-1 bg-neutral-50 shadow-inner"
@@ -318,7 +318,7 @@ export function DomainForm({
                 <Label className="mt-2.5 text-nowrap" htmlFor="zone_id">
                   Zone ID:
                 </Label>
-                <div className="w-full sm:w-[60%]">
+                <div className="w-full sm:w-3/5">
                   <Input
                     id="target"
                     className="flex-1 bg-neutral-50 shadow-inner"
@@ -352,7 +352,7 @@ export function DomainForm({
                 <Label className="mt-2.5 text-nowrap" htmlFor="api-key">
                   API Token:
                 </Label>
-                <div className="w-full sm:w-[60%]">
+                <div className="w-full sm:w-3/5">
                   <Input
                     id="target"
                     className="flex-1 bg-neutral-50 shadow-inner"
@@ -386,7 +386,7 @@ export function DomainForm({
                 <Label className="mt-2.5 text-nowrap" htmlFor="email">
                   Account Email:
                 </Label>
-                <div className="w-full sm:w-[60%]">
+                <div className="w-full sm:w-3/5">
                   <Input
                     id="target"
                     className="flex-1 bg-neutral-50 shadow-inner"

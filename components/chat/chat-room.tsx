@@ -18,6 +18,7 @@ import Peer from "peerjs";
 import { toast } from "sonner";
 
 import { siteConfig } from "@/config/site";
+import { generateGradientClasses } from "@/lib/enums";
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
 
@@ -45,25 +46,6 @@ type User = {
 
 const formatTime = (date: Date) => {
   return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-};
-
-const generateGradientClasses = (seed: string) => {
-  const gradients = [
-    "bg-gradient-to-br from-red-400 to-pink-500",
-    "bg-gradient-to-br from-blue-400 to-indigo-500",
-    "bg-gradient-to-br from-green-400 to-teal-500",
-    "bg-gradient-to-br from-yellow-400 to-orange-500",
-    "bg-gradient-to-br from-purple-400 to-pink-500",
-    "bg-gradient-to-br from-cyan-400 to-blue-500",
-    "bg-gradient-to-br from-pink-400 to-red-500",
-    "bg-gradient-to-br from-teal-400 to-green-500",
-    "bg-gradient-to-br from-orange-400 to-yellow-500",
-    "bg-gradient-to-br from-indigo-400 to-blue-500",
-  ];
-  const hash = seed
-    .split("")
-    .reduce((acc, char) => acc + char.charCodeAt(0), 0);
-  return gradients[hash % gradients.length];
 };
 
 export default function ChatRoom() {

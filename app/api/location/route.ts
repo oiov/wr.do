@@ -6,6 +6,8 @@ interface CurrentLocation {
   longitude: number;
 }
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req: NextRequest) {
   try {
     const geo = geolocation(req);

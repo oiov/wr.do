@@ -60,6 +60,7 @@ function DeleteAccountModal({
           user={{
             name: session?.user?.name || null,
             image: session?.user?.image || null,
+            email: session?.user?.email || null,
           }}
         />
         <h3 className="text-lg font-semibold">Delete Account</h3>

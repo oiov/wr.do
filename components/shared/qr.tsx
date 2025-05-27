@@ -237,7 +237,7 @@ export default function QRCodeEditor({
           Url
         </h3>
         <Input
-          className="ml-auto w-[60%]"
+          className="ml-auto w-3/5"
           type="text"
           placeholder="https://example.com"
           defaultValue={params.url}
@@ -338,7 +338,7 @@ export default function QRCodeEditor({
                   ></div>
                   <input
                     id="color"
-                    className="block w-full rounded-r-md border-2 border-l-0 pl-3 text-neutral-900 placeholder-gray-400 focus:outline-none focus:ring-black dark:text-neutral-300 sm:text-sm"
+                    className="block w-full rounded-r-md border-2 border-l-0 pl-3 text-neutral-900 placeholder:text-gray-400 focus:outline-none focus:ring-black dark:text-neutral-300 sm:text-sm"
                     spellCheck="false"
                     defaultValue={params.fgColor}
                     name="color"
@@ -392,7 +392,7 @@ export default function QRCodeEditor({
                   ></div>
                   <input
                     id="color"
-                    className="block w-full rounded-r-md border-2 border-l-0 pl-3 text-neutral-900 placeholder-gray-400 focus:outline-none focus:ring-black dark:text-neutral-300 sm:text-sm"
+                    className="block w-full rounded-r-md border-2 border-l-0 pl-3 text-neutral-900 placeholder:text-gray-400 focus:outline-none focus:ring-black dark:text-neutral-300 sm:text-sm"
                     spellCheck="false"
                     defaultValue={params.bgColor}
                     name="color"
