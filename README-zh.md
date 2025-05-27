@@ -14,23 +14,26 @@
 - �😀 **权限管理**：方便审核的管理员面板
 - 🔒 **安全可靠**：基于 Cloudflare 强大的 DNS API
 
-## Screenshots
+## 截图预览
 
-![screenshot](https://wr.do/_static/images/light-preview.png)
-
-![screenshot](https://wr.do/_static/images/example_01.png)
-
-![screenshot](https://wr.do/_static/images/example_02.png)
-
-![screenshot](https://wr.do/_static/images/example_03.png)
+<table>
+  <tr>
+    <td><img src="https://wr.do/_static/images/light-preview.png" /></td>
+    <td><img src="https://wr.do/_static/images/example_02.png" /></td>
+  </tr>
+  <tr>
+    <td><img src="https://wr.do/_static/images/example_01.png" /></td>
+    <td><img src="https://wr.do/_static/images/realtime-globe.png" /></td>
+  </tr>
+  <tr>
+    <td><img src="https://wr.do/_static/images/example_03.png" /></td>
+    <td><img src="https://wr.do/_static/images/domains.png" /></td>
+  </tr>
+</table>
 
 ## 快速开始
 
 查看开发者[快速开始](https://wr.do/docs/developer/quick-start)的详细文档。
-
-查看有关[快速开始](https://wr.do/docs/quick-start)的文档。
-
-## 自托管教程
 
 ### 要求
 
@@ -42,6 +45,23 @@
 ### Email worker
 
 查看 [email worker](https://wr.do/docs/developer/cloudflare-email-worker) 文档用于邮件接收。
+
+## 自部署教程
+
+### 使用 Vercel 部署
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/oiov/wr.do.git&project-name=wrdo&env=DATABASE_URL&env=AUTH_SECRET&env=RESEND_API_KEY&env=NEXT_PUBLIC_EMAIL_R2_DOMAIN&env=NEXT_PUBLIC_OPEN_SIGNUP&env=GITHUB_TOKEN)
+
+记得填写必要的环境变量。
+
+### 使用 Docker Compose 部署
+
+
+在服务器中创建一个文件夹，进入该文件夹并新建`docker-compose.yml`文件，填写必要的环境变量，然后执行：
+
+```bash
+docker compose up -d
+```
 
 ## 本地开发
 
@@ -63,7 +83,7 @@ pnpm postinstall
 pnpm db:push
 ```
 
-#### 激活管理员面板
+#### 管理员初始化
 
 Follow https://localhost:3000/setup
 

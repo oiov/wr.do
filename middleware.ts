@@ -1,14 +1,16 @@
 import { NextResponse } from "next/server";
-import { geolocation } from "@vercel/functions";
+import { ipAddress } from "@vercel/functions";
 import { auth } from "auth";
 import { NextAuthRequest } from "next-auth/lib";
-import UAParser from "ua-parser-js";
 
 import { siteConfig } from "./config/site";
+import { extractRealIP, getGeolocation, getUserAgent } from "./lib/geo";
 
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
+
+const isVercel = process.env.VERCEL;
 
 const redirectMap = {
   "Missing[0000]": "/docs/short-urls#missing-links",
@@ -19,7 +21,6 @@ const redirectMap = {
   "IncorrectPassword[0005]": "/password-prompt?error=1&slug=",
 };
 
-// 提取短链接处理逻辑
 async function handleShortUrl(req: NextAuthRequest) {
   if (!req.url.includes("/s/")) return NextResponse.next();
 
@@ -27,9 +28,11 @@ async function handleShortUrl(req: NextAuthRequest) {
   if (!slug)
     return NextResponse.redirect(`${siteConfig.url}/docs/short-urls`, 302);
 
-  const geo = geolocation(req);
   const headers = req.headers;
-  const { browser, device } = parseUserAgent(headers.get("user-agent") || "");
+  const ip = isVercel ? ipAddress(req) : extractRealIP(headers);
+  const ua = getUserAgent(req);
+
+  const geo = await getGeolocation(req, ip || "::1");
 
   const url = new URL(req.url);
   const password = url.searchParams.get("password") || "";
@@ -37,18 +40,24 @@ async function handleShortUrl(req: NextAuthRequest) {
   const trackingData = {
     slug,
     referer: headers.get("referer") || "(None)",
-    ip: headers.get("X-Forwarded-For"),
+    ip,
     city: geo?.city,
     region: geo?.region,
     country: geo?.country,
     latitude: geo?.latitude,
     longitude: geo?.longitude,
     flag: geo?.flag,
-    lang: headers.get("accept-language")?.split(",")[0],
-    device: device.model || "Unknown",
-    browser: browser.name || "Unknown",
+    lang: headers.get("accept-language")?.split(",")[0] || "Unknown",
+    device: ua.device.model || "Unknown",
+    browser: ua.browser.name || "Unknown",
+    engine: ua.engine.name || "",
+    os: ua.os.name || "",
+    cpu: ua.cpu.architecture || "",
+    isBot: ua.isBot,
     password,
   };
+
+  // console.log("Tracking data:", trackingData, siteConfig.url);
 
   const res = await fetch(`${siteConfig.url}/api/s`, {
     method: "POST",
@@ -90,20 +99,9 @@ async function handleShortUrl(req: NextAuthRequest) {
   return NextResponse.redirect(target, 302);
 }
 
-// 提取 slug
 function extractSlug(url: string): string | null {
   const match = url.match(/([^/?]+)(?:\?.*)?$/);
   return match ? match[1] : null;
-}
-
-// 解析用户代理
-const parser = new UAParser();
-function parseUserAgent(ua: string) {
-  parser.setUA(ua);
-  return {
-    browser: parser.getBrowser(),
-    device: parser.getDevice(),
-  };
 }
 
 export default auth(async (req) => {

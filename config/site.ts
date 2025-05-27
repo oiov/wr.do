@@ -1,7 +1,7 @@
 import { SidebarNavItem, SiteConfig } from "types";
 import { env } from "@/env.mjs";
 
-const site_url = env.NEXT_PUBLIC_APP_URL;
+const site_url = env.NEXT_PUBLIC_APP_URL || "http://localhost:3030";
 const open_signup = env.NEXT_PUBLIC_OPEN_SIGNUP;
 const email_r2_domain = env.NEXT_PUBLIC_EMAIL_R2_DOMAIN || "";
 

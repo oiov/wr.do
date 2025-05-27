@@ -17,19 +17,23 @@
 
 ## Screenshots
 
-![screenshot](https://wr.do/_static/images/light-preview.png)
+<table>
+  <tr>
+    <td><img src="https://wr.do/_static/images/light-preview.png" /></td>
+    <td><img src="https://wr.do/_static/images/example_02.png" /></td>
+  </tr>
+  <tr>
+    <td><img src="https://wr.do/_static/images/example_01.png" /></td>
+    <td><img src="https://wr.do/_static/images/realtime-globe.png" /></td>
+  </tr>
+  <tr>
+    <td><img src="https://wr.do/_static/images/example_03.png" /></td>
+    <td><img src="https://wr.do/_static/images/domains.png" /></td>
+  </tr>
+</table>
 
-![screenshot](https://wr.do/_static/images/example_02.png)
-
-![screenshot](https://wr.do/_static/images/example_01.png)
-
-![screenshot](https://wr.do/_static/images/example_03.png)
 
 ## Quick Start
-
-See usage docs about [guide](https://wr.do/docs/quick-start) for quick start.
-
-## Self-hosted Tutorial
 
 See step by step installation tutorial at [Quick Start for Developer](https://wr.do/docs/developer/quick-start).
 
@@ -44,15 +48,41 @@ See more docs about [developer](https://wr.do/docs/developer/installation).
 
 See docs about [email worker](https://wr.do/docs/developer/cloudflare-email-worker).
 
-## Local development
+## Self-hosted
 
-copy `.env.example` to `.env` and fill in the necessary environment variables.
+### Deploy with Vercel
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/oiov/wr.do.git&project-name=wrdo&env=DATABASE_URL&env=AUTH_SECRET&env=RESEND_API_KEY&env=NEXT_PUBLIC_EMAIL_R2_DOMAIN&env=NEXT_PUBLIC_OPEN_SIGNUP&env=GITHUB_TOKEN)
+
+Remember to fill in the necessary environment variables.
+
+### Deploy with Docker Compose
+
+Create a new folder and copy the `docker-compose.yml`、`.env` file to the folder.
+
+```yml
+- wrdo
+  | - docker-compose.yml
+  | - .env
+```
+
+Fill in the environment variables in the `.env` file, then: 
+
+```bash
+docker compose up -d
+```
+
+## Local development
 
 ```bash
 git clone https://github.com/oiov/wr.do
 cd wr.do
 pnpm install
+```
 
+copy `.env.example` to `.env` and fill in the necessary environment variables.
+
+```bash
 # run on localhost:3000
 pnpm dev
 ```
@@ -68,21 +98,12 @@ pnpm db:push
 
 Follow https://localhost:3000/setup
 
-## Legitimacy review
-
-- To avoid abuse, applications without website content will be rejected
-- To avoid domain name conflicts, please check before applying
-- Completed website construction or released open source project (ready to build website for open source project)
-- Political sensitivity, violence, pornography, link jumping, VPN, reverse proxy services, and other illegal or sensitive content must not appear on the website
-
-**Administrators will conduct domain name checks periodically to clean up domain names that violate the above rules, have no content, and are not open source related**
-
 ## Community Group
 
 - Discord: https://discord.gg/AHPQYuZu3m
 - 微信群：
 
-![](https://wr.do/s/group)
+<img width="300" src="https://wr.do/s/group" />
 
 ## License
 

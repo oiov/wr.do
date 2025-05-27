@@ -4,6 +4,8 @@ import { FeatureMap, getDomainsByFeatureClient } from "@/lib/dto/domains";
 import { checkUserStatus } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";
 
+export const dynamic = "force-dynamic";
+
 // Get domains by feature for frontend
 export async function GET(req: NextRequest) {
   try {

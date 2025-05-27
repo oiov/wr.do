@@ -11,12 +11,18 @@
     "postbuild": "next-sitemap",
     "turbo": "next dev --turbo",
     "start": "next start",
+    "start-docker": "npm-run-all check-db start-server",
+    "start-server": "node server.js",
     "lint": "next lint",
     "preview": "next build && next start",
     "postinstall": "prisma generate",
     "db:push": "npx prisma migrate deploy",
     "email": "email dev --dir emails --port 3333",
-    "remove-content": "node ./setup.mjs"
+    "remove-content": "node ./setup.mjs",
+    "check-db": "node scripts/check-db.js"
+  },
+  "prisma": {
+    "schema": "./prisma/schema.prisma"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.4.1",
@@ -68,6 +74,7 @@
     "@vercel/functions": "^1.4.0",
     "@vercel/og": "^0.6.2",
     "cheerio": "1.0.0-rc.12",
+    "chalk": "^4.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
@@ -77,6 +84,7 @@
     "d3-scale": "^4.0.2",
     "d3-scale-chromatic": "^3.1.0",
     "date-fns": "^3.6.0",
+    "dotenv": "^10.0.0",
     "framer-motion": "^12.5.0",
     "globe.gl": "^2.41.4",
     "lodash": "^4.17.21",
@@ -93,6 +101,7 @@
     "next-themes": "^0.3.0",
     "next-view-transitions": "^0.3.0",
     "nodemailer": "^6.9.14",
+    "npm-run-all": "^4.1.5",
     "peerjs": "^1.5.4",
     "prop-types": "^15.8.1",
     "react": "18.3.1",
@@ -112,6 +121,7 @@
     "shiki": "^1.11.0",
     "sonner": "^1.5.0",
     "swr": "^2.2.5",
+    "semver": "^7.5.4",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.176.0",

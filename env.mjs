@@ -6,22 +6,22 @@ export const env = createEnv({
     // This is optional because it's only used in development.
     // See https://next-auth.js.org/deployment.
     NEXTAUTH_URL: z.string().url().optional(),
-    AUTH_SECRET: z.string().min(1),
+    AUTH_SECRET: z.string().optional(),
     GOOGLE_CLIENT_ID: z.string().optional(),
     GOOGLE_CLIENT_SECRET: z.string().optional(),
     GITHUB_ID: z.string().optional(),
     GITHUB_SECRET: z.string().optional(),
     LinuxDo_CLIENT_ID: z.string().optional(),
     LinuxDo_CLIENT_SECRET: z.string().optional(),
-    DATABASE_URL: z.string().min(1),
+    DATABASE_URL: z.string().optional(),
     RESEND_API_KEY: z.string().optional(),
     SCREENSHOTONE_BASE_URL: z.string().optional(),
     GITHUB_TOKEN: z.string().optional(),
   },
   client: {
-    NEXT_PUBLIC_APP_URL: z.string().min(1),
+    NEXT_PUBLIC_APP_URL: z.string().optional(),
     NEXT_PUBLIC_OPEN_SIGNUP: z.string().min(1).default("1"),
-    NEXT_PUBLIC_EMAIL_R2_DOMAIN: z.string().min(1),
+    NEXT_PUBLIC_EMAIL_R2_DOMAIN: z.string().optional(),
   },
   runtimeEnv: {
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,

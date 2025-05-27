@@ -2,9 +2,10 @@ import { ImageResponse } from "@vercel/og";
 
 import { checkApiKey } from "@/lib/dto/api-key";
 import { createScrapeMeta } from "@/lib/dto/scrape";
+import { getIpInfo } from "@/lib/geo";
 import { WRDO_QR_LOGO } from "@/lib/qr/constants";
 import { QRCodeSVG } from "@/lib/qr/utils";
-import { getIpInfo, getSearchParams } from "@/lib/utils";
+import { getSearchParams } from "@/lib/utils";
 import { getQRCodeQuerySchema } from "@/lib/validations/qr";
 
 const CORS_HEADERS = {
@@ -41,9 +42,9 @@ export async function GET(req: Request) {
       );
     }
 
-    const stats = getIpInfo(req);
+    const stats = await getIpInfo(req);
     await createScrapeMeta({
-      ip: stats.ip,
+      ip: stats.ip || "::1",
       type: "qrcode",
       referer: stats.referer,
       city: stats.city,
