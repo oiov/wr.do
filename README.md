@@ -47,7 +47,7 @@ Remember to fill in the necessary environment variables.
 
 ### Deploy with Docker Compose
 
-Create a new folder and copy the `docker-compose.yml`、`.env` file to the folder.
+Create a new folder and copy the [`docker-compose.yml`](https://github.com/oiov/wr.do/blob/main/docker-compose.yml)、[`.env`](https://github.com/oiov/wr.do/blob/main/.env.example) file to the folder.
 
 ```yml
 - wrdo

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { User } from "@prisma/client";
 import { PenLine, RefreshCwIcon } from "lucide-react";
 import { toast } from "sonner";
@@ -86,6 +87,7 @@ function TableColumnSekleton() {
 }
 
 export default function UserUrlsList({ user, action }: UrlListProps) {
+  const pathname = usePathname();
   const [isShowForm, setShowForm] = useState(false);
   const [formType, setFormType] = useState<FormType>("add");
   const [currentEditUrl, setCurrentEditUrl] = useState<ShortUrlFormData | null>(
@@ -141,6 +143,10 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
 
   const renderList = () => (
     <div className="rounded-lg border p-4">
+      {pathname === "/dashboard" && (
+        <h2 className="mb-4 text-lg font-bold">Short URLs</h2>
+      )}
+
       <div className="mb-2 flex-row items-center gap-2 space-y-2 sm:flex sm:space-y-0">
         <div className="relative w-full">
           <Input
@@ -396,42 +402,48 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
   return (
     <>
       <Tabs defaultValue="Links">
-        <div className="mb-4 flex items-center justify-between gap-2">
-          <TabsList>
-            <TabsTrigger value="Links">Links</TabsTrigger>
-            <TabsTrigger value="Realtime">Realtime</TabsTrigger>
-          </TabsList>
-          <div className="ml-auto flex items-center justify-end gap-3">
-            <Button
-              variant={"outline"}
-              onClick={() => handleRefresh()}
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <RefreshCwIcon className="size-4 animate-spin" />
-              ) : (
-                <RefreshCwIcon className="size-4" />
-              )}
-            </Button>
-            <Button
-              className="flex shrink-0 gap-1"
-              variant="default"
-              onClick={() => {
-                setCurrentEditUrl(null);
-                setShowForm(false);
-                setFormType("add");
-                setShowForm(!isShowForm);
-              }}
-            >
-              <Icons.add className="size-4" />
-              <span className="hidden sm:inline">Add URL</span>
-            </Button>
+        {pathname !== "/dashboard" && (
+          <div className="mb-4 flex items-center justify-between gap-2">
+            <TabsList>
+              <TabsTrigger value="Links">Links</TabsTrigger>
+              <TabsTrigger value="Realtime">Realtime</TabsTrigger>
+            </TabsList>
+            <div className="ml-auto flex items-center justify-end gap-3">
+              <Button
+                variant={"outline"}
+                onClick={() => handleRefresh()}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <RefreshCwIcon className="size-4 animate-spin" />
+                ) : (
+                  <RefreshCwIcon className="size-4" />
+                )}
+              </Button>
+              <Button
+                className="flex shrink-0 gap-1"
+                variant="default"
+                onClick={() => {
+                  setCurrentEditUrl(null);
+                  setShowForm(false);
+                  setFormType("add");
+                  setShowForm(!isShowForm);
+                }}
+              >
+                <Icons.add className="size-4" />
+                <span className="hidden sm:inline">Add URL</span>
+              </Button>
+            </div>
           </div>
-        </div>
+        )}
 
         <TabsContent className="space-y-3" value="Links">
           {renderList()}
-          <LiveLog admin={action.indexOf("admin") > -1} />
+          {action.indexOf("admin") > -1 ? (
+            <LiveLog admin={true} />
+          ) : (
+            <LiveLog />
+          )}
           <ApiReference
             badge="POST /api/v1/short"
             target="creating short urls"
@@ -439,7 +451,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
           />
         </TabsContent>
         <TabsContent value="Realtime">
-          <Globe isAdmin={action.indexOf("admin") > -1} />
+          {action.indexOf("admin") > -1 ? <Globe isAdmin={true} /> : <Globe />}
         </TabsContent>
       </Tabs>
 

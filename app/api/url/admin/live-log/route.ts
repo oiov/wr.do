@@ -5,12 +5,12 @@ import { getCurrentUser } from "@/lib/session";
 export async function GET(req: Request) {
   try {
     const user = checkUserStatus(await getCurrentUser());
+    if (user instanceof Response) return user;
 
     const url = new URL(req.url);
     const isAdmin = url.searchParams.get("admin");
 
     if (isAdmin === "true") {
-      if (user instanceof Response) return user;
       if (user.role !== "ADMIN") {
         return Response.json("Unauthorized", {
           status: 401,

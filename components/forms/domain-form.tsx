@@ -25,13 +25,6 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "../ui/collapsible";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
 import { Switch } from "../ui/switch";
 
 export type FormData = DomainFormData;
@@ -158,6 +151,13 @@ export function DomainForm({
       });
     }
   };
+
+  const ReadyBadge = (
+    <Badge className="text-xs font-semibold" variant="green">
+      <Icons.check className="mr-1 size-3" />
+      Ready
+    </Badge>
+  );
 
   return (
     <div>

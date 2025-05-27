@@ -47,7 +47,7 @@ export interface LogEntry {
   isNew?: boolean; // New property to track newly added logs
 }
 
-export default function LiveLog({ admin }: { admin: boolean }) {
+export default function LiveLog({ admin = false }: { admin?: boolean }) {
   const { theme } = useTheme();
   const { mutate } = useSWRConfig();
   const [isLive, setIsLive] = useState(false);

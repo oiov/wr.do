@@ -318,9 +318,10 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
               ) : (
                 <EmptyPlaceholder>
                   <EmptyPlaceholder.Icon name="globe" />
-                  <EmptyPlaceholder.Title>No records</EmptyPlaceholder.Title>
+                  <EmptyPlaceholder.Title>No Subdomain</EmptyPlaceholder.Title>
                   <EmptyPlaceholder.Description>
-                    You don&apos;t have any record yet. Start creating record.
+                    You don&apos;t have any subdomain yet. Start creating
+                    record.
                   </EmptyPlaceholder.Description>
                 </EmptyPlaceholder>
               )}

@@ -17,7 +17,9 @@ Remember to fill in the necessary environment variables.
   Set `SKIP_DB_CHECK` and `SKIP_DB_MIGRATION` to `false` in the `.env` file, this will start the database check and migration.
 </Callout>
 
-Create a new folder and copy the `docker-compose.yml`、`.env` file to the folder.
+Create a new folder and copy the [docker-compose.yml](https://github.com/oiov/wr.do/blob/main/docker-compose.yml)、[.env](https://github.com/oiov/wr.do/blob/main/.env.example) file to the folder.
+
+> Or only create a [docker-compose.yml](https://github.com/oiov/wr.do/blob/main/docker-compose.yml) file, just replace `${DATABASE_URL}` with your database connection url and so on.
 
 ```bash
 - wrdo

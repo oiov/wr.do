@@ -33,18 +33,7 @@
 
 ## 快速开始
 
-查看开发者[快速开始](https://wr.do/docs/developer/quick-start)的详细文档。
-
-### 要求
-
-- [Vercel](https://vercel.com) 账户用于部署应用
-- 至少一个在 [Cloudflare](https://dash.cloudflare.com/) 托管的 **域名**
-
-查看[开发文档](https://wr.do/docs/developer/installation)。
-
-### Email worker
-
-查看 [email worker](https://wr.do/docs/developer/cloudflare-email-worker) 文档用于邮件接收。
+查看开发者[快速开始](https://wr.do/docs/developer/quick-start)详细文档。
 
 ## 自部署教程
 
@@ -55,7 +44,6 @@
 记得填写必要的环境变量。
 
 ### 使用 Docker Compose 部署
-
 
 在服务器中创建一个文件夹，进入该文件夹并新建`docker-compose.yml`文件，填写必要的环境变量，然后执行：
 

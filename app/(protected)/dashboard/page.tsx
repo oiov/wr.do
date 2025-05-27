@@ -173,12 +173,19 @@ export default async function DashboardPage() {
           </ErrorBoundary>
         </div>
         <ErrorBoundary
-          fallback={<Skeleton className="h-[200px] w-full rounded-lg" />}
+          fallback={<Skeleton className="h-[400px] w-full rounded-lg" />}
         >
           <Suspense
-            fallback={<Skeleton className="h-[200px] w-full rounded-lg" />}
+            fallback={<Skeleton className="h-[400px] w-full rounded-lg" />}
           >
-            <LiveLogSection />
+            <UserRecordsListSection
+              user={{
+                id: user.id,
+                name: user.name || "",
+                apiKey: user.apiKey || "",
+                email: user.email || "",
+              }}
+            />
           </Suspense>
         </ErrorBoundary>
         <ErrorBoundary
@@ -194,22 +201,6 @@ export default async function DashboardPage() {
                 apiKey: user.apiKey || "",
                 role: user.role,
                 team: user.team,
-              }}
-            />
-          </Suspense>
-        </ErrorBoundary>
-        <ErrorBoundary
-          fallback={<Skeleton className="h-[400px] w-full rounded-lg" />}
-        >
-          <Suspense
-            fallback={<Skeleton className="h-[400px] w-full rounded-lg" />}
-          >
-            <UserRecordsListSection
-              user={{
-                id: user.id,
-                name: user.name || "",
-                apiKey: user.apiKey || "",
-                email: user.email || "",
               }}
             />
           </Suspense>
