@@ -1,4 +1,3 @@
-import { env } from "@/env.mjs";
 import { generateApiKey } from "@/lib/dto/api-key";
 import { checkUserStatus } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";

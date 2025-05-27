@@ -82,13 +82,14 @@ export function UserApiKeyForm({ user }: UserNameFormProps) {
           <Button
             type="submit"
             variant={"blue"}
+            size={"sm"}
             disabled={isPending}
             className="shrink-0 px-4"
           >
             {isPending ? (
               <Icons.spinner className="size-4 animate-spin" />
             ) : (
-              <p>Generate</p>
+              "Generate"
             )}
           </Button>
         </div>

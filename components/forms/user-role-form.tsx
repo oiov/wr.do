@@ -110,7 +110,7 @@ export function UserRoleForm({ user }: UserNameFormProps) {
               type="submit"
               variant={updated ? "blue" : "disable"}
               disabled={isPending || !updated}
-              className="w-[67px] shrink-0 px-0 sm:w-[130px]"
+              className="h-9 w-[67px] shrink-0 px-0 sm:w-[130px]"
             >
               {isPending ? (
                 <Icons.spinner className="size-4 animate-spin" />
