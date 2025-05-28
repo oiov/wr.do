@@ -12,6 +12,7 @@ import { ShortUrlFormData } from "@/lib/dto/short-urls";
 import {
   cn,
   expirationTime,
+  extractHostname,
   fetcher,
   removeUrlSuffix,
   timeAgo,
@@ -39,6 +40,7 @@ import {
 import { FormType } from "@/components/forms/record-form";
 import { UrlForm } from "@/components/forms/url-form";
 import ApiReference from "@/components/shared/api-reference";
+import BlurImage from "@/components/shared/blur-image";
 import { CopyButton } from "@/components/shared/copy-button";
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
 import { Icons } from "@/components/shared/icons";
@@ -141,8 +143,18 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
     }
   };
 
-  const renderList = () => (
-    <div className="rounded-lg border p-4">
+  const rendeEmpty = () => (
+    <EmptyPlaceholder>
+      <EmptyPlaceholder.Icon name="link" />
+      <EmptyPlaceholder.Title>No urls</EmptyPlaceholder.Title>
+      <EmptyPlaceholder.Description>
+        You don&apos;t have any url yet. Start creating url.
+      </EmptyPlaceholder.Description>
+    </EmptyPlaceholder>
+  );
+
+  const rendeHeader = () => (
+    <>
       {pathname === "/dashboard" && (
         <h2 className="mb-4 text-lg font-bold">Short URLs</h2>
       )}
@@ -221,6 +233,12 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
           </div>
         )}
       </div>
+    </>
+  );
+
+  const rendeList = () => (
+    <div className="rounded-lg border p-4">
+      {rendeHeader()}
 
       <Table>
         <TableHeader className="bg-gray-100/50 dark:bg-primary-foreground">
@@ -377,13 +395,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
               </div>
             ))
           ) : (
-            <EmptyPlaceholder>
-              <EmptyPlaceholder.Icon name="link" />
-              <EmptyPlaceholder.Title>No urls</EmptyPlaceholder.Title>
-              <EmptyPlaceholder.Description>
-                You don&apos;t have any url yet. Start creating url.
-              </EmptyPlaceholder.Description>
-            </EmptyPlaceholder>
+            rendeEmpty()
           )}
         </TableBody>
         {data && Math.ceil(data.total / pageSize) > 1 && (
@@ -399,14 +411,157 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
     </div>
   );
 
+  const rendeGrid = () => (
+    <>
+      <div className="rounded-lg border p-4">
+        {rendeHeader()}
+
+        <section className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+          {isLoading ? (
+            <>
+              {[1, 2, 3, 4, 5, 6].map((v) => (
+                <Skeleton key={v} className="h-24 w-full" />
+              ))}
+            </>
+          ) : data && data.list && data.list.length ? (
+            data.list.map((short) => (
+              <div className="h-24 rounded-md border p-3" key={short.id}>
+                <div className="flex h-full items-start justify-start gap-3">
+                  <BlurImage
+                    src={`https://unavatar.io/${extractHostname(short.target)}?fallback=https://wr.do/logo.png`}
+                    alt="logo"
+                    width={30}
+                    height={30}
+                  />
+                  <div className="flex size-full flex-col justify-between truncate">
+                    <div className="flex w-full items-center justify-between gap-3">
+                      <div className="flex items-center">
+                        <Link
+                          className="overflow-hidden text-ellipsis whitespace-normal text-sm font-semibold text-slate-600 hover:text-blue-400 hover:underline dark:text-slate-400"
+                          href={`https://${short.prefix}/s/${short.url}${short.password ? `?password=${short.password}` : ""}`}
+                          target="_blank"
+                          prefetch={false}
+                          title={short.url}
+                        >
+                          {short.prefix}/s/{short.url}
+                        </Link>
+                        <CopyButton
+                          value={`${short.prefix}/s/${short.url}${short.password ? `?password=${short.password}` : ""}`}
+                          className={cn(
+                            "size-[25px]",
+                            "duration-250 transition-all group-hover:opacity-100",
+                          )}
+                        />
+                        {short.password && (
+                          <Icons.lock className="size-3 text-neutral-600 dark:text-neutral-400" />
+                        )}
+                      </div>
+                      <div className="ml-auto flex items-center">
+                        <Button
+                          className="size-[25px] p-1.5"
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => {
+                            setCurrentEditUrl(short);
+                            setShowForm(false);
+                            setFormType("edit");
+                            setShowForm(!isShowForm);
+                          }}
+                        >
+                          <PenLine className="size-4" />
+                        </Button>
+                        <Button
+                          className="size-[25px] p-1.5"
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => {
+                            setSelectedUrl(short);
+                            setShowQrcode(!isShowQrcode);
+                          }}
+                        >
+                          <Icons.qrcode className="size-4" />
+                        </Button>
+                        <Button
+                          className="size-[25px] p-1.5"
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => {
+                            setSelectedUrl(short);
+                            if (isShowStats && selectedUrl?.id !== short.id) {
+                            } else {
+                              setShowStats(!isShowStats);
+                            }
+                          }}
+                        >
+                          <Icons.lineChart className="size-4" />
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1 overflow-hidden truncate text-sm text-muted-foreground">
+                      <Icons.forwardArrow className="size-4 shrink-0 text-gray-400" />
+                      <LinkInfoPreviewer
+                        apiKey={user.apiKey ?? ""}
+                        url={short.target}
+                        formatUrl={removeUrlSuffix(short.target)}
+                      />
+                    </div>
+                    <div className="mt-auto flex items-center justify-end gap-1.5 text-xs text-muted-foreground">
+                      Expiration:{" "}
+                      {expirationTime(short.expiration, short.updatedAt)}
+                      <span>|</span>
+                      Updated at {timeAgo(short.updatedAt as Date)}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            rendeEmpty()
+          )}
+        </section>
+
+        {data && Math.ceil(data.total / pageSize) > 1 && (
+          <PaginationWrapper
+            total={data.total}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            pageSize={pageSize}
+            setPageSize={setPageSize}
+          />
+        )}
+      </div>
+    </>
+  );
+
+  const rendLogs = () => (
+    <>
+      {action.indexOf("admin") > -1 ? <LiveLog admin={true} /> : <LiveLog />}
+      <ApiReference
+        badge="POST /api/v1/short"
+        target="creating short urls"
+        link="/docs/short-urls#api-reference"
+      />
+    </>
+  );
+
   return (
     <>
-      <Tabs defaultValue="Links">
+      <Tabs defaultValue="List">
         {pathname !== "/dashboard" && (
           <div className="mb-4 flex items-center justify-between gap-2">
             <TabsList>
-              <TabsTrigger value="Links">Links</TabsTrigger>
-              <TabsTrigger value="Realtime">Realtime</TabsTrigger>
+              <TabsTrigger className="flex items-center gap-1" value="List">
+                <Icons.list className="size-4" />
+                List
+              </TabsTrigger>
+              <TabsTrigger className="flex items-center gap-1" value="Grid">
+                <Icons.layoutGrid className="size-4" />
+                Grid
+              </TabsTrigger>
+              <TabsTrigger className="flex items-center gap-1" value="Realtime">
+                <Icons.globe className="size-4" />
+                Realtime
+              </TabsTrigger>
             </TabsList>
             <div className="ml-auto flex items-center justify-end gap-3">
               <Button
@@ -437,18 +592,13 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
           </div>
         )}
 
-        <TabsContent className="space-y-3" value="Links">
-          {renderList()}
-          {action.indexOf("admin") > -1 ? (
-            <LiveLog admin={true} />
-          ) : (
-            <LiveLog />
-          )}
-          <ApiReference
-            badge="POST /api/v1/short"
-            target="creating short urls"
-            link="/docs/short-urls#api-reference"
-          />
+        <TabsContent className="space-y-3" value="List">
+          {rendeList()}
+          {rendLogs()}
+        </TabsContent>
+        <TabsContent className="space-y-3" value="Grid">
+          {rendeGrid()}
+          {rendLogs()}
         </TabsContent>
         <TabsContent value="Realtime">
           {action.indexOf("admin") > -1 ? <Globe isAdmin={true} /> : <Globe />}

@@ -111,28 +111,7 @@ export default function EmailManagerInnovate() {
                 </div>
               </div>
               <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
-                <svg
-                  viewBox="0 0 18 18"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 shrink-0 dark:text-gray-400"
-                >
-                  <path
-                    d="M15.25,9.75H4.75c-1.105,0-2-.895-2-2V3.75"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="1.5"
-                  ></path>
-                  <polyline
-                    fill="none"
-                    points="11 5.5 15.25 9.75 11 14"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="1.5"
-                  ></polyline>
-                </svg>
+                <Icons.forwardArrow className="h-4 w-4 shrink-0 text-gray-400" />
                 {viewMode === "inbox" ? "app@wr.do" : "example@gmail.com"}
               </div>
             </div>

@@ -245,6 +245,15 @@ export function removeUrlSuffix(url: string): string {
   return url.startsWith("http") ? url.split("//")[1] : url;
 }
 
+export function extractHostname(url: string): string {
+  try {
+    const urlObject = new URL(url);
+    return urlObject.hostname;
+  } catch (error) {
+    return "";
+  }
+}
+
 export function toCamelCase(str: string) {
   return str
     .split("-")
