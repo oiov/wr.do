@@ -21,7 +21,6 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 
-import CountUp from "../dashboard/count-up";
 import {
   Select,
   SelectContent,

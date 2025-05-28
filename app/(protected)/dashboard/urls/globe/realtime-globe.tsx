@@ -123,8 +123,8 @@ export default function RealtimeGlobe({
       globe = new Globe(container)
         .width(wrapperWidth)
         .height(wrapperWidth > 728 ? wrapperWidth * 0.9 : wrapperWidth)
-        .globeOffset([0, -130])
-        .atmosphereColor("rgba(170, 170, 200, 0.8)")
+        .globeOffset([0, -80])
+        .atmosphereColor("rgba(170, 170, 200, 0.7)")
         .backgroundColor("rgba(0,0,0,0)")
         .globeMaterial(
           new MeshPhongMaterial({
@@ -295,7 +295,10 @@ export default function RealtimeGlobe({
   }, [cleanup]);
 
   return (
-    <div ref={wrapperRef} className="relative max-h-screen overflow-hidden">
+    <div
+      ref={wrapperRef}
+      className="relative -mt-8 max-h-screen overflow-hidden"
+    >
       <div
         ref={globeRef}
         className="flex justify-center"

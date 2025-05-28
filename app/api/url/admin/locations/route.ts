@@ -109,7 +109,7 @@ export async function GET(request: NextRequest) {
       if (item.latitude && item.longitude) {
         const lat = Math.round(Number(item.latitude) * 100) / 100;
         const lng = Math.round(Number(item.longitude) * 100) / 100;
-        const key = `${lat},${lng}`;
+        const key = `${lat},${lng},${item.createdAt},${item.userUrl.url},${item.userUrl.prefix}`;
 
         if (locationMap.has(key)) {
           const existing = locationMap.get(key)!;
@@ -148,10 +148,6 @@ export async function GET(request: NextRequest) {
     );
     const uniqueLocations = aggregatedData.length;
 
-    // console.log(
-    //   `Fetched ${rawData.length} records, aggregated to ${uniqueLocations} locations, total clicks: ${totalClicks}`,
-    // );
-
     return NextResponse.json({
       data: aggregatedData,
       total: uniqueLocations,
@@ -180,9 +176,6 @@ export async function GET(request: NextRequest) {
       { status: 500 },
     );
   }
-  // finally {
-  //   await prisma.$disconnect();
-  // }
 }
 
 // POST endpoint remains the same
@@ -272,7 +265,4 @@ export async function POST(request: NextRequest) {
       { status: 500 },
     );
   }
-  //  finally {
-  //   await prisma.$disconnect();
-  // }
 }

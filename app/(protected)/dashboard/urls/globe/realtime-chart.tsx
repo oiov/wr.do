@@ -36,7 +36,6 @@ export const RealtimeChart = ({
     return Math.ceil(dataLength / 6);
   };
 
-  // console.log("chartData", chartData);
   const filteredChartData = chartData.filter((item, index) => {
     return item.count !== 0 || index === chartData.length - 1;
   });
@@ -50,7 +49,6 @@ export const RealtimeChart = ({
         <Icons.mousePointerClick className="ml-auto size-4 text-muted-foreground" />
       </div>
       <p className="mb-2 text-lg font-semibold">{totalClicks}</p>
-      {/* <ResponsiveContainer ></ResponsiveContainer> */}
       <BarChart
         width={300}
         height={200}
@@ -68,7 +66,7 @@ export const RealtimeChart = ({
           type="category"
           scale="point"
           padding={{ left: 14, right: 20 }}
-          tickFormatter={(value) => value.split(" ")[1]}
+          tickFormatter={(value) => value}
         />
         <YAxis
           domain={[0, "dataMax"]}
@@ -94,7 +92,7 @@ export const RealtimeChart = ({
           dataKey="count"
           fill="#2d9af9"
           radius={[1, 1, 0, 0]}
-          maxBarSize={20}
+          maxBarSize={40}
         />
       </BarChart>
     </div>

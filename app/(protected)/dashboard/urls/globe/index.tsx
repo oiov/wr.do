@@ -102,129 +102,56 @@ export default function Realtime({ isAdmin = false }: { isAdmin?: boolean }) {
     return `${Math.round(lat * 100) / 100},${Math.round(lng * 100) / 100}`;
   };
 
-  const processChartData = (locations: Location[]): ChartData[] => {
-    // 过滤有效数据
+  const processChartDataOptimized = (locations: Location[]): ChartData[] => {
     const validLocations = locations.filter((loc) => loc.createdAt);
     if (validLocations.length === 0) return [];
 
-    // 获取时间范围
+    // 如果数据量很少，直接按原始时间点展示
+    if (validLocations.length <= 10) {
+      return validLocations.map((loc, index) => ({
+        time: format(new Date(loc.createdAt!), "HH:mm:ss"),
+        count: loc.count,
+      }));
+    }
+
+    // 否则使用智能分组
     const dates = validLocations.map((loc) => new Date(loc.createdAt!));
     const minDate = new Date(Math.min(...dates.map((d) => d.getTime())));
     const maxDate = new Date(Math.max(...dates.map((d) => d.getTime())));
-
-    // 根据时间跨度选择分组策略
     const totalMinutes = differenceInMinutes(maxDate, minDate);
-    const totalHours = differenceInHours(maxDate, minDate);
-    const totalDays = differenceInDays(maxDate, minDate);
 
-    let groupByFn: (date: Date) => Date;
-    let formatFn: (date: Date) => string;
-    let intervalFn: (date: Date, interval: number) => Date;
-    let interval: number;
+    // 根据数据量和时间跨度动态调整分组
+    const targetGroups = Math.min(validLocations.length, 20); // 目标分组数量
+    let groupMinutes: number;
 
-    // 30分钟内：按1分钟分组
-    if (totalMinutes <= 30) {
-      groupByFn = startOfMinute;
-      formatFn = (date) => format(date, "MM-dd HH:mm");
-      intervalFn = addMinutes;
-      interval = 1;
-    } else if (totalMinutes <= 60) {
-      // 1小时内：按2分钟分组
-      groupByFn = (date) => {
-        const minutes = Math.floor(date.getMinutes() / 2) * 2;
-        const grouped = startOfMinute(date);
-        grouped.setMinutes(minutes);
-        return grouped;
-      };
-      formatFn = (date) => format(date, "MM-dd HH:mm");
-      intervalFn = addMinutes;
-      interval = 2;
-    } else if (totalHours <= 2) {
-      // 2小时内：按4分钟分组
-      groupByFn = (date) => {
-        const minutes = Math.floor(date.getMinutes() / 4) * 4;
-        const grouped = startOfMinute(date);
-        grouped.setMinutes(minutes);
-        return grouped;
-      };
-      formatFn = (date) => format(date, "MM-dd HH:mm");
-      intervalFn = addMinutes;
-      interval = 4;
-    } else if (totalHours <= 6) {
-      // 6小时内：按12分钟分组
-      groupByFn = (date) => {
-        const minutes = Math.floor(date.getMinutes() / 12) * 12;
-        const grouped = startOfMinute(date);
-        grouped.setMinutes(minutes);
-        return grouped;
-      };
-      formatFn = (date) => format(date, "MM-dd HH:mm");
-      intervalFn = addMinutes;
-      interval = 12;
-    } else if (totalHours <= 12) {
-      // 12小时内：按24分钟分组
-      groupByFn = (date) => {
-        const minutes = Math.floor(date.getMinutes() / 24) * 24;
-        const grouped = startOfMinute(date);
-        grouped.setMinutes(minutes);
-        return grouped;
-      };
-      formatFn = (date) => format(date, "MM-dd HH:mm");
-      intervalFn = addMinutes;
-      interval = 24;
-    } else if (totalHours <= 24) {
-      // 24小时内：按48分钟分组
-      groupByFn = (date) => {
-        const minutes = Math.floor(date.getMinutes() / 48) * 48;
-        const grouped = startOfMinute(date);
-        grouped.setMinutes(minutes);
-        return grouped;
-      };
-      formatFn = (date) => format(date, "MM-dd HH:mm");
-      intervalFn = addMinutes;
-      interval = 48;
-    } else if (totalDays <= 7) {
-      // 7天内：按天分组
-      groupByFn = startOfDay;
-      formatFn = (date) => format(date, "MM-dd");
-      intervalFn = addHours;
-      interval = 24;
+    if (totalMinutes <= 60) {
+      groupMinutes = Math.max(1, Math.ceil(totalMinutes / targetGroups));
     } else {
-      // 更长时间：按天分组
-      groupByFn = startOfDay;
-      formatFn = (date) => format(date, "MM-dd");
-      intervalFn = addHours;
-      interval = 24;
+      groupMinutes = Math.max(5, Math.ceil(totalMinutes / targetGroups));
     }
 
-    // 分组聚合数据
-    const groupedData = new Map<string, number>();
+    const groupByFn = (date: Date) => {
+      const minutes =
+        Math.floor(date.getMinutes() / groupMinutes) * groupMinutes;
+      const grouped = new Date(date);
+      grouped.setMinutes(minutes, 0, 0);
+      return grouped;
+    };
 
+    const groupedData = new Map<string, number>();
     validLocations.forEach((loc) => {
       const date = new Date(loc.createdAt!);
       const groupedDate = groupByFn(date);
       const key = groupedDate.getTime().toString();
-
       groupedData.set(key, (groupedData.get(key) || 0) + loc.count);
     });
 
-    // 填充时间间隔，确保连续性
-    const result: ChartData[] = [];
-    const startGroup = groupByFn(minDate);
-    const endGroup = groupByFn(maxDate);
-
-    let current = startGroup;
-    // 过滤掉count为0 的数据
-    while (current <= endGroup) {
-      const key = current.getTime().toString();
-      result.push({
-        time: formatFn(current),
-        count: groupedData.get(key) || 0,
-      });
-      current = intervalFn(current, interval);
-    }
-
-    return result;
+    return Array.from(groupedData.entries())
+      .sort(([a], [b]) => parseInt(a) - parseInt(b))
+      .map(([key, count]) => ({
+        time: format(new Date(parseInt(key)), "HH:mm"),
+        count: count,
+      }));
   };
 
   const appendLocationData = (
@@ -276,7 +203,7 @@ export default function Realtime({ isAdmin = false }: { isAdmin?: boolean }) {
       count: Math.max(0.1, loc.count / Math.max(totalCount, 1)),
     }));
 
-    const chartData = processChartData(updatedLocations);
+    const chartData = processChartDataOptimized(updatedLocations);
 
     return {
       locations: normalizedLocations,
@@ -488,13 +415,13 @@ export default function Realtime({ isAdmin = false }: { isAdmin?: boolean }) {
 
   return (
     <div className="relative w-full">
-      <RealtimeTimePicker
-        timeRange={timeRange}
-        setTimeRange={handleTimeRangeChange}
-      />
       <div className="sm:relative sm:p-4">
+        <RealtimeTimePicker
+          timeRange={timeRange}
+          setTimeRange={handleTimeRangeChange}
+        />
         <RealtimeChart
-          className="left-0 top-0 z-10 rounded-t-none text-left sm:absolute"
+          className="left-0 top-9 z-10 rounded-t-none text-left sm:absolute"
           chartData={chartData}
           totalClicks={stats.totalClicks}
         />
@@ -506,7 +433,7 @@ export default function Realtime({ isAdmin = false }: { isAdmin?: boolean }) {
           setHandleTrafficEvent={(fn) => (handleTrafficEventRef.current = fn)}
         />
         <RealtimeLogs
-          className="-top-9 right-0 z-10 sm:absolute"
+          className="right-0 top-0 z-10 sm:absolute"
           locations={locations}
         />
       </div>
@@ -523,7 +450,7 @@ export function RealtimeTimePicker({
 }) {
   return (
     <Select onValueChange={setTimeRange} name="time range" value={timeRange}>
-      <SelectTrigger className="rounded-b-none border-b-0 sm:w-[326px]">
+      <SelectTrigger className="left-0 top-0 z-10 h-9 rounded-b-none border-b-0 bg-transparent text-left backdrop-blur-2xl sm:absolute sm:w-[326px]">
         <SelectValue placeholder="Select a time range" />
       </SelectTrigger>
       <SelectContent>
