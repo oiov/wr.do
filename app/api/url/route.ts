@@ -1,4 +1,4 @@
-import { getUserShortUrls } from "@/lib/dto/short-urls";
+import { getUrlClicksByIds, getUserShortUrls } from "@/lib/dto/short-urls";
 import { checkUserStatus } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";
 
@@ -24,6 +24,21 @@ export async function GET(req: Request) {
       target,
     );
 
+    return Response.json(data);
+  } catch (error) {
+    return Response.json(error?.statusText || error, {
+      status: error.status || 500,
+    });
+  }
+}
+
+export async function POST(req: Request) {
+  try {
+    const user = checkUserStatus(await getCurrentUser());
+    if (user instanceof Response) return user;
+
+    const { ids } = await req.json();
+    const data = await getUrlClicksByIds(ids, user.id, "USER");
     return Response.json(data);
   } catch (error) {
     return Response.json(error?.statusText || error, {

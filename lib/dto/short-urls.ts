@@ -124,6 +124,36 @@ export async function getUserShortUrlCount(
   }
 }
 
+export async function getUrlClicksByIds(
+  ids: string[],
+  userId: string,
+  role: UserRole,
+): Promise<Record<string, number>> {
+  if (ids.length === 0) return {};
+
+  try {
+    const clicksData = await prisma.urlMeta.groupBy({
+      by: ["urlId"],
+      where: {
+        urlId: { in: ids },
+        userUrl: role === "USER" ? { userId } : undefined,
+      },
+      _sum: { click: true },
+    });
+
+    const clicksMap: Record<string, number> = {};
+    ids.forEach((id) => (clicksMap[id] = 0)); // 初始化
+    clicksData.forEach((item) => {
+      clicksMap[item.urlId] = item._sum.click || 0;
+    });
+
+    return clicksMap;
+  } catch (error) {
+    console.error("Error fetching clicks:", error);
+    return Object.fromEntries(ids.map((id) => [id, 0]));
+  }
+}
+
 export async function createUserShortUrl(data: ShortUrlFormData) {
   try {
     const res = await prisma.userUrl.create({

@@ -37,8 +37,8 @@ export default function UserUrlMetaInfo({ user, action, urlId }: UrlMetaProps) {
 
   if (isLoading)
     return (
-      <div className="space-y-2 p-2">
-        <Skeleton className="h-40 w-full" />
+      <div className="space-y-2">
+        <Skeleton className="h-[400px] w-full" />
       </div>
     );
 

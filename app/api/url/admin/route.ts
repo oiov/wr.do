@@ -1,4 +1,4 @@
-import { getUserShortUrls } from "@/lib/dto/short-urls";
+import { getUrlClicksByIds, getUserShortUrls } from "@/lib/dto/short-urls";
 import { checkUserStatus } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";
 
@@ -34,11 +34,31 @@ export async function GET(req: Request) {
 
     return Response.json(data);
   } catch (error) {
-    console.log(error);
-
+    // console.log(error);
     return Response.json(error?.statusText || error, {
       status: error.status || 500,
       statusText: error.statusText || "Server error",
+    });
+  }
+}
+
+export async function POST(req: Request) {
+  try {
+    const user = checkUserStatus(await getCurrentUser());
+    if (user instanceof Response) return user;
+    if (user.role !== "ADMIN") {
+      return Response.json("Unauthorized", {
+        status: 401,
+        statusText: "Unauthorized",
+      });
+    }
+
+    const { ids } = await req.json();
+    const data = await getUrlClicksByIds(ids, user.id, "ADMIN");
+    return Response.json(data);
+  } catch (error) {
+    return Response.json(error?.statusText || error, {
+      status: error.status || 500,
     });
   }
 }

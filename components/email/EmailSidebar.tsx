@@ -14,15 +14,11 @@ import {
 import { toast } from "sonner";
 import useSWR from "swr";
 
-import { siteConfig } from "@/config/site";
-import { TeamPlanQuota } from "@/config/team";
 import { UserEmailList } from "@/lib/dto/email";
 import { reservedAddressSuffix } from "@/lib/enums";
 import { cn, fetcher, nFormatter, timeAgo } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import ApiReference from "@/app/emails/api-reference";
 
-import CountUp from "../dashboard/count-up";
 import { CopyButton } from "../shared/copy-button";
 import { EmptyPlaceholder } from "../shared/empty-placeholder";
 import { Icons } from "../shared/icons";

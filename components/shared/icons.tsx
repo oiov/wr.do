@@ -18,6 +18,7 @@ import {
   Copy,
   Crown,
   Download,
+  EllipsisVertical,
   File,
   FileText,
   Globe,
@@ -90,6 +91,7 @@ export const Icons = {
   unLock: LockKeyholeOpen,
   listFilter: ListFilter,
   botMessageSquare: BotMessageSquare,
+  moreVertical: EllipsisVertical,
   pwdKey: ({ ...props }: LucideProps) => (
     <svg
       height="18"
