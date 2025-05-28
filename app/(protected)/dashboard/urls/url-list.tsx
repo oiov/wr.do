@@ -182,7 +182,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
   };
 
   const rendeEmpty = () => (
-    <EmptyPlaceholder>
+    <EmptyPlaceholder className="col-span-full">
       <EmptyPlaceholder.Icon name="link" />
       <EmptyPlaceholder.Title>No urls</EmptyPlaceholder.Title>
       <EmptyPlaceholder.Description>
@@ -625,7 +625,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
   );
 
   const rendLogs = () => (
-    <div className="space-y-3">
+    <div className="mt-6 space-y-3">
       {action.indexOf("admin") > -1 ? <LiveLog admin={true} /> : <LiveLog />}
       <ApiReference
         badge="POST /api/v1/short"
