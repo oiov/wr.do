@@ -44,10 +44,14 @@ export default function UserUrlMetaInfo({ user, action, urlId }: UrlMetaProps) {
 
   if (!data || data.length === 0) {
     return (
-      <EmptyPlaceholder>
+      <EmptyPlaceholder className="shadow-none">
         <EmptyPlaceholder.Title>No Visits</EmptyPlaceholder.Title>
         <EmptyPlaceholder.Description>
-          You don&apos;t have any visits yet in last {timeRange}.
+          You don&apos;t have any visits yet in{" "}
+          {DATE_DIMENSION_ENUMS.find(
+            (e) => e.value === timeRange,
+          )?.label.toLowerCase()}
+          .
           <Select
             onValueChange={(value: string) => {
               setTimeRange(value);
