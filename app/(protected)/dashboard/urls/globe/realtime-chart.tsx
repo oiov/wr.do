@@ -79,7 +79,7 @@ export const RealtimeChart = ({
           content={({ active, payload, label }) => {
             if (active && payload && payload.length) {
               return (
-                <div className="rounded-md border bg-primary-foreground py-2 text-primary backdrop-blur">
+                <div className="rounded-md border border-primary-foreground bg-primary py-2 text-primary-foreground backdrop-blur">
                   <p className="label px-2 text-base font-medium">{`${label}`}</p>
                   <p className="label px-2 text-sm">{`Visits: ${payload[0].value}`}</p>
                 </div>
