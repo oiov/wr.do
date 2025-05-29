@@ -6,6 +6,7 @@ import { scaleSequentialSqrt } from "d3-scale";
 import { interpolateTurbo } from "d3-scale-chromatic";
 import { GlobeInstance } from "globe.gl";
 import { debounce } from "lodash-es";
+import { useTheme } from "next-themes";
 
 import { Location } from "./index";
 
@@ -33,6 +34,7 @@ export default function RealtimeGlobe({
   locations,
   stats,
 }: GlobeProps) {
+  const { theme } = useTheme();
   const globeRef = useRef<HTMLDivElement>(null);
   const globeInstanceRef = useRef<any>(null);
   const mountedRef = useRef(true);
@@ -128,7 +130,7 @@ export default function RealtimeGlobe({
         .backgroundColor("rgba(0,0,0,0)")
         .globeMaterial(
           new MeshPhongMaterial({
-            color: "rgb(228, 228, 231)",
+            color: theme === "dark" ? "rgb(65, 65, 65)" : "rgb(228, 228, 231)",
             transparent: false,
             opacity: 1,
           }) as any,

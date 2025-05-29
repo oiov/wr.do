@@ -64,6 +64,8 @@ import {
   X,
 } from "lucide-react";
 
+import { cn } from "@/lib/utils";
+
 import LogoIcon from "./logo";
 
 export type Icon = LucideIcon;
@@ -146,7 +148,74 @@ export const Icons = {
   download: Download,
   ellipsis: MoreVertical,
   paintbrush: Paintbrush,
-  mousePointerClick: MousePointerClick,
+  mousePointerClick: ({ className, ...props }: LucideProps) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={`group cursor-pointer transition-transform duration-75 hover:scale-110 ${className || ""}`}
+      {...props}
+    >
+      {/* 点击波纹线条 - 默认显示 */}
+      <g className="group-hover:hidden">
+        <path d="M14 4.1 12 6" />
+        <path d="m5.1 8-2.9-.8" />
+        <path d="m6 12-1.9 2" />
+        <path d="M7.2 2.2 8 5.1" />
+      </g>
+
+      {/* 点击波纹线条 - 动画版本 */}
+      <g className="opacity-0 group-hover:opacity-100">
+        <path
+          d="M14 4.1 12 6"
+          className="transition-all duration-500 group-hover:animate-ping"
+          style={{
+            animationDelay: "0.1s",
+            transformOrigin: "13px 5px",
+          }}
+        />
+        <path
+          d="m5.1 8-2.9-.8"
+          className="transition-all duration-500 group-hover:animate-ping"
+          style={{
+            animationDelay: "0.2s",
+            transformOrigin: "4px 7.6px",
+          }}
+        />
+        <path
+          d="m6 12-1.9 2"
+          className="transition-all duration-500 group-hover:animate-ping"
+          style={{
+            animationDelay: "0.3s",
+            transformOrigin: "5px 13px",
+          }}
+        />
+        <path
+          d="M7.2 2.2 8 5.1"
+          className="transition-all duration-500 group-hover:animate-ping"
+          style={{
+            animationDelay: "0.4s",
+            transformOrigin: "7.6px 3.6px",
+          }}
+        />
+      </g>
+
+      {/* 鼠标指针 - 带点击缩放效果 */}
+      <path
+        d="M9.037 9.69a.498.498 0 0 1 .653-.653l11 4.5a.5.5 0 0 1-.074.949l-4.349 1.041a1 1 0 0 0-.74.739l-1.04 4.35a.5.5 0 0 1-.95.074z"
+        className="transition-transform duration-200 group-hover:scale-90 group-hover:animate-pulse"
+        style={{
+          transformOrigin: "15px 15px",
+        }}
+      />
+    </svg>
+  ),
   listChecks: ListChecks,
   github: ({ ...props }: LucideProps) => (
     <svg
@@ -187,7 +256,6 @@ export const Icons = {
   heading1: Heading1,
   qrcode: QrCode,
   laptop: Laptop,
-  // lineChart: LineChart,
   logo: LogoIcon,
   media: Image,
   messages: MessagesSquare,
@@ -224,16 +292,7 @@ export const Icons = {
   users: Users,
   warning: AlertTriangle,
   globeLock: GlobeLock,
-  globe: Globe,
-  link: Link,
-  mail: Mail,
-  mailPlus: MailPlus,
-  mailOpen: MailOpen,
-  bug: Bug,
-  CirclePlay: CirclePlay,
-  unplug: Unplug,
-  send: Send,
-  lineChart: ({ ...props }: LucideProps) => (
+  globe: ({ className, ...props }: LucideProps) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="24"
@@ -244,10 +303,66 @@ export const Icons = {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
+      className={cn(
+        "group inline-block cursor-pointer transition-transform duration-200 group-hover:scale-110",
+        className,
+      )}
+      style={{ animationDuration: "2s" }}
+      {...props}
+    >
+      <circle cx="12" cy="12" r="10" />
+      <path
+        className="group-hover:hidden"
+        d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"
+      />
+      <path
+        d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"
+        className="transition-all duration-300 ease-in-out [stroke-dasharray:60] [stroke-dashoffset:-60] group-hover:[stroke-dashoffset:0]"
+      />
+      <path className="group-hover:hidden" d="M2 12h20" />
+      <path
+        d="M2 12h20"
+        className="duration-800 transition-all ease-in-out [stroke-dasharray:20] [stroke-dashoffset:-20] group-hover:[stroke-dashoffset:0]"
+        style={{ transitionDelay: "0.2s" }}
+      />
+    </svg>
+  ),
+  link: Link,
+  mail: Mail,
+  mailPlus: MailPlus,
+  mailOpen: MailOpen,
+  bug: Bug,
+  CirclePlay: CirclePlay,
+  unplug: Unplug,
+  send: Send,
+  lineChart: ({ className, ...props }: LucideProps) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={cn(
+        "group inline-block cursor-pointer transition-transform duration-75 group-hover:scale-110",
+        className,
+      )}
       {...props}
     >
       <path d="M3 3v16a2 2 0 0 0 2 2h16" />
-      <path d="m19 9-5 5-4-4-3 3" stroke="#0065ea" />
+      <path
+        className="group-hover:hidden"
+        d="m19 9-5 5-4-4-3 3"
+        stroke="#0065ea"
+      />
+      <path
+        d="m19 9-5 5-4-4-3 3"
+        stroke="#0065ea"
+        className="transition-all duration-1000 ease-in-out [stroke-dasharray:20] [stroke-dashoffset:-20] group-hover:[stroke-dashoffset:0]"
+      />
     </svg>
   ),
   outLink: ({ ...props }: LucideProps) => (

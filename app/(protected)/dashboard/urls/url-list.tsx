@@ -268,7 +268,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
 
   const rendeClicks = (short: ShortUrlFormData) => (
     <>
-      <Icons.mousePointerClick className="size-3" />
+      <Icons.mousePointerClick className="size-[14px]" />
       {isPending ? (
         <Skeleton className="h-4 w-6 rounded" />
       ) : (
@@ -388,7 +388,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                   {expirationTime(short.expiration, short.updatedAt)}
                 </TableCell>
                 <TableCell className="col-span-1 hidden truncate sm:flex">
-                  <div className="flex items-center gap-1 rounded-lg border bg-gray-50 px-3 py-1 dark:bg-gray-600/50">
+                  <div className="flex items-center gap-1 rounded-lg border bg-gray-50 px-2 py-1 dark:bg-gray-600/50">
                     {rendeClicks(short)}
                   </div>
                 </TableCell>
@@ -517,7 +517,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                     </div>
                   </div>
 
-                  <div className="ml-2 flex items-center gap-1 rounded-md border bg-gray-50 px-3 py-1 dark:bg-gray-600/50">
+                  <div className="ml-2 flex items-center gap-1 rounded-md border bg-gray-50 px-2 py-1 dark:bg-gray-600/50">
                     {rendeClicks(short)}
                   </div>
 
