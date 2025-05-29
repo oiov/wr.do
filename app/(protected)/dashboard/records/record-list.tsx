@@ -316,7 +316,7 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                   </TableRow>
                 ))
               ) : (
-                <EmptyPlaceholder>
+                <EmptyPlaceholder className="shadow-none">
                   <EmptyPlaceholder.Icon name="globe" />
                   <EmptyPlaceholder.Title>No Subdomain</EmptyPlaceholder.Title>
                   <EmptyPlaceholder.Description>

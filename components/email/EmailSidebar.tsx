@@ -418,7 +418,7 @@ export default function EmailSidebar({
           <>
             {!isCollapsed ? (
               <div className="flex h-full items-center justify-center">
-                <EmptyPlaceholder>
+                <EmptyPlaceholder className="shadow-none">
                   <EmptyPlaceholder.Icon name="mailPlus" />
                   <EmptyPlaceholder.Title>No emails</EmptyPlaceholder.Title>
                   <EmptyPlaceholder.Description>

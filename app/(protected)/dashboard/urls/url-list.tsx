@@ -182,7 +182,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
   };
 
   const rendeEmpty = () => (
-    <EmptyPlaceholder className="col-span-full">
+    <EmptyPlaceholder className="col-span-full shadow-none">
       <EmptyPlaceholder.Icon name="link" />
       <EmptyPlaceholder.Title>No urls</EmptyPlaceholder.Title>
       <EmptyPlaceholder.Description>
@@ -479,8 +479,8 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                   <BlurImage
                     src={`https://unavatar.io/${extractHostname(short.target)}?fallback=https://wr.do/logo.png`}
                     alt="logo"
-                    width={35}
-                    height={35}
+                    width={30}
+                    height={30}
                   />
                   <div className="ml-2 mr-auto flex flex-col justify-between truncate">
                     {/* url */}

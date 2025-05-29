@@ -315,7 +315,7 @@ export default function DomainList({ user, action }: DomainListProps) {
                   </div>
                 ))
               ) : (
-                <EmptyPlaceholder>
+                <EmptyPlaceholder className="shadow-none">
                   <EmptyPlaceholder.Icon name="globeLock" />
                   <EmptyPlaceholder.Title>No Domains</EmptyPlaceholder.Title>
                   <EmptyPlaceholder.Description>

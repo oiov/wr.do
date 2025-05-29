@@ -271,7 +271,7 @@ export default function UsersList({ user }: UrlListProps) {
                   </TableRow>
                 ))
               ) : (
-                <EmptyPlaceholder>
+                <EmptyPlaceholder className="shadow-none">
                   <EmptyPlaceholder.Icon name="users" />
                   <EmptyPlaceholder.Title>No users</EmptyPlaceholder.Title>
                   <EmptyPlaceholder.Description>

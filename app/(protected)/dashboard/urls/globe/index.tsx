@@ -2,18 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import {
-  addHours,
-  addMinutes,
-  differenceInDays,
-  differenceInHours,
-  differenceInMinutes,
-  format,
-  startOfDay,
-  startOfHour,
-  startOfMinute,
-} from "date-fns";
-import { create } from "lodash";
+import { differenceInMinutes, format } from "date-fns";
 
 import { DAILY_DIMENSION_ENUMS } from "@/lib/enums";
 import {
@@ -149,7 +138,7 @@ export default function Realtime({ isAdmin = false }: { isAdmin?: boolean }) {
     return Array.from(groupedData.entries())
       .sort(([a], [b]) => parseInt(a) - parseInt(b))
       .map(([key, count]) => ({
-        time: format(new Date(parseInt(key)), "HH:mm"),
+        time: format(new Date(parseInt(key)), "MM-dd HH:mm"),
         count: count,
       }));
   };
