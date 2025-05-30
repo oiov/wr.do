@@ -8,6 +8,8 @@ import BlurImage from "@/components/shared/blur-image";
 import { Callout } from "@/components/shared/callout";
 import { CopyButton } from "@/components/shared/copy-button";
 
+import { DocsLang } from "../shared/docs-lang";
+
 const components = {
   h1: ({ className, ...props }) => (
     <h1
@@ -166,6 +168,7 @@ const components = {
   ),
   Callout,
   Card: MdxCard,
+  DocsLang,
   Step: ({ className, ...props }: React.ComponentProps<"h3">) => (
     <h3
       className={cn(

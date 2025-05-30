@@ -1,0 +1,245 @@
+---
+title: 快速开始
+description: 手把手安装步骤详解
+---
+
+<DocsLang en="/docs/developer/quick-start" zh="/docs/developer/quick-start-zh" />
+
+## 0. 安装
+
+```bash
+git clone https://github.com/oiov/wr.do
+````
+
+进入项目文件夹并安装依赖项：
+
+```bash
+cd wrdo
+pnpm install
+```
+
+### 创建 `.env` 文件
+
+将 `.env.example` 的内容复制粘贴到 `.env` 文件中。
+
+## 1. 配置数据库
+
+### 创建服务器数据库实例并获取连接 URL
+
+在部署前，请确保你已准备好一个 Postgres 数据库实例。你可以选择以下方式之一：
+
+* A. 使用 Vercel / Neon 等 Serverless Postgres 实例；
+* B. 使用 Docker 等方式自建 Postgres 实例。
+
+这两种方式的配置稍有不同，我们将在下一步中进行区分。
+
+### 在 Vercel 中添加环境变量
+
+在 Vercel 的部署环境变量中，添加 `DATABASE_URL` 以及其他环境变量，
+并填写上一步中准备好的 Postgres 数据库连接 URL。
+数据库连接 URL 的典型格式如下：
+
+`postgres://username:password@host:port/database`
+
+```js title=".env"
+DATABASE_URL=
+```
+
+### 部署 Postgres
+
+```bash
+pnpm postinstall
+pnpm db:push
+```
+
+#### 或者手动初始化
+
+通过 [migration.sql](https://github.com/oiov/wr.do/blob/main/prisma/migrations)，
+将 SQL 代码复制到数据库中以初始化数据库结构。
+
+### 添加 AUTH_SECRET 环境变量
+
+`AUTH_SECRET` 环境变量用于加密 token 和邮件验证哈希（NextAuth.js）。
+你可以通过 [https://generate-secret.vercel.app/32](https://generate-secret.vercel.app/32) 生成
+
+`AUTH_URL` 是用于 NextAuth.js 的回调 URL，如果使用docker部署，需要设置为你的**站点域名**；如果使用vercel部署，可不填。
+
+注意，`AUTH_URL` 与 `NEXT_PUBLIC_APP_URL` 需要保持一致
+
+```js title=".env"
+AUTH_SECRET=10000032bsfasfafk4lkkfsa
+AUTH_URL=http://localhost:3000
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+```
+
+## 2. 配置认证服务
+
+服务器端数据库需要配合用户认证服务才能正常运行，
+因此需要配置相应的认证服务。
+
+提供以下认证方式：
+
+* Google
+* Github
+* LinuxDo
+* Resend 邮件验证
+
+### Google 配置
+
+在本部分中，你需要更新以下变量：
+
+```js title=".env"
+GOOGLE_CLIENT_ID = your_secret_client_id.apps.googleusercontent.com;
+GOOGLE_CLIENT_SECRET = your_secret_client;
+```
+
+参见配置教程：[Authjs - Google OAuth](https://authjs.dev/getting-started/providers/google)
+
+### Github 配置
+
+在本部分中，你需要更新以下变量：
+
+```js title=".env"
+GITHUB_ID = your_secret_client_id;
+GITHUB_SECRET = your_secret_client;
+```
+
+参见配置教程：[Authjs - Github OAuth](https://authjs.dev/getting-started/providers/github)
+
+### LinuxDo 配置
+
+```js title=".env"
+LinuxDo_CLIENT_ID=
+LinuxDo_CLIENT_SECRET=
+```
+
+参见配置教程：[Connect LinuxDo](https://connect.linux.do)
+
+注意在配置Connect LinuxDo时，参考以下配置: 
+
+![](/_static/docs/linuxdo-connect.png)
+
+### Resend 邮件验证配置
+
+<Callout type="note">
+  邮件部分与 [resend](https://resend.com/) 的文档类似。
+  如果你想了解详细配置，可以查阅官方文档：
+  [这里](https://authjs.dev/getting-started/installation#setup-environment)
+</Callout>
+
+<Steps>
+
+#### 创建账号
+
+如果你还没有 Resend 账号，请按照 [这里](https://resend.com/signup) 的注册流程操作。
+
+#### 创建 API 密钥
+
+登录 Resend 后，它会提示你创建第一个 API 密钥。
+
+将其复制并粘贴到你的 `.env` 文件中：
+
+```js
+RESEND_API_KEY=re_your_resend_api_key;
+RESEND_FROM_EMAIL="you <support@your-domain.com>"
+```
+
+其中 your-domain 与Resend绑定的域名一致（与 `NEXT_PUBLIC_APP_URL` 一致）。
+
+</Steps>
+
+## 3. 邮件 Worker 配置（接收邮件）
+
+详见：[Cloudflare Email Worker 配置教程](/docs/developer/cloudflare-email-worker)
+
+完成上述步骤后，你需要为 r2 存储添加一个公共域名。
+
+通过以下地址：
+
+```bash
+https://dash.cloudflare.com/[account_id]/r2/default/buckets/[bucket]/settings
+```
+
+![](/_static/docs/r2-domain.png)
+
+```js title=".env"
+NEXT_PUBLIC_EMAIL_R2_DOMAIN=https://email-attachment.wr.do
+```
+
+## 4. 添加业务配置
+
+```js title=".env"
+# 允许任何人注册
+NEXT_PUBLIC_OPEN_SIGNUP=1
+```
+
+## 5. 添加 SCREENSHOTONE\_BASE\_URL 环境变量
+
+这是 screenshotone API 的基础地址。
+
+你可以通过部署 [jasonraimondi/url-to-png](https://github.com/jasonraimondi/url-to-png) 自建服务。
+部署说明见：[这里](https://jasonraimondi.github.io/url-to-png/)
+
+```js title=".env"
+SCREENSHOTONE_BASE_URL=https://api.screenshotone.com
+```
+
+## 6. 添加 GITHUB\_TOKEN 环境变量
+
+通过 [https://github.com/settings/tokens](https://github.com/settings/tokens) 获取你的 token：
+
+```js title=".env"
+GITHUB_TOKEN=
+```
+
+## 7. 启动开发服务器
+
+```bash
+pnpm dev
+```
+
+通过浏览器访问：[http://localhost:3000](http://localhost:3000)
+
+## 8. 设置系统
+
+#### 创建第一个账号并将账号权限更改为 ADMIN
+
+请按以下步骤操作：
+
+* 1. 通过 [http://localhost:3000/login](http://localhost:3000/login) 注册登录你的第一个账号；
+* 2. 通过 [http://localhost:3000/setup](http://localhost:3000/setup) 将账号权限更改为 ADMIN；
+* 3. 然后根据 **面板引导** 配置系统并添加第一个域名。
+
+![](/_static/docs/setup-1.png)
+
+![](/_static/docs/setup-2.png)
+
+<Callout type="info">
+  将账号权限更改为 ADMIN 后，你可以刷新页面并访问 http://localhost:3000/admin。
+
+<strong>你必须至少添加一个域名，才能使用短链接、邮件或子域名管理等功能。</strong> 
+</Callout>
+
+## 9. 部署
+
+详见：[部署指南](/docs/developer/deploy)
+
+## Q & A
+
+### Worker 错误 - 重定向过多
+
+请访问：
+
+```bash
+https://dash.cloudflare.com/[account_id]/[zone_name]/ssl-tls/configuration
+```
+
+将 `SSL/TLS 加密模式` 更改为 `Full` 模式。
+
+### 如何修改团队计划配额？
+
+通过 team.ts 文件修改：
+
+```bash
+https://github.com/oiov/wr.do/tree/main/config/team.ts
+```
