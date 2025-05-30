@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { TeamPlanQuota } from "@/config/team";
+import { checkDomainIsConfiguratedResend } from "@/lib/dto/domains";
 import { getUserSendEmailCount, saveUserSendEmail } from "@/lib/dto/email";
 import { checkUserStatus } from "@/lib/dto/user";
 import { resend } from "@/lib/email";
@@ -31,6 +32,13 @@ export async function POST(req: NextRequest) {
 
     if (!isValidEmail(from) || !isValidEmail(to)) {
       return NextResponse.json("Invalid email address", { status: 403 });
+    }
+
+    if (!(await checkDomainIsConfiguratedResend(from.split("@")[1]))) {
+      return NextResponse.json(
+        "This domain is not configured for sending emails",
+        { status: 400 },
+      );
     }
 
     const { error } = await resend.emails.send({

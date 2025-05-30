@@ -22,6 +22,7 @@ export interface DomainConfig {
   cf_api_key: string | null;
   cf_email: string | null;
   cf_api_key_encrypted: boolean;
+  resend_api_key: string | null;
   max_short_links: number | null;
   max_email_forwards: number | null;
   max_dns_records: number | null;
@@ -98,6 +99,20 @@ export async function getDomainsByFeatureClient(feature: string) {
       },
     });
     return domains;
+  } catch (error) {
+    throw new Error(`Failed to fetch domain config: ${error.message}`);
+  }
+}
+
+export async function checkDomainIsConfiguratedResend(domain_name: string) {
+  try {
+    const domain = await prisma.domain.findUnique({
+      where: { domain_name },
+      select: {
+        resend_api_key: true,
+      },
+    });
+    return Boolean(domain?.resend_api_key);
   } catch (error) {
     throw new Error(`Failed to fetch domain config: ${error.message}`);
   }

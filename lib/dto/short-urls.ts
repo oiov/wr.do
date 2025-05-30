@@ -336,6 +336,9 @@ export async function getUrlMetaLiveLog(userId?: string) {
       createdAt: true,
       city: true,
       country: true,
+      os: true,
+      cpu: true,
+      engine: true,
       userUrl: {
         select: {
           url: true,

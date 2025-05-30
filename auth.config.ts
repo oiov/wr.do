@@ -47,7 +47,7 @@ export default {
     }),
     Resend({
       apiKey: env.RESEND_API_KEY,
-      from: "wrdo <support@wr.do>",
+      from: env.RESEND_FROM_EMAIL || "wrdo <support@wr.do>",
       async sendVerificationRequest({ identifier: email, url, provider }) {
         try {
           const { error } = await resend.emails.send({
