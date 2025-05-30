@@ -1,12 +1,8 @@
-import { getClientGeolocation, getIpInfo } from "@/lib/geo";
+import { getIpInfo } from "@/lib/geo";
 
 export async function GET(req: Request) {
   try {
     const data = await getIpInfo(req);
-
-    const geo = await getClientGeolocation(data.ip);
-
-    console.log("[ClientGeolocation]", geo);
 
     return Response.json({
       ip: data.ip,
