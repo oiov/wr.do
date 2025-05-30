@@ -3,10 +3,21 @@ title: Email
 description: How to manage emails in this project.
 ---
 
-<Callout type="success" twClass="mt-0">
-  The magic-link feature with Resend works with Auth.js v5! <br />
-  You can use it in your local environment and in your own production setup.
+<DocsLang en="/docs/developer/email" zh="/docs/developer/email-zh" />
+
+In the WR.DO project, there are two features that rely on Resend, 
+one is email login (magic link), and the other is email sending feature (if you need to receive email feature, 
+please refer to /docs/developer/cloudflare-email-worker). 
+
+The `RESEND_API_KEY` and `RESEND_SROM_SMAIL` configured in the `.env` file are used for login feature, 
+while the Resend key required for email sending feature needs to be added by 
+yourself in the domain configuration after logging into the admin panel (`/admin/domains`).
+
+<Callout type="note">
+  Two features can use the same key, as both essentially use Resend to send emails.
 </Callout>
+
+The following will demonstrate how to configure the Resend key required for login.
 
 ## Steps
 
@@ -31,13 +42,7 @@ Copy/paste in your `.env` file.
 
 ```js
 RESEND_API_KEY = re_your_resend_api_key;
+RESEND_FROM_EMAIL="you <support@your-domain.com>"
 ```
 
 </Steps>
-
-{/* 
-react-email
-> [!WARNING]  
-> You need update `.react-email` folder before use `pnpm run email`. Check the link [here](https://github.com/resend/react-email/issues/868#issuecomment-1828411325) if you have the error : `renderToReadableStream not found`
-
-*/}

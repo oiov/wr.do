@@ -1,0 +1,107 @@
+---
+title: Cloudflare Email Worker 配置
+description: 配置 Cloudflare Email Worker 来激活接收邮件功能
+---
+
+<DocsLang en="/docs/developer/cloudflare-email-worker" zh="/docs/developer/cloudflare-email-worker-zh" />
+
+在开始之前，你需要拥有一个 Cloudflare 账户，并且你的域名已经托管在 Cloudflare 上。
+
+### Email Worker 与 R2 简介
+
+#### Email Worker
+
+Cloudflare Email Worker 是 Cloudflare 的电子邮件路由服务（Email Routing）与 Workers 平台结合提供的一项功能。它允许用户在 Cloudflare 的边缘网络中以编程方式处理接收到的电子邮件。  
+当邮件发送到在 Email Routing 中配置的自定义地址时，关联的 Worker 会被触发，接收邮件数据（例如发件人、收件人、头部、正文等）。  
+开发者可以编写 JavaScript 代码来定义自定义逻辑，比如将邮件转发到指定地址、过滤垃圾邮件，或与外部 API 集成。
+
+#### Cloudflare R2
+
+Cloudflare R2 是一款可扩展的、兼容 S3 的对象存储解决方案。它允许用户在边缘存储和读取文件（如电子邮件附件），并且没有出口流量费用。  
+在邮件 Worker 的上下文中，R2 可用于存储邮件附件或其他数据，并可通过环境绑定在 Worker 脚本中访问。
+
+### cf-email-forwarding-worker 概述
+
+仓库：[oiov/cf-email-forwarding-worker](https://github.com/oiov/cf-email-forwarding-worker)  
+
+使用 Cloudflare Email Worker 和 R2 实现了一个高级的邮件转发解决方案。核心功能是将邮件数据通过 HTTP POST 请求发送到第三方 API 接口进行自定义处理。  
+
+此外，还利用 Cloudflare R2 来存储邮件附件，并使第三方应用可访问。
+
+#### 主要特性
+
+- **基于 API 的转发**：邮件以结构化数据的形式通过 POST 请求发送到可配置的第三方 API（`APP_API_URL` 环境变量）。
+- **附件存储**：邮件附件上传到 R2 存储桶，并将其 URL 包含在 API 请求中。
+- **高度可定制**：第三方应用可根据需要处理邮件数据（如发件人、主题、正文、附件等）。
+
+#### 配置说明
+
+Worker 依赖 `wrangler.jsonc` 文件中定义的两个环境变量：
+
+```json
+"vars": {
+  "APP_API_URL": "https://wr.do/api/v1/email-catcher"
+},
+"r2_buckets": [
+  {
+    "binding": "R2_BUCKET",
+    "bucket_name": "wremail"
+  }
+]
+````
+
+* `APP_API_URL`：接收邮件数据的第三方 API 地址。可以让第三方应用自定义处理邮件内容（如记录日志、进一步处理或转发）。
+* `R2_BUCKET`：R2 存储桶的绑定名，在 Worker 代码中可通过 `env.R2_BUCKET` 访问。
+  其中 `bucket_name`（如 `wremail`）指的是你在 Cloudflare 中预先创建的 R2 存储桶名称。
+
+#### 工作原理
+
+1. **接收邮件**：当邮件发送到配置的地址时，Worker 被触发。
+2. **处理附件**：若邮件包含附件，则提取并上传到 R2 存储桶（如 wremail），并生成可访问的 URL。
+3. **转发邮件数据**：将邮件数据（发件人、收件人、主题、正文、附件链接等）封装为 JSON，发送到 `APP_API_URL`。
+4. **第三方处理**：第三方应用接收并根据自身逻辑处理这些数据。
+
+#### 使用示例
+
+* 用户向 [example@yourdomain.com](mailto:example@yourdomain.com) 发送邮件；
+* Worker 将附件上传至刚才创建的存储桶；
+* Worker 向 [https://wr.do/api/v1/email-catcher](https://wr.do/api/v1/email-catcher) 发送包含邮件信息的 POST 请求；
+* 第三方应用接收数据，并进行记录、存入数据库或转发。
+
+#### 前置条件
+
+* 一个启用了 Email Routing 的 Cloudflare 账户；
+* 已创建并绑定到 Worker 的 R2 存储桶（如 wremail）；
+* 一个已准备好接收 POST 请求的第三方 API 接口。
+
+### 部署 Email Worker 到 Cloudflare
+
+```bash
+git clone https://github.com/oiov/cf-email-forwarding-worker.git
+cd cf-email-forwarding-worker
+pnpm install
+
+wranler login 
+wranler deploy
+```
+
+在部署前，记得在 `wrangler.jsonc` 中添加你的环境变量。
+
+### 配置你的域名邮箱规则
+
+访问：
+
+```bash
+https://dash.cloudflare.com/[account_id]/[zone_name]/email/routing/routes
+```
+
+编辑 `Catch-all address`，选择：
+
+* `Action` -> `Send to a worker`
+* `Destination` -> `wrdo-email-worker`（你部署的 Worker 名称）
+
+然后保存并启用。
+
+<Callout type="warning" twClass="mb-3">
+每当你添加一个新域名时，都需要执行相同操作。
+</Callout>

@@ -1,0 +1,47 @@
+---
+title: 邮件配置
+description: 如何配置项目中的邮件服务
+---
+
+<DocsLang en="/docs/developer/email" zh="/docs/developer/email-zh" />
+
+在 WR.DO 项目中，有两个功能依赖于 Resend：  
+
+- 邮箱验证登录（魔法链接）
+- 邮件发送功能（如果你需要接收邮件功能，请参考 [cloudflare-email-worker](/docs/developer/cloudflare-email-worker)）。
+
+`.env` 文件中配置的 `RESEND_API_KEY` 和 `RESEND_FROM_EMAIL` 用于登录功能，  
+而邮件发送功能所需的 Resend 密钥需要你在登录后台管理面板（`/admin/domains`）后，在域名配置中自行添加。
+
+<Callout type="note">
+  这两个功能可以使用同一个密钥，因为它们本质上都是通过 Resend 发送邮件。
+</Callout>
+
+以下将演示如何配置登录所需的 Resend 密钥。
+
+## 步骤
+
+<Callout type="note">
+  邮件部分配置类似于 [resend](https://resend.com/) 的文档。  
+  如果你想查阅官方文档，可以参考  
+  [这里](https://authjs.dev/getting-started/installation#setup-environment)。
+</Callout>
+
+<Steps>
+
+### 创建账号
+
+如果你还没有 Resend 账号，请按照 [这里](https://resend.com/signup) 的注册流程操作。
+
+### 创建 API 密钥
+
+登录 Resend 后，它会提示你创建第一个 API 密钥。
+
+将其复制并粘贴到你的 `.env` 文件中：
+
+```js
+RESEND_API_KEY = re_your_resend_api_key;
+RESEND_FROM_EMAIL="you <support@your-domain.com>"
+````
+
+</Steps>

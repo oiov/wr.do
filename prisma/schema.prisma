@@ -143,6 +143,10 @@ model UrlMeta {
   lang      String?
   device    String?
   browser   String?
+  engine    String?
+  os        String?
+  cpu       String?
+  isBot     Boolean @default(false)
 
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @default(now()) @map(name: "updated_at")
@@ -258,6 +262,7 @@ model Domain {
   cf_api_key           String?
   cf_email             String?
   cf_api_key_encrypted Boolean
+  resend_api_key       String?
   max_short_links      Int?
   max_email_forwards   Int?
   max_dns_records      Int?

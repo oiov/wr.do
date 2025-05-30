@@ -1,0 +1,65 @@
+---
+title: 开发手册
+description: 如何快速开始 WR.DO
+---
+
+<DocsLang en="/docs/developer/installation" zh="/docs/developer/installation-zh" />
+
+<Steps>
+
+### 创建项目
+
+首先使用 `create-next-app` 创建一个新的 Next.js 项目：
+
+```bash
+npx create-next-app wrdo --example "https://github.com/oiov/wr.do"
+```
+
+或者使用 Vercel 部署：
+
+[![使用 Vercel 部署](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Foiov%2Fwr.do)
+
+<Callout type="warning" twClass="mt-4">
+  这是一种创建代码仓库的好方法，但是部署可能会失败，
+  因为你需要在本地项目中添加环境变量。请按照文档进行设置。
+</Callout>
+
+### 安装依赖
+
+进入文件夹并为项目安装依赖项：
+
+```bash
+cd wrdo
+pnpm install
+```
+
+### 创建 `.env` 文件
+
+将 `.env.example` 内容复制粘贴到 `.env` 文件中：
+
+| 环境变量                       | 值                                                 | 描述                                                                       |
+| -------------------------- | ------------------------------------------------- | ------------------------------------------------------------------------ |
+| NEXTAUTH\_URL              | `http://localhost:3000`                           | Next.js 应用的 URL。                                                         |
+| AUTH\_SECRET               | `123465`                                          | 用于加密令牌和邮件验证哈希的密钥。                                                        |
+| DATABASE\_URL              | `postgres://username:password@host:port/database` | Postgres 数据库的路径。                                                         |
+| GOOGLE\_CLIENT\_ID         | `123465`                                          | Google OAuth 客户端的 ID。                                                    |
+| GOOGLE\_CLIENT\_SECRET     | `123465`                                          | Google OAuth 客户端的密钥。                                                     |
+| GITHUB\_ID                 | `123465`                                          | GitHub OAuth 客户端的 ID。                                                    |
+| GITHUB\_SECRET             | `123465`                                          | GitHub OAuth 客户端的密钥。                                                     |
+| RESEND\_API\_KEY           | `123465`                                          | Resend 的 API 密钥。                                                         |
+| RESEND\_FROM\_EMAIL        | `"you <support@your-domain.com>"`                 | 用于发送邮件的邮箱地址。                                                             |
+| NEXT\_PUBLIC\_OPEN\_SIGNUP | `1`                                               | 开放注册。                                                                    |
+| SCREENSHOTONE\_BASE\_URL   | `https://api.example.com`                         | 待补充                                                                      |
+| GITHUB\_TOKEN              | `ghp_sscsfarwetqet`                               | [https://github.com/settings/tokens](https://github.com/settings/tokens) |
+
+* 如何获取 `GOOGLE_CLIENT_ID`、`GITHUB_ID`，请参见 [认证](/docs/developer/authentification)。
+* 如何获取 `RESEND_API_KEY`，请参见 [邮件](/docs/developer/email)。
+* 如何启用邮件 worker，请参见 [邮件 Worker](/docs/developer/cloudflare-email-worker)。
+
+如需逐步安装说明，请参见 [快速开始](/docs/developer/quick-start)。
+
+### 配置部分
+
+在使用 `pnpm run dev` 之前，请确保检查配置部分并更新所有环境变量。
+
+</Steps>

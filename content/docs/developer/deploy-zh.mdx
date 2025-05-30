@@ -1,0 +1,55 @@
+---
+title: 部署指南
+description: 选择你的部署方式
+---
+
+<DocsLang en="/docs/developer/deploy" zh="/docs/developer/deploy-zh" />
+
+## 使用 Vercel 部署（推荐）
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/oiov/wr.do.git&project-name=wrdo&env=DATABASE_URL&env=AUTH_SECRET&env=RESEND_API_KEY&env=NEXT_PUBLIC_EMAIL_R2_DOMAIN&env=NEXT_PUBLIC_OPEN_SIGNUP&env=GITHUB_TOKEN)
+
+记得填写必要的环境变量。
+
+## 使用 Docker Compose 部署
+
+<Callout type="warning" twClass="mt-4">
+  请在部署前先创建你的数据库实例。  
+  
+  将 `.env` 文件中的 `SKIP_DB_CHECK` 和 `SKIP_DB_MIGRATION` 设置为 `false`，  
+  这样会在启动时进行数据库检查、初始化和迁移。
+</Callout>
+
+创建一个新文件夹，并将 [docker-compose.yml](https://github.com/oiov/wr.do/blob/main/docker-compose.yml) 和 [.env](https://github.com/oiov/wr.do/blob/main/.env.example) 文件复制到该文件夹中。
+
+> 或者只创建一个 [docker-compose.yml](https://github.com/oiov/wr.do/blob/main/docker-compose.yml) 文件，将其中的 `${DATABASE_URL}` 等变量替换为你的数据库连接地址等信息。
+
+```bash
+- wrdo
+  | - docker-compose.yml
+  | - .env
+````
+
+在 `.env` 文件中填写环境变量，然后执行：
+
+```bash
+docker compose up -d
+```
+
+此命令会自动拉取最新的镜像并启动服务。（自动初始化数据库表，可以在容器日志中查看启动日志）
+
+## 使用 Docker Compose（本地数据库）部署
+
+创建一个新文件夹，并将 `docker-compose-localdb.yml` 和 `.env` 文件复制到该文件夹中。
+
+```bash
+- wrdo
+  | - docker-compose.yml
+  | - .env
+```
+
+在 `.env` 文件中填写环境变量，然后执行：
+
+```bash
+docker compose up -d
+```

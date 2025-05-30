@@ -16,6 +16,10 @@ export async function POST(req: NextRequest) {
       lang,
       device,
       browser,
+      engine,
+      os,
+      cpu,
+      isBot,
       password,
     } = await req.json();
 
@@ -57,6 +61,10 @@ export async function POST(req: NextRequest) {
       lang,
       device,
       browser,
+      engine,
+      os,
+      cpu,
+      isBot,
     });
     return Response.json(res.target);
   } catch (error) {

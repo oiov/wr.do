@@ -6,15 +6,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import useSWR from "swr";
 import * as z from "zod";
 
 import { siteConfig } from "@/config/site";
-import { cn } from "@/lib/utils";
+import { cn, fetcher } from "@/lib/utils";
 import { userAuthSchema } from "@/lib/validations/auth";
 import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Icons } from "@/components/shared/icons";
+
+import { Skeleton } from "../ui/skeleton";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
   type?: string;
@@ -59,79 +62,14 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
     });
   }
 
-  return (
-    <div className={cn("grid gap-3", className)} {...props}>
-      <button
-        type="button"
-        className={cn(buttonVariants({ variant: "outline" }))}
-        onClick={() => {
-          setIsGoogleLoading(true);
-          signIn("google");
-        }}
-        disabled={
-          !siteConfig.openSignup ||
-          isLoading ||
-          isGoogleLoading ||
-          isGithubLoading ||
-          isLinuxDoLoading
-        }
-      >
-        {isGoogleLoading ? (
-          <Icons.spinner className="mr-2 size-4 animate-spin" />
-        ) : (
-          <Icons.google className="mr-2 size-4" />
-        )}{" "}
-        Google
-      </button>
-      <button
-        type="button"
-        className={cn(buttonVariants({ variant: "outline" }))}
-        onClick={() => {
-          setIsGithubLoading(true);
-          signIn("github");
-        }}
-        disabled={
-          !siteConfig.openSignup ||
-          isLoading ||
-          isGithubLoading ||
-          isGoogleLoading ||
-          isLinuxDoLoading
-        }
-      >
-        {isGithubLoading ? (
-          <Icons.spinner className="mr-2 size-4 animate-spin" />
-        ) : (
-          <Icons.github className="mr-2 size-4" />
-        )}{" "}
-        Github
-      </button>
-      <button
-        type="button"
-        className={cn(buttonVariants({ variant: "outline" }))}
-        onClick={() => {
-          setIsLinuxDoLoading(true);
-          signIn("linuxdo");
-        }}
-        disabled={
-          !siteConfig.openSignup ||
-          isLoading ||
-          isGithubLoading ||
-          isGoogleLoading ||
-          isLinuxDoLoading
-        }
-      >
-        {isLinuxDoLoading ? (
-          <Icons.spinner className="mr-2 size-4 animate-spin" />
-        ) : (
-          <img
-            src="/_static/images/linuxdo.webp"
-            alt="linuxdo"
-            className="mr-2 size-4"
-          />
-        )}{" "}
-        LinuxDo
-      </button>
+  const { data: loginMethod, isLoading: isLoadingMethod } = useSWR<
+    Record<string, boolean>
+  >("/api/feature", fetcher, {
+    revalidateOnFocus: false,
+  });
 
+  const rendeSeparator = () => {
+    return (
       <div className="relative my-3">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t" />
@@ -142,44 +80,145 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
           </span>
         </div>
       </div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid gap-2">
-          <div className="grid gap-1">
-            <Label className="sr-only" htmlFor="email">
-              Email
-            </Label>
-            <Input
-              id="email"
-              placeholder="name@example.com"
-              type="email"
-              autoCapitalize="none"
-              autoComplete="email"
-              autoCorrect="off"
-              disabled={isLoading || isGoogleLoading}
-              {...register("email")}
+    );
+  };
+
+  if (isLoadingMethod || !loginMethod) {
+    return (
+      <div className={cn("grid gap-3", className)} {...props}>
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+        {rendeSeparator()}
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+      </div>
+    );
+  }
+
+  return (
+    <div className={cn("grid gap-3", className)} {...props}>
+      {loginMethod["google"] && (
+        <button
+          type="button"
+          className={cn(buttonVariants({ variant: "outline" }))}
+          onClick={() => {
+            setIsGoogleLoading(true);
+            signIn("google");
+          }}
+          disabled={
+            !siteConfig.openSignup ||
+            isLoading ||
+            isGoogleLoading ||
+            isGithubLoading ||
+            isLinuxDoLoading
+          }
+        >
+          {isGoogleLoading ? (
+            <Icons.spinner className="mr-2 size-4 animate-spin" />
+          ) : (
+            <Icons.google className="mr-2 size-4" />
+          )}{" "}
+          Google
+        </button>
+      )}
+      {loginMethod["github"] && (
+        <button
+          type="button"
+          className={cn(buttonVariants({ variant: "outline" }))}
+          onClick={() => {
+            setIsGithubLoading(true);
+            signIn("github");
+          }}
+          disabled={
+            !siteConfig.openSignup ||
+            isLoading ||
+            isGithubLoading ||
+            isGoogleLoading ||
+            isLinuxDoLoading
+          }
+        >
+          {isGithubLoading ? (
+            <Icons.spinner className="mr-2 size-4 animate-spin" />
+          ) : (
+            <Icons.github className="mr-2 size-4" />
+          )}{" "}
+          Github
+        </button>
+      )}
+      {loginMethod["linuxdo"] && (
+        <button
+          type="button"
+          className={cn(buttonVariants({ variant: "outline" }))}
+          onClick={() => {
+            setIsLinuxDoLoading(true);
+            signIn("linuxdo");
+          }}
+          disabled={
+            !siteConfig.openSignup ||
+            isLoading ||
+            isGithubLoading ||
+            isGoogleLoading ||
+            isLinuxDoLoading
+          }
+        >
+          {isLinuxDoLoading ? (
+            <Icons.spinner className="mr-2 size-4 animate-spin" />
+          ) : (
+            <img
+              src="/_static/images/linuxdo.webp"
+              alt="linuxdo"
+              className="mr-2 size-4"
             />
-            {errors?.email && (
-              <p className="px-1 text-xs text-red-600">
-                {errors.email.message}
-              </p>
-            )}
+          )}{" "}
+          LinuxDo
+        </button>
+      )}
+
+      {loginMethod["resend"] && rendeSeparator()}
+
+      {loginMethod["resend"] && (
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="grid gap-2">
+            <div className="grid gap-1">
+              <Label className="sr-only" htmlFor="email">
+                Email
+              </Label>
+              <Input
+                id="email"
+                placeholder="name@example.com"
+                type="email"
+                autoCapitalize="none"
+                autoComplete="email"
+                autoCorrect="off"
+                disabled={isLoading || isGoogleLoading}
+                {...register("email")}
+              />
+              {errors?.email && (
+                <p className="px-1 text-xs text-red-600">
+                  {errors.email.message}
+                </p>
+              )}
+            </div>
+            <button
+              className={cn(buttonVariants(), "mt-3")}
+              disabled={
+                !siteConfig.openSignup ||
+                isLoading ||
+                isGoogleLoading ||
+                isGithubLoading
+              }
+            >
+              {isLoading && (
+                <Icons.spinner className="mr-2 size-4 animate-spin" />
+              )}
+              {type === "register"
+                ? "Sign Up with Email"
+                : "Sign In with Email"}
+            </button>
           </div>
-          <button
-            className={cn(buttonVariants(), "mt-3")}
-            disabled={
-              !siteConfig.openSignup ||
-              isLoading ||
-              isGoogleLoading ||
-              isGithubLoading
-            }
-          >
-            {isLoading && (
-              <Icons.spinner className="mr-2 size-4 animate-spin" />
-            )}
-            {type === "register" ? "Sign Up with Email" : "Sign In with Email"}
-          </button>
-        </div>
-      </form>
+        </form>
+      )}
     </div>
   );
 }

@@ -54,11 +54,16 @@ export function DomainForm({
 }: DomainFormProps) {
   const [isPending, startTransition] = useTransition();
   const [isDeleting, startDeleteTransition] = useTransition();
-  const [isChecking, startCheckTransition] = useTransition();
+  const [isCheckingCf, startCheckCfTransition] = useTransition();
+  const [isCheckingResend, startCheckResendTransition] = useTransition();
   const [currentRecordStatus, setCurrentRecordStatus] = useState(
     initData?.enable_dns || false,
   );
-  const [isChecked, setIsChecked] = useState(false);
+  const [currentEmailStatus, setCurrentEmailStatus] = useState(
+    initData?.enable_email || false,
+  );
+  const [isCheckedCfConfig, setIsCheckedCfConfig] = useState(false);
+  const [isCheckedResendConfig, setIsCheckedResendConfig] = useState(false);
 
   const {
     handleSubmit,
@@ -78,6 +83,7 @@ export function DomainForm({
       cf_api_key: initData?.cf_api_key || "",
       cf_email: initData?.cf_email || "",
       cf_api_key_encrypted: initData?.cf_api_key_encrypted || false,
+      resend_api_key: initData?.resend_api_key || "",
       max_short_links: initData?.max_short_links || 0,
       max_email_forwards: initData?.max_email_forwards || 0,
       max_dns_records: initData?.max_dns_records || 0,
@@ -158,43 +164,77 @@ export function DomainForm({
     }
   };
 
-  const handleCheckAccess = async (event) => {
+  const handleCfCheckAccess = async (event) => {
     event?.stopPropagation();
     if (!currentRecordStatus) return;
 
-    if (isChecked) {
-      setIsChecked(false);
+    if (isCheckedCfConfig) {
+      setIsCheckedCfConfig(false);
     }
 
-    startCheckTransition(async () => {
+    startCheckCfTransition(async () => {
       const values = getValues(["cf_zone_id", "cf_api_key", "cf_email"]);
       const res = await fetch(
-        `/api/domain/access-check?zone_id=${values[0]}&api_key=${values[1]}&email=${values[2]}`,
+        `/api/domain/check-cf?zone_id=${values[0]}&api_key=${values[1]}&email=${values[2]}`,
       );
       if (res.ok) {
         const data = await res.json();
         if (data === 200) {
-          setIsChecked(true);
+          setIsCheckedCfConfig(true);
           return;
         }
       }
-      setIsChecked(false);
+      setIsCheckedCfConfig(false);
       toast.error("Access Failed", {
         description: "Please check your Cloudflare settings and try again.",
       });
     });
   };
 
+  const handleResendCheckAccess = async (event) => {
+    event?.stopPropagation();
+    if (!currentEmailStatus) return;
+
+    if (isCheckedResendConfig) {
+      setIsCheckedResendConfig(false);
+    }
+
+    startCheckResendTransition(async () => {
+      const value = getValues(["resend_api_key", "domain_name"]);
+      const res = await fetch(
+        `/api/domain/check-resend?api_key=${value[0]}&domain=${value[1]}`,
+      );
+      if (res.ok) {
+        const data = await res.json();
+        if (data === 200) {
+          setIsCheckedResendConfig(true);
+          return;
+        }
+      }
+      setIsCheckedResendConfig(false);
+      toast.error("Access Failed", {
+        description: "Please check your Resend API key and try again.",
+      });
+    });
+  };
+
   const ReadyBadge = (
+    active: boolean,
+    isChecked: boolean,
+    isChecking: boolean,
+    type: string,
+  ) => (
     <Badge
       className={cn(
         "ml-auto text-xs font-semibold",
-        !currentRecordStatus && "text-muted-foreground",
+        !active && "text-muted-foreground",
       )}
-      variant={
-        currentRecordStatus ? (isChecked ? "green" : "default") : "outline"
+      variant={active ? (isChecked ? "green" : "default") : "outline"}
+      onClick={(event) =>
+        type === "cf"
+          ? handleCfCheckAccess(event)
+          : handleResendCheckAccess(event)
       }
-      onClick={(event) => handleCheckAccess(event)}
     >
       {isChecking && <Icons.spinner className="mr-1 size-3 animate-spin" />}
       {isChecked && !isChecking && <Icons.check className="mr-1 size-3" />}
@@ -278,7 +318,10 @@ export function DomainForm({
               id="email_service"
               {...register("enable_email")}
               defaultChecked={initData?.enable_email ?? false}
-              onCheckedChange={(value) => setValue("enable_email", value)}
+              onCheckedChange={(value) => {
+                setValue("enable_email", value);
+                setCurrentEmailStatus(value);
+              }}
             />
           </div>
 
@@ -301,9 +344,14 @@ export function DomainForm({
         <Collapsible className="relative mt-2 rounded-md bg-neutral-100 p-4 dark:bg-neutral-800">
           <CollapsibleTrigger className="flex w-full items-center justify-between">
             <h2 className="absolute left-2 top-5 text-xs font-semibold text-neutral-400">
-              Cloudflare Configs(Optional)
+              Cloudflare Configs (Optional)
             </h2>
-            {ReadyBadge}
+            {ReadyBadge(
+              currentRecordStatus,
+              isCheckedCfConfig,
+              isCheckingCf,
+              "cf",
+            )}
             <Icons.chevronDown className="ml-2 size-4" />
           </CollapsibleTrigger>
           <CollapsibleContent>
@@ -408,6 +456,63 @@ export function DomainForm({
                           target="_blank"
                         >
                           How to get cloudflare account email?
+                        </Link>
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </FormSectionColumns>
+          </CollapsibleContent>
+        </Collapsible>
+
+        <Collapsible className="relative mt-2 rounded-md bg-neutral-100 p-4 dark:bg-neutral-800">
+          <CollapsibleTrigger className="flex w-full items-center justify-between">
+            <h2 className="absolute left-2 top-5 text-xs font-semibold text-neutral-400">
+              Resend Configs (Optional)
+            </h2>
+            {ReadyBadge(
+              currentEmailStatus,
+              isCheckedResendConfig,
+              isCheckingResend,
+              "resend",
+            )}
+            <Icons.chevronDown className="ml-2 size-4" />
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            {!currentEmailStatus && (
+              <div className="mt-3 flex items-center gap-1 rounded bg-neutral-200 p-2 text-xs dark:bg-neutral-700">
+                <Icons.help className="size-3" /> Associate with "Email Service"
+                status
+              </div>
+            )}
+            <FormSectionColumns title="">
+              <div className="flex w-full items-start justify-between gap-2">
+                <Label className="mt-2.5 text-nowrap" htmlFor="zone_id">
+                  API Key (send email service):
+                </Label>
+                <div className="w-full sm:w-3/5">
+                  <Input
+                    id="target"
+                    className="flex-1 bg-neutral-50 shadow-inner"
+                    size={32}
+                    {...register("resend_api_key")}
+                    disabled={!currentEmailStatus}
+                  />
+                  <div className="flex flex-col justify-between p-1">
+                    {errors?.resend_api_key ? (
+                      <p className="pb-0.5 text-[13px] text-red-600">
+                        {errors.resend_api_key.message}
+                      </p>
+                    ) : (
+                      <p className="pb-0.5 text-[13px] text-muted-foreground">
+                        Optional.{" "}
+                        <Link
+                          className="text-blue-500"
+                          href="/docs/developer/email"
+                          target="_blank"
+                        >
+                          How to get resend api key?
                         </Link>
                       </p>
                     )}
