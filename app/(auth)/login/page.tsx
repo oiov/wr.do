@@ -25,7 +25,7 @@ export default function LoginPage() {
       >
         <>
           <Icons.chevronLeft className="mr-2 size-4" />
-          Back {siteConfig.openSignup ? "Home" : ""}
+          Back
         </>
       </Link>
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
@@ -44,10 +44,10 @@ export default function LoginPage() {
         <Suspense>
           <UserAuthForm />
         </Suspense>
-        <p className="mt-4 break-all rounded-md border border-dashed bg-neutral-50 p-2 text-left text-sm text-gray-600 dark:border-neutral-600 dark:bg-neutral-800 dark:text-zinc-400">
+        {/* <p className="mt-4 break-all rounded-md border border-dashed bg-neutral-50 p-2 text-left text-sm text-gray-600 dark:border-neutral-600 dark:bg-neutral-800 dark:text-zinc-400">
           📢 To keep our free resources accessible to all, we're allowing only
           200 new account sign-ups each day.
-        </p>
+        </p> */}
 
         <p className="px-8 text-center text-sm text-muted-foreground">
           By clicking continue, you agree to our{" "}
