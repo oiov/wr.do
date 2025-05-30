@@ -4,7 +4,12 @@ import { auth } from "auth";
 import { NextAuthRequest } from "next-auth/lib";
 
 import { siteConfig } from "./config/site";
-import { extractRealIP, getGeolocation, getUserAgent } from "./lib/geo";
+import {
+  extractRealIP,
+  getClientGeolocation,
+  getGeolocation,
+  getUserAgent,
+} from "./lib/geo";
 
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
@@ -33,6 +38,9 @@ async function handleShortUrl(req: NextAuthRequest) {
   const ua = getUserAgent(req);
 
   const geo = await getGeolocation(req, ip || "::1");
+
+  const test_geo = await getClientGeolocation(ip);
+  console.log("[ClientGeolocation]", test_geo);
 
   const url = new URL(req.url);
   const password = url.searchParams.get("password") || "";

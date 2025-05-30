@@ -40,10 +40,7 @@ export function getUserAgent(req: NextAuthRequest) {
   }
 }
 
-export async function getClientGeolocation(
-  req,
-  ip,
-): Promise<GeoLocation | null> {
+export async function getClientGeolocation(ip): Promise<GeoLocation | null> {
   // const new_headers = new Headers();
   // new_headers.set("X-Forwarded-For", ip);
   // new_headers.set("User-Agent", req.headers.get("user-agent") || "");
