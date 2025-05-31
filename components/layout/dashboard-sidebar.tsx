@@ -3,9 +3,10 @@
 import { Fragment, useEffect, useState } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { NavItem, SidebarNavItem } from "@/types";
+import { SidebarNavItem } from "@/types";
 import { Menu, PanelLeftClose, PanelRightClose } from "lucide-react";
 import { Link } from "next-view-transitions";
+import { name, version } from "package.json";
 
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
@@ -163,25 +164,17 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
               </nav>
 
               {isSidebarExpanded && (
-                <p className="mx-3 mt-auto pb-3 pt-6 font-mono text-xs text-muted-foreground/70">
-                  &copy; 2024{" "}
+                <p className="mx-3 mt-auto flex items-center gap-1 pb-3 pt-6 font-mono text-xs text-muted-foreground/90">
+                  &copy; 2024
                   <Link
                     href={siteConfig.links.github}
                     target="_blank"
                     rel="noreferrer"
-                    className="font-medium text-primary underline underline-offset-2"
+                    className="font-medium underline-offset-2 hover:underline"
                   >
-                    oiov
+                    {name}
                   </Link>
-                  .{/* <br /> Built with{" "} */}
-                  {/* <Link
-                    href="https://www.cloudflare.com?ref=wrdo"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="font-medium text-primary underline underline-offset-2"
-                  >
-                    Cloudflare
-                  </Link> */}
+                  v{version}
                 </p>
               )}
             </div>
@@ -274,6 +267,19 @@ export function MobileSheetSidebar({ links }: DashboardSidebarProps) {
                       </section>
                     ),
                 )}
+
+                <p className="mx-3 mt-auto flex items-center gap-1 pb-3 pt-6 font-mono text-xs text-muted-foreground/90">
+                  &copy; 2024
+                  <Link
+                    href={siteConfig.links.github}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-medium underline-offset-2 hover:underline"
+                  >
+                    {name}
+                  </Link>
+                  v{version}
+                </p>
 
                 {/* <div className="mt-auto">
                   <UpgradeCard />

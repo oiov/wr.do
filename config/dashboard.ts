@@ -16,7 +16,7 @@ export const sidebarLinks: SidebarNavItem[] = [
     ],
   },
   {
-    title: "SCRAPE",
+    title: "OPEN API",
     items: [
       {
         href: "/dashboard/scrape",
@@ -85,11 +85,6 @@ export const sidebarLinks: SidebarNavItem[] = [
     items: [
       { href: "/dashboard/settings", icon: "settings", title: "Settings" },
       { href: "/docs", icon: "bookOpen", title: "Documentation" },
-      {
-        href: siteConfig.links.oichat,
-        icon: "botMessageSquare",
-        title: "OiChat",
-      },
       {
         href: siteConfig.links.feedback,
         icon: "messageQuoted",
