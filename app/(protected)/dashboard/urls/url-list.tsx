@@ -23,7 +23,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -470,23 +469,24 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
           data.list.map((short) => (
             <div
               className={cn(
-                "h-24 rounded-lg border bg-neutral-50/50 p-1 dark:bg-neutral-800",
+                "h-24 rounded-lg border p-1 shadow-inner dark:bg-neutral-800",
               )}
               key={short.id}
             >
-              <div className="flex h-full flex-col rounded-lg border border-dotted bg-white px-3 py-1.5 shadow backdrop-blur-lg dark:bg-black">
+              <div className="flex h-full flex-col rounded-lg border border-dotted bg-white px-3 py-1.5 backdrop-blur-lg dark:bg-black">
                 <div className="flex items-center justify-between gap-1">
                   <BlurImage
                     src={`https://unavatar.io/${extractHostname(short.target)}?fallback=https://wr.do/logo.png`}
                     alt="logo"
                     width={30}
                     height={30}
+                    className="rounded-md"
                   />
                   <div className="ml-2 mr-auto flex flex-col justify-between truncate">
                     {/* url */}
                     <div className="flex items-center">
                       <Link
-                        className="overflow-hidden text-ellipsis whitespace-normal text-sm font-semibold text-slate-600 hover:text-blue-400 hover:underline dark:text-slate-400"
+                        className="overflow-hidden text-ellipsis whitespace-normal text-sm font-semibold text-slate-600 hover:text-blue-400 hover:underline dark:text-slate-300"
                         href={`https://${short.prefix}/s/${short.url}${short.password ? `?password=${short.password}` : ""}`}
                         target="_blank"
                         prefetch={false}
@@ -501,6 +501,17 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                           "duration-250 transition-all group-hover:opacity-100",
                         )}
                       />
+                      <Button
+                        className="duration-250 size-[26px] p-1.5 text-foreground transition-all hover:border hover:text-foreground dark:text-foreground"
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => {
+                          setSelectedUrl(short);
+                          setShowQrcode(!isShowQrcode);
+                        }}
+                      >
+                        <Icons.qrcode className="size-4" />
+                      </Button>
                       {short.password && (
                         <Icons.lock className="size-3 text-neutral-600 dark:text-neutral-400" />
                       )}
@@ -538,38 +549,6 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                           size="sm"
                           variant="ghost"
                           onClick={() => {
-                            setCurrentEditUrl(short);
-                            setShowForm(false);
-                            setFormType("edit");
-                            setShowForm(!isShowForm);
-                          }}
-                        >
-                          <PenLine className="size-4" />
-                          Edit URL
-                        </Button>
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem asChild>
-                        <Button
-                          className="flex w-full items-center gap-2"
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => {
-                            setSelectedUrl(short);
-                            setShowQrcode(!isShowQrcode);
-                          }}
-                        >
-                          <Icons.qrcode className="size-4" />
-                          QR Code
-                        </Button>
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem asChild>
-                        <Button
-                          className="flex w-full items-center gap-2"
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => {
                             setSelectedUrl(short);
                             setCurrentView(short.id!);
                             if (isShowStats && selectedUrl?.id !== short.id) {
@@ -582,19 +561,54 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                           Analytics
                         </Button>
                       </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild>
+                        <Button
+                          className="flex w-full items-center gap-2"
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => {
+                            setCurrentEditUrl(short);
+                            setShowForm(false);
+                            setFormType("edit");
+                            setShowForm(!isShowForm);
+                          }}
+                        >
+                          <PenLine className="size-4" />
+                          Edit URL
+                        </Button>
+                      </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
 
                 <div className="mt-auto flex items-center justify-end gap-1.5 text-xs text-muted-foreground">
-                  <span>
-                    Expiration:
-                    {expirationTime(short.expiration, short.updatedAt)}
-                  </span>
+                  <TooltipProvider>
+                    <Tooltip delayDuration={200}>
+                      <TooltipTrigger className="truncate">
+                        {short.userName ?? "Anonymous"}
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        {short.userName ?? "Anonymous"}
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                   <Separator
                     className="h-4/5"
                     orientation="vertical"
                   ></Separator>
+                  {short.expiration !== "-1" && (
+                    <>
+                      <span>
+                        Expiration:{" "}
+                        {expirationTime(short.expiration, short.updatedAt)}
+                      </span>
+                      <Separator
+                        className="h-4/5"
+                        orientation="vertical"
+                      ></Separator>
+                    </>
+                  )}
                   {timeAgo(short.updatedAt as Date)}
                   <Switch
                     className="scale-[0.6]"

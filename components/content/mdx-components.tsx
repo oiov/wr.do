@@ -9,6 +9,7 @@ import { Callout } from "@/components/shared/callout";
 import { CopyButton } from "@/components/shared/copy-button";
 
 import { DocsLang } from "../shared/docs-lang";
+import { Separator } from "../ui/separator";
 
 const components = {
   h1: ({ className, ...props }) => (

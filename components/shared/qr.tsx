@@ -426,7 +426,7 @@ export default function QRCodeEditor({
 
       {/* Api Key Mask */}
       {!user.apiKey && (
-        <div className="absolute left-0 top-0 flex size-full flex-col items-center justify-center gap-2 bg-neutral-100/20 px-4 backdrop-blur">
+        <div className="absolute left-0 top-0 z-20 flex size-full flex-col items-center justify-center gap-2 bg-neutral-100/20 px-4 backdrop-blur">
           <p className="text-center text-sm">
             Please create a <strong>api key</strong> before use this feature.{" "}
             <br /> Learn more about{" "}
