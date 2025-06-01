@@ -3,6 +3,7 @@
 import { ScrapeMeta } from "@prisma/client";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
+import { useElementSize } from "@/hooks/use-element-size";
 import {
   Card,
   CardContent,
@@ -54,6 +55,7 @@ export function LineChartMultiple({
   type1,
   type2,
 }: LineChartMultipleProps) {
+  const { ref: wrapperRef, width: wrapperWidth } = useElementSize();
   const processedData = processChartData(chartData, type1, type2);
 
   const chartConfig = {
@@ -75,12 +77,13 @@ export function LineChartMultiple({
           {type2 && ` and ${type2}`}.
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent ref={wrapperRef}>
         <ChartContainer config={chartConfig}>
           <AreaChart
             className="mt-6"
             accessibilityLayer
             data={processedData}
+            width={wrapperWidth}
             margin={{
               left: 12,
               right: 12,

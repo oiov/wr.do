@@ -98,12 +98,12 @@ const LogsTable = ({ userId, target }) => {
             onChange={(e) => handleFilterChange("type", e.target.value)}
             className="h-8 max-w-xs placeholder:text-xs"
           />
-          <Input
+          {/* <Input
             placeholder="Filter by IP..."
             value={filters.ip}
             onChange={(e) => handleFilterChange("ip", e.target.value)}
             className="h-8 max-w-xs placeholder:text-xs"
-          />
+          /> */}
           {
             <>
               <Input
@@ -139,16 +139,15 @@ const LogsTable = ({ userId, target }) => {
         <div className="rounded-md border">
           <Table>
             <TableHeader className="bg-muted">
-              <TableRow className="">
+              <TableRow className="grid grid-cols-5 items-center sm:grid-cols-6">
                 <TableHead className="hidden items-center justify-start px-2 sm:flex">
                   Date
                 </TableHead>
-                <TableHead className="px-2">Type</TableHead>
-                <TableHead className="hidden items-center justify-start px-2 sm:flex">
-                  IP
+                <TableHead className="flex items-center px-2">Type</TableHead>
+                <TableHead className="col-span-3 flex items-center px-2">
+                  Link
                 </TableHead>
-                <TableHead className="px-2">Link</TableHead>
-                <TableHead className="px-2">User</TableHead>
+                <TableHead className="flex items-center px-2">User</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -161,9 +160,6 @@ const LogsTable = ({ userId, target }) => {
                       <TableCell>
                         <Skeleton className="h-2 w-[80px]" />
                       </TableCell>
-                      <TableCell className="hidden sm:inline-block">
-                        <Skeleton className="h-2 w-[120px]" />
-                      </TableCell>
                       <TableCell>
                         <Skeleton className="h-2 w-[200px]" />
                       </TableCell>
@@ -173,15 +169,15 @@ const LogsTable = ({ userId, target }) => {
                     </TableRow>
                   ))
                 : logs.map((log) => (
-                    <TableRow className="text-xs hover:bg-muted" key={log.id}>
+                    <TableRow
+                      className="grid grid-cols-5 items-center text-xs hover:bg-muted sm:grid-cols-6"
+                      key={log.id}
+                    >
                       <TableCell className="hidden truncate p-2 sm:inline-block">
                         {new Date(log.createdAt).toLocaleString()}
                       </TableCell>
                       <TableCell className="p-2">{log.type}</TableCell>
-                      <TableCell className="hidden p-2 sm:inline-block">
-                        {log.ip}
-                      </TableCell>
-                      <TableCell className="max-w-md truncate p-2">
+                      <TableCell className="col-span-3 max-w-full truncate p-2">
                         {log.link}
                       </TableCell>
                       <TableCell className="max-w-md truncate p-2">
@@ -193,12 +189,13 @@ const LogsTable = ({ userId, target }) => {
           </Table>
         </div>
 
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex items-start justify-between gap-2 sm:items-center">
           <p className="ml-auto text-nowrap text-sm">
             {nFormatter(data?.total || 0)} logs
           </p>
           {data && Math.ceil(data.total / pageSize) > 1 && (
             <PaginationWrapper
+              className="m-0"
               total={data.total}
               currentPage={page}
               setCurrentPage={setPage}

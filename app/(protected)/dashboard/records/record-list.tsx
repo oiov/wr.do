@@ -10,6 +10,7 @@ import useSWR, { useSWRConfig } from "swr";
 import { UserRecordFormData } from "@/lib/dto/cloudflare-dns-record";
 import { TTL_ENUMS } from "@/lib/enums";
 import { fetcher, timeAgo } from "@/lib/utils";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -79,6 +80,7 @@ function TableColumnSekleton() {
 }
 
 export default function UserRecordsList({ user, action }: RecordListProps) {
+  const { isMobile } = useMediaQuery();
   const [isShowForm, setShowForm] = useState(false);
   const [formType, setFormType] = useState<FormType>("add");
   const [currentEditRecord, setCurrentEditRecord] =
@@ -328,6 +330,7 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
             </TableBody>
             {data && Math.ceil(data.total / pageSize) > 1 && (
               <PaginationWrapper
+                layout={isMobile ? "right" : "split"}
                 total={data.total}
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}

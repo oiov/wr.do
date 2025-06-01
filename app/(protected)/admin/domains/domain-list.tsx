@@ -9,6 +9,7 @@ import useSWR, { useSWRConfig } from "swr";
 
 import { DomainFormData } from "@/lib/dto/domains";
 import { fetcher, timeAgo } from "@/lib/utils";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -68,6 +69,7 @@ function TableColumnSekleton() {
 }
 
 export default function DomainList({ user, action }: DomainListProps) {
+  const { isMobile } = useMediaQuery();
   const [isShowForm, setShowForm] = useState(false);
   const [formType, setFormType] = useState<FormType>("add");
   const [currentEditDomain, setCurrentEditDomain] =
@@ -326,6 +328,7 @@ export default function DomainList({ user, action }: DomainListProps) {
             </TableBody>
             {data && Math.ceil(data.total / pageSize) > 1 && (
               <PaginationWrapper
+                layout={isMobile ? "right" : "split"}
                 total={data.total}
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}

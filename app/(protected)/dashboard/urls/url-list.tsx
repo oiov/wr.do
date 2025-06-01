@@ -18,6 +18,7 @@ import {
   removeUrlSuffix,
   timeAgo,
 } from "@/lib/utils";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -99,6 +100,7 @@ function TableColumnSekleton() {
 
 export default function UserUrlsList({ user, action }: UrlListProps) {
   const pathname = usePathname();
+  const { isMobile } = useMediaQuery();
   const [currentView, setCurrentView] = useState<string>("List");
   const [isShowForm, setShowForm] = useState(false);
   const [formType, setFormType] = useState<FormType>("add");
@@ -446,6 +448,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
       </TableBody>
       {data && Math.ceil(data.total / pageSize) > 1 && (
         <PaginationWrapper
+          layout={isMobile ? "right" : "split"}
           total={data.total}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
@@ -628,6 +631,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
 
       {data && Math.ceil(data.total / pageSize) > 1 && (
         <PaginationWrapper
+          layout={isMobile ? "right" : "split"}
           total={data.total}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}

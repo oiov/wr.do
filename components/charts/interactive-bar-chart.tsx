@@ -7,6 +7,7 @@ import useSWR from "swr";
 
 import { DATE_DIMENSION_ENUMS } from "@/lib/enums";
 import { cn, fetcher, nFormatter } from "@/lib/utils";
+import { useElementSize } from "@/hooks/use-element-size";
 import {
   Card,
   CardContent,
@@ -62,6 +63,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function InteractiveBarChart() {
+  const { ref: wrapperRef, width: wrapperWidth } = useElementSize();
   const [timeRange, setTimeRange] = useState<string>("7d");
   const [activeChart, setActiveChart] =
     React.useState<keyof typeof chartConfig>("users");
@@ -134,7 +136,7 @@ export function InteractiveBarChart() {
           </Select>
         </div>
 
-        <div className="flex">
+        <div className="grid grid-cols-3 sm:grid-cols-6">
           {["users", "records", "urls", "emails", "inbox", "sends"].map(
             (key) => {
               const chart = key as keyof typeof chartConfig;
@@ -144,13 +146,13 @@ export function InteractiveBarChart() {
                 <button
                   key={chart}
                   data-active={activeChart === chart}
-                  className="relative z-30 flex flex-1 flex-col justify-center gap-1 border-l border-t p-4 text-left data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:p-6"
+                  className="relative z-30 flex flex-col justify-center gap-1 border-l border-t p-3 text-left transition-colors hover:bg-muted/30 data-[active=true]:bg-muted/50 sm:border-t-0 sm:p-4"
                   onClick={() => setActiveChart(chart)}
                 >
                   <span className="text-xs text-muted-foreground">
                     {chartConfig[chart].label}
                   </span>
-                  <span className="text-lg font-bold leading-none sm:text-3xl">
+                  <span className="text-base font-bold leading-none sm:text-lg">
                     {nFormatter(data.total[key])}
                   </span>
                   <span
@@ -170,7 +172,7 @@ export function InteractiveBarChart() {
           )}
         </div>
       </CardHeader>
-      <CardContent className="px-2 sm:p-6">
+      <CardContent ref={wrapperRef} className="px-2 sm:p-6">
         <ChartContainer
           config={chartConfig}
           className="aspect-auto h-[200px] w-full"
@@ -178,6 +180,7 @@ export function InteractiveBarChart() {
           <BarChart
             accessibilityLayer
             data={data.list}
+            width={wrapperWidth}
             margin={{
               left: 12,
               right: 12,

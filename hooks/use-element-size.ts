@@ -10,7 +10,7 @@ interface UseElementSizeOptions {
   box?: "content-box" | "border-box" | "device-pixel-content-box";
 }
 
-export function useElementSize<T extends HTMLElement>(
+export function useElementSize<T extends HTMLDivElement>(
   initialSize: ElementSize = { width: 0, height: 0 },
   options: UseElementSizeOptions = {},
 ): { ref: React.RefObject<T>; width: number; height: number } {
