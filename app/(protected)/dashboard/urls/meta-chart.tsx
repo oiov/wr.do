@@ -406,12 +406,12 @@ export function DailyPVUVChart({
               <TabsTrigger value="referrer">Referrers</TabsTrigger>
               <TabsTrigger value="isBot">Traffic Type</TabsTrigger>
             </TabsList>
-            <TabsContent className="h-[90%]" value="referrer">
+            <TabsContent className="h-[calc(100%-40px)]" value="referrer">
               {refererStats.length > 0 && (
                 <StatsList data={refererStats} title="Referrers" />
               )}
             </TabsContent>
-            <TabsContent className="h-[90%]" value="isBot">
+            <TabsContent className="h-[calc(100%-40px)]" value="isBot">
               {isBotStats.length > 0 && (
                 <StatsList data={isBotStats} title="Is Bot" />
               )}
@@ -423,12 +423,12 @@ export function DailyPVUVChart({
               <TabsTrigger value="country">Country</TabsTrigger>
               <TabsTrigger value="city">City</TabsTrigger>
             </TabsList>
-            <TabsContent className="h-[90%]" value="country">
+            <TabsContent className="h-[calc(100%-40px)]" value="country">
               {countryStats.length > 0 && (
                 <StatsList data={countryStats} title="Countries" />
               )}
             </TabsContent>
-            <TabsContent className="h-[90%]" value="city">
+            <TabsContent className="h-[calc(100%-40px)]" value="city">
               {cityStats.length > 0 && (
                 <StatsList data={cityStats} title="Cities" />
               )}
@@ -440,12 +440,12 @@ export function DailyPVUVChart({
               <TabsTrigger value="browser">Browser</TabsTrigger>
               <TabsTrigger value="engine">Browser Engine</TabsTrigger>
             </TabsList>
-            <TabsContent className="h-[90%]" value="browser">
+            <TabsContent className="h-[calc(100%-40px)]" value="browser">
               {browserStats.length > 0 && (
                 <StatsList data={browserStats} title="Browsers" />
               )}
             </TabsContent>
-            <TabsContent className="h-[90%]" value="engine">
+            <TabsContent className="h-[calc(100%-40px)]" value="engine">
               {engineStats.length > 0 && (
                 <StatsList data={engineStats} title="Engines" />
               )}
@@ -458,12 +458,12 @@ export function DailyPVUVChart({
               <TabsTrigger value="language">Language</TabsTrigger>
               <TabsTrigger value="region">Region</TabsTrigger>
             </TabsList>
-            <TabsContent className="h-[90%]" value="language">
+            <TabsContent className="h-[calc(100%-40px)]" value="language">
               {languageStats.length > 0 && (
                 <StatsList data={languageStats} title="Languages" />
               )}
             </TabsContent>
-            <TabsContent className="h-[90%]" value="region">
+            <TabsContent className="h-[calc(100%-40px)]" value="region">
               {regionStats.length > 0 && (
                 <StatsList data={regionStats} title="Regions" />
               )}
@@ -476,15 +476,15 @@ export function DailyPVUVChart({
               <TabsTrigger value="os">OS</TabsTrigger>
               <TabsTrigger value="cpu">CPU</TabsTrigger>
             </TabsList>
-            <TabsContent className="h-[90%]" value="device">
+            <TabsContent className="h-[calc(100%-40px)]" value="device">
               {deviceStats.length > 0 && (
                 <StatsList data={deviceStats} title="Devices" />
               )}
             </TabsContent>
-            <TabsContent className="h-[90%]" value="os">
+            <TabsContent className="h-[calc(100%-40px)]" value="os">
               {osStats.length > 0 && <StatsList data={osStats} title="OS" />}
             </TabsContent>
-            <TabsContent className="h-[90%]" value="cpu">
+            <TabsContent className="h-[calc(100%-40px)]" value="cpu">
               {cpuStats.length > 0 && <StatsList data={cpuStats} title="CPU" />}
             </TabsContent>
           </Tabs>
@@ -507,7 +507,7 @@ export function StatsList({ data, title }: { data: Stat[]; title: string }) {
       <div
         className={`scrollbar-hidden overflow-hidden overflow-y-auto px-4 pb-4 pt-2 transition-all duration-500 ease-in-out`}
         style={{
-          maxHeight: "18rem", // 动态计算最大高度
+          maxHeight: "18rem",
         }}
       >
         {displayedData.map((ref) => (
