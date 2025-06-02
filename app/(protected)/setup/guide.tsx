@@ -215,8 +215,7 @@ function SetAdminRole({ id, email }: { id: string; email: string }) {
           ReadyBadge
         ) : (
           <Button
-            className=""
-            variant={"outline"}
+            variant={"default"}
             size={"sm"}
             onClick={handleSetAdmin}
             disabled={isPending}

@@ -233,7 +233,7 @@ export function RecordForm({
                     ))
                   ) : (
                     <Button className="w-full" variant="ghost">
-                      No domain
+                      No domains configured
                     </Button>
                   )}
                 </SelectContent>
