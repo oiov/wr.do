@@ -1,6 +1,5 @@
 "use server";
 
-import { auth } from "@/auth";
 import { UserRole } from "@prisma/client";
 
 import { prisma } from "@/lib/db";
@@ -25,7 +24,7 @@ export type UserRecordFormData = {
   tags: string;
   created_on?: string;
   modified_on?: string;
-  active: number;
+  active: number; // 0: inactive, 1: active, 2: pending
 };
 
 export async function createUserRecord(
@@ -89,9 +88,15 @@ export async function getUserRecords(
     role === "USER"
       ? {
           userId,
-          // active,
+          active: {
+            not: 2,
+          },
         }
-      : {};
+      : {
+          active: {
+            not: 2,
+          },
+        };
   const [total, list] = await prisma.$transaction([
     prisma.userRecord.count({
       where: option,

@@ -1,3 +1,4 @@
+import { siteConfig } from "@/config/site";
 import { TeamPlanQuota } from "@/config/team";
 import { createDNSRecord } from "@/lib/cloudflare";
 import {
@@ -75,8 +76,36 @@ export async function POST(req: Request) {
     );
     if (user_record && user_record.length > 0) {
       return Response.json("Record already exists", {
-        status: 403,
+        status: 400,
       });
+    }
+
+    // apply subdomain
+    if (siteConfig.enableSubdomainApply) {
+      const res = await createUserRecord(user.id, {
+        record_id: generateSecret(16),
+        zone_id: matchedZone.cf_zone_id,
+        zone_name: matchedZone.domain_name,
+        name: record.name,
+        type: record.type,
+        content: record.content,
+        proxied: record.proxied,
+        proxiable: false,
+        ttl: record.ttl,
+        comment: record.comment,
+        tags: "",
+        created_on: new Date().toISOString(),
+        modified_on: new Date().toISOString(),
+        active: 2, // pending
+      });
+
+      if (res.status !== "success") {
+        return Response.json(res.status, {
+          status: 502,
+        });
+      }
+      // send email to admin
+      return Response.json(res.data?.id);
     }
 
     const data = await createDNSRecord(

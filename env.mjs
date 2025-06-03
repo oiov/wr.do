@@ -3,8 +3,6 @@ import { z } from "zod";
 
 export const env = createEnv({
   server: {
-    // This is optional because it's only used in development.
-    // See https://next-auth.js.org/deployment.
     NEXTAUTH_URL: z.string().url().optional(),
     AUTH_SECRET: z.string().optional(),
     GOOGLE_CLIENT_ID: z.string().optional(),
@@ -23,6 +21,7 @@ export const env = createEnv({
     NEXT_PUBLIC_APP_URL: z.string().optional(),
     NEXT_PUBLIC_OPEN_SIGNUP: z.string().min(1).default("1"),
     NEXT_PUBLIC_EMAIL_R2_DOMAIN: z.string().optional(),
+    NEXT_PUBLIC_ENABLE_SUBDOMAIN_APPLY: z.string().min(1).default("0"),
   },
   runtimeEnv: {
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
@@ -37,6 +36,8 @@ export const env = createEnv({
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     NEXT_PUBLIC_OPEN_SIGNUP: process.env.NEXT_PUBLIC_OPEN_SIGNUP,
     NEXT_PUBLIC_EMAIL_R2_DOMAIN: process.env.NEXT_PUBLIC_EMAIL_R2_DOMAIN,
+    NEXT_PUBLIC_ENABLE_SUBDOMAIN_APPLY:
+      process.env.NEXT_PUBLIC_ENABLE_SUBDOMAIN_APPLY,
     SCREENSHOTONE_BASE_URL: process.env.SCREENSHOTONE_BASE_URL,
     GITHUB_TOKEN: process.env.GITHUB_TOKEN,
     LinuxDo_CLIENT_ID: process.env.LinuxDo_CLIENT_ID,

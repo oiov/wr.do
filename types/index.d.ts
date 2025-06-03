@@ -18,6 +18,7 @@ export type SiteConfig = {
   };
   openSignup: boolean;
   emailR2Domain: string;
+  enableSubdomainApply: boolean;
 };
 
 export type NavItem = {
