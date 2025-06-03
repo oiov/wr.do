@@ -23,5 +23,7 @@ export async function GET() {
         resend: !!(env.RESEND_API_KEY && env.RESEND_FROM_EMAIL),
       }),
     );
-  } catch (error) {}
+  } catch (error) {
+    console.log("[Error]", error);
+  }
 }
