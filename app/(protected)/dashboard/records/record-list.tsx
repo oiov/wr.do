@@ -87,6 +87,8 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
     useState<UserRecordFormData | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [tab, setTab] = useState("app");
+  const isAdmin = action.includes("/admin");
 
   const { mutate } = useSWRConfig();
 
@@ -136,11 +138,13 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
     }
   };
 
+  const rendeApplyList = () => {};
+
   return (
     <>
       <Card className="xl:col-span-2">
         <CardHeader className="flex flex-row items-center">
-          {action.includes("/admin") ? (
+          {isAdmin ? (
             <CardDescription className="text-balance text-lg font-bold">
               <span>Total Subdomains:</span>{" "}
               <span className="font-bold">{data && data.total}</span>
