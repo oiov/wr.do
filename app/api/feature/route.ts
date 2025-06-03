@@ -13,13 +13,17 @@ console.log(
   !!(process.env.LinuxDo_CLIENT_ID && process.env.LinuxDo_CLIENT_SECRET),
 );
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
-    console.log(
+    console.error(
       "[env]",
       env.LinuxDo_CLIENT_ID,
       env.LinuxDo_CLIENT_SECRET,
       !!(env.LinuxDo_CLIENT_ID && env.LinuxDo_CLIENT_SECRET),
+      "[process.env]",
+      process.env.LinuxDo_CLIENT_ID,
+      process.env.LinuxDo_CLIENT_SECRET,
+      !!(process.env.LinuxDo_CLIENT_ID && process.env.LinuxDo_CLIENT_SECRET),
     );
     console.log(
       "[process.env]",
