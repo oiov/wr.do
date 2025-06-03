@@ -1,6 +1,6 @@
 services:
   app:
-    image: ghcr.io/oiov/wr.do/wrdo:${TAG:-main}
+    image: ghcr.io/oiov/wr.do/wrdo:${TAG:-latest}
     container_name: wrdo
     ports:
       - "3000:3000"
