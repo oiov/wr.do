@@ -4,8 +4,9 @@ on:
   push:
     branches:
       - main
+      - fix/docker
     tags:
-      - 'v*.*.*' 
+      - "v*.*.*"
   pull_request:
     branches:
       - main
@@ -47,7 +48,7 @@ jobs:
           tags: |
             type=sha,format=short  
             type=ref,event=branch,prefix=  
-            type=ref,event=tag 
+            type=ref,event=tag
 
       # 构建并推送 Docker 镜像
       - name: Build and push Docker image
@@ -55,7 +56,7 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          push: true # ${{ github.event_name != 'pull_request' }}  
+          push: true # ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
