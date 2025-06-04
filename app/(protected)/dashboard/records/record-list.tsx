@@ -47,7 +47,7 @@ import {
 import { PaginationWrapper } from "@/components/shared/pagination";
 
 export interface RecordListProps {
-  user: Pick<User, "id" | "name" | "apiKey" | "email">;
+  user: Pick<User, "id" | "name" | "apiKey" | "email" | "role">;
   action: string;
 }
 
@@ -137,8 +137,6 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
       toast.error("Failed to update status");
     }
   };
-
-  const rendeApplyList = () => {};
 
   return (
     <>
@@ -271,30 +269,48 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                       }
                     </TableCell>
                     <TableCell className="col-span-1 hidden items-center justify-center gap-1 sm:flex">
-                      <SwitchWrapper
-                        record={record}
-                        onChangeStatu={handleChangeStatu}
-                      />
-                      {!record.active && (
+                      {record.active !== 2 ? (
+                        <SwitchWrapper
+                          record={record}
+                          onChangeStatu={handleChangeStatu}
+                        />
+                      ) : (
+                        <Badge className="rounded-md" variant={"yellow"}>
+                          Pending
+                        </Badge>
+                      )}
+                      {record.active !== 1 && (
                         <TooltipProvider>
                           <Tooltip delayDuration={200}>
                             <TooltipTrigger className="truncate">
                               <Icons.help className="size-4 cursor-pointer text-yellow-500 opacity-90" />
                             </TooltipTrigger>
                             <TooltipContent>
-                              <ul className="list-disc px-3">
-                                <li>The target is currently inaccessible.</li>
-                                <li>Please check the target and try again.</li>
-                                <li>
-                                  If the target is not activated within 3 days,{" "}
-                                  <br />
-                                  the administrator will{" "}
-                                  <strong className="text-red-500">
-                                    delete this record
-                                  </strong>
-                                  .
-                                </li>
-                              </ul>
+                              {record.active === 0 && (
+                                <ul className="list-disc px-3">
+                                  <li>The target is currently inaccessible.</li>
+                                  <li>
+                                    Please check the target and try again.
+                                  </li>
+                                  <li>
+                                    If the target is not activated within 3
+                                    days, <br />
+                                    the administrator will{" "}
+                                    <strong className="text-red-500">
+                                      delete this record
+                                    </strong>
+                                    .
+                                  </li>
+                                </ul>
+                              )}
+                              {record.active === 2 && (
+                                <ul className="list-disc px-3">
+                                  <li>
+                                    The record is currently pending for admin
+                                    approval.
+                                  </li>
+                                </ul>
+                              )}
                             </TooltipContent>
                           </Tooltip>
                         </TooltipProvider>
@@ -304,20 +320,40 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                       {timeAgo(record.modified_on as unknown as Date)}
                     </TableCell>
                     <TableCell className="col-span-1 flex justify-center">
-                      <Button
-                        className="text-sm hover:bg-slate-100 dark:hover:text-primary-foreground"
-                        size="sm"
-                        variant={"outline"}
-                        onClick={() => {
-                          setCurrentEditRecord(record);
-                          setShowForm(false);
-                          setFormType("edit");
-                          setShowForm(!isShowForm);
-                        }}
-                      >
-                        <p>Edit</p>
-                        <PenLine className="ml-1 size-4" />
-                      </Button>
+                      {record.active !== 2 ? (
+                        <Button
+                          className="text-sm hover:bg-slate-100 dark:hover:text-primary-foreground"
+                          size="sm"
+                          variant={"outline"}
+                          onClick={() => {
+                            setCurrentEditRecord(record);
+                            setShowForm(false);
+                            setFormType("edit");
+                            setShowForm(!isShowForm);
+                          }}
+                        >
+                          <p>Edit</p>
+                          <PenLine className="ml-1 size-4" />
+                        </Button>
+                      ) : record.active === 2 &&
+                        user.role === "ADMIN" &&
+                        isAdmin ? (
+                        <Button
+                          className="text-sm hover:bg-blue-400 dark:hover:text-primary-foreground"
+                          size="sm"
+                          variant={"blue"}
+                          onClick={() => {
+                            setCurrentEditRecord(record);
+                            setShowForm(false);
+                            setFormType("edit");
+                            setShowForm(!isShowForm);
+                          }}
+                        >
+                          <p>Review</p>
+                        </Button>
+                      ) : (
+                        "--"
+                      )}
                     </TableCell>
                   </TableRow>
                 ))
@@ -347,7 +383,7 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
       </Card>
 
       <Modal
-        className="md:max-w-2xl"
+        className="max-h-[90vh] overflow-y-auto md:max-w-2xl"
         showModal={isShowForm}
         setShowModal={setShowForm}
       >

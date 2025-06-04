@@ -19,9 +19,9 @@ export const env = createEnv({
   },
   client: {
     NEXT_PUBLIC_APP_URL: z.string().optional(),
-    NEXT_PUBLIC_OPEN_SIGNUP: z.string().min(1).default("1"),
+    NEXT_PUBLIC_OPEN_SIGNUP: z.string().default("1"),
     NEXT_PUBLIC_EMAIL_R2_DOMAIN: z.string().optional(),
-    NEXT_PUBLIC_ENABLE_SUBDOMAIN_APPLY: z.string().min(1).default("0"),
+    NEXT_PUBLIC_ENABLE_SUBDOMAIN_APPLY: z.string().default("0"),
   },
   runtimeEnv: {
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,

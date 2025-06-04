@@ -262,6 +262,9 @@ export default function DomainList({ user, action }: DomainListProps) {
                             handleChangeStatus(value, "enable_email", domain)
                           }
                         />
+                        {domain.resend_api_key && (
+                          <Icons.resend className="mx-0.5 size-4" />
+                        )}
                       </TableCell>
                       <TableCell className="col-span-1 hidden items-center gap-1 sm:flex">
                         <Switch
@@ -270,6 +273,11 @@ export default function DomainList({ user, action }: DomainListProps) {
                             handleChangeStatus(value, "enable_dns", domain)
                           }
                         />
+                        {domain.cf_zone_id &&
+                          domain.cf_api_key &&
+                          domain.cf_email && (
+                            <Icons.cloudflare className="mx-0.5 size-4" />
+                          )}
                       </TableCell>
                       <TableCell className="col-span-1 flex items-center gap-1">
                         <Switch
@@ -298,17 +306,6 @@ export default function DomainList({ user, action }: DomainListProps) {
                           <p className="hidden sm:block">Edit</p>
                           <PenLine className="mx-0.5 size-4 sm:ml-1 sm:size-3" />
                         </Button>
-                        {domain.cf_zone_id &&
-                          domain.cf_api_key &&
-                          domain.cf_email && (
-                            <Button
-                              className="h-7 px-1 text-xs hover:bg-slate-100 dark:hover:text-primary-foreground"
-                              size="sm"
-                              variant="ghost"
-                            >
-                              <Icons.cloudflare className="mx-0.5 size-4" />
-                            </Button>
-                          )}
                       </TableCell>
                     </TableRow>
                     {/* {isShowDomainInfo && selectedDomain?.id === domain.id && (

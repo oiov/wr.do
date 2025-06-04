@@ -83,7 +83,7 @@ export const PricingSection = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <PriceCard
             tier="Free"
             price="$0/mo"
@@ -97,7 +97,7 @@ export const PricingSection = () => {
             }
             benefits={getBenefits(TeamPlanQuota.free)}
           />
-          <PriceCard
+          {/* <PriceCard
             tier="Premium"
             price="$5/mo"
             bestFor="Best for 5-50 users"
@@ -109,7 +109,7 @@ export const PricingSection = () => {
               </Link>
             }
             benefits={getBenefits(TeamPlanQuota.premium)}
-          />
+          /> */}
           <PriceCard
             tier="Enterprise"
             price="Contact us"

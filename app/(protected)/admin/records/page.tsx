@@ -30,6 +30,7 @@ export default async function DashboardPage() {
           name: user.name || "",
           apiKey: user.apiKey || "",
           email: user.email || "",
+          role: user.role,
         }}
         action="/api/record/admin"
       />

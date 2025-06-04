@@ -39,8 +39,9 @@ pnpm install
 
 | 环境变量                       | 值                                                 | 描述                                                                       |
 | -------------------------- | ------------------------------------------------- | ------------------------------------------------------------------------ |
-| NEXTAUTH\_URL              | `http://localhost:3000`                           | Next.js 应用的 URL。                                                         |
+| NEXT_PUBLIC_APP_URL              | `http://localhost:3000`                           | Next.js 应用的 URL。                                                         |
 | AUTH\_SECRET               | `123465`                                          | 用于加密令牌和邮件验证哈希的密钥。                                                        |
+| AUTH_URL | `http://localhost:3000`                           | NextAuth.js 的回调 URL。                                                         |
 | DATABASE\_URL              | `postgres://username:password@host:port/database` | Postgres 数据库的路径。                                                         |
 | GOOGLE\_CLIENT\_ID         | `123465`                                          | Google OAuth 客户端的 ID。                                                    |
 | GOOGLE\_CLIENT\_SECRET     | `123465`                                          | Google OAuth 客户端的密钥。                                                     |
@@ -49,6 +50,7 @@ pnpm install
 | RESEND\_API\_KEY           | `123465`                                          | Resend 的 API 密钥。                                                         |
 | RESEND\_FROM\_EMAIL        | `"you <support@your-domain.com>"`                 | 用于发送邮件的邮箱地址。                                                             |
 | NEXT\_PUBLIC\_OPEN\_SIGNUP | `1`                                               | 开放注册。                                                                    |
+| NEXT_PUBLIC_ENABLE_SUBDOMAIN_APPLY | `0`                                         | 启用子域名申请模式                                                                    |
 | SCREENSHOTONE\_BASE\_URL   | `https://api.example.com`                         | 待补充                                                                      |
 | GITHUB\_TOKEN              | `ghp_sscsfarwetqet`                               | [https://github.com/settings/tokens](https://github.com/settings/tokens) |
 

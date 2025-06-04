@@ -1,3 +1,4 @@
+import { env } from "@/env.mjs";
 import { siteConfig } from "@/config/site";
 import { TeamPlanQuota } from "@/config/team";
 import { createDNSRecord } from "@/lib/cloudflare";
@@ -7,7 +8,8 @@ import {
   getUserRecordCount,
 } from "@/lib/dto/cloudflare-dns-record";
 import { getDomainsByFeature } from "@/lib/dto/domains";
-import { checkUserStatus } from "@/lib/dto/user";
+import { checkUserStatus, getFirstAdminUser } from "@/lib/dto/user";
+import { applyRecordEmailHtml, resend } from "@/lib/email";
 import { reservedDomains } from "@/lib/enums";
 import { getCurrentUser } from "@/lib/session";
 import { generateSecret } from "@/lib/utils";
@@ -104,7 +106,22 @@ export async function POST(req: Request) {
           status: 502,
         });
       }
-      // send email to admin
+      const admin_user = await getFirstAdminUser();
+      if (admin_user) {
+        await resend.emails.send({
+          from: env.RESEND_FROM_EMAIL,
+          to: admin_user.email || "",
+          subject: "New record pending approval",
+          html: applyRecordEmailHtml({
+            appUrl: siteConfig.url,
+            appName: siteConfig.name,
+            zone_name: record.zone_name,
+            type: record.type,
+            name: record.name,
+            content: record.content,
+          }),
+        });
+      }
       return Response.json(res.data?.id);
     }
 

@@ -77,6 +77,58 @@ export async function createUserRecord(
   }
 }
 
+export async function updateUserRecordReview(
+  userId: string,
+  id: string,
+  data: UserRecordFormData,
+) {
+  try {
+    const {
+      record_id,
+      zone_id,
+      zone_name,
+      name,
+      type,
+      content,
+      ttl,
+      proxied,
+      proxiable,
+      comment,
+      tags,
+      created_on,
+      modified_on,
+      active,
+    } = createUserRecordSchema.parse(data);
+
+    const res = await prisma.userRecord.update({
+      where: {
+        id,
+      },
+      data: {
+        userId,
+        record_id,
+        zone_id,
+        zone_name,
+        name,
+        type,
+        content,
+        ttl,
+        proxied,
+        proxiable,
+        comment,
+        tags,
+        created_on,
+        modified_on,
+        active,
+      },
+    });
+    return { status: "success", data: res };
+  } catch (error) {
+    // console.log(error);
+    return { status: error };
+  }
+}
+
 export async function getUserRecords(
   userId: string,
   active: number = 1,
@@ -88,14 +140,14 @@ export async function getUserRecords(
     role === "USER"
       ? {
           userId,
-          active: {
-            not: 2,
-          },
+          // active: {
+          //   not: 2,
+          // },
         }
       : {
-          active: {
-            not: 2,
-          },
+          // active: {
+          //   not: 2,
+          // },
         };
   const [total, list] = await prisma.$transaction([
     prisma.userRecord.count({

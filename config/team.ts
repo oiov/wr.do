@@ -6,7 +6,7 @@ export const TeamPlanQuota = {
     SL_Domains: 2,
     SL_AdvancedAnalytics: true,
     SL_CustomQrCodeLogo: false,
-    RC_NewRecords: 0,
+    RC_NewRecords: 3,
     EM_EmailAddresses: 1000,
     EM_Domains: 2,
     EM_SendEmails: 200,

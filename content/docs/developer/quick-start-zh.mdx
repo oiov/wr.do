@@ -171,6 +171,8 @@ NEXT_PUBLIC_EMAIL_R2_DOMAIN=https://email-attachment.wr.do
 ```js title=".env"
 # 允许任何人注册
 NEXT_PUBLIC_OPEN_SIGNUP=1
+# 子域名申请模式，默认关闭（0 关闭， 1 开启），若设置为1，用户创建子域名后需要等待管理员审核，才能解析到 cloudflare
+NEXT_PUBLIC_ENABLE_SUBDOMAIN_APPLY=0
 ```
 
 ## 5. 添加 SCREENSHOTONE\_BASE\_URL 环境变量

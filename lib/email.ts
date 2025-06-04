@@ -144,41 +144,102 @@ export function getVerificationEmailHtml({
   `;
 }
 
-// TODO: Update sendVerificationRequest for use react-email with resend magic-link
-
-// Email({
-//   sendVerificationRequest: async ({ identifier, url, provider }) => {
-//     const user = await getUserByEmail(identifier);
-//     if (!user || !user.name) return null;
-
-//     const userVerified = user?.emailVerified ? true : false;
-//     const authSubject = userVerified ? `Sign-in link for ${siteConfig.name}` : "Activate your account";
-
-//     try {
-//       const { data, error } = await resend.emails.send({
-//         from: 'WR.DO App <onboarding@resend.dev>',
-//         to: process.env.NODE_ENV === "development" ? 'delivered@resend.dev' : identifier,
-//         subject: authSubject,
-//         react: MagicLinkEmail({
-//           firstName: user?.name as string,
-//           actionUrl: url,
-//           mailType: userVerified ? "login" : "register",
-//           siteName: siteConfig.name
-//         }),
-//         // Set this to prevent Gmail from threading emails.
-//         // More info: https://resend.com/changelog/custom-email-headers
-//         headers: {
-//           'X-Entity-Ref-ID': new Date().getTime() + "",
-//         },
-//       });
-
-//       if (error || !data) {
-//         throw new Error(error?.message)
-//       }
-
-//       // console.log(data)
-//     } catch (error) {
-//       throw new Error("Failed to send verification email.")
-//     }
-//   },
-// }),
+export function applyRecordEmailHtml({
+  appUrl,
+  appName,
+  zone_name,
+  type,
+  name,
+  content,
+}: {
+  appUrl: string;
+  appName: string;
+  zone_name: string;
+  type: string;
+  name: string;
+  content: string;
+}) {
+  return `
+    <html>
+      <head>
+        <title>Record Email - ${appName}</title>
+        <style>
+          body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+          }
+          .wrapper {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+          }
+          .content {
+            padding: 30px;
+            color: #333333;
+          }
+          .content h2 {
+            font-size: 20px;
+            margin: 0 0 15px;
+            color: #1a1a1a;
+          }
+          .content p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 0 0 20px;
+            color: #555555;
+          }
+          .button-container {
+            text-align: center;
+            margin: 20px 0;
+          }
+          .button {
+            display: inline-block;
+            padding: 14px 30px;
+            background-color: #346df1;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+          }
+          .button:hover {
+            background-color: #2858c1;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="wrapper">
+          <table>
+            <tr>
+              <th>Zone</th>
+              <td>${zone_name}</td>
+            </tr>
+            <tr>
+              <th>Type</th>
+              <td>${type}</td>
+            </tr>
+            <tr>
+              <th>Name</th>
+              <td>${name}</td>
+            </tr>
+            <tr>
+              <th>Content</th>
+              <td>${content}</td>
+            </tr>
+          </table>
+          
+          <div class="button-container">
+           <a href="${appUrl}/admin/domains" class="button">Review Record</a>
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
+}

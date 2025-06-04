@@ -189,7 +189,7 @@ export default function EmailDetail({
           <p className="text-xs">
             <strong>To:</strong> {email.to}
           </p>
-          {email.replyTo && (
+          {email.replyTo && email.replyTo !== '""' && (
             <p className="text-xs">
               <strong>Reply-To:</strong> {email.replyTo}
             </p>

@@ -146,3 +146,10 @@ export function checkUserStatus(user: any) {
   }
   return user;
 }
+
+export function getFirstAdminUser() {
+  return prisma.user.findFirst({
+    where: { role: UserRole.ADMIN },
+    select: { email: true },
+  });
+}

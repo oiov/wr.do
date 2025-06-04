@@ -343,8 +343,9 @@ export function DomainForm({
 
         <Collapsible className="relative mt-2 rounded-md bg-neutral-100 p-4 dark:bg-neutral-800">
           <CollapsibleTrigger className="flex w-full items-center justify-between">
-            <h2 className="absolute left-2 top-5 text-xs font-semibold text-neutral-400">
+            <h2 className="absolute left-2 top-5 flex gap-2 text-xs font-semibold text-neutral-400">
               Cloudflare Configs (Optional)
+              <Icons.cloudflare className="mx-0.5 size-4" />
             </h2>
             {ReadyBadge(
               currentRecordStatus,
@@ -468,8 +469,9 @@ export function DomainForm({
 
         <Collapsible className="relative mt-2 rounded-md bg-neutral-100 p-4 dark:bg-neutral-800">
           <CollapsibleTrigger className="flex w-full items-center justify-between">
-            <h2 className="absolute left-2 top-5 text-xs font-semibold text-neutral-400">
+            <h2 className="absolute left-2 top-5 flex gap-2 text-xs font-semibold text-neutral-400">
               Resend Configs (Optional)
+              <Icons.resend className="mx-0.5 size-4" />
             </h2>
             {ReadyBadge(
               currentEmailStatus,
