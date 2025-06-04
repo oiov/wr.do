@@ -109,6 +109,10 @@ pnpm db:push
 
 Follow https://localhost:3000/setup
 
+## Environment Variables
+
+查看 [开发者文档](https://wr.do/docs/developer).
+
 ## 社区群组
 
 - Discord: https://discord.gg/AHPQYuZu3m

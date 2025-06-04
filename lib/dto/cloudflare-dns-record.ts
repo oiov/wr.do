@@ -1,6 +1,6 @@
 "use server";
 
-import { UserRole } from "@prisma/client";
+import { User, UserRole } from "@prisma/client";
 
 import { prisma } from "@/lib/db";
 import {
@@ -25,6 +25,7 @@ export type UserRecordFormData = {
   created_on?: string;
   modified_on?: string;
   active: number; // 0: inactive, 1: active, 2: pending
+  user: Pick<User, "name" | "email">;
 };
 
 export async function createUserRecord(
@@ -157,6 +158,30 @@ export async function getUserRecords(
       where: option,
       skip: (page - 1) * size,
       take: size,
+      select: {
+        id: true,
+        record_id: true,
+        zone_id: true,
+        zone_name: true,
+        name: true,
+        type: true,
+        content: true,
+        ttl: true,
+        proxied: true,
+        proxiable: true,
+        comment: true,
+        tags: true,
+        created_on: true,
+        modified_on: true,
+        active: true,
+        userId: true,
+        user: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+      },
       orderBy: {
         modified_on: "desc",
       },

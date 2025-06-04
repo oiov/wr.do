@@ -40,10 +40,7 @@ import {
 import { FormType, RecordForm } from "@/components/forms/record-form";
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
 import { Icons } from "@/components/shared/icons";
-import {
-  LinkInfoPreviewer,
-  LinkPreviewer,
-} from "@/components/shared/link-previewer";
+import { LinkInfoPreviewer } from "@/components/shared/link-previewer";
 import { PaginationWrapper } from "@/components/shared/pagination";
 
 export interface RecordListProps {
@@ -53,7 +50,7 @@ export interface RecordListProps {
 
 function TableColumnSekleton() {
   return (
-    <TableRow className="grid grid-cols-3 items-center sm:grid-cols-8">
+    <TableRow className="grid grid-cols-3 items-center sm:grid-cols-9">
       <TableCell className="col-span-1">
         <Skeleton className="h-5 w-24" />
       </TableCell>
@@ -64,6 +61,9 @@ function TableColumnSekleton() {
         <Skeleton className="h-5 w-24" />
       </TableCell>
       <TableCell className="col-span-1 hidden sm:inline-block">
+        <Skeleton className="h-5 w-16" />
+      </TableCell>
+      <TableCell className="col-span-1 hidden justify-center sm:flex">
         <Skeleton className="h-5 w-16" />
       </TableCell>
       <TableCell className="col-span-1 hidden justify-center sm:flex">
@@ -92,7 +92,7 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
 
   const { mutate } = useSWRConfig();
 
-  const { data, error, isLoading } = useSWR<{
+  const { data, isLoading } = useSWR<{
     total: number;
     list: UserRecordFormData[];
   }>(`${action}?page=${currentPage}&size=${pageSize}`, fetcher, {
@@ -109,7 +109,7 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
     setChecked: (value: boolean) => void,
   ) => {
     const originalState = record.active === 1;
-    setChecked(checked); // 立即更新 UI
+    setChecked(checked);
 
     const res = await fetch(`/api/record/update`, {
       method: "PUT",
@@ -201,7 +201,7 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
         <CardContent>
           <Table>
             <TableHeader className="bg-gray-100/50 dark:bg-primary-foreground">
-              <TableRow className="grid grid-cols-3 items-center sm:grid-cols-8">
+              <TableRow className="grid grid-cols-3 items-center sm:grid-cols-9">
                 <TableHead className="col-span-1 flex items-center font-bold">
                   Type
                 </TableHead>
@@ -216,6 +216,9 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                 </TableHead>
                 <TableHead className="col-span-1 hidden items-center justify-center font-bold sm:flex">
                   Status
+                </TableHead>
+                <TableHead className="col-span-1 hidden items-center font-bold sm:flex">
+                  User
                 </TableHead>
                 <TableHead className="col-span-1 hidden items-center justify-center font-bold sm:flex">
                   Updated
@@ -238,7 +241,7 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                 data.list.map((record) => (
                   <TableRow
                     key={record.id}
-                    className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-8"
+                    className="grid animate-fade-in grid-cols-3 items-center animate-in sm:grid-cols-9"
                   >
                     <TableCell className="col-span-1">
                       <Badge className="text-xs" variant="outline">
@@ -315,6 +318,18 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                           </Tooltip>
                         </TooltipProvider>
                       )}
+                    </TableCell>
+                    <TableCell className="col-span-1 hidden truncate sm:flex">
+                      <TooltipProvider>
+                        <Tooltip delayDuration={200}>
+                          <TooltipTrigger className="truncate">
+                            {record.user.name ?? record.user.email}
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            {record.user.name ?? record.user.email}
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                     </TableCell>
                     <TableCell className="col-span-1 hidden justify-center sm:flex">
                       {timeAgo(record.modified_on as unknown as Date)}

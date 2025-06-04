@@ -103,25 +103,28 @@ export function RecordForm({
   });
 
   const handleCreateRecord = async (data: CreateDNSRecord) => {
-    startTransition(async () => {
-      const response = await fetch(`${action}/add`, {
-        method: "POST",
-        body: JSON.stringify({
-          records: [data],
-          email,
-        }),
-      });
-
-      if (!response.ok || response.status !== 200) {
-        toast.error("Created Failed!", {
-          description: await response.text(),
+    if (siteConfig.enableSubdomainApply && data.comment!.length < 20) {
+      toast.warning("Apply reason must be at least 20 characters!");
+    } else {
+      startTransition(async () => {
+        const response = await fetch(`${action}/add`, {
+          method: "POST",
+          body: JSON.stringify({
+            records: [data],
+            email,
+          }),
         });
-      } else {
-        toast.success(`Created successfully!`);
-        setShowForm(false);
-        onRefresh();
-      }
-    });
+        if (!response.ok || response.status !== 200) {
+          toast.error("Created Failed!", {
+            description: await response.text(),
+          });
+        } else {
+          toast.success(`Created successfully!`);
+          setShowForm(false);
+          onRefresh();
+        }
+      });
+    }
   };
 
   const handleUpdateRecord = async (data: CreateDNSRecord) => {
@@ -203,7 +206,6 @@ export function RecordForm({
       <div className="rounded-t-lg bg-muted px-4 py-2 text-lg font-semibold">
         {type === "add" ? "Create" : "Edit"} record
       </div>
-
       {siteConfig.enableSubdomainApply && (
         <ul className="m-2 list-disc gap-1 rounded-md bg-yellow-600/10 p-2 px-5 pr-2 text-xs font-medium text-yellow-600 dark:bg-yellow-500/10 dark:text-yellow-500">
           <li>The administrator has enabled application mode.</li>
@@ -213,7 +215,6 @@ export function RecordForm({
           </li>
         </ul>
       )}
-
       <form className="p-4" onSubmit={onSubmit}>
         {isAdmin && (
           <div className="items-center justify-start gap-4 md:flex">
@@ -245,7 +246,7 @@ export function RecordForm({
           </div>
         )}
 
-        {siteConfig.enableSubdomainApply && initData?.active === 2 && (
+        {siteConfig.enableSubdomainApply && (
           <FormSectionColumns
             title="What are you planning to use the subdomain for?"
             required
@@ -266,7 +267,6 @@ export function RecordForm({
             </p>
           </FormSectionColumns>
         )}
-
         <div className="items-center justify-start gap-4 md:flex">
           <FormSectionColumns title="Domain" required>
             {isLoading ? (
@@ -326,7 +326,6 @@ export function RecordForm({
             <p className="p-1 text-[13px] text-muted-foreground">Required.</p>
           </FormSectionColumns>
         </div>
-
         <div className="items-center justify-start gap-4 md:flex">
           <FormSectionColumns title="Name" required>
             <div className="flex w-full items-center gap-2">
@@ -398,7 +397,6 @@ export function RecordForm({
             </div>
           </FormSectionColumns>
         </div>
-
         <div className="items-center justify-start gap-4 md:flex">
           <FormSectionColumns title="TTL" required>
             <Select
@@ -441,7 +439,6 @@ export function RecordForm({
             </FormSectionColumns>
           )}
         </div>
-
         {/* Action buttons */}
         <div className="mt-3 flex justify-end gap-3">
           {type === "edit" && (

@@ -119,6 +119,10 @@ pnpm db:push
 
 Follow https://localhost:3000/setup
 
+## Environment Variables
+
+Via [Installation For Developer](https://wr.do/docs/developer).
+
 ## Community Group
 
 - Discord: https://discord.gg/AHPQYuZu3m
