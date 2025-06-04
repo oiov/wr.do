@@ -81,7 +81,7 @@ export async function createUserRecord(
 export async function updateUserRecordReview(
   userId: string,
   id: string,
-  data: UserRecordFormData,
+  data: Omit<UserRecordFormData, "user">,
 ) {
   try {
     const {
@@ -265,7 +265,7 @@ export async function deleteUserRecord(
 
 export async function updateUserRecord(
   userId: string,
-  data: UserRecordFormData,
+  data: Omit<UserRecordFormData, "user">,
 ) {
   try {
     const {
