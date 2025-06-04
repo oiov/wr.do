@@ -30,7 +30,7 @@ export type UserRecordFormData = {
 
 export async function createUserRecord(
   userId: string,
-  data: UserRecordFormData,
+  data: Omit<UserRecordFormData, "user">,
 ) {
   try {
     const {
