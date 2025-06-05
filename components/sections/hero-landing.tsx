@@ -18,7 +18,7 @@ export default function HeroLanding({
 }: {
   userId: string | undefined;
 }) {
-  const t = useTranslations("Common");
+  const t = useTranslations("Landing");
   return (
     <section className="custom-bg relative space-y-6 py-12 sm:py-20 lg:py-24">
       <div className="container flex max-w-screen-lg flex-col items-center gap-5 text-center">
@@ -30,23 +30,24 @@ export default function HeroLanding({
             "px-4",
           )}
         >
-          <span className="mr-1">🚀</span>Deploy with&nbsp;
+          <span className="mr-1">🚀</span>
+          {t("deployWithVercel")}&nbsp;
           <span className="font-bold" style={{ fontFamily: "Bahamas Bold" }}>
             Vercel
           </span>
-          &nbsp;now!
+          &nbsp;
+          {t("now")}
         </Link>
 
         <h1 className="text-balance font-satoshi text-[40px] font-black leading-[1.15] tracking-tight sm:text-5xl md:text-6xl md:leading-[1.15]">
-          One platform powers{" "}
+          {t("onePlatformPowers")}
           <span className="bg-gradient-to-r from-violet-600 via-blue-600 to-cyan-500 bg-clip-text text-transparent">
-            endless solutions
+            {t("endlessSolutions")}
           </span>
         </h1>
 
         <p className="max-w-2xl text-balance text-muted-foreground sm:text-lg">
-          Link shortening, domain hosting, email manager and <br />
-          open api, everything you need to build better.
+          {t("platformDescription")}
         </p>
 
         <div className="flex items-center justify-center gap-4">
@@ -63,7 +64,7 @@ export default function HeroLanding({
               "gap-2 bg-primary-foreground px-4 text-[15px] font-semibold text-primary hover:bg-slate-100",
             )}
           >
-            <span>Documents</span>
+            <span>{t("documents")}</span>
             <Icons.bookOpen className="size-4" />
           </Link>
           <Link
@@ -74,7 +75,7 @@ export default function HeroLanding({
               "px-4 text-[15px] font-semibold",
             )}
           >
-            <span>{userId ? t("Dashboard") : "Sign in for free"}</span>
+            <span>{userId ? t("Dashboard") : t("signInForFree")}</span>
             {/* <Icons.arrowRight className="size-4" /> */}
           </Link>
         </div>
@@ -86,13 +87,14 @@ export default function HeroLanding({
 }
 
 export function LandingImages() {
+  const t = useTranslations("Landing");
   return (
     <>
       <div className="mx-auto mt-10 w-full max-w-6xl px-6">
         <div className="my-14 flex flex-col items-center justify-around gap-10 md:flex-row-reverse">
           <Image
             className="size-[260px] rounded-lg transition-all hover:opacity-90 hover:shadow-xl"
-            alt={"example"}
+            alt={t("exampleImageAlt")}
             src="/_static/landing/link.svg"
             placeholder="blur"
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAGCAYAAAD68A/GAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAACCSURBVBhXZYzBCgIxDEQnTdPau+hveBB/XtiLn+NJQdoNS2Orq6zuO0zgZRhSVbvegeAJGx7hvUeMAUSEzu1RUesEKuNkIgyrFaoFzB4i8i1+cDEwXHOuRc65lbVpe38XuPm+YMdIKa3WOj9F60vWcj0IOg8Xy7ngdDxgv9vO+h/gCZNAKuSRdQ2rAAAAAElFTkSuQmCC"
@@ -101,21 +103,16 @@ export function LandingImages() {
           />
           <div className="grids grids-dark px-2 py-4">
             <h3 className="mb-6 text-xl font-bold md:text-3xl">
-              URL Shortening
+              {t("urlShorteningTitle")}
             </h3>
-            <p className="text-lg">
-              📖 Instantly transform long, unwieldy URLs into short, memorable
-              links that are easy to share. Enjoy built-in analytics to track
-              clicks, monitor performance, and gain insights into your
-              audience—all in real time.
-            </p>
+            <p className="text-lg">{t("urlShorteningDescription")}</p>
           </div>
         </div>
 
         <div className="flex flex-col items-center justify-around gap-10 md:flex-row">
           <Image
             className="size-[260px] rounded-lg transition-all hover:opacity-90 hover:shadow-xl"
-            alt={"example"}
+            alt={t("exampleImageAlt")}
             src="/_static/landing/hosting.svg"
             placeholder="blur"
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAGCAYAAAD68A/GAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAACCSURBVBhXZYzBCgIxDEQnTdPau+hveBB/XtiLn+NJQdoNS2Orq6zuO0zgZRhSVbvegeAJGx7hvUeMAUSEzu1RUesEKuNkIgyrFaoFzB4i8i1+cDEwXHOuRc65lbVpe38XuPm+YMdIKa3WOj9F60vWcj0IOg8Xy7ngdDxgv9vO+h/gCZNAKuSRdQ2rAAAAAElFTkSuQmCC"
@@ -124,21 +121,16 @@ export function LandingImages() {
           />
           <div className="grids grids-dark px-2 py-4">
             <h3 className="mb-6 text-xl font-bold md:text-3xl">
-              Free Subdomain Hosting
+              {t("freeSubdomainHostingTitle")}
             </h3>
-            <p className="text-lg">
-              🎉 Kickstart your online presence with free, fully customizable
-              subdomains. Whether you&apos;re launching a personal project or
-              testing a business idea, get started quickly with no cost and
-              reliable hosting you can trust.
-            </p>
+            <p className="text-lg">{t("freeSubdomainHostingDescription")}</p>
           </div>
         </div>
 
         <div className="my-14 flex flex-col items-center justify-around gap-10 md:flex-row-reverse">
           <Image
             className="size-[260px] rounded-lg transition-all hover:opacity-90 hover:shadow-xl"
-            alt={"example"}
+            alt={t("exampleImageAlt")}
             src="/_static/landing/email.svg"
             placeholder="blur"
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAGCAYAAAD68A/GAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAACCSURBVBhXZYzBCgIxDEQnTdPau+hveBB/XtiLn+NJQdoNS2Orq6zuO0zgZRhSVbvegeAJGx7hvUeMAUSEzu1RUesEKuNkIgyrFaoFzB4i8i1+cDEwXHOuRc65lbVpe38XuPm+YMdIKa3WOj9F60vWcj0IOg8Xy7ngdDxgv9vO+h/gCZNAKuSRdQ2rAAAAAElFTkSuQmCC"
@@ -147,13 +139,17 @@ export function LandingImages() {
           />
           <div className="grids grids-dark px-2 py-4">
             <h3 className="mb-6 text-xl font-bold md:text-3xl">
-              Email Receivers & Senders
+              {t("emailReceiversSendersTitle")}
             </h3>
             <p className="text-lg">
-              📧 Seamlessly receive and send emails from any email provider with
-              top-notch security. Stay connected and manage your communications
-              effortlessly, knowing your data is protected with robust
-              encryption and privacy features.
+              {t("emailReceiversSendersDescription")}{" "}
+              <a
+                className="underline"
+                href="/dashboard/settings"
+                target="_blank"
+              >
+                {t("applyYourApiKey")}
+              </a>
             </p>
           </div>
         </div>
@@ -161,7 +157,7 @@ export function LandingImages() {
         <div className="flex flex-col items-center justify-around gap-10 md:flex-row">
           <Image
             className="size-[260px] rounded-lg transition-all hover:opacity-90 hover:shadow-xl"
-            alt={"example"}
+            alt={t("exampleImageAlt")}
             src="/_static/landing/domain.svg"
             placeholder="blur"
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAGCAYAAAD68A/GAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAACCSURBVBhXZYzBCgIxDEQnTdPau+hveBB/XtiLn+NJQdoNS2Orq6zuO0zgZRhSVbvegeAJGx7hvUeMAUSEzu1RUesEKuNkIgyrFaoFzB4i8i1+cDEwXHOuRc65lbVpe38XuPm+YMdIKa3WOj9F60vWcj0IOg8Xy7ngdDxgv9vO+h/gCZNAKuSRdQ2rAAAAAElFTkSuQmCC"
@@ -170,21 +166,16 @@ export function LandingImages() {
           />
           <div className="grids grids-dark px-2 py-4">
             <h3 className="mb-6 text-xl font-bold md:text-3xl">
-              Multiple Domains
+              {t("multipleDomainsTitle")}
             </h3>
-            <p className="text-lg">
-              🤩 Empower your business with the flexibility of multiple domains,
-              such as wr.do, uv.do, and more. Establish a strong digital
-              footprint, create branded links, or manage diverse projects—all
-              under one unified platform.
-            </p>
+            <p className="text-lg">{t("multipleDomainsDescription")}</p>
           </div>
         </div>
 
         <div className="flex flex-col items-center justify-around gap-10 md:flex-row-reverse">
           <Image
             className="size-[260px] rounded-lg transition-all hover:opacity-90 hover:shadow-xl"
-            alt={"example"}
+            alt={t("exampleImageAlt")}
             src="/_static/landing/screenshot.svg"
             placeholder="blur"
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAGCAYAAAD68A/GAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAACCSURBVBhXZYzBCgIxDEQnTdPau+hveBB/XtiLn+NJQdoNS2Orq6zuO0zgZRhSVbvegeAJGx7hvUeMAUSEzu1RUesEKuNkIgyrFaoFzB4i8i1+cDEwXHOuRc65lbVpe38XuPm+YMdIKa3WOj9F60vWcj0IOg8Xy7ngdDxgv9vO+h/gCZNAKuSRdQ2rAAAAAElFTkSuQmCC"
@@ -193,19 +184,16 @@ export function LandingImages() {
           />
           <div className="grids grids-dark px-2 py-4">
             <h3 className="mb-6 text-xl font-bold md:text-3xl">
-              Website Screenshot API
+              {t("websiteScreenshotApiTitle")}
             </h3>
             <p className="text-lg">
-              📷 Capture high-quality screenshots of any webpage instantly with
-              our powerful Screenshot API. Integrate seamlessly into your
-              applications, access third-party services, and unlock advanced
-              features by applying your unique API key.
+              {t("websiteScreenshotApiDescription")}{" "}
               <a
                 className="underline"
                 href="/dashboard/settings"
                 target="_blank"
               >
-                Apply your api key--&gt;
+                {t("applyYourApiKey")}
               </a>
             </p>
           </div>
@@ -214,7 +202,7 @@ export function LandingImages() {
         <div className="my-14 flex flex-col items-center justify-around gap-10 md:flex-row">
           <Image
             className="size-[260px] rounded-lg transition-all hover:opacity-90 hover:shadow-xl"
-            alt={"example"}
+            alt={t("exampleImageAlt")}
             src="/_static/landing/info.svg"
             placeholder="blur"
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAGCAYAAAD68A/GAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAACCSURBVBhXZYzBCgIxDEQnTdPau+hveBB/XtiLn+NJQdoNS2Orq6zuO0zgZRhSVbvegeAJGx7hvUeMAUSEzu1RUesEKuNkIgyrFaoFzB4i8i1+cDEwXHOuRc65lbVpe38XuPm+YMdIKa3WOj9F60vWcj0IOg8Xy7ngdDxgv9vO+h/gCZNAKuSRdQ2rAAAAAElFTkSuQmCC"
@@ -223,19 +211,16 @@ export function LandingImages() {
           />
           <div className="grids grids-dark px-2 py-4">
             <h3 className="mb-6 text-xl font-bold md:text-3xl">
-              Meta Information API
+              {t("metaInformationApiTitle")}
             </h3>
             <p className="text-lg">
-              🍥 Extract rich, structured web data effortlessly with our smart
-              Meta Information API. Perfect for developers, businesses, or
-              researchers, this tool offers seamless integration, third-party
-              service access, and enhanced functionality.
+              {t("metaInformationApiDescription")}{" "}
               <a
                 className="underline"
                 href="/dashboard/settings"
                 target="_blank"
               >
-                Apply your api key--&gt;
+                {t("applyYourApiKey")}
               </a>
             </p>
           </div>

@@ -5,8 +5,9 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { SidebarNavItem } from "@/types";
 import { Menu, PanelLeftClose, PanelRightClose } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Link } from "next-view-transitions";
-import { name, version } from "package.json";
+import pkg from "package.json";
 
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
@@ -28,6 +29,7 @@ interface DashboardSidebarProps {
 }
 
 export function DashboardSidebar({ links }: DashboardSidebarProps) {
+  const t = useTranslations("System");
   const path = usePathname();
 
   const { isTablet } = useMediaQuery();
@@ -98,7 +100,7 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
                       >
                         {isSidebarExpanded ? (
                           <p className="text-xs text-muted-foreground">
-                            {section.title}
+                            {t(section.title)}
                           </p>
                         ) : (
                           <div className="h-4" />
@@ -122,7 +124,7 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
                                     )}
                                   >
                                     <Icon className="size-5" />
-                                    {item.title}
+                                    {t(item.title)}
                                     {item.badge && (
                                       <Badge className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full">
                                         {item.badge}
@@ -150,7 +152,7 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
                                       </Link>
                                     </TooltipTrigger>
                                     <TooltipContent side="right">
-                                      {item.title}
+                                      {t(item.title)}
                                     </TooltipContent>
                                   </Tooltip>
                                 )}
@@ -172,9 +174,9 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
                     rel="noreferrer"
                     className="font-medium underline-offset-2 hover:underline"
                   >
-                    {name}
+                    {pkg.name}
                   </Link>
-                  v{version}
+                  v{pkg.version}
                 </p>
               )}
             </div>
@@ -189,6 +191,7 @@ export function MobileSheetSidebar({ links }: DashboardSidebarProps) {
   const path = usePathname();
   const [open, setOpen] = useState(false);
   const { isSm, isMobile } = useMediaQuery();
+  const t = useTranslations("System");
 
   if (isSm || isMobile) {
     return (
@@ -229,7 +232,7 @@ export function MobileSheetSidebar({ links }: DashboardSidebarProps) {
                         className="flex flex-col gap-0.5"
                       >
                         <p className="text-xs text-muted-foreground">
-                          {section.title}
+                          {t(section.title)}
                         </p>
 
                         {section.items.map((item) => {
@@ -253,7 +256,7 @@ export function MobileSheetSidebar({ links }: DashboardSidebarProps) {
                                   )}
                                 >
                                   <Icon className="size-5" />
-                                  {item.title}
+                                  {t(item.title)}
                                   {item.badge && (
                                     <Badge className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full">
                                       {item.badge}
@@ -276,9 +279,9 @@ export function MobileSheetSidebar({ links }: DashboardSidebarProps) {
                     rel="noreferrer"
                     className="font-medium underline-offset-2 hover:underline"
                   >
-                    {name}
+                    {pkg.name}
                   </Link>
-                  v{version}
+                  v{pkg.version}
                 </p>
 
                 {/* <div className="mt-auto">

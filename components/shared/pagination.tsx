@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslations } from "next-intl";
 
 import { cn } from "@/lib/utils";
 
@@ -43,6 +44,8 @@ export function PaginationWrapper({
 
   // Calculate total pages based on pageSize
   const totalPages = Math.ceil(total / pageSize);
+
+  const t = useTranslations("List");
 
   const shouldShowPage = (page: number) => {
     return (
@@ -144,7 +147,7 @@ export function PaginationWrapper({
     >
       {setPageSize && (
         <div className="flex items-center gap-2">
-          <span className="text-muted-foreground">Show</span>
+          <span className="text-muted-foreground">{t("Show")}</span>
           <Select
             value={pageSize.toString()}
             onValueChange={handlePageSizeChange}
@@ -172,7 +175,7 @@ export function PaginationWrapper({
               "hidden sm:inline-block",
             )}
           >
-            per page
+            {t("per page")}
           </span>
         </div>
       )}

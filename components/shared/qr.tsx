@@ -10,6 +10,7 @@ import {
 } from "react";
 import Link from "next/link";
 import { debounce } from "lodash";
+import { useTranslations } from "next-intl";
 import { HexColorPicker } from "react-colorful";
 import { toast } from "sonner";
 
@@ -45,6 +46,7 @@ export default function QRCodeEditor({
   user: { id: string; apiKey: string; team: string };
   url: string;
 }) {
+  const t = useTranslations("List");
   const [params, setParams] = useState({
     key: user.apiKey,
     url,
@@ -145,13 +147,13 @@ export default function QRCodeEditor({
 
   return (
     <div className="relative w-full max-w-lg rounded-lg bg-white p-4 shadow-lg dark:bg-neutral-900">
-      <h2 className="mb-4 text-lg font-semibold">QR Code Design</h2>
+      <h2 className="mb-4 text-lg font-semibold">{t("QR Code Design")}</h2>
 
       {/* QR Code Preview */}
       <div className="mb-3">
         <div className="flex items-center justify-between gap-1">
           <h3 className="text-sm font-semibold text-neutral-600 dark:text-neutral-300">
-            Preview
+            {t("Preview")}
           </h3>
           <DropdownMenu>
             <DropdownMenuTrigger className="ml-auto px-2 py-2 hover:bg-accent hover:text-accent-foreground">
@@ -166,7 +168,7 @@ export default function QRCodeEditor({
               >
                 <div className="flex items-center gap-2 text-neutral-500">
                   <Icons.media className="size-4" />
-                  <span className="font-semibold">Download SVG</span>
+                  <span className="font-semibold">{t("Download SVG")}</span>
                 </div>
               </DropdownMenuItem>
               <DropdownMenuItem
@@ -181,7 +183,7 @@ export default function QRCodeEditor({
               >
                 <div className="flex items-center gap-2 text-neutral-500">
                   <Icons.media className="size-4" />
-                  <span className="font-semibold">Download PNG</span>
+                  <span className="font-semibold">{t("Download PNG")}</span>
                 </div>
               </DropdownMenuItem>
               <DropdownMenuItem
@@ -196,7 +198,7 @@ export default function QRCodeEditor({
               >
                 <div className="flex items-center gap-2 text-neutral-500">
                   <Icons.media className="size-4" />
-                  <span className="font-semibold">Download JPG</span>
+                  <span className="font-semibold">{t("Download JPG")}</span>
                 </div>
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -234,7 +236,7 @@ export default function QRCodeEditor({
 
       <div className="group mb-3 flex items-center justify-between">
         <h3 className="text-nowrap text-sm font-semibold text-neutral-600 transition-all group-hover:ml-1 group-hover:font-bold dark:text-neutral-300">
-          Url
+          {t("Url")}
         </h3>
         <Input
           className="ml-auto w-3/5"
@@ -248,7 +250,7 @@ export default function QRCodeEditor({
       <div className="mb-3">
         <div className="group mb-3 flex items-center justify-between">
           <h3 className="text-nowrap text-sm font-semibold text-neutral-600 transition-all group-hover:ml-1 group-hover:font-bold dark:text-neutral-300">
-            Logo
+            {t("Logo")}
           </h3>
           <TooltipProvider>
             <Tooltip delayDuration={0}>
@@ -256,13 +258,13 @@ export default function QRCodeEditor({
                 <Icons.help className="ml-1 size-4 text-neutral-400" />
               </TooltipTrigger>
               <TooltipContent className="max-w-64 text-left">
-                Display your logo in the center of the QR code.{" "}
+                {t("Display your logo in the center of the QR code")}.{" "}
                 <Link
                   className="border-b text-neutral-500"
                   href="/docs/open-api/qrcode"
                   target="_blank"
                 >
-                  Learn more
+                  {t("Learn more")}
                 </Link>
                 .
               </TooltipContent>
@@ -277,7 +279,7 @@ export default function QRCodeEditor({
         <details className="group">
           <summary className="flex w-full cursor-pointer items-center justify-between">
             <h3 className="text-nowrap text-sm font-semibold text-neutral-600 transition-all group-hover:ml-1 group-hover:font-bold dark:text-neutral-300">
-              Custom Logo
+              {t("Custom Logo")}
             </h3>
             <TooltipProvider>
               <Tooltip delayDuration={0}>
@@ -291,13 +293,13 @@ export default function QRCodeEditor({
                   </Badge>
                 </TooltipTrigger>
                 <TooltipContent className="max-w-64 text-left">
-                  Customize your QR code logo.{" "}
+                  {t("Customize your QR code logo")}.{" "}
                   <Link
                     className="border-b text-neutral-500"
                     href="/docs/open-api/qrcode"
                     target="_blank"
                   >
-                    Learn more
+                    {t("Learn more")}
                   </Link>
                   .
                 </TooltipContent>
@@ -319,7 +321,7 @@ export default function QRCodeEditor({
       <details className="group mb-3">
         <summary className="flex w-full cursor-pointer items-center justify-between">
           <h3 className="text-nowrap text-sm font-semibold text-neutral-600 transition-all group-hover:ml-1 group-hover:font-bold dark:text-neutral-300">
-            Front Color
+            {t("Front Color")}
           </h3>
           <Icons.chevronDown className="ml-auto size-4" />
         </summary>
@@ -373,7 +375,7 @@ export default function QRCodeEditor({
       <details className="group" open={true}>
         <summary className="flex w-full cursor-pointer items-center justify-between">
           <h3 className="text-nowrap text-sm font-semibold text-neutral-600 transition-all group-hover:ml-1 group-hover:font-bold dark:text-neutral-300">
-            Background Color
+            {t("Background Color")}
           </h3>
           <Icons.chevronDown className="ml-auto size-4" />
         </summary>
@@ -428,20 +430,20 @@ export default function QRCodeEditor({
       {!user.apiKey && (
         <div className="absolute left-0 top-0 z-20 flex size-full flex-col items-center justify-center gap-2 bg-neutral-100/20 px-4 backdrop-blur">
           <p className="text-center text-sm">
-            Please create a <strong>api key</strong> before use this feature.{" "}
-            <br /> Learn more about{" "}
+            {t("Please create a api key before use this feature")}. <br />{" "}
+            {t("Learn more about")}{" "}
             <Link
               className="py-1 text-blue-600 hover:text-blue-400 hover:underline dark:hover:text-primary-foreground"
               href={"/docs/open-api#api-key"}
               target="_blank"
             >
-              api key
+              Api key
             </Link>
             .
           </p>
 
           <Link href={"/dashboard/settings"}>
-            <Button>Create Api Key</Button>
+            <Button>{t("Create Api Key")}</Button>
           </Link>
         </div>
       )}
