@@ -2,6 +2,8 @@ import "@/styles/globals.css";
 
 import { fontHeading, fontSans, fontSatoshi } from "@/assets/fonts";
 import { SessionProvider } from "next-auth/react";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
 import { ThemeProvider } from "next-themes";
 import { ViewTransitions } from "next-view-transitions";
 
@@ -18,10 +20,12 @@ interface RootLayoutProps {
 
 export const metadata = constructMetadata();
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default async function RootLayout({ children }: RootLayoutProps) {
+  const locale = await getLocale();
+  const messages = await getMessages();
   return (
     <ViewTransitions>
-      <html lang="en" suppressHydrationWarning>
+      <html lang={locale} suppressHydrationWarning>
         <head>
           <script
             defer
@@ -37,18 +41,20 @@ export default function RootLayout({ children }: RootLayoutProps) {
             fontSatoshi.variable,
           )}
         >
-          <SessionProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="light"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <ModalProvider>{children}</ModalProvider>
-              <Toaster richColors closeButton />
-              <TailwindIndicator />
-            </ThemeProvider>
-          </SessionProvider>
+          <NextIntlClientProvider messages={messages}>
+            <SessionProvider>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="light"
+                enableSystem
+                disableTransitionOnChange
+              >
+                <ModalProvider>{children}</ModalProvider>
+                <Toaster richColors closeButton />
+                <TailwindIndicator />
+              </ThemeProvider>
+            </SessionProvider>
+          </NextIntlClientProvider>
           <GoogleAnalytics />
         </body>
       </html>

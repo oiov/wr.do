@@ -1,9 +1,11 @@
+"user client";
+
 import { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 import { siteConfig } from "@/config/site";
-import { getCurrentUser } from "@/lib/session";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/shared/icons";
@@ -11,8 +13,12 @@ import { Icons } from "@/components/shared/icons";
 import EmailManagerExp from "./email";
 import UrlShortener from "./url-shortener";
 
-export default async function HeroLanding() {
-  const user = await getCurrentUser();
+export default function HeroLanding({
+  userId,
+}: {
+  userId: string | undefined;
+}) {
+  const t = useTranslations("Common");
   return (
     <section className="custom-bg relative space-y-6 py-12 sm:py-20 lg:py-24">
       <div className="container flex max-w-screen-lg flex-col items-center gap-5 text-center">
@@ -68,7 +74,7 @@ export default async function HeroLanding() {
               "px-4 text-[15px] font-semibold",
             )}
           >
-            <span>{user?.id ? "Dashboard" : "Sign in for free"}</span>
+            <span>{userId ? t("Dashboard") : "Sign in for free"}</span>
             {/* <Icons.arrowRight className="size-4" /> */}
           </Link>
         </div>
