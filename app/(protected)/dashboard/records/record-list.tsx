@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { User } from "@prisma/client";
 import { PenLine, RefreshCwIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import useSWR, { useSWRConfig } from "swr";
 
@@ -87,8 +88,9 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
     useState<UserRecordFormData | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [tab, setTab] = useState("app");
   const isAdmin = action.includes("/admin");
+
+  const t = useTranslations("List");
 
   const { mutate } = useSWRConfig();
 
@@ -144,30 +146,30 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
         <CardHeader className="flex flex-row items-center">
           {isAdmin ? (
             <CardDescription className="text-balance text-lg font-bold">
-              <span>Total Subdomains:</span>{" "}
+              <span>{t("Total Subdomains")}:</span>{" "}
               <span className="font-bold">{data && data.total}</span>
             </CardDescription>
           ) : (
             <div className="grid gap-2">
-              <CardTitle>Subdomains</CardTitle>
+              <CardTitle>{t("Subdomain List")}</CardTitle>
               <CardDescription className="hidden text-balance sm:block">
-                Please read the{" "}
+                {t("Please read the")}{" "}
                 <Link
                   target="_blank"
                   className="font-semibold text-yellow-600 after:content-['↗'] hover:underline"
                   href="/docs/dns-records#legitimacy-review"
                 >
-                  Legitimacy review
+                  {t("legitimacy review")}
                 </Link>{" "}
-                before using. See{" "}
+                {t("before using")}. {t("See")}{" "}
                 <Link
                   target="_blank"
                   className="text-blue-500 hover:underline"
                   href="/docs/examples/vercel"
                 >
-                  examples
+                  {t("examples")}
                 </Link>{" "}
-                for more usage.
+                {t("for more usage")}.
               </CardDescription>
             </div>
           )}
@@ -194,7 +196,7 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
               }}
             >
               <Icons.add className="size-4" />
-              <span className="hidden sm:inline">Add Record</span>
+              <span className="hidden sm:inline">{t("Add Record")}</span>
             </Button>
           </div>
         </CardHeader>
@@ -203,28 +205,28 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
             <TableHeader className="bg-gray-100/50 dark:bg-primary-foreground">
               <TableRow className="grid grid-cols-3 items-center sm:grid-cols-9">
                 <TableHead className="col-span-1 flex items-center font-bold">
-                  Type
+                  {t("Type")}
                 </TableHead>
                 <TableHead className="col-span-1 flex items-center font-bold">
-                  Name
+                  {t("Name")}
                 </TableHead>
                 <TableHead className="col-span-2 hidden items-center font-bold sm:flex">
-                  Content
+                  {t("Content")}
                 </TableHead>
                 <TableHead className="col-span-1 hidden items-center font-bold sm:flex">
-                  TTL
+                  {t("TTL")}
                 </TableHead>
                 <TableHead className="col-span-1 hidden items-center justify-center font-bold sm:flex">
-                  Status
+                  {t("Status")}
                 </TableHead>
                 <TableHead className="col-span-1 hidden items-center font-bold sm:flex">
-                  User
+                  {t("User")}
                 </TableHead>
                 <TableHead className="col-span-1 hidden items-center justify-center font-bold sm:flex">
-                  Updated
+                  {t("Updated")}
                 </TableHead>
                 <TableHead className="col-span-1 flex items-center justify-center font-bold">
-                  Actions
+                  {t("Actions")}
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -279,7 +281,7 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                         />
                       ) : (
                         <Badge className="rounded-md" variant={"yellow"}>
-                          Pending
+                          {t("Pending")}
                         </Badge>
                       )}
                       {record.active !== 1 && (
@@ -291,16 +293,21 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                             <TooltipContent>
                               {record.active === 0 && (
                                 <ul className="list-disc px-3">
-                                  <li>The target is currently inaccessible.</li>
                                   <li>
-                                    Please check the target and try again.
+                                    {t("The target is currently inaccessible")}.
                                   </li>
                                   <li>
-                                    If the target is not activated within 3
-                                    days, <br />
-                                    the administrator will{" "}
+                                    {t("Please check the target and try again")}
+                                    .
+                                  </li>
+                                  <li>
+                                    {t(
+                                      "If the target is not activated within 3 days",
+                                    )}
+                                    , <br />
+                                    {t("the administrator will")}{" "}
                                     <strong className="text-red-500">
-                                      delete this record
+                                      {t("delete this record")}
                                     </strong>
                                     .
                                   </li>
@@ -309,8 +316,10 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                               {record.active === 2 && (
                                 <ul className="list-disc px-3">
                                   <li>
-                                    The record is currently pending for admin
-                                    approval.
+                                    {t(
+                                      "The record is currently pending for admin approval",
+                                    )}
+                                    .
                                   </li>
                                 </ul>
                               )}
@@ -347,7 +356,7 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                             setShowForm(!isShowForm);
                           }}
                         >
-                          <p>Edit</p>
+                          <p>{t("Edit")}</p>
                           <PenLine className="ml-1 size-4" />
                         </Button>
                       ) : record.active === 2 &&
@@ -364,7 +373,7 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                             setShowForm(!isShowForm);
                           }}
                         >
-                          <p>Review</p>
+                          <p>{t("Review")}</p>
                         </Button>
                       ) : (
                         "--"
@@ -375,7 +384,9 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
               ) : (
                 <EmptyPlaceholder className="shadow-none">
                   <EmptyPlaceholder.Icon name="globe" />
-                  <EmptyPlaceholder.Title>No Subdomain</EmptyPlaceholder.Title>
+                  <EmptyPlaceholder.Title>
+                    {t("No Subdomains")}
+                  </EmptyPlaceholder.Title>
                   <EmptyPlaceholder.Description>
                     You don&apos;t have any subdomain yet. Start creating
                     record.
@@ -398,7 +409,7 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
       </Card>
 
       <Modal
-        className="max-h-[90vh] overflow-y-auto md:max-w-2xl"
+        className="max-h-[99vh] overflow-y-auto md:max-w-2xl"
         showModal={isShowForm}
         setShowModal={setShowForm}
       >

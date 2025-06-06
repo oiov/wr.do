@@ -28,19 +28,19 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <StaticInfoCard
           title="Url to Screenshot"
-          desc="Take a screenshot of the webpage."
+          desc="Take a screenshot of the webpage"
           link="/dashboard/scrape/screenshot"
           icon="camera"
         />
         <StaticInfoCard
           title="Url to Meta Info"
-          desc="Extract website metadata."
+          desc="Extract website metadata"
           link="/dashboard/scrape/meta-info"
           icon="globe"
         />
         <StaticInfoCard
           title="Url to QR Code"
-          desc="Generate QR Code from URL."
+          desc="Generate QR Code from URL"
           link="/dashboard/scrape/qrcode"
           icon="qrcode"
         />
@@ -48,13 +48,13 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <StaticInfoCard
           title="Url to Markdown"
-          desc="Convert website content to Markdown format."
+          desc="Convert website content to Markdown format"
           link="/dashboard/scrape/markdown"
           icon="heading1"
         />
         <StaticInfoCard
           title="Url to Text"
-          desc="Extract website text."
+          desc="Convert website content to text"
           link="/dashboard/scrape/markdown"
           icon="fileText"
         />

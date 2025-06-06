@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { User } from "@prisma/client";
 import { PenLine, RefreshCwIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import useSWR, { useSWRConfig } from "swr";
 
@@ -70,6 +71,7 @@ function TableColumnSekleton() {
 
 export default function DomainList({ user, action }: DomainListProps) {
   const { isMobile } = useMediaQuery();
+  const t = useTranslations("List");
   const [isShowForm, setShowForm] = useState(false);
   const [formType, setFormType] = useState<FormType>("add");
   const [currentEditDomain, setCurrentEditDomain] =

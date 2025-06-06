@@ -13,11 +13,9 @@ import {
   DashboardInfoCard,
   HeroCard,
 } from "@/components/dashboard/dashboard-info-card";
-import { DashboardHeader } from "@/components/dashboard/header";
 import { ErrorBoundary } from "@/components/shared/error-boundary";
 
 import UserRecordsList from "./records/record-list";
-import LiveLog from "./urls/live-logs";
 import UserUrlsList from "./urls/url-list";
 
 export const metadata = constructMetadata({
@@ -87,10 +85,6 @@ async function DnsRecordsCardSection({
   );
 }
 
-async function LiveLogSection() {
-  return <LiveLog admin={false} />;
-}
-
 async function UserUrlsListSection({
   user,
 }: {
@@ -148,7 +142,7 @@ export default async function DashboardPage() {
 
   return (
     <>
-      <DashboardHeader heading="Dashboard" text="" />
+      {/* <DashboardHeader heading="Dashboard" text="" /> */}
       <div className="flex flex-col gap-5">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 xl:grid-cols-3">
           <ErrorBoundary

@@ -187,7 +187,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
   const rendeEmpty = () => (
     <EmptyPlaceholder className="col-span-full shadow-none">
       <EmptyPlaceholder.Icon name="link" />
-      <EmptyPlaceholder.Title>No urls</EmptyPlaceholder.Title>
+      <EmptyPlaceholder.Title>{t("No urls")}</EmptyPlaceholder.Title>
       <EmptyPlaceholder.Description>
         You don&apos;t have any url yet. Start creating url.
       </EmptyPlaceholder.Description>

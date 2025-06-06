@@ -3,6 +3,7 @@
 import { Dispatch, SetStateAction, useState, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import useSWR from "swr";
@@ -61,8 +62,10 @@ export function RecordForm({
   const [currentZoneName, setCurrentZoneName] = useState(
     initData?.zone_name || "wr.do",
   );
-  const [email, setEmail] = useState(user.email);
+  const [email, setEmail] = useState(initData?.user.email || user.email);
   const isAdmin = action.indexOf("admin") > -1;
+
+  const t = useTranslations("List");
 
   const {
     handleSubmit,
@@ -204,24 +207,26 @@ export function RecordForm({
   return (
     <div>
       <div className="rounded-t-lg bg-muted px-4 py-2 text-lg font-semibold">
-        {type === "add" ? "Create" : "Edit"} record
+        {type === "add" ? t("Create record") : t("Edit record")}
       </div>
       {siteConfig.enableSubdomainApply && (
         <ul className="m-2 list-disc gap-1 rounded-md bg-yellow-600/10 p-2 px-5 pr-2 text-xs font-medium text-yellow-600 dark:bg-yellow-500/10 dark:text-yellow-500">
-          <li>The administrator has enabled application mode.</li>
+          <li>{t("The administrator has enabled application mode")}.</li>
           <li>
-            After submission, you need to wait for administrator approval before
-            the record takes effect.
+            {t(
+              "After submission, you need to wait for administrator approval before the record takes effect",
+            )}
+            .
           </li>
         </ul>
       )}
       <form className="p-4" onSubmit={onSubmit}>
         {isAdmin && (
           <div className="items-center justify-start gap-4 md:flex">
-            <FormSectionColumns required title="User email">
+            <FormSectionColumns required title={t("User email")}>
               <div className="flex w-full items-center gap-2">
                 <Label className="sr-only" htmlFor="content">
-                  User email
+                  {t("User email")}
                 </Label>
                 <Input
                   id="email"
@@ -229,6 +234,7 @@ export function RecordForm({
                   size={32}
                   defaultValue={email || ""}
                   onChange={(e) => setEmail(e.target.value)}
+                  disabled={type === "edit"}
                 />
               </div>
               <div className="flex flex-col justify-between p-1">
@@ -248,12 +254,12 @@ export function RecordForm({
 
         {siteConfig.enableSubdomainApply && (
           <FormSectionColumns
-            title="What are you planning to use the subdomain for?"
+            title={t("What are you planning to use the subdomain for?")}
             required
           >
             <div className="flex items-center gap-2">
               <Label className="sr-only" htmlFor="comment">
-                What are you planning to use the subdomain for?
+                {t("What are you planning to use the subdomain for?")}
               </Label>
               <Textarea
                 id="comment"
@@ -263,12 +269,12 @@ export function RecordForm({
               />
             </div>
             <p className="p-1 text-[13px] text-muted-foreground">
-              At least 20 characters
+              {t("At least 20 characters")}
             </p>
           </FormSectionColumns>
         )}
         <div className="items-center justify-start gap-4 md:flex">
-          <FormSectionColumns title="Domain" required>
+          <FormSectionColumns title={t("Domain")} required>
             {isLoading ? (
               <Skeleton className="h-9 w-full" />
             ) : (
@@ -293,17 +299,17 @@ export function RecordForm({
                     ))
                   ) : (
                     <Button className="w-full" variant="ghost">
-                      No domains configured
+                      {t("No domains configured")}
                     </Button>
                   )}
                 </SelectContent>
               </Select>
             )}
             <p className="p-1 text-[13px] text-muted-foreground">
-              Required. Select a domain.
+              {t("Required")}. {t("Select a domain")}.
             </p>
           </FormSectionColumns>
-          <FormSectionColumns title="Type" required>
+          <FormSectionColumns title={t("Type")} required>
             <Select
               onValueChange={(value: RecordType) => {
                 setValue("type", value);
@@ -323,14 +329,16 @@ export function RecordForm({
                 ))}
               </SelectContent>
             </Select>
-            <p className="p-1 text-[13px] text-muted-foreground">Required.</p>
+            <p className="p-1 text-[13px] text-muted-foreground">
+              {t("Required")}.
+            </p>
           </FormSectionColumns>
         </div>
         <div className="items-center justify-start gap-4 md:flex">
-          <FormSectionColumns title="Name" required>
+          <FormSectionColumns title={t("Name")} required>
             <div className="flex w-full items-center gap-2">
               <Label className="sr-only" htmlFor="name">
-                Name (required)
+                {t("Name")}
               </Label>
               <div className="relative w-full">
                 <Input
@@ -354,7 +362,7 @@ export function RecordForm({
                 </p>
               ) : (
                 <p className="pb-0.5 text-[13px] text-muted-foreground">
-                  Required. E.g. www.
+                  {t("Required")}. {t("Example")} www
                 </p>
               )}
             </div>
@@ -363,15 +371,15 @@ export function RecordForm({
             required
             title={
               currentRecordType === "CNAME"
-                ? "Content"
+                ? t("Content")
                 : currentRecordType === "A"
-                  ? "IPv4 address"
-                  : "Content"
+                  ? t("IPv4 address")
+                  : t("Content")
             }
           >
             <div className="flex w-full items-center gap-2">
               <Label className="sr-only" htmlFor="content">
-                Content
+                t("Content")
               </Label>
               <Input
                 id="content"
@@ -388,10 +396,10 @@ export function RecordForm({
               ) : (
                 <p className="pb-0.5 text-[13px] text-muted-foreground">
                   {currentRecordType === "CNAME"
-                    ? "Required. E.g. www.example.com"
+                    ? `${t("Required")}. ${t("Example")} www.example.com`
                     : currentRecordType === "A"
-                      ? "Required. E.g. 8.8.8.8"
-                      : "Required."}
+                      ? `${t("Required")}. ${t("Example")} 8.8.8.8`
+                      : t("Required")}
                 </p>
               )}
             </div>
@@ -418,14 +426,14 @@ export function RecordForm({
               </SelectContent>
             </Select>
             <p className="p-1 text-[13px] text-muted-foreground">
-              Optional. Time To Live.
+              {t("Optional")}. {t("Time To Live")}.
             </p>
           </FormSectionColumns>
           {["A", "CNAME"].includes(currentRecordType) && (
-            <FormSectionColumns title="Proxy">
+            <FormSectionColumns title={t("Proxy")}>
               <div className="flex w-full items-center gap-2">
                 <Label className="sr-only" htmlFor="proxy">
-                  Proxy
+                  {t("Proxy")}
                 </Label>
                 <Switch
                   id="proxied"
@@ -434,7 +442,7 @@ export function RecordForm({
                 />
               </div>
               <p className="p-1 text-[13px] text-muted-foreground">
-                Proxy status.
+                {t("Proxy status")}.
               </p>
             </FormSectionColumns>
           )}
@@ -452,7 +460,7 @@ export function RecordForm({
               {isDeleting ? (
                 <Icons.spinner className="size-4 animate-spin" />
               ) : (
-                <p>Delete</p>
+                <p>{t("Delete")}</p>
               )}
             </Button>
           )}
@@ -462,7 +470,7 @@ export function RecordForm({
             className="w-[80px] px-0"
             onClick={() => setShowForm(false)}
           >
-            Cancle
+            {t("Cancel")}
           </Button>
           <Button
             type="submit"
@@ -473,7 +481,7 @@ export function RecordForm({
             {isPending ? (
               <Icons.spinner className="size-4 animate-spin" />
             ) : (
-              <p>{type === "edit" ? "Update" : "Save"}</p>
+              <p>{type === "edit" ? t("Update") : t("Save")}</p>
             )}
           </Button>
         </div>
