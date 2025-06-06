@@ -11,6 +11,7 @@ import {
   Sparkles,
   SquarePlus,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import useSWR from "swr";
 
@@ -67,6 +68,7 @@ export default function EmailSidebar({
   setAdminModel,
 }: EmailSidebarProps) {
   const { isMobile } = useMediaQuery();
+  const t = useTranslations("Email");
 
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -261,7 +263,7 @@ export default function EmailSidebar({
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search emails..."
+                  placeholder={t("Search emails")}
                   className="h-[30px] w-full border p-1 pl-8 text-xs placeholder:text-xs"
                 />
                 <Search className="absolute left-2 top-2 size-4 text-gray-500" />
@@ -296,7 +298,9 @@ export default function EmailSidebar({
           }}
         >
           <SquarePlus className="size-4" />
-          {!isCollapsed && <span className="text-xs">Create New Email</span>}
+          {!isCollapsed && (
+            <span className="text-xs">{t("Create New Email")}</span>
+          )}
         </Button>
 
         {!isCollapsed && (
@@ -306,7 +310,7 @@ export default function EmailSidebar({
               <div className="flex items-center gap-1">
                 <Icons.mail className="size-3" />
                 <p className="line-clamp-1 text-start font-medium">
-                  Email Address
+                  {t("Email Address")}
                 </p>
               </div>
               <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
@@ -319,7 +323,7 @@ export default function EmailSidebar({
               <div className="flex items-center gap-1">
                 <Icons.inbox className="size-3" />
                 <p className="line-clamp-1 text-start font-medium">
-                  Inbox Emails
+                  {t("Inbox Emails")}
                 </p>
               </div>
               <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
@@ -342,7 +346,7 @@ export default function EmailSidebar({
               <div className="flex items-center gap-1">
                 <Icons.mailOpen className="size-3" />
                 <p className="line-clamp-1 text-start font-medium">
-                  Unread Emails
+                  {t("Unread Emails")}
                 </p>
               </div>
               <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
@@ -353,7 +357,7 @@ export default function EmailSidebar({
                   <TooltipTrigger>
                     <Icons.listFilter className="absolute bottom-1 right-1 size-3" />
                   </TooltipTrigger>
-                  <TooltipContent>Filter unread emails</TooltipContent>
+                  <TooltipContent>{t("Filter unread emails")}</TooltipContent>
                 </Tooltip>
               </TooltipProvider>
             </div>
@@ -372,7 +376,7 @@ export default function EmailSidebar({
               <div className="flex items-center gap-1">
                 <Icons.send className="size-3" />
                 <p className="line-clamp-1 text-start font-medium">
-                  Sent Emails
+                  {t("Sent Emails")}
                 </p>
               </div>
               <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
@@ -384,7 +388,7 @@ export default function EmailSidebar({
 
         {!isCollapsed && user.role === "ADMIN" && (
           <div className="mt-2 flex items-center gap-2 text-sm">
-            Admin Mode:{" "}
+            {t("Admin Mode")}:{" "}
             <Switch
               defaultChecked={isAdminModel}
               onCheckedChange={(v) => setAdminModel(v)}
@@ -420,7 +424,9 @@ export default function EmailSidebar({
               <div className="flex h-full items-center justify-center">
                 <EmptyPlaceholder className="shadow-none">
                   <EmptyPlaceholder.Icon name="mailPlus" />
-                  <EmptyPlaceholder.Title>No emails</EmptyPlaceholder.Title>
+                  <EmptyPlaceholder.Title>
+                    {t("No emails")}
+                  </EmptyPlaceholder.Title>
                   <EmptyPlaceholder.Description>
                     You don&apos;t have any email yet. Start creating email.
                   </EmptyPlaceholder.Description>
@@ -527,7 +533,7 @@ export default function EmailSidebar({
                   {email.unreadCount > 0 && (
                     <Badge variant="default">{email.unreadCount}</Badge>
                   )}
-                  {email.count} recived
+                  {t("{email} recived", { email: email.count })}
                 </div>
                 <span className="line-clamp-1 hover:line-clamp-none">
                   {isAdminModel
@@ -568,7 +574,7 @@ export default function EmailSidebar({
         <Modal showModal={showEmailModal} setShowModal={setShowEmailModal}>
           <div className="p-6">
             <h2 className="mb-4 text-lg font-semibold">
-              {isEdit ? "Edit" : "Create new"} email
+              {isEdit ? t("Edit email") : t("Create new email")}
             </h2>
             <form
               onSubmit={(e) => {
@@ -582,14 +588,14 @@ export default function EmailSidebar({
                   htmlFor="emailAddress"
                   className="mb-1 block text-sm font-medium text-gray-700"
                 >
-                  Email Address
+                  {t("Email Address")}
                 </label>
                 <div className="flex items-center justify-center">
                   <Input
                     id="emailAddress"
                     name="emailAddress"
                     type="text"
-                    placeholder="Enter email suffix"
+                    placeholder={t("Enter email prefix")}
                     className="w-full rounded-r-none"
                     required
                     defaultValue={
@@ -622,7 +628,7 @@ export default function EmailSidebar({
                           ))
                         ) : (
                           <Button className="w-full" variant="ghost">
-                            No domains configured
+                            {t("No domains configured")}
                           </Button>
                         )}
                       </SelectContent>
@@ -652,10 +658,10 @@ export default function EmailSidebar({
                   variant="outline"
                   onClick={() => setShowEmailModal(false)}
                 >
-                  Cancel
+                  {t("Cancel")}
                 </Button>
                 <Button type="submit" variant="default" disabled={isPending}>
-                  {isEdit ? "Update" : "Create"}
+                  {isEdit ? t("Update") : t("Create")}
                 </Button>
               </div>
             </form>
@@ -667,19 +673,20 @@ export default function EmailSidebar({
       {showDeleteModal && (
         <Modal showModal={showDeleteModal} setShowModal={setShowDeleteModal}>
           <div className="p-6">
-            <h2 className="mb-4 text-lg font-semibold">Delete email</h2>
+            <h2 className="mb-4 text-lg font-semibold">{t("Delete email")}</h2>
             <p className="mb-4 text-sm text-neutral-600">
-              You are about to delete the following email, once deleted, it
-              cannot be recovered. All emails in inbox will be deleted at the
-              same time. Are you sure you want to continue?
+              {t(
+                "You are about to delete the following email, once deleted, it cannot be recovered",
+              )}
+              . {t("All emails in inbox will be deleted at the same time")}.{" "}
+              {t("Are you sure you want to continue?")}
             </p>
             <p className="mb-4 text-sm text-neutral-600">
-              To confirm, please type{" "}
+              {t("To confirm, please type")}{" "}
               <strong>
                 delete{" "}
                 {userEmails.find((e) => e.id === emailToDelete)?.emailAddress}
-              </strong>{" "}
-              below:
+              </strong>
             </p>
             <Input
               value={deleteInput}
@@ -696,7 +703,7 @@ export default function EmailSidebar({
                   setEmailToDelete(null);
                 }}
               >
-                Cancel
+                {t("Cancel")}
               </Button>
               <Button
                 variant="destructive"
@@ -710,7 +717,7 @@ export default function EmailSidebar({
                     }`
                 }
               >
-                Delete
+                {t("Confirm Delete")}
               </Button>
             </div>
           </div>

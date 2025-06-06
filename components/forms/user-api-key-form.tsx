@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -27,6 +28,8 @@ type FormData = {
 export function UserApiKeyForm({ user }: UserNameFormProps) {
   const [isPending, startTransition] = useTransition();
   const [apiKey, setApiKey] = useState(user?.apiKey || "");
+
+  const t = useTranslations("Setting");
 
   const {
     handleSubmit,
@@ -57,12 +60,12 @@ export function UserApiKeyForm({ user }: UserNameFormProps) {
   return (
     <form onSubmit={onSubmit}>
       <SectionColumns
-        title="API Key"
-        description="Generate a new API key to access the open apis."
+        title={t("API Key")}
+        description={t("Generate a new API key to access the open apis")}
       >
         <div className="flex w-full items-center gap-2">
           <Label className="sr-only" htmlFor="name">
-            API Key
+            {t("API Key")}
           </Label>
           <div className="flex w-full items-center">
             <input
@@ -89,7 +92,7 @@ export function UserApiKeyForm({ user }: UserNameFormProps) {
             {isPending ? (
               <Icons.spinner className="size-4 animate-spin" />
             ) : (
-              "Generate"
+              t("Generate")
             )}
           </Button>
         </div>

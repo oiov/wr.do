@@ -123,6 +123,14 @@ Follow https://localhost:3000/setup
 
 Via [Installation For Developer](https://wr.do/docs/developer).
 
+## Technology Stack
+
+- Next.js + React + TypeScript
+- Tailwind CSS for styling and design
+- Prisma ORM as the database toolkit
+- Cloudflare as the primary cloud infrastructure
+- Vercel as the recommended deployment platform
+
 ## Community Group
 
 - Discord: https://discord.gg/AHPQYuZu3m

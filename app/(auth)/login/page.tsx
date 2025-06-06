@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { Metadata } from "next";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
@@ -14,6 +15,7 @@ export const metadata: Metadata = {
 };
 
 export default function LoginPage() {
+  const t = useTranslations("Auth");
   return (
     <div className="container flex h-screen w-screen flex-col items-center justify-center">
       <Link
@@ -25,20 +27,20 @@ export default function LoginPage() {
       >
         <>
           <Icons.chevronLeft className="mr-2 size-4" />
-          Back
+          {t("Back")}
         </>
       </Link>
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
         <div className="flex flex-col space-y-2 text-center">
           <Icons.logo className="mx-auto size-12" />
           <div className="text-2xl font-semibold tracking-tight">
-            <span>Welcome to</span>{" "}
+            <span>{t("Welcome to")}</span>{" "}
             <span style={{ fontFamily: "Bahamas Bold" }}>
               {siteConfig.name}
             </span>
           </div>
           <p className="text-sm text-muted-foreground">
-            Choose your login method to continue
+            {t("Choose your login method to continue")}
           </p>
         </div>
         <Suspense>
@@ -50,19 +52,19 @@ export default function LoginPage() {
         </p> */}
 
         <p className="px-8 text-center text-sm text-muted-foreground">
-          By clicking continue, you agree to our{" "}
+          {t("By clicking continue, you agree to our")}{" "}
           <Link
             href="/terms"
             className="hover:text-brand underline underline-offset-4"
           >
-            Terms of Service
+            {t("Terms of Service")}
           </Link>{" "}
-          and{" "}
+          {t("and")}{" "}
           <Link
             href="/privacy"
             className="hover:text-brand underline underline-offset-4"
           >
-            Privacy Policy
+            {t("Privacy Policy")}
           </Link>
           .
         </p>

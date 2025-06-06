@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { siteConfig } from "@/config/site";
@@ -27,26 +28,22 @@ export default function StepGuide({
   const [direction, setDirection] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
 
+  const t = useTranslations("Common");
+
   const steps = [
     {
       id: 1,
-      title: "Set up an administrator",
-      description:
-        "Begin by entering your website URL or selecting an example site to reimagine your website with modern themes.",
+      title: t("Set up an administrator"),
       component: () => <SetAdminRole id={user.id} email={user.email} />,
     },
     {
       id: 2,
-      title: "Add the first domain",
-      description:
-        "Check out your reimagined site and click to Migrate & Download.",
+      title: t("Add the first domain"),
       component: () => <AddDomain onNextStep={goToNextStep} />,
     },
     {
       id: 3,
-      title: "Congrats on completing setup 🎉",
-      description:
-        "Navigate to your GitHub dashboard where you'll manage your repository and project files.",
+      title: t("Congrats on completing setup 🎉"),
       component: () => <Congrats />,
     },
   ];
@@ -92,7 +89,7 @@ export default function StepGuide({
     <Modal className="md:max-w-2xl">
       <div className="w-full px-4 py-2 md:px-8 md:py-4">
         <div className="mb-6 mt-3 flex items-center justify-between gap-4">
-          <h2 className="text-2xl font-bold">Admin Setup Guide</h2>
+          <h2 className="text-2xl font-bold">{t("Admin Setup Guide")}</h2>
           <div className="flex items-center gap-2 rounded-full bg-muted/50 px-3 py-1.5 text-sm font-medium">
             <span className="flex size-6 items-center justify-center rounded-full bg-primary text-primary-foreground">
               {currentStep}
@@ -161,7 +158,7 @@ export default function StepGuide({
           )}
         >
           <ChevronLeft className="h-4 w-4" />
-          Previous
+          {t("Previous")}
         </button>
 
         <button
@@ -171,7 +168,7 @@ export default function StepGuide({
             "flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-primary-foreground transition-colors hover:bg-primary/90",
           )}
         >
-          {currentStep === steps.length ? "🚀 Start" : "Next"}
+          {currentStep === steps.length ? t("🚀 Start") : t("Next")}
           <ChevronRight className="h-4 w-4" />
         </button>
       </motion.div>
@@ -182,6 +179,7 @@ export default function StepGuide({
 function SetAdminRole({ id, email }: { id: string; email: string }) {
   const [isPending, startTransition] = useTransition();
   const [isAdmin, setIsAdmin] = useState(false);
+  const t = useTranslations("Common");
   const handleSetAdmin = async () => {
     startTransition(async () => {
       const res = await fetch("/api/setup");
@@ -194,7 +192,7 @@ function SetAdminRole({ id, email }: { id: string; email: string }) {
   const ReadyBadge = (
     <Badge className="text-xs font-semibold" variant="green">
       <Icons.check className="mr-1 size-3" />
-      Ready
+      {t("Ready")}
     </Badge>
   );
 
@@ -202,14 +200,14 @@ function SetAdminRole({ id, email }: { id: string; email: string }) {
     <div className="flex flex-col gap-4 rounded-lg bg-neutral-50 p-4 dark:bg-neutral-900">
       <div className="flex items-center justify-between">
         <span className="text-sm font-semibold text-muted-foreground">
-          Allow Sign Up:
+          {t("Allow Sign Up")}:
         </span>
         {siteConfig.openSignup ? ReadyBadge : <Skeleton className="h-4 w-12" />}
       </div>
 
       <div className="flex items-center justify-between">
         <span className="text-sm font-semibold text-muted-foreground">
-          Set {email} as ADMIN:
+          {t("Set {email} as ADMIN", { email })}:
         </span>
         {isAdmin ? (
           ReadyBadge
@@ -223,30 +221,36 @@ function SetAdminRole({ id, email }: { id: string; email: string }) {
             {isPending && (
               <Icons.spinner className="mr-2 size-4 animate-spin" />
             )}
-            Active Now
+            {t("Active Now")}
           </Button>
         )}
       </div>
 
       <div className="rounded-md border border-dashed p-2 text-xs text-muted-foreground">
         <p className="flex items-start gap-1">
-          📢 Only by becoming an administrator can one access the admin panel
-          and add domain names.
+          •{" "}
+          {t(
+            "Only by becoming an administrator can one access the admin panel and add domain names",
+          )}
+          .
         </p>
         <p className="my-1">
-          📢 Administrators can set all user permissions, allocate quotas, view
-          and edit all resources (short links, subdomains, email), etc.
+          •{" "}
+          {t(
+            "Administrators can set all user permissions, allocate quotas, view and edit all resources (short links, subdomains, email), etc",
+          )}
+          .
         </p>
         <p>
-          📢 Via{" "}
+          •{t("Via")}{" "}
           <a
-            className="text-blue-500"
+            className="text-blue-500 after:content-['_↗']"
             target="_blank"
             href="/docs/developer/quick-start"
           >
-            quick start
+            {t("quick start")}
           </a>{" "}
-          docs to get more information.
+          {t("docs to get more information")}.
         </p>
       </div>
     </div>
@@ -256,6 +260,7 @@ function SetAdminRole({ id, email }: { id: string; email: string }) {
 function AddDomain({ onNextStep }: { onNextStep: () => void }) {
   const [isPending, startTransition] = useTransition();
   const [domain, setDomain] = useState("");
+  const t = useTranslations("Common");
   const handleCreateDomain = async () => {
     if (!domain) {
       toast.warning("Domain name cannot be empty");
@@ -292,10 +297,10 @@ function AddDomain({ onNextStep }: { onNextStep: () => void }) {
   };
   return (
     <div className="flex flex-col gap-4 rounded-lg bg-neutral-50 p-4 dark:bg-neutral-900">
-      <FormSectionColumns title="Domain Name">
+      <FormSectionColumns title={t("Domain Name")}>
         <div className="flex w-full flex-col items-start justify-between gap-2">
           <Label className="sr-only" htmlFor="domain_name">
-            Domain Name
+            {t("Domain Name")}
           </Label>
           <div className="w-full">
             <Input
@@ -307,7 +312,10 @@ function AddDomain({ onNextStep }: { onNextStep: () => void }) {
             />
           </div>
           <p className="text-xs text-muted-foreground">
-            Please enter a valid domain name (must be hosted on Cloudflare).
+            {t(
+              "Please enter a valid domain name (must be hosted on Cloudflare)",
+            )}
+            .
           </p>
         </div>
 
@@ -318,7 +326,7 @@ function AddDomain({ onNextStep }: { onNextStep: () => void }) {
             size={"sm"}
             onClick={onNextStep}
           >
-            Or add later
+            {t("Or add later")}
           </Button>
           <Button
             className="flex items-center gap-1"
@@ -330,7 +338,7 @@ function AddDomain({ onNextStep }: { onNextStep: () => void }) {
             {isPending && (
               <Icons.spinner className="mr-2 size-4 animate-spin" />
             )}
-            Submit
+            {t("Submit")}
           </Button>
         </div>
       </FormSectionColumns>

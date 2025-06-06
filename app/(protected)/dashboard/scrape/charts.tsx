@@ -1,6 +1,5 @@
 import {
   getScrapeStatsByTypeAndUserId,
-  getScrapeStatsByUserId,
   getScrapeStatsByUserId1,
 } from "@/lib/dto/scrape";
 

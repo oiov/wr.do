@@ -23,6 +23,7 @@ export async function UserInfoCard({
   icon?: keyof typeof Icons;
 }) {
   const Icon = Icons[icon || "arrowRight"];
+  const t = useTranslations("Components");
   return (
     <Card className="grids group bg-gray-50/70 backdrop-blur-lg dark:bg-primary-foreground">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -31,7 +32,7 @@ export async function UserInfoCard({
             className="font-semibold text-slate-500 duration-500 group-hover:text-blue-500 group-hover:underline"
             href={link}
           >
-            {title}
+            {t(title)}
           </Link>
         </CardTitle>
         <Icon className="size-4 text-muted-foreground" />
@@ -49,7 +50,7 @@ export async function UserInfoCard({
             )}
           </div>
         )}
-        <p className="text-xs text-muted-foreground">total</p>
+        <p className="text-xs text-muted-foreground">{t("total")}</p>
       </CardContent>
     </Card>
   );

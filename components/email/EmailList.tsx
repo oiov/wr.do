@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ForwardEmail } from "@prisma/client";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import useSWR from "swr";
 
@@ -48,6 +49,7 @@ export default function EmailList({
   className,
   isAdminModel,
 }: EmailListProps) {
+  const t = useTranslations("Email");
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isAutoRefresh, setIsAutoRefresh] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -148,14 +150,14 @@ export default function EmailList({
   };
 
   if (!emailAddress) {
-    return EmptyInboxSection();
+    return <EmptyInboxSection />;
   }
 
   return (
     <div className={cn("grids flex flex-1 flex-col", className)}>
       <div className="flex items-center gap-2 bg-neutral-200/40 p-2 text-base font-semibold text-neutral-600 backdrop-blur dark:bg-neutral-800 dark:text-neutral-50">
         <Icons.inbox size={20} />
-        <span>INBOX</span>
+        <span>{t("INBOX")}</span>
         <div className="ml-auto flex items-center justify-center gap-2">
           <SendEmailModal emailAddress={emailAddress} onSuccess={mutate} />
           <TooltipProvider>
@@ -168,7 +170,7 @@ export default function EmailList({
                   aria-label="Auto refresh"
                 />
               </TooltipTrigger>
-              <TooltipContent side="bottom">Auto refresh</TooltipContent>
+              <TooltipContent side="bottom">{t("Auto refresh")}</TooltipContent>
             </Tooltip>
           </TooltipProvider>
           <Button
@@ -204,7 +206,7 @@ export default function EmailList({
                   size="sm"
                   className="flex w-full items-center gap-1"
                 >
-                  <span className="text-sm">more</span>
+                  <span className="text-sm">{t("more")}</span>
                   <Icons.chevronDown className="mt-0.5 size-4" />
                 </Button>
               </DropdownMenuTrigger>
@@ -216,13 +218,13 @@ export default function EmailList({
                     onClick={handleMarkSelectedAsRead}
                     className="w-full"
                   >
-                    <span className="text-xs">Mask as read</span>
+                    <span className="text-xs">{t("Mask as read")}</span>
                   </Button>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild disabled>
                   <Button variant="ghost" size="sm" className="w-full">
-                    <span className="text-xs">Delete selected</span>
+                    <span className="text-xs">{t("Delete selected")}</span>
                   </Button>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -298,7 +300,7 @@ export default function EmailList({
                 <div className="flex h-[calc(100vh-135px)] flex-col items-center justify-center gap-8">
                   <Loader />
                   <p className="font-mono font-semibold text-neutral-500">
-                    Waiting for emails...
+                    {t("Waiting for emails")}...
                   </p>
                 </div>
               )}
@@ -321,6 +323,7 @@ export default function EmailList({
 }
 
 export function EmptyInboxSection() {
+  const t = useTranslations("Email");
   return (
     <div className="grids flex flex-1 animate-fade-in flex-col items-center justify-center p-4 text-center text-neutral-600 dark:text-neutral-400">
       <BlurImage
@@ -330,10 +333,12 @@ export function EmptyInboxSection() {
         width={200}
         alt="Inbox"
       />
-      <h2 className="my-2 text-lg font-semibold">No Email Address Selected</h2>
+      <h2 className="my-2 text-lg font-semibold">
+        {t("No Email Address Selected")}
+      </h2>
       <p className="max-w-md text-sm">
-        Please select an email address from the list to view your inbox. Once
-        selected, your emails will appear here automatically.
+        {t("Please select an email address from the list to view your inbox")}.
+        {t("Once selected, your emails will appear here automatically")}.
       </p>
       <ul className="mt-3 list-disc text-left">
         <li>
@@ -343,7 +348,7 @@ export function EmptyInboxSection() {
             target="_blank"
             rel="noreferrer"
           >
-            How to use email to send or receive emails?
+            {t("How to use email to send or receive emails?")}
           </Link>
         </li>
         <li>
@@ -353,7 +358,7 @@ export function EmptyInboxSection() {
             target="_blank"
             rel="noreferrer"
           >
-            Will my email or inbox expire?
+            {t("Will my email or inbox expire?")}
           </Link>
         </li>
         <li>
@@ -363,7 +368,7 @@ export function EmptyInboxSection() {
             target="_blank"
             rel="noreferrer"
           >
-            What is the limit? It's free?
+            {t("What is the limit? It's free?")}
           </Link>
         </li>
         <li>
@@ -373,7 +378,7 @@ export function EmptyInboxSection() {
             target="_blank"
             rel="noreferrer"
           >
-            How to create emails with api?
+            {t("How to create emails with api?")}
           </Link>
         </li>
       </ul>
