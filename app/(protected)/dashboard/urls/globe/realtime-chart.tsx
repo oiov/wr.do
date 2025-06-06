@@ -1,13 +1,7 @@
 "use client";
 
-import {
-  Bar,
-  BarChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { useTranslations } from "next-intl";
+import { Bar, BarChart, Tooltip, XAxis, YAxis } from "recharts";
 
 import { cn } from "@/lib/utils";
 import StatusDot from "@/components/dashboard/status-dot";
@@ -29,6 +23,7 @@ export const RealtimeChart = ({
   chartData,
   totalClicks,
 }: RealtimeChartProps) => {
+  const t = useTranslations("Components");
   const getTickInterval = (dataLength: number) => {
     if (dataLength <= 6) return 0;
     if (dataLength <= 12) return 1;
@@ -45,7 +40,7 @@ export const RealtimeChart = ({
     <div className={cn(`rounded-lg border p-3 backdrop-blur-2xl`, className)}>
       <div className="mb-1 flex items-center text-base font-semibold">
         <StatusDot status={1} />
-        <h3 className="ml-2">Realtime Visits</h3>
+        <h3 className="ml-2">{t("Realtime Visits")}</h3>
         <Icons.mousePointerClick className="ml-auto size-4 text-muted-foreground" />
       </div>
       <p className="mb-2 text-lg font-semibold">{totalClicks}</p>

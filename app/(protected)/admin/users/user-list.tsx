@@ -105,9 +105,7 @@ export default function UsersList({ user }: UrlListProps) {
         <CardHeader className="flex flex-row items-center">
           <CardDescription className="text-balance text-lg font-bold">
             <span>Total Users:</span>{" "}
-            <span className="font-bold">
-              {data && <CountUpFn count={data.total} />}
-            </span>
+            <span className="font-bold">{data && data.total}</span>
           </CardDescription>
           <div className="ml-auto flex items-center justify-end gap-3">
             <Button

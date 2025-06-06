@@ -5,7 +5,6 @@ import { constructMetadata } from "@/lib/utils";
 import { DashboardHeader } from "@/components/dashboard/header";
 import ApiReference from "@/components/shared/api-reference";
 
-import DashboardScrapeCharts from "../charts";
 import { MetaScraping } from "../scrapes";
 
 export const metadata = constructMetadata({
@@ -21,10 +20,10 @@ export default async function DashboardPage() {
   return (
     <>
       <DashboardHeader
-        heading="Url&nbsp;&nbsp;to&nbsp;&nbsp;Meta&nbsp;&nbsp;Info"
-        text="Quickly extract valuable structured website data."
+        heading="Url to Meta Info"
+        text="Quickly extract valuable structured website data"
         link="/docs/open-api/meta-info"
-        linkText="Meta Info API."
+        linkText="Meta Info API"
       />
       <ApiReference
         badge="GET /api/v1/scraping/meta"

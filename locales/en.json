@@ -47,7 +47,32 @@
     "Customize your QR code logo": "Customize your QR code logo",
     "Please create a api key before use this feature": "Please create a api key before use this feature",
     "Learn more about": "Learn more about",
-    "Create Api Key": "Create Api Key"
+    "Create Api Key": "Create Api Key",
+    "Show": "Show",
+    "per page": "per page"
+  },
+  "Components": {
+    "Dashboard": "Dashboard",
+    "Live Logs": "Live Logs",
+    "Real-time logs of short link visits": "Real-time logs of short link visits",
+    "Stop": "Stop",
+    "Live": "Live",
+    "Time": "Time",
+    "Slug": "Slug",
+    "Target": "Target",
+    "Location": "Location",
+    "Clicks": "Clicks",
+    "of": "/",
+    "total logs": "total logs",
+    "API Reference": "API Reference",
+    "provide a api for {target}": "provide a api for {target}",
+    "creating short urls": "creating short urls",
+    "View the usage tutorial": "View the usage tutorial",
+    "document": "document",
+    "Realtime Visits": "Realtime Visits",
+    "See documentation": "See documentation",
+    "Manage Short URLs": "Manage Short URLs",
+    "List and manage short urls": "List and manage short urls"
   },
   "Landing": {
     "settings": "Settings",
