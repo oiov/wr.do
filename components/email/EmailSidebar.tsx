@@ -17,13 +17,14 @@ import useSWR from "swr";
 
 import { UserEmailList } from "@/lib/dto/email";
 import { reservedAddressSuffix } from "@/lib/enums";
-import { cn, fetcher, nFormatter, timeAgo } from "@/lib/utils";
+import { cn, fetcher, nFormatter } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
 
 import { CopyButton } from "../shared/copy-button";
 import { EmptyPlaceholder } from "../shared/empty-placeholder";
 import { Icons } from "../shared/icons";
 import { PaginationWrapper } from "../shared/pagination";
+import { TimeAgoIntl } from "../shared/time-ago";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -539,7 +540,7 @@ export default function EmailSidebar({
                   {isAdminModel
                     ? `Created by ${email.user || email.email.slice(0, 5)} at`
                     : ""}{" "}
-                  {timeAgo(email.createdAt)}
+                  <TimeAgoIntl date={email.createdAt} />
                 </span>
               </div>
             )}

@@ -7,11 +7,12 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import useSWR from "swr";
 
-import { cn, fetcher, htmlToText, timeAgo } from "@/lib/utils";
+import { cn, fetcher, htmlToText } from "@/lib/utils";
 
 import BlurImage from "../shared/blur-image";
 import { Icons } from "../shared/icons";
 import { PaginationWrapper } from "../shared/pagination";
+import { TimeAgoIntl } from "../shared/time-ago";
 // import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
@@ -278,7 +279,9 @@ export default function EmailList({
                             {email.fromName || email.subject || "Untitled"}
                           </span>
                           <span className="ml-auto text-xs text-neutral-600 dark:text-neutral-400">
-                            {timeAgo((email.date as any) || email.createdAt)}
+                            <TimeAgoIntl
+                              date={(email.date as any) || email.createdAt}
+                            />
                           </span>
                           {email.readAt && (
                             <Icons.checkCheck className="ml-2 size-3 text-green-600" />

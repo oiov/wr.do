@@ -10,7 +10,7 @@ import useSWR, { useSWRConfig } from "swr";
 
 import { UserRecordFormData } from "@/lib/dto/cloudflare-dns-record";
 import { TTL_ENUMS } from "@/lib/enums";
-import { fetcher, timeAgo } from "@/lib/utils";
+import { fetcher } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -43,6 +43,7 @@ import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
 import { Icons } from "@/components/shared/icons";
 import { LinkInfoPreviewer } from "@/components/shared/link-previewer";
 import { PaginationWrapper } from "@/components/shared/pagination";
+import { TimeAgoIntl } from "@/components/shared/time-ago";
 
 export interface RecordListProps {
   user: Pick<User, "id" | "name" | "apiKey" | "email" | "role">;
@@ -341,7 +342,9 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                       </TooltipProvider>
                     </TableCell>
                     <TableCell className="col-span-1 hidden justify-center sm:flex">
-                      {timeAgo(record.modified_on as unknown as Date)}
+                      <TimeAgoIntl
+                        date={record.modified_on as unknown as Date}
+                      />
                     </TableCell>
                     <TableCell className="col-span-1 flex justify-center">
                       {record.active !== 2 ? (

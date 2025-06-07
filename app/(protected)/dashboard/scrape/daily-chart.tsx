@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { ScrapeMeta } from "@prisma/client";
+import { useTranslations } from "next-intl";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import { isLink, nFormatter, removeUrlSuffix, timeAgo } from "@/lib/utils";
@@ -18,7 +19,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import CountUp from "@/components/dashboard/count-up";
 
 const chartConfig = {
   request: {
@@ -105,14 +105,19 @@ export function DailyPVUVChart({ data }: { data: ScrapeMeta[] }) {
   const latestDate = timeAgo(latestEntry.updatedAt);
   const latestFrom = latestEntry.type;
 
+  const t = useTranslations("Components");
+
   return (
     <Card>
       <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
         <div className="flex flex-1 flex-col justify-center gap-1 px-5 py-4">
-          <CardTitle>Total Requests of APIs in Last 30 Days</CardTitle>
+          <CardTitle>{t("Total Requests of APIs in Last 30 Days")}</CardTitle>
           <CardDescription>
-            Last request from <strong>{latestFrom}</strong> api about{" "}
-            {latestDate}.
+            {t("Last request from {latestFrom} api about {latestDate}", {
+              latestFrom,
+              latestDate,
+            })}
+            .
           </CardDescription>
         </div>
         <div className="flex">
@@ -125,8 +130,8 @@ export function DailyPVUVChart({ data }: { data: ScrapeMeta[] }) {
                 className="relative z-30 flex flex-1 flex-col items-center justify-center gap-1 border-t px-6 py-2 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-3"
                 onClick={() => setActiveChart(chart)}
               >
-                <span className="text-xs text-muted-foreground">
-                  {chartConfig[chart].label}
+                <span className="text-nowrap text-xs text-muted-foreground">
+                  {t(chartConfig[chart].label)}
                 </span>
                 <span className="text-lg font-bold leading-none">
                   {nFormatter(dataTotal[key])}

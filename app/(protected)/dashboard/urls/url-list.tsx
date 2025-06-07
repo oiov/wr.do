@@ -17,7 +17,6 @@ import {
   fetcher,
   nFormatter,
   removeUrlSuffix,
-  timeAgo,
 } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "@/components/ui/button";
@@ -58,6 +57,7 @@ import { Icons } from "@/components/shared/icons";
 import { LinkInfoPreviewer } from "@/components/shared/link-previewer";
 import { PaginationWrapper } from "@/components/shared/pagination";
 import QRCodeEditor from "@/components/shared/qr";
+import { TimeAgoIntl } from "@/components/shared/time-ago";
 
 import Globe from "./globe";
 import LiveLog from "./live-logs";
@@ -396,7 +396,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                   </div>
                 </TableCell>
                 <TableCell className="col-span-1 hidden truncate sm:flex">
-                  {timeAgo(short.updatedAt as Date)}
+                  <TimeAgoIntl date={short.updatedAt as Date} />
                 </TableCell>
                 <TableCell className="col-span-1 flex items-center gap-1 sm:col-span-2">
                   <Button
@@ -563,7 +563,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                           }}
                         >
                           <Icons.lineChart className="size-4" />
-                          Analytics
+                          {t("Analytics")}
                         </Button>
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
@@ -580,7 +580,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                           }}
                         >
                           <PenLine className="size-4" />
-                          Edit URL
+                          {t("Edit URL")}
                         </Button>
                       </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -614,7 +614,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                       ></Separator>
                     </>
                   )}
-                  {timeAgo(short.updatedAt as Date)}
+                  <TimeAgoIntl date={short.updatedAt as Date} />
                   <Switch
                     className="scale-[0.6]"
                     defaultChecked={short.active === 1}

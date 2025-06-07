@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import useSWR, { useSWRConfig } from "swr";
 
 import { DomainFormData } from "@/lib/dto/domains";
-import { fetcher, timeAgo } from "@/lib/utils";
+import { fetcher } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,6 +35,7 @@ import { FormType } from "@/components/forms/record-form";
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
 import { Icons } from "@/components/shared/icons";
 import { PaginationWrapper } from "@/components/shared/pagination";
+import { TimeAgoIntl } from "@/components/shared/time-ago";
 
 export interface DomainListProps {
   user: Pick<User, "id" | "name" | "email" | "apiKey" | "role" | "team">;
@@ -291,7 +292,7 @@ export default function DomainList({ user, action }: DomainListProps) {
                         />
                       </TableCell>
                       <TableCell className="col-span-1 flex items-center truncate">
-                        {timeAgo(domain.updatedAt as Date)}
+                        <TimeAgoIntl date={domain.updatedAt as Date} />
                       </TableCell>
                       <TableCell className="col-span-1 flex items-center gap-1">
                         <Button

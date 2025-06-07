@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 import { getUserRecordCount } from "@/lib/dto/cloudflare-dns-record";
 import {
@@ -134,7 +135,6 @@ async function RequestStatsSection() {
 
   return hasStats ? (
     <>
-      <h2 className="my-1 text-xl font-semibold">Request Statistics</h2>
       <DailyPVUVChart
         data={screenshot_stats
           .concat(meta_stats)
@@ -200,7 +200,6 @@ async function MarkdownTextChartSection() {
 async function LogsSection({ userId }: { userId: string }) {
   return (
     <>
-      <h2 className="my-1 text-xl font-semibold">Request Logs</h2>
       <LogsTable userId={userId} target={"/api/v1/scraping/admin/logs"} />
     </>
   );
@@ -213,10 +212,7 @@ export default async function AdminPage() {
 
   return (
     <>
-      <DashboardHeader
-        heading="Admin Panel"
-        text="Access only for users with ADMIN role"
-      />
+      <DashboardHeader heading="Admin Panel" text="" />
       <div className="flex flex-col gap-5">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 xl:grid-cols-3">
           <ErrorBoundary

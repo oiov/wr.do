@@ -1,6 +1,7 @@
 "use client";
 
 import { TrendingUp } from "lucide-react";
+import { useTranslations } from "next-intl";
 import {
   Label,
   PolarGrid,
@@ -29,6 +30,7 @@ export function RadialShapeChart({
   total: number;
   totalUser: number;
 }) {
+  const t = useTranslations("Components");
   const chartData = [
     { browser: "safari", actived: total, fill: "var(--color-safari)" },
   ];
@@ -94,7 +96,7 @@ export function RadialShapeChart({
           <TrendingUp className="size-4" />
         </div>
         <div className="leading-none text-muted-foreground">
-          Cumulative proportion of activated <strong>Api Key</strong> users
+          {t("Activated Api Key users")}
         </div>
       </CardFooter>
     </Card>
