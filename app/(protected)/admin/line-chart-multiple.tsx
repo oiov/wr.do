@@ -79,7 +79,7 @@ export function LineChartMultiple({
   return (
     <Card>
       <CardHeader>
-        <CardDescription>{message}.</CardDescription>
+        <CardDescription>{message}</CardDescription>
       </CardHeader>
       <CardContent ref={wrapperRef}>
         <ChartContainer config={chartConfig}>

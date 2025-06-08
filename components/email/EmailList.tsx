@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import Link from "next/link";
 import { ForwardEmail } from "@prisma/client";
 import { useTranslations } from "next-intl";
@@ -58,6 +58,8 @@ export default function EmailList({
   const [selectedEmails, setSelectedEmails] = useState<string[]>([]);
   const [showMutiCheckBox, setShowMutiCheckBox] = useState(false);
 
+  const [isDeleting, startDeleteTransition] = useTransition();
+
   const { data, error, isLoading, mutate } = useSWR<{
     total: number;
     list: ForwardEmail[];
@@ -84,15 +86,11 @@ export default function EmailList({
   }, [emailAddress, data, selectedEmailId]);
 
   const handleMarkAsRead = async (emailId: string) => {
-    try {
-      await fetch("/api/email/read", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ emailId }),
-      }).then(() => mutate());
-    } catch (error) {
-      console.log("Error marking email as read");
-    }
+    await fetch("/api/email/read", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ emailId }),
+    }).then(() => mutate());
   };
 
   const handleMarkSelectedAsRead = async () => {
@@ -148,6 +146,17 @@ export default function EmailList({
       }
     }
     onSelectEmail(emailId);
+  };
+
+  const handleDeletEmails = async (ids: string[]) => {
+    startDeleteTransition(async () => {
+      await fetch("/api/email/inbox", {
+        method: "DELETE",
+        body: JSON.stringify({ ids }),
+      }).then((v) => {
+        v.status === 200 && mutate();
+      });
+    });
   };
 
   if (!emailAddress) {
@@ -212,7 +221,10 @@ export default function EmailList({
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem asChild>
+                <DropdownMenuItem
+                  asChild
+                  disabled={selectedEmails.length === 0}
+                >
                   <Button
                     variant="ghost"
                     size="sm"
@@ -223,8 +235,19 @@ export default function EmailList({
                   </Button>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild disabled>
-                  <Button variant="ghost" size="sm" className="w-full">
+                <DropdownMenuItem
+                  asChild
+                  disabled={isDeleting || selectedEmails.length === 0}
+                >
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="w-full"
+                    onClick={() => handleDeletEmails(selectedEmails)}
+                  >
+                    {isDeleting && (
+                      <Icons.spinner className="mr-1 size-4 animate-spin" />
+                    )}
                     <span className="text-xs">{t("Delete selected")}</span>
                   </Button>
                 </DropdownMenuItem>

@@ -234,8 +234,8 @@
     "Visitors": "访客",
     "Name": "名称",
     "Activated Api Key users": "已启用 API Key 的用户",
-    "total-requests-one-type": "Open API 的 {type1} 的总请求数。",
-    "total-requests-two-types": "Open API 的 {type1} 和 {type2} 的总请求数。"
+    "total-requests-one-type": "Open API 的 {type1} 的总请求数",
+    "total-requests-two-types": "Open API 的 {type1} 和 {type2} 的总请求数"
   },
   "Landing": {
     "settings": "设置",

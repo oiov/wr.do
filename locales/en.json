@@ -234,8 +234,8 @@
     "Visitors": "Visitors",
     "Name": "Name",
     "Activated Api Key users": "Activated Api Key users",
-    "total-requests-one-type": "Total requests of {type1}.",
-    "total-requests-two-types": "Total requests of {type1} and {type2}."
+    "total-requests-one-type": "Total requests of {type1}",
+    "total-requests-two-types": "Total requests of {type1} and {type2}"
   },
   "Landing": {
     "settings": "Settings",
