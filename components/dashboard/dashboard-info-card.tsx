@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 
 import { nFormatter } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -73,7 +74,8 @@ export async function DashboardInfoCard({
   link: string;
   icon?: keyof typeof Icons;
 }) {
-  const t = useTranslations("Components");
+  // const t = useTranslations("Components");
+  const t = await getTranslations("Components");
   const Icon = Icons[icon || "arrowRight"];
   return (
     <Card className="grids group animate-fade-in bg-gray-50/70 backdrop-blur-lg dark:bg-primary-foreground">
@@ -110,7 +112,7 @@ export async function DashboardInfoCard({
   );
 }
 
-export function HeroCard({
+export async function HeroCard({
   total,
   monthTotal,
   limit,
@@ -119,7 +121,8 @@ export function HeroCard({
   monthTotal: number;
   limit: number;
 }) {
-  const t = useTranslations("Components");
+  // const t = useTranslations("Components");
+  const t = await getTranslations("Components");
   return (
     <div className="grids group relative mb-4 h-full w-full shrink-0 origin-left overflow-hidden rounded-lg border bg-gray-50/70 px-5 pt-5 text-left duration-500 before:absolute before:right-1 before:top-1 before:z-[2] before:h-12 before:w-12 before:rounded-full before:bg-violet-500 before:blur-lg before:duration-500 after:absolute after:right-8 after:top-3 after:z-[2] after:h-20 after:w-20 after:rounded-full after:bg-rose-300 after:blur-lg after:duration-500 hover:border-cyan-600 hover:decoration-2 hover:duration-500 hover:before:-bottom-8 hover:before:right-12 hover:before:blur hover:before:[box-shadow:_20px_20px_20px_30px_#a21caf] hover:after:-right-8 group-hover:before:duration-500 group-hover:after:duration-500 dark:bg-primary-foreground md:max-w-[350px]">
       <div className="flex flex-row items-center justify-between">
@@ -166,7 +169,7 @@ export async function StaticInfoCard({
   icon?: keyof typeof Icons;
 }) {
   const Icon = Icons[icon || "arrowRight"];
-  const t = useTranslations("Components");
+  const t = await getTranslations("Components");
   return (
     <Card className="grids group bg-gray-50/70 backdrop-blur-lg dark:bg-primary-foreground">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
