@@ -143,3 +143,5 @@ Via [Installation For Developer](https://wr.do/docs/developer).
    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=oiov/wr.do&type=Date" />
  </picture>
 </a>
+
+[![Powered by DartNode](https://dartnode.com/branding/DN-Open-Source-sm.png)](https://dartnode.com "Powered by DartNode - Free VPS for Open Source")
