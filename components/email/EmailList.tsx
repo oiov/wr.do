@@ -126,6 +126,10 @@ export default function EmailList({
     );
   };
 
+  const handleSelectAllEmails = () => {
+    setSelectedEmails(data?.list.map((email) => email.id) || []);
+  };
+
   const handleSetAutoRefresh = (value: boolean) => {
     setIsAutoRefresh(value);
   };
@@ -208,7 +212,7 @@ export default function EmailList({
           >
             <Icons.listChecks className="size-4" />
           </Button>
-          {selectedEmails.length > 0 && (
+          {showMutiCheckBox && (
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <Button
@@ -221,6 +225,17 @@ export default function EmailList({
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
+                <DropdownMenuItem asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleSelectAllEmails}
+                    className="w-full"
+                  >
+                    <span className="text-xs">{t("Select all")}</span>
+                  </Button>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem
                   asChild
                   disabled={selectedEmails.length === 0}
@@ -287,9 +302,9 @@ export default function EmailList({
                           onClick={(e) => e.stopPropagation()}
                         >
                           <Checkbox
-                            defaultChecked={selectedEmails.includes(email.id)}
+                            checked={selectedEmails.includes(email.id)}
                             onCheckedChange={() => handleSelectEmail(email.id)}
-                            className="mr-2 size-4 border-neutral-300 bg-neutral-100 data-[state=checked]:border-neutral-900 data-[state=checked]:bg-neutral-600 data-[state=checked]:text-neutral-100 dark:border-neutral-700 dark:bg-neutral-800 dark:data-[state=checked]:border-neutral-300 dark:data-[state=checked]:bg-neutral-300"
+                            className="mr-3 size-4 border-neutral-300 bg-neutral-100 data-[state=checked]:border-neutral-900 data-[state=checked]:bg-neutral-600 data-[state=checked]:text-neutral-100 dark:border-neutral-700 dark:bg-neutral-800 dark:data-[state=checked]:border-neutral-300 dark:data-[state=checked]:bg-neutral-300"
                           />
                         </div>
                       )}
