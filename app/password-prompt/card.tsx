@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
@@ -22,6 +23,8 @@ export default function PasswordPrompt() {
   const [isHidden, setIsHidden] = useState(true);
   const [isPending, startTransition] = useTransition();
   const inputRefs = useRef<(HTMLInputElement | null)[]>(Array(6).fill(null));
+
+  const t = useTranslations("Components");
 
   useEffect(() => {
     if (initialPassword) {
