@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, SetStateAction, useTransition } from "react";
+import { Dispatch, SetStateAction, useMemo, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";
 import { Sparkles } from "lucide-react";
@@ -82,6 +82,19 @@ export function UrlForm({
       dedupingInterval: 10000,
     },
   );
+
+  const validDefaultDomain = useMemo(() => {
+    if (!shortDomains?.length) return undefined;
+
+    if (
+      initData?.prefix &&
+      shortDomains.some((d) => d.domain_name === initData.prefix)
+    ) {
+      return initData.prefix;
+    }
+
+    return shortDomains[0].domain_name;
+  }, [shortDomains, initData?.prefix]);
 
   const onSubmit = handleSubmit((data) => {
     if (type === "add") {
@@ -211,7 +224,7 @@ export function UrlForm({
                       setValue("prefix", value);
                     }}
                     name="prefix"
-                    defaultValue={initData?.prefix || "wr.do"}
+                    defaultValue={validDefaultDomain}
                     disabled={type === "edit"}
                   >
                     <SelectTrigger className="w-1/3 rounded-r-none border-r-0 shadow-inner">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import { User, UserEmail } from "@prisma/client";
 import randomName from "@scaleway/random-name";
 import {
@@ -76,7 +76,7 @@ export default function EmailSidebar({
   const [isEdit, setIsEdit] = useState(false);
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const [domainSuffix, setDomainSuffix] = useState<string | null>("wr.do");
+  const [domainSuffix, setDomainSuffix] = useState<string | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [emailToDelete, setEmailToDelete] = useState<string | null>(null);
   const [deleteInput, setDeleteInput] = useState("");
@@ -112,6 +112,12 @@ export default function EmailSidebar({
     revalidateOnFocus: false,
     dedupingInterval: 10000,
   });
+
+  useEffect(() => {
+    if (!domainSuffix && emailDomains && emailDomains.length > 0) {
+      setDomainSuffix(emailDomains[0].domain_name);
+    }
+  }, [domainSuffix, emailDomains]);
 
   if (!selectedEmailAddress && data && data.list.length > 0) {
     onSelectEmail(data.list[0].emailAddress);

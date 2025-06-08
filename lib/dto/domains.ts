@@ -97,6 +97,9 @@ export async function getDomainsByFeatureClient(feature: string) {
       select: {
         domain_name: true,
       },
+      orderBy: {
+        updatedAt: "desc",
+      },
     });
     return domains;
   } catch (error) {

@@ -281,7 +281,10 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                           onChangeStatu={handleChangeStatu}
                         />
                       ) : (
-                        <Badge className="rounded-md" variant={"yellow"}>
+                        <Badge
+                          className="text-nowrap rounded-md"
+                          variant={"yellow"}
+                        >
                           {t("Pending")}
                         </Badge>
                       )}
@@ -349,7 +352,7 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                     <TableCell className="col-span-1 flex justify-center">
                       {record.active !== 2 ? (
                         <Button
-                          className="text-sm hover:bg-slate-100 dark:hover:text-primary-foreground"
+                          className="text-nowrap text-sm hover:bg-slate-100 dark:hover:text-primary-foreground"
                           size="sm"
                           variant={"outline"}
                           onClick={() => {

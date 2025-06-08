@@ -1,6 +1,12 @@
 "use client";
 
-import { Dispatch, SetStateAction, useState, useTransition } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useMemo,
+  useState,
+  useTransition,
+} from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";
 import { useTranslations } from "next-intl";
@@ -94,6 +100,19 @@ export function RecordForm({
       dedupingInterval: 10000,
     },
   );
+
+  const validDefaultDomain = useMemo(() => {
+    if (!recordDomains?.length) return undefined;
+
+    if (
+      initData?.zone_name &&
+      recordDomains.some((d) => d.domain_name === initData.zone_name)
+    ) {
+      return initData.zone_name;
+    }
+
+    return recordDomains[0].domain_name;
+  }, [recordDomains, initData?.zone_name]);
 
   const onSubmit = handleSubmit((data) => {
     if (isAdmin && type === "edit" && initData?.active === 2) {
@@ -284,7 +303,7 @@ export function RecordForm({
                   setCurrentZoneName(value);
                 }}
                 name="zone_name"
-                defaultValue={String(initData?.zone_name || "wr.do")}
+                defaultValue={validDefaultDomain}
                 disabled={type === "edit"}
               >
                 <SelectTrigger className="w-full shadow-inner">
