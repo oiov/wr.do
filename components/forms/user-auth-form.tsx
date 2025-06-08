@@ -178,7 +178,11 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
         </button>
       )}
 
-      {loginMethod["resend"] && rendeSeparator()}
+      {(loginMethod["google"] ||
+        loginMethod["github"] ||
+        loginMethod["linuxdo"]) &&
+        loginMethod["resend"] &&
+        rendeSeparator()}
 
       {loginMethod["resend"] && (
         <form onSubmit={handleSubmit(onSubmit)}>

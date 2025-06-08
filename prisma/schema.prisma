@@ -273,3 +273,16 @@ model Domain {
 
   @@map("domains")
 }
+
+// model SystemConfig {
+//   id          String   @id @default(uuid())
+//   key         String   @unique
+//   value       String // JSON String
+//   type        String // BOOLEAN, STRING, NUMBER, OBJECT
+//   description String?
+//   version     String   @default("0.5.0")
+//   createdAt   DateTime @default(now())
+//   updatedAt   DateTime @default(now())
+
+//   @@map("system_configs")
+// }

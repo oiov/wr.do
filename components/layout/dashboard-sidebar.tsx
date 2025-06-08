@@ -166,18 +166,28 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
               </nav>
 
               {isSidebarExpanded && (
-                <p className="mx-3 mt-auto flex items-center gap-1 pb-3 pt-6 font-mono text-xs text-muted-foreground/90">
-                  &copy; 2024
+                <div
+                  className="mx-3 mt-auto flex items-center gap-1 pb-3 pt-6 text-xs text-muted-foreground/90"
+                  style={{ fontFamily: "Bahamas Bold" }}
+                >
+                  Copyright {new Date().getFullYear()} &copy;
                   <Link
-                    href={siteConfig.links.github}
+                    href={siteConfig.url}
                     target="_blank"
                     rel="noreferrer"
                     className="font-medium underline-offset-2 hover:underline"
                   >
-                    {pkg.name}
+                    {siteConfig.name}
                   </Link>
-                  v{pkg.version}
-                </p>
+                  <Link
+                    href={`${siteConfig.links.github}/releases/latest`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-thin underline-offset-2 hover:underline"
+                  >
+                    v{pkg.version}
+                  </Link>
+                </div>
               )}
             </div>
           </aside>
@@ -271,18 +281,28 @@ export function MobileSheetSidebar({ links }: DashboardSidebarProps) {
                     ),
                 )}
 
-                <p className="mx-3 mt-auto flex items-center gap-1 pb-3 pt-6 font-mono text-xs text-muted-foreground/90">
-                  &copy; 2024
+                <div
+                  className="mx-3 mt-auto flex items-center gap-1 pb-3 pt-6 font-mono text-xs text-muted-foreground/90"
+                  style={{ fontFamily: "Bahamas Bold" }}
+                >
+                  Copyright {new Date().getFullYear()} &copy;
                   <Link
-                    href={siteConfig.links.github}
+                    href={siteConfig.url}
                     target="_blank"
                     rel="noreferrer"
                     className="font-medium underline-offset-2 hover:underline"
                   >
-                    {pkg.name}
+                    {siteConfig.name}
                   </Link>
-                  v{pkg.version}
-                </p>
+                  <Link
+                    href={`${siteConfig.links.github}/releases/latest`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-thin underline-offset-2 hover:underline"
+                  >
+                    v{pkg.version}
+                  </Link>
+                </div>
 
                 {/* <div className="mt-auto">
                   <UpgradeCard />
