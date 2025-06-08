@@ -20,7 +20,7 @@ import {
   getRegionName,
 } from "@/lib/contries";
 import { DATE_DIMENSION_ENUMS } from "@/lib/enums";
-import { isLink, removeUrlSuffix, timeAgo } from "@/lib/utils";
+import { isLink, removeUrlSuffix } from "@/lib/utils";
 import { useElementSize } from "@/hooks/use-element-size";
 import { Button } from "@/components/ui/button";
 import {
@@ -45,6 +45,7 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Icons } from "@/components/shared/icons";
+import { TimeAgoIntl } from "@/components/shared/time-ago";
 
 const chartConfig = {
   pv: {
@@ -187,7 +188,6 @@ export function DailyPVUVChart({
   const dataTotal = calculateUVAndPV(data);
 
   const latestEntry = data[data.length - 1];
-  const latestDate = timeAgo(latestEntry.updatedAt);
   const latestFrom = [
     latestEntry.city ? decodeURIComponent(latestEntry.city) : "",
     latestEntry.country ? `(${getCountryName(latestEntry.country)})` : "",
@@ -241,18 +241,17 @@ export function DailyPVUVChart({
   const regionStats = generateStatsList(data, "region");
   const isBotStats = generateStatsList(data, "isBot");
 
+  const lastVisitorInfo = t.rich("last-visitor-info", {
+    location: latestFrom,
+    timeAgo: () => <TimeAgoIntl date={latestEntry.updatedAt} />,
+  });
+
   return (
     <Card>
       <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-2 sm:py-3">
           <CardTitle>{t("Link Analytics")}</CardTitle>
-          <CardDescription>
-            {t("Last visitor from {latestFrom} about {latestDate}", {
-              latestFrom,
-              latestDate,
-            })}
-            .
-          </CardDescription>
+          <CardDescription>{lastVisitorInfo}</CardDescription>
         </div>
         <div className="flex items-center">
           <Select
