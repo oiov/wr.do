@@ -1,16 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import Link from "next/link";
 import { ForwardEmail } from "@prisma/client";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import useSWR from "swr";
 
-import { cn, fetcher, htmlToText, timeAgo } from "@/lib/utils";
+import { cn, fetcher, htmlToText } from "@/lib/utils";
 
 import BlurImage from "../shared/blur-image";
 import { Icons } from "../shared/icons";
 import { PaginationWrapper } from "../shared/pagination";
+import { TimeAgoIntl } from "../shared/time-ago";
 // import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
@@ -48,12 +50,15 @@ export default function EmailList({
   className,
   isAdminModel,
 }: EmailListProps) {
+  const t = useTranslations("Email");
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isAutoRefresh, setIsAutoRefresh] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [selectedEmails, setSelectedEmails] = useState<string[]>([]);
   const [showMutiCheckBox, setShowMutiCheckBox] = useState(false);
+
+  const [isDeleting, startDeleteTransition] = useTransition();
 
   const { data, error, isLoading, mutate } = useSWR<{
     total: number;
@@ -81,15 +86,11 @@ export default function EmailList({
   }, [emailAddress, data, selectedEmailId]);
 
   const handleMarkAsRead = async (emailId: string) => {
-    try {
-      await fetch("/api/email/read", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ emailId }),
-      }).then(() => mutate());
-    } catch (error) {
-      console.log("Error marking email as read");
-    }
+    await fetch("/api/email/read", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ emailId }),
+    }).then(() => mutate());
   };
 
   const handleMarkSelectedAsRead = async () => {
@@ -125,6 +126,10 @@ export default function EmailList({
     );
   };
 
+  const handleSelectAllEmails = () => {
+    setSelectedEmails(data?.list.map((email) => email.id) || []);
+  };
+
   const handleSetAutoRefresh = (value: boolean) => {
     setIsAutoRefresh(value);
   };
@@ -147,15 +152,26 @@ export default function EmailList({
     onSelectEmail(emailId);
   };
 
+  const handleDeletEmails = async (ids: string[]) => {
+    startDeleteTransition(async () => {
+      await fetch("/api/email/inbox", {
+        method: "DELETE",
+        body: JSON.stringify({ ids }),
+      }).then((v) => {
+        v.status === 200 && mutate();
+      });
+    });
+  };
+
   if (!emailAddress) {
-    return EmptyInboxSection();
+    return <EmptyInboxSection />;
   }
 
   return (
     <div className={cn("grids flex flex-1 flex-col", className)}>
       <div className="flex items-center gap-2 bg-neutral-200/40 p-2 text-base font-semibold text-neutral-600 backdrop-blur dark:bg-neutral-800 dark:text-neutral-50">
         <Icons.inbox size={20} />
-        <span>INBOX</span>
+        <span>{t("INBOX")}</span>
         <div className="ml-auto flex items-center justify-center gap-2">
           <SendEmailModal emailAddress={emailAddress} onSuccess={mutate} />
           <TooltipProvider>
@@ -168,7 +184,7 @@ export default function EmailList({
                   aria-label="Auto refresh"
                 />
               </TooltipTrigger>
-              <TooltipContent side="bottom">Auto refresh</TooltipContent>
+              <TooltipContent side="bottom">{t("Auto refresh")}</TooltipContent>
             </Tooltip>
           </TooltipProvider>
           <Button
@@ -196,7 +212,7 @@ export default function EmailList({
           >
             <Icons.listChecks className="size-4" />
           </Button>
-          {selectedEmails.length > 0 && (
+          {showMutiCheckBox && (
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <Button
@@ -204,7 +220,7 @@ export default function EmailList({
                   size="sm"
                   className="flex w-full items-center gap-1"
                 >
-                  <span className="text-sm">more</span>
+                  <span className="text-sm">{t("more")}</span>
                   <Icons.chevronDown className="mt-0.5 size-4" />
                 </Button>
               </DropdownMenuTrigger>
@@ -213,16 +229,41 @@ export default function EmailList({
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={handleMarkSelectedAsRead}
+                    onClick={handleSelectAllEmails}
                     className="w-full"
                   >
-                    <span className="text-xs">Mask as read</span>
+                    <span className="text-xs">{t("Select all")}</span>
                   </Button>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild disabled>
-                  <Button variant="ghost" size="sm" className="w-full">
-                    <span className="text-xs">Delete selected</span>
+                <DropdownMenuItem
+                  asChild
+                  disabled={selectedEmails.length === 0}
+                >
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleMarkSelectedAsRead}
+                    className="w-full"
+                  >
+                    <span className="text-xs">{t("Mask as read")}</span>
+                  </Button>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  asChild
+                  disabled={isDeleting || selectedEmails.length === 0}
+                >
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="w-full"
+                    onClick={() => handleDeletEmails(selectedEmails)}
+                  >
+                    {isDeleting && (
+                      <Icons.spinner className="mr-1 size-4 animate-spin" />
+                    )}
+                    <span className="text-xs">{t("Delete selected")}</span>
                   </Button>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -261,9 +302,9 @@ export default function EmailList({
                           onClick={(e) => e.stopPropagation()}
                         >
                           <Checkbox
-                            defaultChecked={selectedEmails.includes(email.id)}
+                            checked={selectedEmails.includes(email.id)}
                             onCheckedChange={() => handleSelectEmail(email.id)}
-                            className="mr-2 size-4 border-neutral-300 bg-neutral-100 data-[state=checked]:border-neutral-900 data-[state=checked]:bg-neutral-600 data-[state=checked]:text-neutral-100 dark:border-neutral-700 dark:bg-neutral-800 dark:data-[state=checked]:border-neutral-300 dark:data-[state=checked]:bg-neutral-300"
+                            className="mr-3 size-4 border-neutral-300 bg-neutral-100 data-[state=checked]:border-neutral-900 data-[state=checked]:bg-neutral-600 data-[state=checked]:text-neutral-100 dark:border-neutral-700 dark:bg-neutral-800 dark:data-[state=checked]:border-neutral-300 dark:data-[state=checked]:bg-neutral-300"
                           />
                         </div>
                       )}
@@ -276,7 +317,9 @@ export default function EmailList({
                             {email.fromName || email.subject || "Untitled"}
                           </span>
                           <span className="ml-auto text-xs text-neutral-600 dark:text-neutral-400">
-                            {timeAgo((email.date as any) || email.createdAt)}
+                            <TimeAgoIntl
+                              date={(email.date as any) || email.createdAt}
+                            />
                           </span>
                           {email.readAt && (
                             <Icons.checkCheck className="ml-2 size-3 text-green-600" />
@@ -298,7 +341,7 @@ export default function EmailList({
                 <div className="flex h-[calc(100vh-135px)] flex-col items-center justify-center gap-8">
                   <Loader />
                   <p className="font-mono font-semibold text-neutral-500">
-                    Waiting for emails...
+                    {t("Waiting for emails")}...
                   </p>
                 </div>
               )}
@@ -321,6 +364,7 @@ export default function EmailList({
 }
 
 export function EmptyInboxSection() {
+  const t = useTranslations("Email");
   return (
     <div className="grids flex flex-1 animate-fade-in flex-col items-center justify-center p-4 text-center text-neutral-600 dark:text-neutral-400">
       <BlurImage
@@ -330,10 +374,12 @@ export function EmptyInboxSection() {
         width={200}
         alt="Inbox"
       />
-      <h2 className="my-2 text-lg font-semibold">No Email Address Selected</h2>
+      <h2 className="my-2 text-lg font-semibold">
+        {t("No Email Address Selected")}
+      </h2>
       <p className="max-w-md text-sm">
-        Please select an email address from the list to view your inbox. Once
-        selected, your emails will appear here automatically.
+        {t("Please select an email address from the list to view your inbox")}.
+        {t("Once selected, your emails will appear here automatically")}.
       </p>
       <ul className="mt-3 list-disc text-left">
         <li>
@@ -343,7 +389,7 @@ export function EmptyInboxSection() {
             target="_blank"
             rel="noreferrer"
           >
-            How to use email to send or receive emails?
+            {t("How to use email to send or receive emails?")}
           </Link>
         </li>
         <li>
@@ -353,7 +399,7 @@ export function EmptyInboxSection() {
             target="_blank"
             rel="noreferrer"
           >
-            Will my email or inbox expire?
+            {t("Will my email or inbox expire?")}
           </Link>
         </li>
         <li>
@@ -363,7 +409,7 @@ export function EmptyInboxSection() {
             target="_blank"
             rel="noreferrer"
           >
-            What is the limit? It's free?
+            {t("What is the limit? It's free?")}
           </Link>
         </li>
         <li>
@@ -373,7 +419,7 @@ export function EmptyInboxSection() {
             target="_blank"
             rel="noreferrer"
           >
-            How to create emails with api?
+            {t("How to create emails with api?")}
           </Link>
         </li>
       </ul>

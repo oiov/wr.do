@@ -22,10 +22,10 @@ export default async function DashboardPage() {
   return (
     <>
       <DashboardHeader
-        heading="Url&nbsp;&nbsp;to&nbsp;&nbsp;Screenshot"
-        text="Quickly extract website screenshots."
+        heading="Url to Screenshot"
+        text="Quickly extract website screenshots"
         link="/docs/open-api/screenshot"
-        linkText="Screenshot API."
+        linkText="Screenshot API"
       />
       <ApiReference
         badge="GET /api/v1/scraping/screenshot"

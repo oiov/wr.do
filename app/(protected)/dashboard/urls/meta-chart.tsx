@@ -7,6 +7,7 @@ import { UrlMeta, User } from "@prisma/client";
 import { VisSingleContainer, VisTooltip, VisTopoJSONMap } from "@unovis/react";
 import { TopoJSONMap } from "@unovis/ts";
 import { WorldMapTopoJSON } from "@unovis/ts/maps";
+import { useTranslations } from "next-intl";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import { TeamPlanQuota } from "@/config/team";
@@ -19,7 +20,7 @@ import {
   getRegionName,
 } from "@/lib/contries";
 import { DATE_DIMENSION_ENUMS } from "@/lib/enums";
-import { isLink, removeUrlSuffix, timeAgo } from "@/lib/utils";
+import { isLink, removeUrlSuffix } from "@/lib/utils";
 import { useElementSize } from "@/hooks/use-element-size";
 import { Button } from "@/components/ui/button";
 import {
@@ -44,6 +45,7 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Icons } from "@/components/shared/icons";
+import { TimeAgoIntl } from "@/components/shared/time-ago";
 
 const chartConfig = {
   pv: {
@@ -175,6 +177,8 @@ export function DailyPVUVChart({
   const [activeChart, setActiveChart] =
     React.useState<keyof typeof chartConfig>("pv");
 
+  const t = useTranslations("Components");
+
   const processedData = processUrlMeta(data).map((entry) => ({
     date: entry.date,
     pv: entry.clicks,
@@ -184,7 +188,6 @@ export function DailyPVUVChart({
   const dataTotal = calculateUVAndPV(data);
 
   const latestEntry = data[data.length - 1];
-  const latestDate = timeAgo(latestEntry.updatedAt);
   const latestFrom = [
     latestEntry.city ? decodeURIComponent(latestEntry.city) : "",
     latestEntry.country ? `(${getCountryName(latestEntry.country)})` : "",
@@ -238,14 +241,17 @@ export function DailyPVUVChart({
   const regionStats = generateStatsList(data, "region");
   const isBotStats = generateStatsList(data, "isBot");
 
+  const lastVisitorInfo = t.rich("last-visitor-info", {
+    location: latestFrom,
+    timeAgo: () => <TimeAgoIntl date={latestEntry.updatedAt} />,
+  });
+
   return (
     <Card>
       <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-2 sm:py-3">
-          <CardTitle>Link Analytics</CardTitle>
-          <CardDescription>
-            Last visitor from {latestFrom} about {latestDate}.
-          </CardDescription>
+          <CardTitle>{t("Link Analytics")}</CardTitle>
+          <CardDescription>{lastVisitorInfo}</CardDescription>
         </div>
         <div className="flex items-center">
           <Select
@@ -291,8 +297,8 @@ export function DailyPVUVChart({
                 className="relative z-30 flex flex-1 flex-col items-center justify-center gap-1 border-t px-6 py-2 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-3"
                 onClick={() => setActiveChart(chart)}
               >
-                <span className="text-sm font-semibold text-muted-foreground">
-                  {chartConfig[chart].label}
+                <span className="text-nowrap text-sm font-semibold text-muted-foreground">
+                  {t(chartConfig[chart].label)}
                 </span>
                 <span className="text-lg font-bold leading-none">
                   {dataTotal[key as keyof typeof dataTotal].toLocaleString()}
@@ -403,8 +409,8 @@ export function DailyPVUVChart({
           {/* Referrers、isBotStats */}
           <Tabs defaultValue="referrer">
             <TabsList>
-              <TabsTrigger value="referrer">Referrers</TabsTrigger>
-              <TabsTrigger value="isBot">Traffic Type</TabsTrigger>
+              <TabsTrigger value="referrer">{t("Referrers")}</TabsTrigger>
+              <TabsTrigger value="isBot">{t("Traffic Type")}</TabsTrigger>
             </TabsList>
             <TabsContent className="h-[calc(100%-40px)]" value="referrer">
               {refererStats.length > 0 && (
@@ -420,8 +426,8 @@ export function DailyPVUVChart({
           {/* 国家、城市 */}
           <Tabs defaultValue="country">
             <TabsList>
-              <TabsTrigger value="country">Country</TabsTrigger>
-              <TabsTrigger value="city">City</TabsTrigger>
+              <TabsTrigger value="country">{t("Country")}</TabsTrigger>
+              <TabsTrigger value="city">{t("City")}</TabsTrigger>
             </TabsList>
             <TabsContent className="h-[calc(100%-40px)]" value="country">
               {countryStats.length > 0 && (
@@ -437,8 +443,8 @@ export function DailyPVUVChart({
           {/* browserStats、engineStats */}
           <Tabs defaultValue="browser">
             <TabsList>
-              <TabsTrigger value="browser">Browser</TabsTrigger>
-              <TabsTrigger value="engine">Browser Engine</TabsTrigger>
+              <TabsTrigger value="browser">{t("Browser")}</TabsTrigger>
+              <TabsTrigger value="engine">{t("Engine")}</TabsTrigger>
             </TabsList>
             <TabsContent className="h-[calc(100%-40px)]" value="browser">
               {browserStats.length > 0 && (
@@ -455,8 +461,8 @@ export function DailyPVUVChart({
           {/* Languages、regionStats */}
           <Tabs className="h-full" defaultValue="language">
             <TabsList>
-              <TabsTrigger value="language">Language</TabsTrigger>
-              <TabsTrigger value="region">Region</TabsTrigger>
+              <TabsTrigger value="language">{t("Language")}</TabsTrigger>
+              <TabsTrigger value="region">{t("Region")}</TabsTrigger>
             </TabsList>
             <TabsContent className="h-[calc(100%-40px)]" value="language">
               {languageStats.length > 0 && (
@@ -472,8 +478,8 @@ export function DailyPVUVChart({
           {/* deviceStats、osStats、cpuStats */}
           <Tabs defaultValue="device">
             <TabsList>
-              <TabsTrigger value="device">Device</TabsTrigger>
-              <TabsTrigger value="os">OS</TabsTrigger>
+              <TabsTrigger value="device">{t("Device")}</TabsTrigger>
+              <TabsTrigger value="os">{t("OS")}</TabsTrigger>
               <TabsTrigger value="cpu">CPU</TabsTrigger>
             </TabsList>
             <TabsContent className="h-[calc(100%-40px)]" value="device">
@@ -497,12 +503,12 @@ export function DailyPVUVChart({
 export function StatsList({ data, title }: { data: Stat[]; title: string }) {
   const [showAll, setShowAll] = useState(false);
   const displayedData = showAll ? data.slice(0, 50) : data.slice(0, 8);
-
+  const t = useTranslations("Components");
   return (
     <div className="h-full rounded-lg border">
       <div className="flex items-center justify-between border-b px-5 py-2 text-xs font-medium text-muted-foreground">
-        <span>名称</span>
-        <span className="">点击量</span>
+        <span>{t("Name")}</span>
+        <span className="">{t("Visitors")}</span>
       </div>
       <div
         className={`scrollbar-hidden overflow-hidden overflow-y-auto px-4 pb-4 pt-2 transition-all duration-500 ease-in-out`}

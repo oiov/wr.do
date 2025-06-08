@@ -5,6 +5,7 @@ import { updateUserRole, type FormData } from "@/actions/update-user-role";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User, UserRole } from "@prisma/client";
 import { useSession } from "next-auth/react";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -42,6 +43,8 @@ export function UserRoleForm({ user }: UserNameFormProps) {
   const roles = Object.values(UserRole);
   const [role, setRole] = useState(user.role);
 
+  const t = useTranslations("Setting");
+
   const form = useForm<FormData>({
     resolver: zodResolver(userRoleSchema),
     values: {
@@ -69,8 +72,8 @@ export function UserRoleForm({ user }: UserNameFormProps) {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <SectionColumns
-          title="Your Role"
-          description="Select the role what you want for test the app."
+          title={t("Your Role")}
+          description={t("Select the role what you want for this app")}
         >
           <div className="flex w-full items-center gap-2">
             <FormField
@@ -78,7 +81,7 @@ export function UserRoleForm({ user }: UserNameFormProps) {
               name="role"
               render={({ field }) => (
                 <FormItem className="w-full space-y-0">
-                  <FormLabel className="sr-only">Role</FormLabel>
+                  <FormLabel className="sr-only">{t("Role")}</FormLabel>
                   <Select
                     // TODO:(FIX) Option value not update. Use useState for the moment
                     onValueChange={(value: UserRole) => {
@@ -97,7 +100,7 @@ export function UserRoleForm({ user }: UserNameFormProps) {
                     <SelectContent>
                       {roles.map((role) => (
                         <SelectItem key={role} value={role.toString()}>
-                          {role}
+                          {t(role)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -115,17 +118,9 @@ export function UserRoleForm({ user }: UserNameFormProps) {
               {isPending ? (
                 <Icons.spinner className="size-4 animate-spin" />
               ) : (
-                <p>
-                  Save
-                  <span className="hidden sm:inline-flex">&nbsp;Changes</span>
-                </p>
+                <p>{t("Save")}</p>
               )}
             </Button>
-          </div>
-          <div className="flex flex-col justify-between p-1">
-            <p className="text-[13px] text-muted-foreground">
-              Remove this field on real production
-            </p>
           </div>
         </SectionColumns>
       </form>

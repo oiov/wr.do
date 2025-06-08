@@ -1,6 +1,7 @@
 "use client";
 
 import { ScrapeMeta } from "@prisma/client";
+import { useTranslations } from "next-intl";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import { useElementSize } from "@/hooks/use-element-size";
@@ -58,6 +59,8 @@ export function LineChartMultiple({
   const { ref: wrapperRef, width: wrapperWidth } = useElementSize();
   const processedData = processChartData(chartData, type1, type2);
 
+  const t = useTranslations("Components");
+
   const chartConfig = {
     source1: {
       label: type1,
@@ -69,13 +72,14 @@ export function LineChartMultiple({
     },
   } satisfies ChartConfig;
 
+  const message = type2
+    ? t("total-requests-two-types", { type1, type2 })
+    : t("total-requests-one-type", { type1 });
+
   return (
     <Card>
       <CardHeader>
-        <CardDescription>
-          Total requests of {type1}
-          {type2 && ` and ${type2}`}.
-        </CardDescription>
+        <CardDescription>{message}</CardDescription>
       </CardHeader>
       <CardContent ref={wrapperRef}>
         <ChartContainer config={chartConfig}>

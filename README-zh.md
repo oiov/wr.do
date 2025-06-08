@@ -109,9 +109,17 @@ pnpm db:push
 
 Follow https://localhost:3000/setup
 
-## Environment Variables
+## 环境变量
 
 查看 [开发者文档](https://wr.do/docs/developer).
+
+## 技术栈
+
+- Next.js + React + TypeScript
+- Tailwind CSS 用于样式设计
+- Prisma ORM 作为数据库工具
+- Cloudflare 作为主要的云基础设施
+- Vercel 作为推荐的部署平台
 
 ## 社区群组
 

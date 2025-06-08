@@ -22,7 +22,7 @@ export default async function SettingsPage() {
     <>
       <DashboardHeader
         heading="Account Settings"
-        text="Manage account and website settings."
+        text="Manage account and website settings"
       />
       <div className="divide-y divide-muted pb-10">
         <UserNameForm user={{ id: user.id, name: user.name || "" }} />

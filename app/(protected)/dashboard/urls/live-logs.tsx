@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { RefreshCwIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import useSWR, { useSWRConfig } from "swr";
 
@@ -53,6 +54,8 @@ export default function LiveLog({ admin = false }: { admin?: boolean }) {
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [limitDiplay, setLimitDisplay] = useState(100);
   const newLogsRef = useRef<Set<string>>(new Set()); // Track new log keys
+
+  const t = useTranslations("Components");
 
   const {
     data: newLogs,
@@ -151,10 +154,10 @@ export default function LiveLog({ admin = false }: { admin?: boolean }) {
         <div className="flex items-center justify-between gap-2">
           <div>
             <CardTitle className="text-base text-gray-800 dark:text-gray-100">
-              Live Log
+              {t("Live Logs")}
             </CardTitle>
             <CardDescription>
-              Real-time logs of short link visits.
+              {t("Real-time logs of short link visits")}.
             </CardDescription>
           </div>
 
@@ -166,7 +169,8 @@ export default function LiveLog({ admin = false }: { admin?: boolean }) {
               isLive ? "border-dashed border-blue-600 text-blue-500" : ""
             }`}
           >
-            <Icons.CirclePlay className="h-4 w-4" /> {isLive ? "Stop" : "Live"}
+            <Icons.CirclePlay className="h-4 w-4" />{" "}
+            {isLive ? t("Stop") : t("Live")}
           </Button>
           <Button
             className="bg-primary-foreground"
@@ -207,22 +211,22 @@ export default function LiveLog({ admin = false }: { admin?: boolean }) {
               <TableHeader>
                 <TableRow className="grid grid-cols-5 bg-gray-100/50 text-sm dark:bg-primary-foreground sm:grid-cols-9">
                   <TableHead className="col-span-2 flex h-8 items-center">
-                    Time
+                    {t("Time")}
                   </TableHead>
                   <TableHead className="col-span-1 flex h-8 items-center">
-                    Slug
+                    {t("Slug")}
                   </TableHead>
                   <TableHead className="col-span-3 hidden h-8 items-center sm:flex">
-                    Target
+                    {t("Target")}
                   </TableHead>
                   <TableHead className="col-span-1 hidden h-8 items-center sm:flex">
                     IP
                   </TableHead>
                   <TableHead className="col-span-1 flex h-8 items-center">
-                    Location
+                    {t("Location")}
                   </TableHead>
                   <TableHead className="col-span-1 flex h-8 items-center">
-                    Clicks
+                    {t("Clicks")}
                   </TableHead>
                 </TableRow>
               </TableHeader>
@@ -283,7 +287,7 @@ export default function LiveLog({ admin = false }: { admin?: boolean }) {
         )}
         {isLive && (
           <div className="flex w-full items-center justify-end gap-2 border-t border-dashed pt-4 text-sm text-gray-500">
-            <p>{logs.length}</p> of
+            <p>{logs.length}</p> {t("of")}
             <Select
               onValueChange={(value: string) => {
                 setLimitDisplay(Number(value));
@@ -302,7 +306,7 @@ export default function LiveLog({ admin = false }: { admin?: boolean }) {
                 ))}
               </SelectContent>
             </Select>
-            <p>total logs</p>
+            <p>{t("total logs")}</p>
           </div>
         )}
       </CardContent>

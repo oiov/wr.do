@@ -4,10 +4,7 @@ import { DashboardHeader } from "@/components/dashboard/header";
 export default function DashboardLoading() {
   return (
     <>
-      <DashboardHeader
-        heading="Manage&nbsp;Short&nbsp;URLs"
-        text="List and manage short urls."
-      />
+      <DashboardHeader heading="Setup Guide" text="" />
       <Skeleton className="h-32 w-full rounded-lg" />
       <Skeleton className="h-[400px] w-full rounded-lg" />
     </>

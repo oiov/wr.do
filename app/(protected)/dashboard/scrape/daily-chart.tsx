@@ -3,9 +3,10 @@
 import * as React from "react";
 import Link from "next/link";
 import { ScrapeMeta } from "@prisma/client";
+import { useTranslations } from "next-intl";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
-import { isLink, nFormatter, removeUrlSuffix, timeAgo } from "@/lib/utils";
+import { isLink, nFormatter, removeUrlSuffix } from "@/lib/utils";
 import {
   Card,
   CardContent,
@@ -18,7 +19,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import CountUp from "@/components/dashboard/count-up";
+import { TimeAgoIntl } from "@/components/shared/time-ago";
 
 const chartConfig = {
   request: {
@@ -102,18 +103,21 @@ export function DailyPVUVChart({ data }: { data: ScrapeMeta[] }) {
     (a, b) => new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime(),
   );
   const latestEntry = sort_data[sort_data.length - 1];
-  const latestDate = timeAgo(latestEntry.updatedAt);
   const latestFrom = latestEntry.type;
+
+  const t = useTranslations("Components");
+
+  const lastRequestInfo = t.rich("last-request-info", {
+    location: latestFrom,
+    timeAgo: () => <TimeAgoIntl date={latestEntry.updatedAt} />,
+  });
 
   return (
     <Card>
       <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
         <div className="flex flex-1 flex-col justify-center gap-1 px-5 py-4">
-          <CardTitle>Total Requests of APIs in Last 30 Days</CardTitle>
-          <CardDescription>
-            Last request from <strong>{latestFrom}</strong> api about{" "}
-            {latestDate}.
-          </CardDescription>
+          <CardTitle>{t("Total Requests of APIs in Last 30 Days")}</CardTitle>
+          <CardDescription>{lastRequestInfo}</CardDescription>
         </div>
         <div className="flex">
           {["request", "ip"].map((key) => {
@@ -125,8 +129,8 @@ export function DailyPVUVChart({ data }: { data: ScrapeMeta[] }) {
                 className="relative z-30 flex flex-1 flex-col items-center justify-center gap-1 border-t px-6 py-2 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-3"
                 onClick={() => setActiveChart(chart)}
               >
-                <span className="text-xs text-muted-foreground">
-                  {chartConfig[chart].label}
+                <span className="text-nowrap text-xs text-muted-foreground">
+                  {t(chartConfig[chart].label)}
                 </span>
                 <span className="text-lg font-bold leading-none">
                   {nFormatter(dataTotal[key])}

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSelectedLayoutSegment } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { useSession } from "next-auth/react";
+import { useTranslations } from "next-intl";
 
 import { docsConfig } from "@/config/docs";
 import { marketingConfig } from "@/config/marketing";
@@ -16,6 +17,7 @@ import { Icons } from "@/components/shared/icons";
 import { ModeToggle } from "./mode-toggle";
 
 export function NavMobile() {
+  const t = useTranslations("System");
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
   const selectedLayout = useSelectedLayoutSegment();
@@ -69,7 +71,7 @@ export function NavMobile() {
                   onClick={() => setOpen(false)}
                   className="flex w-full font-medium capitalize"
                 >
-                  {title}
+                  {t(title)}
                 </Link>
               </li>
             ))}
@@ -83,7 +85,7 @@ export function NavMobile() {
                     onClick={() => setOpen(false)}
                     className="flex w-full font-medium capitalize"
                   >
-                    Admin
+                    {t("Admin")}
                   </Link>
                 </li>
               ) : null}
@@ -94,7 +96,7 @@ export function NavMobile() {
                   onClick={() => setOpen(false)}
                   className="flex w-full font-medium capitalize"
                 >
-                  Dashboard
+                  {t("Dashboard")}
                 </Link>
               </li>
             </>
@@ -106,7 +108,7 @@ export function NavMobile() {
                   onClick={() => setOpen(false)}
                   className="flex w-full font-medium capitalize"
                 >
-                  Sign in
+                  {t("Sign in")}
                 </Link>
               </li>
             </>

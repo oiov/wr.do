@@ -4,11 +4,12 @@ import { useState } from "react";
 import Link from "next/link";
 import { User } from "@prisma/client";
 import { PenLine, RefreshCwIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import useSWR, { useSWRConfig } from "swr";
 
 import { DomainFormData } from "@/lib/dto/domains";
-import { fetcher, timeAgo } from "@/lib/utils";
+import { fetcher } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "@/components/ui/button";
 import {
@@ -34,6 +35,7 @@ import { FormType } from "@/components/forms/record-form";
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
 import { Icons } from "@/components/shared/icons";
 import { PaginationWrapper } from "@/components/shared/pagination";
+import { TimeAgoIntl } from "@/components/shared/time-ago";
 
 export interface DomainListProps {
   user: Pick<User, "id" | "name" | "email" | "apiKey" | "role" | "team">;
@@ -70,6 +72,7 @@ function TableColumnSekleton() {
 
 export default function DomainList({ user, action }: DomainListProps) {
   const { isMobile } = useMediaQuery();
+  const t = useTranslations("List");
   const [isShowForm, setShowForm] = useState(false);
   const [formType, setFormType] = useState<FormType>("add");
   const [currentEditDomain, setCurrentEditDomain] =
@@ -130,7 +133,7 @@ export default function DomainList({ user, action }: DomainListProps) {
       <Card className="xl:col-span-2">
         <CardHeader className="flex flex-row items-center gap-2">
           <div className="flex items-center gap-1 text-lg font-bold">
-            <span className="text-nowrap">Total Domains:</span>
+            <span className="text-nowrap">{t("Total Domains")}:</span>
             {isLoading ? (
               <Skeleton className="h-6 w-16" />
             ) : (
@@ -161,7 +164,7 @@ export default function DomainList({ user, action }: DomainListProps) {
               }}
             >
               <Icons.add className="size-4" />
-              <span className="hidden sm:inline">Add Domain</span>
+              <span className="hidden sm:inline">{t("Add Domain")}</span>
             </Button>
           </div>
         </CardHeader>
@@ -170,7 +173,7 @@ export default function DomainList({ user, action }: DomainListProps) {
             <div className="relative w-full">
               <Input
                 className="h-8 text-xs md:text-xs"
-                placeholder="Search by domain name..."
+                placeholder={t("Search by domain name") + "..."}
                 value={searchParams.target}
                 onChange={(e) => {
                   setSearchParams({
@@ -197,25 +200,25 @@ export default function DomainList({ user, action }: DomainListProps) {
             <TableHeader className="bg-gray-100/50 dark:bg-primary-foreground">
               <TableRow className="grid grid-cols-4 items-center text-xs sm:grid-cols-7">
                 <TableHead className="col-span-1 flex items-center font-bold">
-                  Domain
+                  {t("Domain Name")}
                 </TableHead>
                 <TableHead className="col-span-1 hidden items-center text-nowrap font-bold sm:flex">
-                  Shorten
+                  {t("Shorten Service")}
                 </TableHead>
                 <TableHead className="col-span-1 hidden items-center text-nowrap font-bold sm:flex">
-                  Email
+                  {t("Email Service")}
                 </TableHead>
                 <TableHead className="col-span-1 hidden items-center text-nowrap font-bold sm:flex">
-                  Subdomain
+                  {t("Subdomain Service")}
                 </TableHead>
                 <TableHead className="col-span-1 flex items-center text-nowrap font-bold">
-                  Active
+                  {t("Active")}
                 </TableHead>
                 <TableHead className="col-span-1 flex items-center font-bold">
-                  Updated
+                  {t("Updated")}
                 </TableHead>
                 <TableHead className="col-span-1 flex items-center font-bold">
-                  Actions
+                  {t("Actions")}
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -289,7 +292,7 @@ export default function DomainList({ user, action }: DomainListProps) {
                         />
                       </TableCell>
                       <TableCell className="col-span-1 flex items-center truncate">
-                        {timeAgo(domain.updatedAt as Date)}
+                        <TimeAgoIntl date={domain.updatedAt as Date} />
                       </TableCell>
                       <TableCell className="col-span-1 flex items-center gap-1">
                         <Button
@@ -303,7 +306,7 @@ export default function DomainList({ user, action }: DomainListProps) {
                             setShowForm(!isShowForm);
                           }}
                         >
-                          <p className="hidden sm:block">Edit</p>
+                          <p className="hidden sm:block">{t("Edit")}</p>
                           <PenLine className="mx-0.5 size-4 sm:ml-1 sm:size-3" />
                         </Button>
                       </TableCell>
@@ -316,7 +319,9 @@ export default function DomainList({ user, action }: DomainListProps) {
               ) : (
                 <EmptyPlaceholder className="shadow-none">
                   <EmptyPlaceholder.Icon name="globeLock" />
-                  <EmptyPlaceholder.Title>No Domains</EmptyPlaceholder.Title>
+                  <EmptyPlaceholder.Title>
+                    {t("No Domains")}
+                  </EmptyPlaceholder.Title>
                   <EmptyPlaceholder.Description>
                     You don&apos;t have any domains yet. Start creating one.
                   </EmptyPlaceholder.Description>

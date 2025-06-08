@@ -4,6 +4,7 @@ import * as React from "react";
 import { useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import useSWR from "swr";
@@ -39,6 +40,8 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
   const [isLinuxDoLoading, setIsLinuxDoLoading] =
     React.useState<boolean>(false);
   const searchParams = useSearchParams();
+
+  const t = useTranslations("Auth");
 
   async function onSubmit(data: FormData) {
     setIsLoading(true);
@@ -76,7 +79,7 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
         </div>
         <div className="relative flex justify-center text-xs uppercase">
           <span className="bg-background px-2 text-muted-foreground">
-            Or continue with
+            {t("Or continue with")}
           </span>
         </div>
       </div>
@@ -213,8 +216,8 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
                 <Icons.spinner className="mr-2 size-4 animate-spin" />
               )}
               {type === "register"
-                ? "Sign Up with Email"
-                : "Sign In with Email"}
+                ? t("Sign Up with Email")
+                : t("Sign In with Email")}
             </button>
           </div>
         </form>

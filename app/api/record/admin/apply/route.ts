@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     const { record: reviewRecord, userId, id } = await req.json();
     const record = {
       ...reviewRecord,
-      comment: "Created by wr.do (review mode)",
+      // comment: "Created by wr.do (review mode)",
       id,
     };
 

@@ -2,9 +2,10 @@
 
 import { useCallback, useState } from "react";
 import { UserSendEmail } from "@prisma/client";
+import { useTranslations } from "next-intl";
 import useSWR from "swr";
 
-import { cn, fetcher, formatDate, htmlToText } from "@/lib/utils";
+import { fetcher, formatDate, htmlToText } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -25,6 +26,8 @@ export default function SendsEmailList({
   const [pageSize, setPageSize] = useState(10);
 
   const [searchQuery, setSearchQuery] = useState("");
+
+  const t = useTranslations("Email");
 
   const { data, isLoading, error } = useSWR<{
     list: UserSendEmail[];
@@ -49,12 +52,12 @@ export default function SendsEmailList({
   return (
     <Card className="mx-auto w-full max-w-4xl border-none">
       <CardHeader>
-        <CardTitle>Sent Emails</CardTitle>
+        <CardTitle>{t("Sent Emails")}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="mb-2 flex items-center justify-between gap-4">
           <Input
-            placeholder="Search by send to email..."
+            placeholder={t("Search by send to email")}
             value={searchQuery}
             onChange={handleSearch}
             className="w-full bg-neutral-50"
@@ -68,11 +71,11 @@ export default function SendsEmailList({
           </div>
         ) : error ? (
           <div className="text-center text-red-500">
-            Failed to load emails. Please try again.
+            {t("Failed to load emails")}. {t("Please try again")}.
           </div>
         ) : !data || data.list.length === 0 ? (
           <div className="text-center text-muted-foreground">
-            No emails found.
+            {t("No emails found")}.
           </div>
         ) : (
           <div className="scrollbar-hidden max-h-[50vh] overflow-y-auto">

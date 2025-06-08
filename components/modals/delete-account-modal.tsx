@@ -6,6 +6,7 @@ import {
   useState,
 } from "react";
 import { signOut, useSession } from "next-auth/react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -22,6 +23,8 @@ function DeleteAccountModal({
 }) {
   const { data: session } = useSession();
   const [deleting, setDeleting] = useState(false);
+
+  const t = useTranslations("Setting");
 
   async function deleteAccount() {
     setDeleting(true);
@@ -63,13 +66,13 @@ function DeleteAccountModal({
             email: session?.user?.email || null,
           }}
         />
-        <h3 className="text-lg font-semibold">Delete Account</h3>
+        <h3 className="text-lg font-semibold">{t("Delete Account")}</h3>
         <p className="text-center text-sm text-muted-foreground">
-          <b>Warning:</b> This will permanently delete your account and your
-          active subscription!
+          <b>{t("Warning")}:</b>{" "}
+          {t(
+            "This will permanently delete your account and your active subscription!",
+          )}
         </p>
-
-        {/* TODO: Use getUserSubscriptionPlan(session.user.id) to display the user's subscription if he have a paid plan */}
       </div>
 
       <form
@@ -89,7 +92,7 @@ function DeleteAccountModal({
             <span className="font-semibold text-black dark:text-white">
               confirm delete account
             </span>{" "}
-            below
+            below:
           </label>
           <Input
             type="text"

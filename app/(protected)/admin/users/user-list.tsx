@@ -5,7 +5,7 @@ import { User } from "@prisma/client";
 import { PenLine, RefreshCwIcon } from "lucide-react";
 import useSWR, { useSWRConfig } from "swr";
 
-import { fetcher, timeAgo } from "@/lib/utils";
+import { fetcher } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -37,6 +37,7 @@ import { UserForm } from "@/components/forms/user-form";
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
 import { Icons } from "@/components/shared/icons";
 import { PaginationWrapper } from "@/components/shared/pagination";
+import { TimeAgoIntl } from "@/components/shared/time-ago";
 
 import CountUpFn from "../../../../components/dashboard/count-up";
 
@@ -105,9 +106,7 @@ export default function UsersList({ user }: UrlListProps) {
         <CardHeader className="flex flex-row items-center">
           <CardDescription className="text-balance text-lg font-bold">
             <span>Total Users:</span>{" "}
-            <span className="font-bold">
-              {data && <CountUpFn count={data.total} />}
-            </span>
+            <span className="font-bold">{data && data.total}</span>
           </CardDescription>
           <div className="ml-auto flex items-center justify-end gap-3">
             <Button
@@ -252,7 +251,7 @@ export default function UsersList({ user }: UrlListProps) {
                       <Switch defaultChecked={user.active === 1} />
                     </TableCell>
                     <TableCell className="col-span-1 hidden justify-center sm:flex">
-                      {timeAgo(user.createdAt || "")}
+                      <TimeAgoIntl date={user.updatedAt as Date} />
                     </TableCell>
                     <TableCell className="col-span-1 flex justify-center">
                       <Button

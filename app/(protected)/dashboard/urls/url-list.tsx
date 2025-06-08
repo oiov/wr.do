@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { User } from "@prisma/client";
 import { PenLine, RefreshCwIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import useSWR, { useSWRConfig } from "swr";
 
@@ -16,7 +17,6 @@ import {
   fetcher,
   nFormatter,
   removeUrlSuffix,
-  timeAgo,
 } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "@/components/ui/button";
@@ -57,6 +57,7 @@ import { Icons } from "@/components/shared/icons";
 import { LinkInfoPreviewer } from "@/components/shared/link-previewer";
 import { PaginationWrapper } from "@/components/shared/pagination";
 import QRCodeEditor from "@/components/shared/qr";
+import { TimeAgoIntl } from "@/components/shared/time-ago";
 
 import Globe from "./globe";
 import LiveLog from "./live-logs";
@@ -101,6 +102,7 @@ function TableColumnSekleton() {
 export default function UserUrlsList({ user, action }: UrlListProps) {
   const pathname = usePathname();
   const { isMobile } = useMediaQuery();
+  const t = useTranslations("List");
   const [currentView, setCurrentView] = useState<string>("List");
   const [isShowForm, setShowForm] = useState(false);
   const [formType, setFormType] = useState<FormType>("add");
@@ -185,7 +187,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
   const rendeEmpty = () => (
     <EmptyPlaceholder className="col-span-full shadow-none">
       <EmptyPlaceholder.Icon name="link" />
-      <EmptyPlaceholder.Title>No urls</EmptyPlaceholder.Title>
+      <EmptyPlaceholder.Title>{t("No urls")}</EmptyPlaceholder.Title>
       <EmptyPlaceholder.Description>
         You don&apos;t have any url yet. Start creating url.
       </EmptyPlaceholder.Description>
@@ -197,7 +199,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
       <div className="relative w-full">
         <Input
           className="h-8 text-xs md:text-xs"
-          placeholder="Search by slug..."
+          placeholder={t("Search by slug") + "..."}
           value={searchParams.slug}
           onChange={(e) => {
             setSearchParams({
@@ -220,7 +222,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
       <div className="relative w-full">
         <Input
           className="h-8 text-xs md:text-xs"
-          placeholder="Search by target..."
+          placeholder={t("Search by target") + "..."}
           value={searchParams.target}
           onChange={(e) => {
             setSearchParams({
@@ -244,7 +246,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
         <div className="relative w-full">
           <Input
             className="h-8 text-xs md:text-xs"
-            placeholder="Search by user name..."
+            placeholder={t("Search by username") + "..."}
             value={searchParams.userName}
             onChange={(e) => {
               setSearchParams({
@@ -299,28 +301,28 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
       <TableHeader className="bg-gray-100/50 dark:bg-primary-foreground">
         <TableRow className="grid grid-cols-3 items-center sm:grid-cols-11">
           <TableHead className="col-span-1 flex items-center font-bold sm:col-span-2">
-            Slug
+            {t("Slug")}
           </TableHead>
           <TableHead className="col-span-1 flex items-center font-bold sm:col-span-2">
-            Target
+            {t("Target")}
           </TableHead>
           <TableHead className="col-span-1 hidden items-center font-bold sm:flex">
-            User
+            {t("User")}
           </TableHead>
           <TableHead className="col-span-1 hidden items-center font-bold sm:flex">
-            Enabled
+            {t("Enabled")}
           </TableHead>
           <TableHead className="col-span-1 hidden items-center font-bold sm:flex">
-            Expiration
+            {t("Expiration")}
           </TableHead>
           <TableHead className="col-span-1 hidden items-center font-bold sm:flex">
-            Clicks
+            {t("Clicks")}
           </TableHead>
           <TableHead className="col-span-1 hidden items-center font-bold sm:flex">
-            Updated
+            {t("Updated")}
           </TableHead>
           <TableHead className="col-span-1 flex items-center font-bold sm:col-span-2">
-            Actions
+            {t("Actions")}
           </TableHead>
         </TableRow>
       </TableHeader>
@@ -394,7 +396,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                   </div>
                 </TableCell>
                 <TableCell className="col-span-1 hidden truncate sm:flex">
-                  {timeAgo(short.updatedAt as Date)}
+                  <TimeAgoIntl date={short.updatedAt as Date} />
                 </TableCell>
                 <TableCell className="col-span-1 flex items-center gap-1 sm:col-span-2">
                   <Button
@@ -408,7 +410,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                       setShowForm(!isShowForm);
                     }}
                   >
-                    <p className="hidden sm:block">Edit</p>
+                    <p className="hidden sm:block">{t("Edit")}</p>
                     <PenLine className="mx-0.5 size-4 sm:ml-1 sm:size-3" />
                   </Button>
                   <Button
@@ -561,7 +563,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                           }}
                         >
                           <Icons.lineChart className="size-4" />
-                          Analytics
+                          {t("Analytics")}
                         </Button>
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
@@ -578,7 +580,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                           }}
                         >
                           <PenLine className="size-4" />
-                          Edit URL
+                          {t("Edit URL")}
                         </Button>
                       </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -612,7 +614,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                       ></Separator>
                     </>
                   )}
-                  {timeAgo(short.updatedAt as Date)}
+                  <TimeAgoIntl date={short.updatedAt as Date} />
                   <Switch
                     className="scale-[0.6]"
                     defaultChecked={short.active === 1}
@@ -662,7 +664,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
         {/* Tabs */}
         <div className="mb-4 flex items-center justify-between gap-2">
           {pathname === "/dashboard" && (
-            <h2 className="mr-3 text-lg font-semibold">Short URLs</h2>
+            <h2 className="mr-3 text-lg font-semibold">{t("Short URLs")}</h2>
           )}
           <TabsList>
             <TabsTrigger onClick={() => setCurrentView("List")} value="List">
@@ -715,7 +717,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
               }}
             >
               <Icons.add className="size-4" />
-              <span className="hidden sm:inline">Add URL</span>
+              <span className="hidden sm:inline">{t("Add URL")}</span>
             </Button>
           </div>
         </div>

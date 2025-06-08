@@ -5,6 +5,7 @@ import type { CSSProperties, ReactNode } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { X } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { TeamPlanQuota } from "@/config/team";
 import { cn, nFormatter } from "@/lib/utils";
@@ -66,6 +67,7 @@ const getBenefits = (plan) => [
 ];
 
 export const PricingSection = () => {
+  const t = useTranslations("Landing");
   return (
     <section
       id="pricing"
@@ -75,49 +77,48 @@ export const PricingSection = () => {
       <div className="relative z-10 mx-auto max-w-5xl px-4 py-20 md:px-8">
         <div className="mb-12 space-y-3">
           <h2 className="text-center text-xl font-semibold leading-tight sm:text-3xl sm:leading-tight md:text-4xl md:leading-tight">
-            Pricing
+            {t("pricingTitle")}
           </h2>
           <p className="text-center text-base text-zinc-600 dark:text-zinc-400 md:text-lg">
-            Use it for free for yourself, upgrade when your team needs advanced
-            control.
+            {t("pricingDescription")}
           </p>
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <PriceCard
-            tier="Free"
-            price="$0/mo"
-            bestFor="For hobbyists and individuals looking to manage their links"
+            tier={t("freeTier")}
+            price={t("freePrice")}
+            bestFor={t("freeBestFor")}
             CTA={
               <Link href={"/dashboard"}>
                 <Button className="w-full" variant={"default"}>
-                  Get started free
+                  {t("getStartedFree")}
                 </Button>
               </Link>
             }
             benefits={getBenefits(TeamPlanQuota.free)}
           />
           {/* <PriceCard
-            tier="Premium"
-            price="$5/mo"
-            bestFor="Best for 5-50 users"
+            tier={t("premiumTier")}
+            price={t("premiumPrice")}
+            bestFor={t("premiumBestFor")}
             CTA={
               <Link href={"/pricing"}>
                 <Button className="w-full bg-zinc-800 text-zinc-50 hover:bg-zinc-700 hover:text-zinc-50 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200 dark:hover:text-zinc-900">
-                  Get free trial
+                  {t("getFreeTrial")}
                 </Button>
               </Link>
             }
             benefits={getBenefits(TeamPlanQuota.premium)}
           /> */}
           <PriceCard
-            tier="Enterprise"
-            price="Contact us"
-            bestFor="For large organizations with custom needs"
+            tier={t("enterpriseTier")}
+            price={t("enterprisePrice")}
+            bestFor={t("enterpriseBestFor")}
             CTA={
               <Link href={"mailto:support@wr.do"}>
                 <Button className="w-full" variant="outline">
-                  Contact us
+                  {t("contactUs")}
                 </Button>
               </Link>
             }

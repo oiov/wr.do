@@ -18,6 +18,8 @@ import { Input } from "../ui/input";
 
 import "react-quill/dist/quill.snow.css";
 
+import { useTranslations } from "next-intl";
+
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 interface SendEmailModalProps {
@@ -36,6 +38,8 @@ export function SendEmailModal({
   const [isOpen, setIsOpen] = useState(false);
   const [sendForm, setSendForm] = useState({ to: "", subject: "", html: "" });
   const [isPending, startTransition] = useTransition();
+
+  const t = useTranslations("Email");
 
   const handleSendEmail = async () => {
     if (!emailAddress) {
@@ -94,7 +98,7 @@ export function SendEmailModal({
         <DrawerContent className="fixed bottom-0 right-0 top-0 w-full rounded-none sm:max-w-xl">
           <DrawerHeader>
             <DrawerTitle className="flex items-center gap-1">
-              Send Email{" "}
+              {t("Send Email")}{" "}
               <Icons.help className="size-5 text-neutral-600 hover:text-neutral-400" />
             </DrawerTitle>
             <DrawerClose asChild>
@@ -106,13 +110,13 @@ export function SendEmailModal({
           <div className="scrollbar-hidden h-[calc(100vh)] space-y-4 overflow-y-auto p-6">
             <div>
               <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                From
+                {t("From")}
               </label>
               <Input value={emailAddress || ""} disabled className="mt-1" />
             </div>
             <div>
               <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                To
+                {t("To")}
               </label>
               <Input
                 value={sendForm.to}
@@ -125,7 +129,7 @@ export function SendEmailModal({
             </div>
             <div>
               <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                Subject
+                {t("Subject")}
               </label>
               <Input
                 value={sendForm.subject}
@@ -138,7 +142,7 @@ export function SendEmailModal({
             </div>
             <div>
               <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                Content
+                {t("Content")}
               </label>
               <ReactQuill
                 value={sendForm.html}
@@ -152,7 +156,7 @@ export function SendEmailModal({
           <DrawerFooter>
             <DrawerClose asChild>
               <Button variant="outline" disabled={isPending}>
-                Cancel
+                {t("Cancel")}
               </Button>
             </DrawerClose>
             <Button
@@ -160,7 +164,7 @@ export function SendEmailModal({
               disabled={isPending}
               variant="default"
             >
-              {isPending ? "Sending..." : "Send"}
+              {isPending ? t("Sending") : t("Send")}
             </Button>
           </DrawerFooter>
         </DrawerContent>

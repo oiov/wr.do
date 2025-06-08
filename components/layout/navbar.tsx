@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSelectedLayoutSegment } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { useTranslations } from "next-intl";
 
 import { docsConfig } from "@/config/docs";
 import { marketingConfig } from "@/config/marketing";
@@ -10,13 +10,11 @@ import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { useScroll } from "@/hooks/use-scroll";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
 import { DocsSearch } from "@/components/docs/search";
 import { Icons } from "@/components/shared/icons";
 import MaxWidthWrapper from "@/components/shared/max-width-wrapper";
 
 import { ModeToggle } from "./mode-toggle";
-import { UserAccountNav } from "./user-account-nav";
 
 interface NavBarProps {
   scroll?: boolean;
@@ -25,7 +23,6 @@ interface NavBarProps {
 
 export function NavBar({ scroll = false }: NavBarProps) {
   const scrolled = useScroll(50);
-  const { data: session, status } = useSession();
 
   const selectedLayout = useSelectedLayoutSegment();
   const documentation = selectedLayout === "docs";
@@ -36,6 +33,8 @@ export function NavBar({ scroll = false }: NavBarProps) {
 
   const links =
     (selectedLayout && configMap[selectedLayout]) || marketingConfig.mainNav;
+
+  const t = useTranslations("System");
 
   return (
     <header
@@ -75,7 +74,7 @@ export function NavBar({ scroll = false }: NavBarProps) {
                     item.disabled && "cursor-not-allowed opacity-80",
                   )}
                 >
-                  {item.title}
+                  {t(item.title)}
                 </Link>
               ))}
             </nav>
@@ -108,7 +107,7 @@ export function NavBar({ scroll = false }: NavBarProps) {
             className="hidden text-sm font-medium text-foreground/60 transition-colors hover:text-foreground/80 md:block"
           >
             <Button className="" variant="outline" size="sm" rounded="lg">
-              Dashboard
+              {t("Dashboard")}
             </Button>
           </Link>
           <div className="hidden md:flex">

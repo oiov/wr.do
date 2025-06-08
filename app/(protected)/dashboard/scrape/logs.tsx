@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { RefreshCwIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import useSWR, { useSWRConfig } from "swr";
 
 import { nFormatter } from "@/lib/utils";
@@ -48,6 +49,8 @@ const getLogsUrl = (
 const LogsTable = ({ userId, target }) => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
+
+  const t = useTranslations("Components");
 
   const [filters, setFilters] = useState({
     type: "",
@@ -141,13 +144,17 @@ const LogsTable = ({ userId, target }) => {
             <TableHeader className="bg-muted">
               <TableRow className="grid grid-cols-5 items-center sm:grid-cols-6">
                 <TableHead className="hidden items-center justify-start px-2 sm:flex">
-                  Date
+                  {t("Date")}
                 </TableHead>
-                <TableHead className="flex items-center px-2">Type</TableHead>
+                <TableHead className="flex items-center px-2">
+                  {t("Type")}
+                </TableHead>
                 <TableHead className="col-span-3 flex items-center px-2">
-                  Link
+                  {t("Link")}
                 </TableHead>
-                <TableHead className="flex items-center px-2">User</TableHead>
+                <TableHead className="flex items-center px-2">
+                  {t("User")}
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

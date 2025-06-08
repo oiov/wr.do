@@ -19,10 +19,10 @@ export default async function DashboardPage() {
   return (
     <>
       <DashboardHeader
-        heading="Manage&nbsp;&nbsp;DNS&nbsp;&nbsp;Records"
-        text="List and manage records."
+        heading="Manage DNS Records"
+        text="List and manage records"
         link="/docs/dns-records"
-        linkText="DNS records."
+        linkText="DNS records"
       />
       <UserRecordsList
         user={{

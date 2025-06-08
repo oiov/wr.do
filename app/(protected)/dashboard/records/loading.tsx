@@ -5,8 +5,8 @@ export default function DashboardRecordsLoading() {
   return (
     <>
       <DashboardHeader
-        heading="Manage&nbsp;&nbsp;DNS&nbsp;&nbsp;Records"
-        text="List and manage records."
+        heading="Manage DNS Records"
+        text="List and manage records"
       />
       <Skeleton className="h-32 w-full rounded-lg" />
       <Skeleton className="h-[400px] w-full rounded-lg" />

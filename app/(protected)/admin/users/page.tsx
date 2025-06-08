@@ -20,7 +20,7 @@ export default async function UsersPage() {
     <>
       <DashboardHeader
         heading="User Management"
-        text="List and manage all users."
+        text="List and manage all users"
       />
       <UsersList user={{ id: user.id, name: user.name || "" }} />
     </>

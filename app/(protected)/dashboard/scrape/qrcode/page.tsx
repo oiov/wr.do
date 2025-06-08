@@ -6,7 +6,7 @@ import { DashboardHeader } from "@/components/dashboard/header";
 import ApiReference from "@/components/shared/api-reference";
 import QRCodeEditor from "@/components/shared/qr";
 
-import { CodeLight, QrCodeScraping } from "../scrapes";
+import { CodeLight } from "../scrapes";
 
 export const metadata = constructMetadata({
   title: "Url to QR Code API - WR.DO",
@@ -21,10 +21,10 @@ export default async function DashboardPage() {
   return (
     <>
       <DashboardHeader
-        heading="Url&nbsp;&nbsp;to&nbsp;&nbsp;QR&nbsp;&nbsp;Code"
+        heading="Url to QR Code"
         text="Generate QR Code from URL"
         link="/docs/open-api/qrcode"
-        linkText="QR Code API."
+        linkText="QR Code API"
       />
       <ApiReference
         badge="GET /api/v1/scraping/qrcode"

@@ -1,6 +1,5 @@
 import {
   getScrapeStatsByTypeAndUserId,
-  getScrapeStatsByUserId,
   getScrapeStatsByUserId1,
 } from "@/lib/dto/scrape";
 
@@ -21,10 +20,7 @@ export default async function DashboardScrapeCharts({ id }: { id: string }) {
   return (
     <>
       {all_user_logs && all_user_logs.length > 0 && (
-        <>
-          <h2 className="my-1 text-xl font-semibold">Request Statistics</h2>
-          <DailyPVUVChart data={all_user_logs} />
-        </>
+        <DailyPVUVChart data={all_user_logs} />
       )}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {(screenshot_stats.length > 0 || meta_stats.length > 0) && (
@@ -43,7 +39,6 @@ export default async function DashboardScrapeCharts({ id }: { id: string }) {
         )}
       </div>
 
-      <h2 className="my-1 text-xl font-semibold">Request Logs</h2>
       <LogsTable userId={id} target={"/api/v1/scraping/logs"} />
     </>
   );

@@ -5,6 +5,7 @@ import { updateUserName, type FormData } from "@/actions/update-user-name";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";
 import { useSession } from "next-auth/react";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -24,6 +25,8 @@ export function UserNameForm({ user }: UserNameFormProps) {
   const [updated, setUpdated] = useState(false);
   const [isPending, startTransition] = useTransition();
   const updateUserNameWithId = updateUserName.bind(null, user.id);
+
+  const t = useTranslations("Setting");
 
   const checkUpdate = (value) => {
     setUpdated(user.name !== value);
@@ -59,12 +62,12 @@ export function UserNameForm({ user }: UserNameFormProps) {
   return (
     <form onSubmit={onSubmit}>
       <SectionColumns
-        title="Your Name"
-        description="Please enter a display name you are comfortable with."
+        title={t("Your Name")}
+        description={t("Please enter a display name you are comfortable with")}
       >
         <div className="flex w-full items-center gap-2">
           <Label className="sr-only" htmlFor="name">
-            Name
+            {t("Name")}
           </Label>
           <Input
             id="name"
@@ -82,10 +85,7 @@ export function UserNameForm({ user }: UserNameFormProps) {
             {isPending ? (
               <Icons.spinner className="size-4 animate-spin" />
             ) : (
-              <p>
-                Save
-                <span className="hidden sm:inline-flex">&nbsp;Changes</span>
-              </p>
+              <p>{t("Save")}</p>
             )}
           </Button>
         </div>
@@ -95,7 +95,9 @@ export function UserNameForm({ user }: UserNameFormProps) {
               {errors.name.message}
             </p>
           )}
-          <p className="text-[13px] text-muted-foreground">Max 32 characters</p>
+          <p className="text-[13px] text-muted-foreground">
+            {t("Max 32 characters")}
+          </p>
         </div>
       </SectionColumns>
     </form>

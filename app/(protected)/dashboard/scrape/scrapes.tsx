@@ -4,6 +4,7 @@ import { useState } from "react";
 import JsonView from "@uiw/react-json-view";
 import { githubLightTheme } from "@uiw/react-json-view/githubLight";
 import { vscodeTheme } from "@uiw/react-json-view/vscode";
+import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { toast } from "sonner";
 
@@ -50,6 +51,7 @@ export function ScreenshotScraping({
 }: {
   user: { id: string; apiKey: string };
 }) {
+  const t = useTranslations("Scrape");
   const { theme } = useTheme();
   const [protocol, setProtocol] = useState("https://");
 
@@ -87,10 +89,12 @@ export function ScreenshotScraping({
       <CodeLight content={`https://wr.do/api/v1/scraping/screenshot`} />
       <Card className="bg-gray-50 dark:bg-gray-900">
         <CardHeader>
-          <CardTitle>Playground</CardTitle>
+          <CardTitle>{t("Playground")}</CardTitle>
           <CardDescription>
-            Automate your website screenshots and turn them into stunning
-            visuals for your applications.
+            {t(
+              "Automate your website screenshots and turn them into stunning visuals for your applications",
+            )}
+            .
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -126,9 +130,9 @@ export function ScreenshotScraping({
               variant="blue"
               onClick={handleScrapingScreenshot}
               disabled={isShoting}
-              className="rounded-l-none"
+              className="w-28 rounded-l-none"
             >
-              {isShoting ? "Scraping..." : "Send"}
+              {isShoting ? t("Scraping") : t("Start")}
             </Button>
           </div>
 
@@ -164,6 +168,7 @@ export function MetaScraping({
 }: {
   user: { id: string; apiKey: string };
 }) {
+  const t = useTranslations("Scrape");
   const { theme } = useTheme();
   const [currentLink, setCurrentLink] = useState("wr.do");
   const [protocol, setProtocol] = useState("https://");
@@ -203,8 +208,10 @@ export function MetaScraping({
       <CodeLight content={`https://wr.do/api/v1/scraping/meta`} />
       <Card className="bg-gray-50 dark:bg-gray-900">
         <CardHeader>
-          <CardTitle>Playground</CardTitle>
-          <CardDescription>Scrape the meta data of a website.</CardDescription>
+          <CardTitle>{t("Playground")}</CardTitle>
+          <CardDescription>
+            {t("Scrape the meta data of a website")}.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex items-center">
@@ -239,9 +246,9 @@ export function MetaScraping({
               variant="blue"
               onClick={handleScrapingMeta}
               disabled={isScraping}
-              className="rounded-l-none"
+              className="w-28 rounded-l-none"
             >
-              {isScraping ? "Scraping..." : "Send"}
+              {isScraping ? t("Scraping") : t("Start")}
             </Button>
           </div>
 
@@ -264,6 +271,7 @@ export function MarkdownScraping({
 }: {
   user: { id: string; apiKey: string };
 }) {
+  const t = useTranslations("Scrape");
   const { theme } = useTheme();
   const [currentLink, setCurrentLink] = useState("wr.do");
   const [protocol, setProtocol] = useState("https://");
@@ -334,9 +342,9 @@ export function MarkdownScraping({
               variant="blue"
               onClick={handleScrapingMeta}
               disabled={isScraping}
-              className="rounded-l-none"
+              className="w-28 rounded-l-none"
             >
-              {isScraping ? "Scraping..." : "Send"}
+              {isScraping ? t("Scraping") : t("Start")}
             </Button>
           </div>
 
@@ -359,6 +367,7 @@ export function TextScraping({
 }: {
   user: { id: string; apiKey: string };
 }) {
+  const t = useTranslations("Scrape");
   const { theme } = useTheme();
   const [currentLink, setCurrentLink] = useState("wr.do");
   const [protocol, setProtocol] = useState("https://");
@@ -394,7 +403,7 @@ export function TextScraping({
       <CodeLight content={`https://wr.do/api/v1/scraping/text`} />
       <Card className="bg-gray-50 dark:bg-gray-900">
         <CardHeader>
-          <CardTitle>Text</CardTitle>
+          <CardTitle>{t("Text")}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center">
@@ -429,9 +438,9 @@ export function TextScraping({
               variant="blue"
               onClick={handleScrapingMeta}
               disabled={isScraping}
-              className="rounded-l-none"
+              className="w-28 rounded-l-none"
             >
-              {isScraping ? "Scraping..." : "Send"}
+              {isScraping ? t("Scraping") : t("Start")}
             </Button>
           </div>
 
@@ -454,6 +463,7 @@ export function QrCodeScraping({
 }: {
   user: { id: string; apiKey: string };
 }) {
+  const t = useTranslations("Scrape");
   const { theme } = useTheme();
   const [protocol, setProtocol] = useState("https://");
 
@@ -487,11 +497,7 @@ export function QrCodeScraping({
       <CodeLight content={`https://wr.do/api/v1/scraping/qrcode`} />
       <Card className="bg-gray-50 dark:bg-gray-900">
         <CardHeader>
-          <CardTitle>Playground</CardTitle>
-          <CardDescription>
-            Automate your website screenshots and turn them into stunning
-            visuals for your applications.
-          </CardDescription>
+          <CardTitle>{t("Playground")}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center">

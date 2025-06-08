@@ -5,8 +5,8 @@ export default function DashboardRecordsLoading() {
   return (
     <>
       <DashboardHeader
-        heading="Scraping&nbsp;&nbsp;API&nbsp;&nbsp;Overview"
-        text="Quickly extract valuable structured website data. It's free and unlimited to use!"
+        heading="Scraping API Overview"
+        text="Quickly extract valuable structured website data"
       />
       <div className="flex flex-col gap-5">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 lg:grid-cols-3">

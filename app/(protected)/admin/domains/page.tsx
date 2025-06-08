@@ -19,10 +19,10 @@ export default async function DashboardPage() {
   return (
     <>
       <DashboardHeader
-        heading="Manage&nbsp;&nbsp;Domains"
-        text="List and manage domains."
+        heading="Domains Management"
+        text="List and manage domains"
         link="/docs/developer/cloudflare"
-        linkText="domains."
+        linkText="domains"
       />
       <DomainList
         user={{
