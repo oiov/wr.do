@@ -165,7 +165,7 @@ export default function LiveLog({ admin = false }: { admin?: boolean }) {
             onClick={toggleLive}
             variant={"outline"}
             size="sm"
-            className={`ml-auto gap-2 bg-primary-foreground transition-colors hover:border-blue-600 hover:text-blue-600 ${
+            className={`ml-auto gap-2 text-nowrap bg-primary-foreground transition-colors hover:border-blue-600 hover:text-blue-600 ${
               isLive ? "border-dashed border-blue-600 text-blue-500" : ""
             }`}
           >

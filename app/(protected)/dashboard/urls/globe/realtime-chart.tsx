@@ -61,7 +61,9 @@ export const RealtimeChart = ({
           type="category"
           scale="point"
           padding={{ left: 14, right: 20 }}
-          tickFormatter={(value) => value.split(" ")[1]}
+          tickFormatter={(value) =>
+            value.split(" ")[1] ? value.split(" ")[1] : value
+          }
         />
         <YAxis
           domain={[0, "dataMax"]}
