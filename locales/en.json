@@ -235,7 +235,16 @@
     "Name": "Name",
     "Activated Api Key users": "Activated Api Key users",
     "total-requests-one-type": "Total requests of {type1}",
-    "total-requests-two-types": "Total requests of {type1} and {type2}"
+    "total-requests-two-types": "Total requests of {type1} and {type2}",
+    "Protected Link": "Protected Link",
+    "You are attempting to access a password-protected link": "You are attempting to access a password-protected link",
+    "Please contact the owner to get the password": "Please contact the owner to get the password",
+    "Learn more about this from our": "Learn more about this from our",
+    "docs": "docs",
+    "Incorrect password": "Incorrect password",
+    "Please try again": "Please try again",
+    "Unlock": "Unlock",
+    "Unlocking": "Unlocking..."
   },
   "Landing": {
     "settings": "Settings",

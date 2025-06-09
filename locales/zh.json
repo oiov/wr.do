@@ -235,7 +235,16 @@
     "Name": "名称",
     "Activated Api Key users": "已启用 API Key 的用户",
     "total-requests-one-type": "Open API 的 {type1} 的总请求数",
-    "total-requests-two-types": "Open API 的 {type1} 和 {type2} 的总请求数"
+    "total-requests-two-types": "Open API 的 {type1} 和 {type2} 的总请求数",
+    "Protected Link": "受保护的链接",
+    "You are attempting to access a password-protected link": "您正在尝试访问受密码保护的链接",
+    "Please contact the owner to get the password": "请联系链接所有者获取密码",
+    "Learn more about this from our": "了解更多请参考",
+    "docs": "文档",
+    "Incorrect password": "密码错误",
+    "Please try again": "请重试",
+    "Unlock": "解锁",
+    "Unlocking": "解锁中..."
   },
   "Landing": {
     "settings": "设置",

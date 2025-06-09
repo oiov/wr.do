@@ -86,20 +86,22 @@ export default function PasswordPrompt() {
       <div className="flex flex-1 items-center justify-center">
         <div className="mx-3 w-full max-w-md rounded-lg bg-black/70 px-6 py-6 shadow-md shadow-neutral-900 backdrop-blur-xl md:px-[50px]">
           <h1 className="mb-4 flex items-center justify-center gap-2 text-center text-2xl font-bold text-neutral-50">
-            Protected Link
+            {t("Protected Link")}
           </h1>
 
           <div className="mb-4 break-all text-left text-sm text-neutral-400">
             <p>
-              You are attempting to access a password-protected link.{" "}
-              <strong>Please contact the owner to get the password.</strong>{" "}
-              Learn more about this from our{" "}
+              {t("You are attempting to access a password-protected link")}.{" "}
+              <strong>
+                {t("Please contact the owner to get the password")}
+              </strong>
+              . {t("Learn more about this from our")}{" "}
               <Link
                 className="underline"
                 target="_blank"
                 href="/docs/short-urls#password"
               >
-                docs
+                {t("docs")}
               </Link>
               .
             </p>
@@ -124,7 +126,7 @@ export default function PasswordPrompt() {
 
             {isError && (
               <p className="mb-2 animate-fade-in text-left text-sm text-red-500">
-                Incorrect password. Please try again.
+                {t("Incorrect password")}! {t("Please try again")}.
               </p>
             )}
 
@@ -154,7 +156,7 @@ export default function PasswordPrompt() {
                 ) : (
                   <Icons.unLock className="size-4" />
                 )}
-                {isPending ? "Unlocking..." : "Unlock"}
+                {isPending ? t("Unlocking") : t("Unlock")}
               </Button>
             </div>
           </form>
