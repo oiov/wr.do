@@ -129,7 +129,7 @@ export function InteractiveBarChart() {
             <SelectContent>
               {DATE_DIMENSION_ENUMS.map((e, i) => (
                 <div key={e.value}>
-                  <SelectItem value={e.value}>{e.label}</SelectItem>
+                  <SelectItem value={e.value}>{t(e.label)}</SelectItem>
                   {i % 2 === 0 && i !== DATE_DIMENSION_ENUMS.length - 1 && (
                     <SelectSeparator />
                   )}

@@ -244,7 +244,17 @@
     "Incorrect password": "Incorrect password",
     "Please try again": "Please try again",
     "Unlock": "Unlock",
-    "Unlocking": "Unlocking..."
+    "Unlocking": "Unlocking...",
+    "Last 24 Hours": "Last 24 Hours",
+    "Last 7 Days": "Last 7 Days",
+    "Last 30 Days": "Last 30 Days",
+    "Last 2 Months": "Last 2 Months",
+    "Last 3 Months": "Last 3 Months",
+    "Last 6 Months": "Last 6 Months",
+    "Last 1 Year": "Last 1 Year",
+    "All the time": "All the time",
+    "No Visits": "No Visits",
+    "You don't have any visits yet in": "You don't have any visits yet in"
   },
   "Landing": {
     "settings": "Settings",

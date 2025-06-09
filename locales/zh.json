@@ -244,7 +244,17 @@
     "Incorrect password": "密码错误",
     "Please try again": "请重试",
     "Unlock": "解锁",
-    "Unlocking": "解锁中..."
+    "Unlocking": "解锁中...",
+    "Last 24 Hours": "最近 24 小时",
+    "Last 7 Days": "最近 7 天",
+    "Last 30 Days": "最近 30 天",
+    "Last 2 Months": "最近 2 个月",
+    "Last 3 Months": "最近 3 个月",
+    "Last 6 Months": "最近 6 个月",
+    "Last 1 Year": "最近 1 年",
+    "All the time": "所有时间",
+    "No Visits": "无访问记录",
+    "You don't have any visits yet in": "您还没有任何访问记录于"
   },
   "Landing": {
     "settings": "设置",

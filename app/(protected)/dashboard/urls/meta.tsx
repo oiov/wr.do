@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { UrlMeta, User } from "@prisma/client";
+import { useTranslations } from "next-intl";
 import useSWR from "swr";
 
 import { TeamPlanQuota } from "@/config/team";
@@ -28,6 +29,7 @@ export interface UrlMetaProps {
 }
 
 export default function UserUrlMetaInfo({ user, action, urlId }: UrlMetaProps) {
+  const t = useTranslations("Components");
   const [timeRange, setTimeRange] = useState<string>("24h");
   const { data, isLoading } = useSWR<UrlMeta[]>(
     `${action}?id=${urlId}&range=${timeRange}`,
@@ -45,12 +47,13 @@ export default function UserUrlMetaInfo({ user, action, urlId }: UrlMetaProps) {
   if (!data || data.length === 0) {
     return (
       <EmptyPlaceholder className="shadow-none">
-        <EmptyPlaceholder.Title>No Visits</EmptyPlaceholder.Title>
+        <EmptyPlaceholder.Title>{t("No Visits")}</EmptyPlaceholder.Title>
         <EmptyPlaceholder.Description>
-          You don&apos;t have any visits yet in{" "}
-          {DATE_DIMENSION_ENUMS.find(
-            (e) => e.value === timeRange,
-          )?.label.toLowerCase()}
+          {t("You don't have any visits yet in")}{" "}
+          {t(
+            DATE_DIMENSION_ENUMS.find((e) => e.value === timeRange)?.label ||
+              "",
+          )}
           .
           <Select
             onValueChange={(value: string) => {
@@ -72,7 +75,7 @@ export default function UserUrlMetaInfo({ user, action, urlId }: UrlMetaProps) {
                     value={e.value}
                   >
                     <span className="flex items-center gap-1">
-                      {e.label}
+                      {t(e.label)}
                       {e.key >
                         TeamPlanQuota[user.team!].SL_AnalyticsRetention && (
                         <Icons.crown className="size-3" />

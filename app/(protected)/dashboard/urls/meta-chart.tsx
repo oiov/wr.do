@@ -274,7 +274,7 @@ export function DailyPVUVChart({
                     value={e.value}
                   >
                     <span className="flex items-center gap-1">
-                      {e.label}
+                      {t(e.label)}
                       {e.key >
                         TeamPlanQuota[user.team!].SL_AnalyticsRetention && (
                         <Icons.crown className="size-3" />
