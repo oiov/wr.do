@@ -24,7 +24,7 @@ export type UserRecordFormData = {
   tags: string;
   created_on?: string;
   modified_on?: string;
-  active: number; // 0: inactive, 1: active, 2: pending
+  active: number; // 0: inactive, 1: active, 2: pending, 3: rejected
   user: Pick<User, "name" | "email">;
 };
 

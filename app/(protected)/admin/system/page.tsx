@@ -4,6 +4,7 @@ import { getCurrentUser } from "@/lib/session";
 import { constructMetadata } from "@/lib/utils";
 import { DashboardHeader } from "@/components/dashboard/header";
 
+import AppConfigs from "./app-configs";
 import DomainList from "./domain-list";
 import PlanList from "./plan-list";
 
@@ -20,6 +21,7 @@ export default async function DashboardPage() {
   return (
     <>
       <DashboardHeader heading="System Settings" text="" />
+      <AppConfigs />
       <DomainList
         user={{
           id: user.id,

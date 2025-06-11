@@ -110,7 +110,7 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
             signIn("google");
           }}
           disabled={
-            !siteConfig.openSignup ||
+            !loginMethod.registration ||
             isLoading ||
             isGoogleLoading ||
             isGithubLoading ||
@@ -134,7 +134,7 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
             signIn("github");
           }}
           disabled={
-            !siteConfig.openSignup ||
+            !loginMethod.registration ||
             isLoading ||
             isGithubLoading ||
             isGoogleLoading ||
@@ -158,7 +158,7 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
             signIn("linuxdo");
           }}
           disabled={
-            !siteConfig.openSignup ||
+            !loginMethod.registration ||
             isLoading ||
             isGithubLoading ||
             isGoogleLoading ||
@@ -210,7 +210,7 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
             <button
               className={cn(buttonVariants(), "mt-3")}
               disabled={
-                !siteConfig.openSignup ||
+                !loginMethod.registration ||
                 isLoading ||
                 isGoogleLoading ||
                 isGithubLoading

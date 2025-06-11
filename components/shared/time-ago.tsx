@@ -5,6 +5,10 @@ export function TimeAgoIntl({ date }: { date: Date }) {
   const locale = useLocale();
 
   return (
-    <TimeAgo datetime={date} locale={locale === "zh" ? "zh_CN" : locale} />
+    <TimeAgo
+      className="text-nowrap"
+      datetime={date}
+      locale={locale === "zh" ? "zh_CN" : locale}
+    />
   );
 }

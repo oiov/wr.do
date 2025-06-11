@@ -14,7 +14,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import useSWR from "swr";
 
-import { siteConfig } from "@/config/site";
 import { CreateDNSRecord, RecordType } from "@/lib/cloudflare";
 import { UserRecordFormData } from "@/lib/dto/cloudflare-dns-record";
 import { RECORD_TYPE_ENUMS, TTL_ENUMS } from "@/lib/enums";
@@ -101,6 +100,11 @@ export function RecordForm({
     },
   );
 
+  const { data: configs } = useSWR<Record<string, any>>(
+    "/api/configs",
+    fetcher,
+  );
+
   const validDefaultDomain = useMemo(() => {
     if (!recordDomains?.length) return undefined;
 
@@ -125,7 +129,7 @@ export function RecordForm({
   });
 
   const handleCreateRecord = async (data: CreateDNSRecord) => {
-    if (siteConfig.enableSubdomainApply && data.comment!.length < 20) {
+    if (configs?.enable_subdomain_apply && data.comment!.length < 20) {
       toast.warning("Apply reason must be at least 20 characters!");
     } else {
       startTransition(async () => {
@@ -228,7 +232,7 @@ export function RecordForm({
       <div className="rounded-t-lg bg-muted px-4 py-2 text-lg font-semibold">
         {type === "add" ? t("Create record") : t("Edit record")}
       </div>
-      {siteConfig.enableSubdomainApply && (
+      {configs?.enable_subdomain_apply && (
         <ul className="m-2 list-disc gap-1 rounded-md bg-yellow-600/10 p-2 px-5 pr-2 text-xs font-medium text-yellow-600 dark:bg-yellow-500/10 dark:text-yellow-500">
           <li>{t("The administrator has enabled application mode")}.</li>
           <li>
@@ -271,7 +275,7 @@ export function RecordForm({
           </div>
         )}
 
-        {siteConfig.enableSubdomainApply && (
+        {configs?.enable_subdomain_apply && (
           <FormSectionColumns
             title={t("What are you planning to use the subdomain for?")}
             required

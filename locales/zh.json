@@ -444,6 +444,13 @@
     "This action cannot be undone - please proceed with caution": "此操作不可逆，请谨慎操作",
     "Warning": "警告",
     "This will permanently delete your account and your active subscription!": "这将永久删除您的账户和订阅!",
-    "verification": "为了验证，请在下方输入 <confirm>确认删除账户</confirm>"
+    "verification": "为了验证，请在下方输入 <confirm>确认删除账户</confirm>",
+    "App Configs": "应用配置",
+    "User Registration": "用户注册",
+    "Allow users to sign up": "是否允许用户注册",
+    "Subdomain Apply Mode": "子域名申请模式",
+    "Enable subdomain apply mode, each submission requires administrator review": "启用子域名申请模式，每次提交需要管理员审核",
+    "Notification": "系统通知",
+    "Set system notification, this will be displayed in the header": "设置系统通知，将在网页顶部显示"
   }
 }

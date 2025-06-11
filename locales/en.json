@@ -444,6 +444,13 @@
     "This action cannot be undone - please proceed with caution": "This action cannot be undone - please proceed with caution",
     "Warning": "Warning",
     "This will permanently delete your account and your active subscription!": "This will permanently delete your account and your active subscription!",
-    "verification": "verification"
+    "verification": "verification",
+    "App Configs": "App Configs",
+    "User Registration": "User Registration",
+    "Allow users to sign up": "Allow users to sign up",
+    "Subdomain Apply Mode": "Subdomain Apply Mode",
+    "Enable subdomain apply mode, each submission requires administrator review": "Enable subdomain apply mode, each submission requires administrator review",
+    "Notification": "系统通知",
+    "Set system notification, this will be displayed in the header": "Set system notification, this will be displayed in the header"
   }
 }

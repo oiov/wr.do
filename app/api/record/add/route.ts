@@ -8,6 +8,7 @@ import {
 } from "@/lib/dto/cloudflare-dns-record";
 import { getDomainsByFeature } from "@/lib/dto/domains";
 import { getPlanQuota } from "@/lib/dto/plan";
+import { getConfigValue } from "@/lib/dto/system-config";
 import { checkUserStatus, getFirstAdminUser } from "@/lib/dto/user";
 import { applyRecordEmailHtml, resend } from "@/lib/email";
 import { reservedDomains } from "@/lib/enums";
@@ -84,8 +85,12 @@ export async function POST(req: Request) {
       });
     }
 
+    const enableSubdomainApply = await getConfigValue<boolean>(
+      "enable_subdomain_apply",
+    );
+
     // apply subdomain
-    if (siteConfig.enableSubdomainApply) {
+    if (enableSubdomainApply) {
       const res = await createUserRecord(user.id, {
         record_id: generateSecret(16),
         zone_id: matchedZone.cf_zone_id,

@@ -42,6 +42,22 @@ VALUES
     '系统全局通知消息'
 );
 
+-- 3. 是否子域名申请模式，默认false
+INSERT INTO "system_configs"
+  (
+  "key",
+  "value",
+  "type",
+  "description"
+  )
+VALUES
+  (
+    'enable_subdomain_apply',
+    'false',
+    'BOOLEAN',
+    '是否启用子域名申请模式'
+);
+
 -- 创建计划表
 CREATE TABLE "plans"
 (

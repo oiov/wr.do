@@ -350,7 +350,7 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                       />
                     </TableCell>
                     <TableCell className="col-span-1 flex justify-center">
-                      {record.active !== 2 ? (
+                      {[0, 1].includes(record.active) ? (
                         <Button
                           className="text-nowrap text-sm hover:bg-slate-100 dark:hover:text-primary-foreground"
                           size="sm"
@@ -369,7 +369,7 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                         user.role === "ADMIN" &&
                         isAdmin ? (
                         <Button
-                          className="text-sm hover:bg-blue-400 dark:hover:text-primary-foreground"
+                          className="text-nowrap text-sm hover:bg-blue-400 dark:hover:text-primary-foreground"
                           size="sm"
                           variant={"blue"}
                           onClick={() => {
@@ -383,6 +383,22 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                         </Button>
                       ) : (
                         "--"
+                      )}
+                      {record.active === 3 && (
+                        <Button
+                          className="text-nowrap text-sm hover:bg-blue-400 dark:hover:text-primary-foreground"
+                          size="sm"
+                          variant={"blue"}
+                          disabled
+                          onClick={() => {
+                            setCurrentEditRecord(record);
+                            setShowForm(false);
+                            setFormType("edit");
+                            setShowForm(!isShowForm);
+                          }}
+                        >
+                          <p>{t("Reject")}</p>
+                        </Button>
                       )}
                     </TableCell>
                   </TableRow>
