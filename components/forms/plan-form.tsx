@@ -148,8 +148,11 @@ export function PlanForm({
       <div className="rounded-t-lg bg-muted px-4 py-2 text-lg font-semibold">
         {type === "add" ? t("Create Plan") : t("Edit Plan")}
       </div>
-      <form className="p-4" onSubmit={onSubmit}>
-        <div className="items-center justify-start gap-4 md:flex">
+      <form className="space-y-3 p-4" onSubmit={onSubmit}>
+        <div className="relative grid-cols-1 gap-2 rounded-md border bg-neutral-50 px-3 pb-3 pt-8 dark:bg-neutral-900 md:grid md:grid-cols-2">
+          <h2 className="absolute left-2 top-2 text-xs font-semibold text-neutral-400">
+            {t("Base")}
+          </h2>
           <FormSectionColumns title={t("Plan Name")} required>
             <div className="flex w-full items-center gap-2">
               <Label className="sr-only" htmlFor="Plan-Name">
@@ -169,14 +172,32 @@ export function PlanForm({
                 </p>
               ) : (
                 <p className="pb-0.5 text-[13px] text-muted-foreground">
-                  {t("Required")}. Plan name must be unique
+                  {t("Required")}. {t("Plan name must be unique")}
                 </p>
               )}
             </div>
           </FormSectionColumns>
+          <FormSectionColumns title={t("Active")}>
+            <Label className="sr-only" htmlFor="active">
+              {t("Active")}:
+            </Label>
+            <Switch
+              id="active"
+              className="mb-3"
+              {...register("isActive")}
+              defaultChecked={initData?.isActive ?? true}
+              onCheckedChange={(value) => setValue("isActive", value)}
+            />
+            <p className="pb-1 text-[13px] text-muted-foreground">
+              {t("Only active plans can be used")}
+            </p>
+          </FormSectionColumns>
         </div>
 
-        <div className="items-center justify-start gap-4 md:flex">
+        <div className="relative grid-cols-1 gap-2 rounded-md border bg-neutral-50 px-3 pb-3 pt-8 dark:bg-neutral-900 md:grid md:grid-cols-2">
+          <h2 className="absolute left-2 top-2 text-xs font-semibold text-neutral-400">
+            {t("Shorten Service")}
+          </h2>
           {/* Short Limit - slNewLinks */}
           <FormSectionColumns title={t("Short Limit")} required>
             <div className="flex w-full items-center gap-2">
@@ -203,8 +224,96 @@ export function PlanForm({
               )}
             </div>
           </FormSectionColumns>
+          {/* Short Limit -  slAnalyticsRetention*/}
+          <FormSectionColumns title={t("View Period")}>
+            <div className="flex w-full items-center gap-2">
+              <Label className="sr-only" htmlFor="View-Period">
+                {t("View Period")}
+              </Label>
+              <Input
+                id="short-limit"
+                className="flex-1 shadow-inner"
+                size={32}
+                type="number"
+                {...register("slAnalyticsRetention", { valueAsNumber: true })}
+              />
+            </div>
+            <div className="flex flex-col justify-between p-1">
+              {errors?.slAnalyticsRetention ? (
+                <p className="pb-0.5 text-[13px] text-red-600">
+                  {errors.slAnalyticsRetention.message}
+                </p>
+              ) : (
+                <p className="pb-0.5 text-[13px] text-muted-foreground">
+                  {t(
+                    "Time range for viewing short link visitor statistics data (days)",
+                  )}
+                  .
+                </p>
+              )}
+            </div>
+          </FormSectionColumns>
+          {/* Short Limit -  slTrackedClicks*/}
+          <FormSectionColumns title={t("Tracked Limit")}>
+            <div className="flex w-full items-center gap-2">
+              <Label className="sr-only" htmlFor="Click-Limit">
+                {t("Tracked Limit")}
+              </Label>
+              <Input
+                id="short-limit"
+                className="flex-1 shadow-inner"
+                size={32}
+                type="number"
+                {...register("slTrackedClicks", { valueAsNumber: true })}
+              />
+            </div>
+            <div className="flex flex-col justify-between p-1">
+              {errors?.slTrackedClicks ? (
+                <p className="pb-0.5 text-[13px] text-red-600">
+                  {errors.slTrackedClicks.message}
+                </p>
+              ) : (
+                <p className="pb-0.5 text-[13px] text-muted-foreground">
+                  {t("Monthly limit of tracked clicks (times)")}.
+                </p>
+              )}
+            </div>
+          </FormSectionColumns>
+          {/* Short Limit -  slDomains */}
+          <FormSectionColumns title={t("Domain Limit")}>
+            <div className="flex w-full items-center gap-2">
+              <Label className="sr-only" htmlFor="Domain-Limit">
+                {t("Domain Limit")}
+              </Label>
+              <Input
+                id="short-limit"
+                className="flex-1 shadow-inner"
+                size={32}
+                type="number"
+                disabled
+                {...register("slDomains", { valueAsNumber: true })}
+              />
+            </div>
+            <div className="flex flex-col justify-between p-1">
+              {errors?.slDomains ? (
+                <p className="pb-0.5 text-[13px] text-red-600">
+                  {errors.slDomains.message}
+                </p>
+              ) : (
+                <p className="pb-0.5 text-[13px] text-muted-foreground">
+                  {t("Limit on the number of allowed domains")}.
+                </p>
+              )}
+            </div>
+          </FormSectionColumns>
+        </div>
+
+        <div className="relative grid-cols-1 gap-2 rounded-md border bg-neutral-50 px-3 pb-3 pt-8 dark:bg-neutral-900 md:grid md:grid-cols-2">
+          <h2 className="absolute left-2 top-2 text-xs font-semibold text-neutral-400">
+            {t("Email Service")}
+          </h2>
           {/* Email Limit - emEmailAddresses */}
-          <FormSectionColumns title={t("Email Limit")} required>
+          <FormSectionColumns title={t("Email Limit")}>
             <div className="flex w-full items-center gap-2">
               <Label className="sr-only" htmlFor="Email-Limit">
                 {t("Email Limit")}
@@ -229,11 +338,8 @@ export function PlanForm({
               )}
             </div>
           </FormSectionColumns>
-        </div>
-
-        <div className="items-center justify-start gap-4 md:flex">
           {/* "Send Limit" - emSendEmails */}
-          <FormSectionColumns title={t("Send Limit")} required>
+          <FormSectionColumns title={t("Send Limit")}>
             <div className="flex w-full items-center gap-2">
               <Label className="sr-only" htmlFor="Send-Limit">
                 {t("Send Limit")}
@@ -258,6 +364,12 @@ export function PlanForm({
               )}
             </div>
           </FormSectionColumns>
+        </div>
+
+        <div className="relative grid-cols-1 gap-2 rounded-md border bg-neutral-50 px-3 pb-3 pt-8 dark:bg-neutral-900 md:grid md:grid-cols-2">
+          <h2 className="absolute left-2 top-2 text-xs font-semibold text-neutral-400">
+            {t("Subdomain Service")}
+          </h2>
           {/* Record Limit - rcNewRecords */}
           <FormSectionColumns title={t("Record Limit")} required>
             <div className="flex w-full items-center gap-2">
@@ -285,18 +397,6 @@ export function PlanForm({
             </div>
           </FormSectionColumns>
         </div>
-
-        <FormSectionColumns title={t("Active")} required>
-          <Label className="sr-only" htmlFor="active">
-            {t("Active")}:
-          </Label>
-          <Switch
-            id="active"
-            {...register("isActive")}
-            defaultChecked={initData?.isActive ?? true}
-            onCheckedChange={(value) => setValue("isActive", value)}
-          />
-        </FormSectionColumns>
 
         {/* Action buttons */}
         <div className="mt-3 flex justify-end gap-3">

@@ -58,7 +58,7 @@ export default function AppConfigs({}: {}) {
   }
 
   return (
-    <Card>
+    <Card className="bg-neutral-50 dark:bg-neutral-900">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-lg font-bold">{t("App Configs")}</CardTitle>
       </CardHeader>
@@ -111,6 +111,7 @@ export default function AppConfigs({}: {}) {
               <div className="flex w-full items-start gap-2">
                 <Textarea
                   className="h-16 max-h-32 min-h-9 resize-y"
+                  placeholder="Support HTML format, such as <div>info</div>"
                   rows={5}
                   defaultValue={configs.system_notification}
                   value={notification}

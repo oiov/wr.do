@@ -156,7 +156,14 @@
     "Monthly limit of emails sent": "Monthly limit of emails sent",
     "Monthly limit of email addresses created": "Monthly limit of email addresses created",
     "Reject": "Reject",
-    "Rejected": "Rejected"
+    "Rejected": "Rejected",
+    "View Period": "View Period",
+    "Time range for viewing short link visitor statistics data (days)": "Time range for viewing short link visitor statistics data (days)",
+    "Tracked Limit": "Tracked Limit",
+    "Monthly limit of tracked clicks (times)": "Monthly limit of tracked clicks (times)",
+    "Limit on the number of allowed domains": "Limit on the number of allowed domains",
+    "Only active plans can be used": "Only active plans can be used",
+    "Plan name must be unique": "Plan name must be unique"
   },
   "Components": {
     "Dashboard": "Dashboard",

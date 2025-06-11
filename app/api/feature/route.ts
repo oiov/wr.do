@@ -1,6 +1,8 @@
 import { env } from "@/env.mjs";
 import { getConfigValue } from "@/lib/dto/system-config";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req: Request) {
   try {
     const registration = await getConfigValue<boolean>(

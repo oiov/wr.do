@@ -8,6 +8,7 @@ import {
   MobileSheetSidebar,
 } from "@/components/layout/dashboard-sidebar";
 import { ModeToggle } from "@/components/layout/mode-toggle";
+import { Notification } from "@/components/layout/notification";
 import { UserAccountNav } from "@/components/layout/user-account-nav";
 import MaxWidthWrapper from "@/components/shared/max-width-wrapper";
 
@@ -32,6 +33,7 @@ export default async function Dashboard({ children }: ProtectedLayoutProps) {
       <DashboardSidebar links={filteredLinks} />
 
       <div className="flex flex-1 flex-col">
+        <Notification />
         <header className="sticky top-0 z-50 flex h-14 bg-background px-4 lg:h-[60px] xl:px-8">
           <MaxWidthWrapper className="flex max-w-7xl items-center gap-x-3 px-0">
             <MobileSheetSidebar links={filteredLinks} />

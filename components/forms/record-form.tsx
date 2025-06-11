@@ -102,7 +102,7 @@ export function RecordForm({
   );
 
   const { data: configs } = useSWR<Record<string, any>>(
-    "/api/configs",
+    "/api/configs?key=enable_subdomain_apply",
     fetcher,
   );
 

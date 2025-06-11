@@ -11,11 +11,18 @@ export async function GET(req: NextRequest) {
     const user = checkUserStatus(await getCurrentUser());
     if (user instanceof Response) return user;
 
-    const configs = await getMultipleConfigs([
-      "enable_user_registration",
-      "enable_subdomain_apply",
-      "system_notification",
-    ]);
+    const url = new URL(req.url);
+    const keys = url.searchParams.getAll("key") || [];
+
+    if (keys.length === 0) {
+      return Response.json("key is required", { status: 400 });
+    }
+
+    const configs = await getMultipleConfigs(keys);
+
+    // "enable_user_registration",
+    // "enable_subdomain_apply",
+    // "system_notification",
 
     return Response.json(configs, { status: 200 });
   } catch (error) {

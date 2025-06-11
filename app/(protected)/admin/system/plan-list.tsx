@@ -203,7 +203,7 @@ export default function PlanList({ user, action }: PlanListProps) {
                       </TableCell>
                       <TableCell className="col-span-1 flex items-center gap-1">
                         <Button
-                          className="h-7 px-1 text-xs hover:bg-slate-100 dark:hover:text-primary-foreground"
+                          className="h-7 px-1 text-xs hover:bg-slate-100 dark:hover:text-primary-foreground sm:px-1.5"
                           size="sm"
                           variant={"outline"}
                           onClick={() => {
