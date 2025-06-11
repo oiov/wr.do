@@ -8,7 +8,7 @@ import DomainList from "./domain-list";
 import PlanList from "./plan-list";
 
 export const metadata = constructMetadata({
-  title: "System Settings - WR.DO",
+  title: "System Settings",
   description: "",
 });
 

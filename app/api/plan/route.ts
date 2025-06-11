@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 
 import { getAllPlans, getPlanQuota } from "@/lib/dto/plan";
 
-// export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic";
 
 // Get one plan by plan name for frontend
 export async function GET(req: NextRequest) {

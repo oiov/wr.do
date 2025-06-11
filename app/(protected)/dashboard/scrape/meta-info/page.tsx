@@ -8,7 +8,7 @@ import ApiReference from "@/components/shared/api-reference";
 import { MetaScraping } from "../scrapes";
 
 export const metadata = constructMetadata({
-  title: "Url to Meta API - WR.DO",
+  title: "Url to Meta API",
   description: "Quickly extract valuable structured website data",
 });
 

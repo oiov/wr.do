@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
-import { useTranslations } from "next-intl";
 
 import { getUserRecordCount } from "@/lib/dto/cloudflare-dns-record";
 import {

@@ -7,7 +7,7 @@ import { DashboardHeader } from "@/components/dashboard/header";
 import UserRecordsList from "../../dashboard/records/record-list";
 
 export const metadata = constructMetadata({
-  title: "DNS Records - WR.DO",
+  title: "DNS Records",
   description: "List and manage records.",
 });
 

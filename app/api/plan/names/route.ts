@@ -4,7 +4,7 @@ import { getPlanNames } from "@/lib/dto/plan";
 import { checkUserStatus } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";
 
-// export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic";
 
 // Get plan names for frontend
 export async function GET(req: NextRequest) {

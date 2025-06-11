@@ -55,6 +55,7 @@ export async function POST(req: NextRequest) {
       emSendEmails: plan.emSendEmails,
       appSupport: plan.appSupport.toUpperCase() as any,
       appApiAccess: plan.appApiAccess,
+      isActive: true,
     });
 
     if (data) {
