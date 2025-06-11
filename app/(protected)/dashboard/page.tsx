@@ -2,9 +2,9 @@ import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { UserRole } from "@prisma/client";
 
-import { TeamPlanQuota } from "@/config/team";
 import { getUserRecordCount } from "@/lib/dto/cloudflare-dns-record";
 import { getAllUserEmailsCount } from "@/lib/dto/email";
+import { getPlanQuota, PlanQuota } from "@/lib/dto/plan";
 import { getUserShortUrlCount } from "@/lib/dto/short-urls";
 import { getCurrentUser } from "@/lib/session";
 import { constructMetadata } from "@/lib/utils";
@@ -19,16 +19,16 @@ import UserRecordsList from "./records/record-list";
 import UserUrlsList from "./urls/url-list";
 
 export const metadata = constructMetadata({
-  title: "Dashboard - WR.DO",
+  title: "Dashboard",
   description: "List and manage records.",
 });
 
 async function EmailHeroCardSection({
   userId,
-  team,
+  plan,
 }: {
   userId: string;
-  team: string;
+  plan: PlanQuota;
 }) {
   const email_count = await getAllUserEmailsCount(userId);
 
@@ -36,17 +36,17 @@ async function EmailHeroCardSection({
     <HeroCard
       total={email_count.total}
       monthTotal={email_count.month_total}
-      limit={TeamPlanQuota[team].EM_EmailAddresses}
+      limit={plan.emEmailAddresses}
     />
   );
 }
 
 async function ShortUrlsCardSection({
   userId,
-  team,
+  plan,
 }: {
   userId: string;
-  team: string;
+  plan: PlanQuota;
 }) {
   const url_count = await getUserShortUrlCount(userId);
 
@@ -56,7 +56,7 @@ async function ShortUrlsCardSection({
       title="Short URLs"
       total={url_count.total}
       monthTotal={url_count.month_total}
-      limit={TeamPlanQuota[team].SL_NewLinks}
+      limit={plan.slNewLinks}
       link="/dashboard/urls"
       icon="link"
     />
@@ -65,10 +65,10 @@ async function ShortUrlsCardSection({
 
 async function DnsRecordsCardSection({
   userId,
-  team,
+  plan,
 }: {
   userId: string;
-  team: string;
+  plan: PlanQuota;
 }) {
   const record_count = await getUserRecordCount(userId);
 
@@ -78,7 +78,7 @@ async function DnsRecordsCardSection({
       title="DNS Records"
       total={record_count.total}
       monthTotal={record_count.month_total}
-      limit={TeamPlanQuota[team].RC_NewRecords}
+      limit={plan.rcNewRecords}
       link="/dashboard/records"
       icon="globeLock"
     />
@@ -140,6 +140,8 @@ export default async function DashboardPage() {
 
   if (!user?.id) redirect("/login");
 
+  const plan = await getPlanQuota(user.team);
+
   return (
     <>
       <div className="flex flex-col gap-5">
@@ -150,7 +152,7 @@ export default async function DashboardPage() {
             <Suspense
               fallback={<Skeleton className="h-32 w-full rounded-lg" />}
             >
-              <EmailHeroCardSection userId={user.id} team={user.team} />
+              <EmailHeroCardSection userId={user.id} plan={plan} />
             </Suspense>
           </ErrorBoundary>
           <ErrorBoundary
@@ -159,7 +161,7 @@ export default async function DashboardPage() {
             <Suspense
               fallback={<Skeleton className="h-32 w-full rounded-lg" />}
             >
-              <ShortUrlsCardSection userId={user.id} team={user.team} />
+              <ShortUrlsCardSection userId={user.id} plan={plan} />
             </Suspense>
           </ErrorBoundary>
           <ErrorBoundary
@@ -168,7 +170,7 @@ export default async function DashboardPage() {
             <Suspense
               fallback={<Skeleton className="h-32 w-full rounded-lg" />}
             >
-              <DnsRecordsCardSection userId={user.id} team={user.team} />
+              <DnsRecordsCardSection userId={user.id} plan={plan} />
             </Suspense>
           </ErrorBoundary>
         </div>

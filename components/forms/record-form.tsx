@@ -14,7 +14,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import useSWR from "swr";
 
-import { siteConfig } from "@/config/site";
 import { CreateDNSRecord, RecordType } from "@/lib/cloudflare";
 import { UserRecordFormData } from "@/lib/dto/cloudflare-dns-record";
 import { RECORD_TYPE_ENUMS, TTL_ENUMS } from "@/lib/enums";
@@ -77,6 +76,7 @@ export function RecordForm({
     handleSubmit,
     register,
     formState: { errors },
+    getValues,
     setValue,
   } = useForm<FormData>({
     resolver: zodResolver(createRecordSchema),
@@ -99,6 +99,11 @@ export function RecordForm({
       revalidateOnFocus: false,
       dedupingInterval: 10000,
     },
+  );
+
+  const { data: configs } = useSWR<Record<string, any>>(
+    "/api/configs?key=enable_subdomain_apply",
+    fetcher,
   );
 
   const validDefaultDomain = useMemo(() => {
@@ -125,7 +130,7 @@ export function RecordForm({
   });
 
   const handleCreateRecord = async (data: CreateDNSRecord) => {
-    if (siteConfig.enableSubdomainApply && data.comment!.length < 20) {
+    if (configs?.enable_subdomain_apply && data.comment!.length < 20) {
       toast.warning("Apply reason must be at least 20 characters!");
     } else {
       startTransition(async () => {
@@ -165,7 +170,30 @@ export function RecordForm({
             description: await response.text(),
           });
         } else {
-          const res = await response.json();
+          toast.success(`Update successfully!`);
+          setShowForm(false);
+          onRefresh();
+        }
+      }
+    });
+  };
+
+  const handleRejectRecord = async (data: CreateDNSRecord) => {
+    startTransition(async () => {
+      if (type === "edit") {
+        const response = await fetch(`${action}/reject`, {
+          method: "POST",
+          body: JSON.stringify({
+            recordId: initData?.record_id,
+            record: data,
+            userId: initData?.userId,
+          }),
+        });
+        if (!response.ok || response.status !== 200) {
+          toast.error("Update Failed", {
+            description: await response.text(),
+          });
+        } else {
           toast.success(`Update successfully!`);
           setShowForm(false);
           onRefresh();
@@ -228,7 +256,7 @@ export function RecordForm({
       <div className="rounded-t-lg bg-muted px-4 py-2 text-lg font-semibold">
         {type === "add" ? t("Create record") : t("Edit record")}
       </div>
-      {siteConfig.enableSubdomainApply && (
+      {configs?.enable_subdomain_apply && (
         <ul className="m-2 list-disc gap-1 rounded-md bg-yellow-600/10 p-2 px-5 pr-2 text-xs font-medium text-yellow-600 dark:bg-yellow-500/10 dark:text-yellow-500">
           <li>{t("The administrator has enabled application mode")}.</li>
           <li>
@@ -271,7 +299,7 @@ export function RecordForm({
           </div>
         )}
 
-        {siteConfig.enableSubdomainApply && (
+        {configs?.enable_subdomain_apply && (
           <FormSectionColumns
             title={t("What are you planning to use the subdomain for?")}
             required
@@ -483,6 +511,7 @@ export function RecordForm({
               )}
             </Button>
           )}
+
           <Button
             type="reset"
             variant="outline"
@@ -491,6 +520,20 @@ export function RecordForm({
           >
             {t("Cancel")}
           </Button>
+          {type === "edit" && initData?.active === 2 && isAdmin && (
+            <Button
+              type="button"
+              className="w-[80px] px-0"
+              onClick={() => handleRejectRecord(getValues())}
+              disabled={isPending}
+            >
+              {isPending ? (
+                <Icons.spinner className="size-4 animate-spin" />
+              ) : (
+                <p>{t("Reject")}</p>
+              )}
+            </Button>
+          )}
           <Button
             type="submit"
             variant="blue"

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { TeamPlanQuota } from "@/config/team";
 import { createUserEmail, getAllUserEmails } from "@/lib/dto/email";
+import { getPlanQuota } from "@/lib/dto/plan";
 import { checkUserStatus } from "@/lib/dto/user";
 import { reservedAddressSuffix } from "@/lib/enums";
 import { getCurrentUser } from "@/lib/session";
@@ -43,11 +43,13 @@ export async function POST(req: NextRequest) {
   const user = checkUserStatus(await getCurrentUser());
   if (user instanceof Response) return user;
 
+  const plan = await getPlanQuota(user.team);
+
   // check limit
   const limit = await restrictByTimeRange({
     model: "userEmail",
     userId: user.id,
-    limit: TeamPlanQuota[user.team].EM_EmailAddresses,
+    limit: plan.emEmailAddresses,
     rangeType: "month",
   });
   if (limit)

@@ -1,8 +1,6 @@
 import { User } from "@prisma/client";
 import { AvatarProps } from "@radix-ui/react-avatar";
 
-import { generateGradientClasses } from "@/lib/enums";
-import { cn } from "@/lib/utils";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 interface UserAvatarProps extends AvatarProps {

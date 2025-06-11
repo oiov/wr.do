@@ -5,8 +5,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { User, UserRole } from "@prisma/client";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import useSWR from "swr";
 
 import { ROLE_ENUM } from "@/lib/enums";
+import { fetcher } from "@/lib/utils";
 import { updateUserSchema } from "@/lib/validations/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,6 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { Skeleton } from "../ui/skeleton";
 import { Switch } from "../ui/switch";
 
 export type FormData = User;
@@ -63,6 +66,15 @@ export function UserForm({
       team: initData?.team || "free",
     },
   });
+
+  const { data: plans, isLoading } = useSWR<string[]>(
+    "/api/plan/names",
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      dedupingInterval: 10000,
+    },
+  );
 
   const onSubmit = handleSubmit((data) => {
     if (type === "edit") {
@@ -175,24 +187,31 @@ export function UserForm({
             </Select>
           </FormSectionColumns>
           <FormSectionColumns title="Plan">
-            <Select
-              onValueChange={(value: string) => {
-                setValue("team", value);
-              }}
-              name="team"
-              defaultValue={`${initData?.team}` || "free"}
-            >
-              <SelectTrigger className="w-full shadow-inner">
-                <SelectValue placeholder="Select a plan" />
-              </SelectTrigger>
-              <SelectContent>
-                {["free", "premium", "business"].map((role) => (
-                  <SelectItem key={role} value={role}>
-                    {role}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            {isLoading ? (
+              <Skeleton className="h-9 w-full rounded-r-none border-r-0 shadow-inner" />
+            ) : (
+              plans &&
+              plans.length > 0 && (
+                <Select
+                  onValueChange={(value: string) => {
+                    setValue("team", value);
+                  }}
+                  name="plan"
+                  defaultValue={`${initData?.team}` || "free"}
+                >
+                  <SelectTrigger className="w-full shadow-inner">
+                    <SelectValue placeholder="Select a plan" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {plans.map((role) => (
+                      <SelectItem key={role} value={role}>
+                        {role}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )
+            )}
           </FormSectionColumns>
         </div>
         <div className="items-center justify-start gap-4 md:flex">

@@ -110,7 +110,7 @@
     "Time To Live": "生效时间",
     "Proxy": "代理记录",
     "Proxy status": "DNS 响应被 Cloudflare Anycast IP 替代",
-    "Total Domains": "总计",
+    "Total Domains": "域名管理",
     "Add Domain": "添加域名",
     "Domain Name": "域名",
     "Shorten Service": "短链服务",
@@ -139,7 +139,31 @@
     "send email service": "用于发送邮件服务",
     "How to get resend api key?": "如何获取 Resend API 密钥?",
     "Analytics": "访客分析",
-    "Edit URL": "编辑短链"
+    "Edit URL": "编辑短链",
+    "Plan Name": "计划名称",
+    "Quota Settings": "配额设置",
+    "Short Limit": "创建短链数量",
+    "Record Limit": "创建子域名数量",
+    "Email Limit": "创建邮箱数量",
+    "Send Limit": "发件数量",
+    "Domain Limit": "域名限制",
+    "Add Plan": "添加计划",
+    "No Plans": "暂无计划",
+    "Create Plan": "创建计划",
+    "Edit Plan": "编辑计划",
+    "Monthly limit of short links created": "每月新创建短链数量限制",
+    "Monthly limit of subdomains created": "每月新创建子域名数量限制",
+    "Monthly limit of emails sent": "每月发送邮件数量限制",
+    "Monthly limit of email addresses created": "每月接收邮件数量限制",
+    "Reject": "拒绝",
+    "Rejected": "已拒绝",
+    "View Period": "时间范围",
+    "Time range for viewing short link visitor statistics data (days)": "查看短链访问量统计数据的时间范围(天)",
+    "Tracked Limit": "跟踪统计限制",
+    "Monthly limit of tracked clicks (times)": "每月最大跟踪点击量限制(次)",
+    "Limit on the number of allowed domains": "允许的域名数量限制",
+    "Only active plans can be used": "只有启用的计划才能生效",
+    "Plan name must be unique": "计划名称必须唯一"
   },
   "Components": {
     "Dashboard": "用户面板",
@@ -254,7 +278,8 @@
     "Last 1 Year": "最近 1 年",
     "All the time": "所有时间",
     "No Visits": "无访问记录",
-    "You don't have any visits yet in": "您还没有任何访问记录于"
+    "You don't have any visits yet in": "您还没有任何访问记录于",
+    "System Settings": "系统设置"
   },
   "Landing": {
     "settings": "设置",
@@ -339,7 +364,8 @@
     "System": "跟随系统",
     "Admin": "管理面板",
     "Sign in": "登录",
-    "Log out": "退出登录"
+    "Log out": "退出登录",
+    "System Settings": "系统设置"
   },
   "Email": {
     "Search emails": "搜索邮箱...",
@@ -427,6 +453,13 @@
     "This action cannot be undone - please proceed with caution": "此操作不可逆，请谨慎操作",
     "Warning": "警告",
     "This will permanently delete your account and your active subscription!": "这将永久删除您的账户和订阅!",
-    "verification": "为了验证，请在下方输入 <confirm>确认删除账户</confirm>"
+    "verification": "为了验证，请在下方输入 <confirm>确认删除账户</confirm>",
+    "App Configs": "应用配置",
+    "User Registration": "用户注册",
+    "Allow users to sign up": "是否允许用户注册",
+    "Subdomain Apply Mode": "子域名申请模式",
+    "Enable subdomain apply mode, each submission requires administrator review": "启用子域名申请模式，每次提交需要管理员审核",
+    "Notification": "系统通知",
+    "Set system notification, this will be displayed in the header": "设置系统通知，将在网页顶部显示"
   }
 }

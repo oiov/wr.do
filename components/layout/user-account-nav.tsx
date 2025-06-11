@@ -65,7 +65,7 @@ export function UserAccountNav() {
                   <p className="font-medium">{user.name || "Anonymous"}</p>
                   <Link href={"/pricing"} target="_blank">
                     <Badge className="text-xs font-semibold" variant="default">
-                      {user.team.toUpperCase()}
+                      {user.team}
                     </Badge>
                   </Link>
                 </div>
@@ -155,7 +155,7 @@ export function UserAccountNav() {
               <p className="font-medium">{user.name || "Anonymous"}</p>
               <Link href={"/pricing"} target="_blank">
                 <Badge className="text-xs font-semibold" variant="default">
-                  {user.team.toUpperCase()}
+                  {user.team}
                 </Badge>
               </Link>
             </div>

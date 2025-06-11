@@ -16,9 +16,7 @@ export type SiteConfig = {
     discord: string;
     oichat: string;
   };
-  openSignup: boolean;
   emailR2Domain: string;
-  enableSubdomainApply: boolean;
 };
 
 export type NavItem = {

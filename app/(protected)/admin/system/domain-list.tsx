@@ -12,12 +12,7 @@ import { DomainFormData } from "@/lib/dto/domains";
 import { fetcher } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -296,7 +291,7 @@ export default function DomainList({ user, action }: DomainListProps) {
                       </TableCell>
                       <TableCell className="col-span-1 flex items-center gap-1">
                         <Button
-                          className="h-7 px-1 text-xs hover:bg-slate-100 dark:hover:text-primary-foreground"
+                          className="h-7 px-1 text-xs hover:bg-slate-100 dark:hover:text-primary-foreground sm:px-1.5"
                           size="sm"
                           variant={"outline"}
                           onClick={() => {
@@ -306,7 +301,9 @@ export default function DomainList({ user, action }: DomainListProps) {
                             setShowForm(!isShowForm);
                           }}
                         >
-                          <p className="hidden sm:block">{t("Edit")}</p>
+                          <p className="hidden text-nowrap sm:block">
+                            {t("Edit")}
+                          </p>
                           <PenLine className="mx-0.5 size-4 sm:ml-1 sm:size-3" />
                         </Button>
                       </TableCell>

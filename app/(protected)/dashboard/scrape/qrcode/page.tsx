@@ -9,7 +9,7 @@ import QRCodeEditor from "@/components/shared/qr";
 import { CodeLight } from "../scrapes";
 
 export const metadata = constructMetadata({
-  title: "Url to QR Code API - WR.DO",
+  title: "Url to QR Code API",
   description: "Generate QR Code from URL",
 });
 

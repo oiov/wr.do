@@ -400,7 +400,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                 </TableCell>
                 <TableCell className="col-span-1 flex items-center gap-1 sm:col-span-2">
                   <Button
-                    className="h-7 px-1 text-xs hover:bg-slate-100 dark:hover:text-primary-foreground"
+                    className="h-7 px-1 text-xs hover:bg-slate-100 dark:hover:text-primary-foreground sm:px-1.5"
                     size="sm"
                     variant={"outline"}
                     onClick={() => {
@@ -410,7 +410,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                       setShowForm(!isShowForm);
                     }}
                   >
-                    <p className="hidden sm:block">{t("Edit")}</p>
+                    <p className="hidden text-nowrap sm:block">{t("Edit")}</p>
                     <PenLine className="mx-0.5 size-4 sm:ml-1 sm:size-3" />
                   </Button>
                   <Button
