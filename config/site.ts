@@ -2,9 +2,7 @@ import { SidebarNavItem, SiteConfig } from "types";
 import { env } from "@/env.mjs";
 
 const site_url = env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-const open_signup = env.NEXT_PUBLIC_OPEN_SIGNUP;
 const email_r2_domain = env.NEXT_PUBLIC_EMAIL_R2_DOMAIN || "";
-const enable_subdomain_apply = env.NEXT_PUBLIC_ENABLE_SUBDOMAIN_APPLY || "0";
 
 export const siteConfig: SiteConfig = {
   name: "WR.DO",
@@ -20,9 +18,7 @@ export const siteConfig: SiteConfig = {
     oichat: "https://oi.wr.do",
   },
   mailSupport: "support@wr.do",
-  openSignup: open_signup === "1" ? true : false,
   emailR2Domain: email_r2_domain,
-  enableSubdomainApply: enable_subdomain_apply === "1" ? true : false,
 };
 
 export const footerLinks: SidebarNavItem[] = [

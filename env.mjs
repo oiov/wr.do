@@ -19,9 +19,7 @@ export const env = createEnv({
   },
   client: {
     NEXT_PUBLIC_APP_URL: z.string().optional(),
-    NEXT_PUBLIC_OPEN_SIGNUP: z.string().default("1"),
     NEXT_PUBLIC_EMAIL_R2_DOMAIN: z.string().optional(),
-    NEXT_PUBLIC_ENABLE_SUBDOMAIN_APPLY: z.string().default("0"),
   },
   runtimeEnv: {
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
@@ -34,10 +32,7 @@ export const env = createEnv({
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     RESEND_FROM_EMAIL: process.env.RESEND_FROM_EMAIL,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
-    NEXT_PUBLIC_OPEN_SIGNUP: process.env.NEXT_PUBLIC_OPEN_SIGNUP,
     NEXT_PUBLIC_EMAIL_R2_DOMAIN: process.env.NEXT_PUBLIC_EMAIL_R2_DOMAIN,
-    NEXT_PUBLIC_ENABLE_SUBDOMAIN_APPLY:
-      process.env.NEXT_PUBLIC_ENABLE_SUBDOMAIN_APPLY,
     SCREENSHOTONE_BASE_URL: process.env.SCREENSHOTONE_BASE_URL,
     GITHUB_TOKEN: process.env.GITHUB_TOKEN,
     LinuxDo_CLIENT_ID: process.env.LinuxDo_CLIENT_ID,

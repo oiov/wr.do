@@ -156,16 +156,7 @@ Via:
 NEXT_PUBLIC_EMAIL_R2_DOMAIN=https://email-attachment.wr.do
 ```
 
-## 4. Add the Bussiness Configs
-
-```js title=".env"
-# Allow anyone to sign up
-NEXT_PUBLIC_OPEN_SIGNUP=1
-# The default is closed (0 closed, 1 open), if set to 1, the user needs to wait for the administrator to approve the subdomain after creating a subdomain
-NEXT_PUBLIC_ENABLE_SUBDOMAIN_APPLY=0
-```
-
-## 5. Add the SCREENSHOTONE_BASE_URL Environment Variable
+## 4. Add the SCREENSHOTONE_BASE_URL Environment Variable
 
 It's the base URL for the screenshotone API.
 
@@ -176,7 +167,7 @@ Deploy docs via [here](https://jasonraimondi.github.io/url-to-png/)
 SCREENSHOTONE_BASE_URL=https://api.screenshotone.com
 ```
 
-## 6. Add the GITHUB_TOKEN Environment Variable
+## 5. Add the GITHUB_TOKEN Environment Variable
 
 Via https://github.com/settings/tokens to get your token.
 
@@ -184,14 +175,14 @@ Via https://github.com/settings/tokens to get your token.
 GITHUB_TOKEN=
 ```
 
-## 7. Start the Dev Server
+## 6. Start the Dev Server
 
 ```bash
 pnpm dev
 ```
 Via [http://localhost:3000](http://localhost:3000)
 
-## 8. Setup System
+## 7. Setup System
 
 #### Create the first account and Change the account's role to ADMIN
 
@@ -211,7 +202,7 @@ Follow the steps below:
   <strong>You must add at least one domain to start using short links, email or subdomain management features.</strong>
 </Callout>
 
-## 9. Deploy
+## 8. Deploy
 
 See [Deploy Guide](/docs/developer/deploy).
 
