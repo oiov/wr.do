@@ -55,12 +55,6 @@ export const sidebarLinks: SidebarNavItem[] = [
         authorizeOnly: UserRole.ADMIN,
       },
       {
-        href: "/admin/domains",
-        icon: "globeLock",
-        title: "Domains",
-        authorizeOnly: UserRole.ADMIN,
-      },
-      {
         href: "/admin/users",
         icon: "users",
         title: "Users",
@@ -76,6 +70,12 @@ export const sidebarLinks: SidebarNavItem[] = [
         href: "/admin/records",
         icon: "globe",
         title: "Records",
+        authorizeOnly: UserRole.ADMIN,
+      },
+      {
+        href: "/admin/system",
+        icon: "settings",
+        title: "System Settings",
         authorizeOnly: UserRole.ADMIN,
       },
     ],

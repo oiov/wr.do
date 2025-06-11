@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { siteConfig } from "@/config/site";
-import { TeamPlanQuota } from "@/config/team";
 import { checkApiKey } from "@/lib/dto/api-key";
 import { getDomainsByFeature } from "@/lib/dto/domains";
 import { createUserEmail, deleteUserEmailByAddress } from "@/lib/dto/email";
+import { getPlanQuota } from "@/lib/dto/plan";
 import { reservedAddressSuffix } from "@/lib/enums";
 import { restrictByTimeRange } from "@/lib/team";
 
@@ -32,11 +31,13 @@ export async function POST(req: NextRequest) {
     });
   }
 
+  const plan = await getPlanQuota(user.team!);
+
   // check limit
   const limit = await restrictByTimeRange({
     model: "userEmail",
     userId: user.id,
-    limit: TeamPlanQuota[user.team!].EM_EmailAddresses,
+    limit: plan.emEmailAddresses,
     rangeType: "month",
   });
   if (limit)

@@ -1,5 +1,5 @@
-import { TeamPlanQuota } from "@/config/team";
 import { getDomainsByFeature } from "@/lib/dto/domains";
+import { getPlanQuota } from "@/lib/dto/plan";
 import { createUserShortUrl } from "@/lib/dto/short-urls";
 import { checkUserStatus } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";
@@ -11,11 +11,12 @@ export async function POST(req: Request) {
     const user = checkUserStatus(await getCurrentUser());
     if (user instanceof Response) return user;
 
+    const plan = await getPlanQuota(user.team);
     // check limit
     const limit = await restrictByTimeRange({
       model: "userUrl",
       userId: user.id,
-      limit: TeamPlanQuota[user.team].SL_NewLinks,
+      limit: plan.slNewLinks,
       rangeType: "month",
     });
     if (limit) return Response.json(limit.statusText, { status: limit.status });

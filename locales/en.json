@@ -139,7 +139,22 @@
     "send email service": "send email service",
     "How to get resend api key?": "How to get resend api key?",
     "Analytics": "Analytics",
-    "Edit URL": "Edit URL"
+    "Edit URL": "Edit URL",
+    "Plan Name": "Plan",
+    "Quota Settings": "Quota Settings",
+    "Short Limit": "Short Limit",
+    "Record Limit": "Record Limit",
+    "Email Limit": "Email Limit",
+    "Send Limit": "Send Limit",
+    "Domain Limit": "Domain Limit",
+    "Add Plan": "Add Plan",
+    "No Plans": "No Plans",
+    "Create Plan": "Create Plan",
+    "Edit Plan": "Edit Plan",
+    "Monthly limit of short links created": "Monthly limit of short links created",
+    "Monthly limit of subdomains created": "Monthly limit of subdomains created",
+    "Monthly limit of emails sent": "Monthly limit of emails sent",
+    "Monthly limit of email addresses created": "Monthly limit of email addresses created"
   },
   "Components": {
     "Dashboard": "Dashboard",
@@ -254,7 +269,8 @@
     "Last 1 Year": "Last 1 Year",
     "All the time": "All the time",
     "No Visits": "No Visits",
-    "You don't have any visits yet in": "You don't have any visits yet in"
+    "You don't have any visits yet in": "You don't have any visits yet in",
+    "System Settings": "System Settings"
   },
   "Landing": {
     "settings": "Settings",
@@ -339,7 +355,8 @@
     "System": "System",
     "Admin": "Admin",
     "Sign in": "Sign in",
-    "Log out": "Log out"
+    "Log out": "Log out",
+    "System Settings": "System Settings"
   },
   "Email": {
     "Search emails": "Search emails",

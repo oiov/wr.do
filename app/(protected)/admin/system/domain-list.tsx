@@ -306,7 +306,9 @@ export default function DomainList({ user, action }: DomainListProps) {
                             setShowForm(!isShowForm);
                           }}
                         >
-                          <p className="hidden sm:block">{t("Edit")}</p>
+                          <p className="hidden text-nowrap sm:block">
+                            {t("Edit")}
+                          </p>
                           <PenLine className="mx-0.5 size-4 sm:ml-1 sm:size-3" />
                         </Button>
                       </TableCell>

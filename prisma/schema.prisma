@@ -274,15 +274,47 @@ model Domain {
   @@map("domains")
 }
 
-// model SystemConfig {
-//   id          String   @id @default(uuid())
-//   key         String   @unique
-//   value       String // JSON String
-//   type        String // BOOLEAN, STRING, NUMBER, OBJECT
-//   description String?
-//   version     String   @default("0.5.0")
-//   createdAt   DateTime @default(now())
-//   updatedAt   DateTime @default(now())
+model SystemConfig {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  value       String // JSON String
+  type        String // BOOLEAN, STRING, NUMBER, OBJECT
+  description String?
+  version     String   @default("0.5.0")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
 
-//   @@map("system_configs")
-// }
+  @@map("system_configs")
+}
+
+model Plan {
+  id   String @id @default(uuid())
+  name String @unique // "free", "premium", "business"
+
+  // Short Link (SL) related quotas
+  slTrackedClicks      Int
+  slNewLinks           Int
+  slAnalyticsRetention Int // days
+  slDomains            Int
+  slAdvancedAnalytics  Boolean
+  slCustomQrCodeLogo   Boolean
+
+  // Record (RC) related quotas
+  rcNewRecords Int
+
+  // Email (EM) related quotas
+  emEmailAddresses Int
+  emDomains        Int
+  emSendEmails     Int
+
+  // App (APP) related settings
+  appSupport   String // "BASIC", "LIVE"
+  appApiAccess Boolean
+
+  // Metadata
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@map("plans")
+}

@@ -9,8 +9,8 @@ import { TopoJSONMap } from "@unovis/ts";
 import { WorldMapTopoJSON } from "@unovis/ts/maps";
 import { useTranslations } from "next-intl";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import useSWR from "swr";
 
-import { TeamPlanQuota } from "@/config/team";
 import {
   getBotName,
   getCountryName,
@@ -20,7 +20,7 @@ import {
   getRegionName,
 } from "@/lib/contries";
 import { DATE_DIMENSION_ENUMS } from "@/lib/enums";
-import { isLink, removeUrlSuffix } from "@/lib/utils";
+import { fetcher, isLink, removeUrlSuffix } from "@/lib/utils";
 import { useElementSize } from "@/hooks/use-element-size";
 import { Button } from "@/components/ui/button";
 import {
@@ -179,6 +179,11 @@ export function DailyPVUVChart({
 
   const t = useTranslations("Components");
 
+  const { data: plan } = useSWR<{ slAnalyticsRetention: number }>(
+    `/api/plan?team=${user.team}`,
+    fetcher,
+  );
+
   const processedData = processUrlMeta(data).map((entry) => ({
     date: entry.date,
     pv: entry.clicks,
@@ -254,40 +259,39 @@ export function DailyPVUVChart({
           <CardDescription>{lastVisitorInfo}</CardDescription>
         </div>
         <div className="flex items-center">
-          <Select
-            onValueChange={(value: string) => {
-              setTimeRange(value);
-            }}
-            name="time range"
-            defaultValue={timeRange}
-          >
-            <SelectTrigger className="mx-4 w-full shadow-inner">
-              <SelectValue placeholder="Select a time" />
-            </SelectTrigger>
-            <SelectContent>
-              {DATE_DIMENSION_ENUMS.map((e, i) => (
-                <div key={e.value}>
-                  <SelectItem
-                    disabled={
-                      e.key > TeamPlanQuota[user.team!].SL_AnalyticsRetention
-                    }
-                    value={e.value}
-                  >
-                    <span className="flex items-center gap-1">
-                      {t(e.label)}
-                      {e.key >
-                        TeamPlanQuota[user.team!].SL_AnalyticsRetention && (
-                        <Icons.crown className="size-3" />
-                      )}
-                    </span>
-                  </SelectItem>
-                  {i % 2 === 0 && i !== DATE_DIMENSION_ENUMS.length - 1 && (
-                    <SelectSeparator />
-                  )}
-                </div>
-              ))}
-            </SelectContent>
-          </Select>
+          {plan && (
+            <Select
+              onValueChange={(value: string) => {
+                setTimeRange(value);
+              }}
+              name="time range"
+              defaultValue={timeRange}
+            >
+              <SelectTrigger className="mx-4 w-full min-w-28 shadow-inner">
+                <SelectValue placeholder="Select a time" />
+              </SelectTrigger>
+              <SelectContent>
+                {DATE_DIMENSION_ENUMS.map((e, i) => (
+                  <div key={e.value}>
+                    <SelectItem
+                      disabled={e.key > plan.slAnalyticsRetention}
+                      value={e.value}
+                    >
+                      <span className="flex items-center gap-1">
+                        {t(e.label)}
+                        {e.key > plan.slAnalyticsRetention && (
+                          <Icons.crown className="size-3" />
+                        )}
+                      </span>
+                    </SelectItem>
+                    {i % 2 === 0 && i !== DATE_DIMENSION_ENUMS.length - 1 && (
+                      <SelectSeparator />
+                    )}
+                  </div>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
           {["pv", "uv"].map((key) => {
             const chart = key as keyof typeof chartConfig;
             return (

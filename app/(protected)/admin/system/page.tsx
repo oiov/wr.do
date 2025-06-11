@@ -4,11 +4,12 @@ import { getCurrentUser } from "@/lib/session";
 import { constructMetadata } from "@/lib/utils";
 import { DashboardHeader } from "@/components/dashboard/header";
 
-import DomainList from "../system/domain-list";
+import DomainList from "./domain-list";
+import PlanList from "./plan-list";
 
 export const metadata = constructMetadata({
-  title: "Domains - WR.DO",
-  description: "List and manage domains.",
+  title: "System Settings - WR.DO",
+  description: "",
 });
 
 export default async function DashboardPage() {
@@ -18,12 +19,7 @@ export default async function DashboardPage() {
 
   return (
     <>
-      <DashboardHeader
-        heading="Domains Management"
-        text="List and manage domains"
-        link="/docs/developer/cloudflare"
-        linkText="domains"
-      />
+      <DashboardHeader heading="System Settings" text="" />
       <DomainList
         user={{
           id: user.id,
@@ -34,6 +30,17 @@ export default async function DashboardPage() {
           team: user.team,
         }}
         action="/api/admin/domain"
+      />
+      <PlanList
+        user={{
+          id: user.id,
+          name: user.name || "",
+          apiKey: user.apiKey || "",
+          email: user.email || "",
+          role: user.role,
+          team: user.team,
+        }}
+        action="/api/admin/plan"
       />
     </>
   );

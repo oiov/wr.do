@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { TeamPlanQuota } from "@/config/team";
 import { checkDomainIsConfiguratedResend } from "@/lib/dto/domains";
 import { getUserSendEmailCount, saveUserSendEmail } from "@/lib/dto/email";
+import { getPlanQuota } from "@/lib/dto/plan";
 import { checkUserStatus } from "@/lib/dto/user";
 import { resend } from "@/lib/email";
 import { getCurrentUser } from "@/lib/session";
@@ -14,11 +14,13 @@ export async function POST(req: NextRequest) {
     const user = checkUserStatus(await getCurrentUser());
     if (user instanceof Response) return user;
 
+    const plan = await getPlanQuota(user.team);
+
     // check limit
     const limit = await restrictByTimeRange({
       model: "userSendEmail",
       userId: user.id,
-      limit: TeamPlanQuota[user.team].EM_SendEmails,
+      limit: plan.emSendEmails,
       rangeType: "month",
     });
     if (limit)

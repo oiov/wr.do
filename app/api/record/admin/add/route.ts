@@ -1,4 +1,3 @@
-import { TeamPlanQuota } from "@/config/team";
 import { createDNSRecord } from "@/lib/cloudflare";
 import {
   createUserRecord,
@@ -6,6 +5,7 @@ import {
   getUserRecordCount,
 } from "@/lib/dto/cloudflare-dns-record";
 import { getDomainsByFeature } from "@/lib/dto/domains";
+import { getPlanQuota } from "@/lib/dto/plan";
 import { checkUserStatus, getUserByEmail } from "@/lib/dto/user";
 import { reservedDomains } from "@/lib/enums";
 import { getCurrentUser } from "@/lib/session";
@@ -39,8 +39,10 @@ export async function POST(req: Request) {
       });
     }
 
+    const plan = await getPlanQuota(user.team);
+
     const { total } = await getUserRecordCount(target_user.id);
-    if (total >= TeamPlanQuota[target_user.team!].RC_NewRecords) {
+    if (total >= plan.rcNewRecords) {
       return Response.json("Your records have reached the free limit.", {
         status: 409,
       });

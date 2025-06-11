@@ -1,6 +1,6 @@
 import * as React from "react";
 import Link from "next/link";
-import { version } from "package.json";
+import pkg from "package.json";
 
 import { footerLinks, siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
@@ -76,7 +76,7 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
               rel="noreferrer"
               className="font-thin underline-offset-2 hover:underline"
             >
-              v{version}
+              v{pkg.version}
             </Link>
           </div>
 

@@ -6,68 +6,74 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { X } from "lucide-react";
 import { useTranslations } from "next-intl";
+import useSWR from "swr";
 
-import { TeamPlanQuota } from "@/config/team";
-import { cn, nFormatter } from "@/lib/utils";
+import { PlanQuotaFormData } from "@/lib/dto/plan";
+import { cn, fetcher, nFormatter } from "@/lib/utils";
 
 import { Icons } from "../shared/icons";
 import { Button } from "../ui/button";
 
-const getBenefits = (plan) => [
+const getBenefits = (plan: PlanQuotaFormData) => [
   {
-    text: `${nFormatter(plan.SL_TrackedClicks)} tracked clicks/mo`,
+    text: `${nFormatter(plan.slTrackedClicks)} tracked clicks/mo`,
     checked: true,
     icon: <Icons.mousePointerClick className="size-4" />,
   },
   {
-    text: `${nFormatter(plan.SL_NewLinks)} new links/mo`,
+    text: `${nFormatter(plan.slNewLinks)} new links/mo`,
     checked: true,
     icon: <Icons.link className="size-4" />,
   },
   {
-    text: `${plan.SL_AnalyticsRetention}-day analytics retention`,
+    text: `${plan.slAnalyticsRetention}-day analytics retention`,
     checked: true,
     icon: <Icons.calendar className="size-4" />,
   },
   {
     text: `Customize short link QR code`,
-    checked: plan.SL_CustomQrCodeLogo,
+    checked: plan.slCustomQrCodeLogo,
     icon: <Icons.qrcode className="size-4" />,
   },
   {
-    text: `${nFormatter(plan.EM_EmailAddresses)} email addresses/mo`,
+    text: `${nFormatter(plan.emEmailAddresses)} email addresses/mo`,
     checked: true,
     icon: <Icons.mail className="size-4" />,
   },
   {
-    text: `${nFormatter(plan.EM_SendEmails)} send emails/mo`,
+    text: `${nFormatter(plan.emSendEmails)} send emails/mo`,
     checked: true,
     icon: <Icons.send className="size-4" />,
   },
   {
-    text: `${plan.SL_Domains === 1 ? "One" : plan.SL_Domains} domain${plan.SL_Domains > 1 ? "s" : ""}`,
+    text: `${plan.slDomains === 1 ? "One" : plan.slDomains} domain${plan.slDomains > 1 ? "s" : ""}`,
     checked: true,
     icon: <Icons.globe className="size-4" />,
   },
   {
     text: "Advanced analytics",
-    checked: plan.SL_AdvancedAnalytics,
+    checked: plan.slAdvancedAnalytics,
     icon: <Icons.lineChart className="size-4" />,
   },
   {
-    text: `${plan.APP_Support.charAt(0).toUpperCase() + plan.APP_Support.slice(1)} support`,
+    text: `${plan.appSupport.charAt(0).toUpperCase() + plan.appSupport.slice(1)} support`,
     checked: true,
     icon: <Icons.help className="size-4" />,
   },
   {
     text: "Open API Access",
-    checked: plan.APP_ApiAccess,
+    checked: plan.appApiAccess,
     icon: <Icons.unplug className="size-4" />,
   },
 ];
 
 export const PricingSection = () => {
   const t = useTranslations("Landing");
+  const { data: plan } = useSWR<{
+    total: number;
+    list: PlanQuotaFormData[];
+  }>(`/api/plan?all=1`, fetcher);
+
   return (
     <section
       id="pricing"
@@ -85,45 +91,36 @@ export const PricingSection = () => {
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <PriceCard
-            tier={t("freeTier")}
-            price={t("freePrice")}
-            bestFor={t("freeBestFor")}
-            CTA={
-              <Link href={"/dashboard"}>
-                <Button className="w-full" variant={"default"}>
-                  {t("getStartedFree")}
-                </Button>
-              </Link>
-            }
-            benefits={getBenefits(TeamPlanQuota.free)}
-          />
-          {/* <PriceCard
-            tier={t("premiumTier")}
-            price={t("premiumPrice")}
-            bestFor={t("premiumBestFor")}
-            CTA={
-              <Link href={"/pricing"}>
-                <Button className="w-full bg-zinc-800 text-zinc-50 hover:bg-zinc-700 hover:text-zinc-50 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200 dark:hover:text-zinc-900">
-                  {t("getFreeTrial")}
-                </Button>
-              </Link>
-            }
-            benefits={getBenefits(TeamPlanQuota.premium)}
-          /> */}
-          <PriceCard
-            tier={t("enterpriseTier")}
-            price={t("enterprisePrice")}
-            bestFor={t("enterpriseBestFor")}
-            CTA={
-              <Link href={"mailto:support@wr.do"}>
-                <Button className="w-full" variant="outline">
-                  {t("contactUs")}
-                </Button>
-              </Link>
-            }
-            benefits={getBenefits(TeamPlanQuota.business)}
-          />
+          {plan && (
+            <PriceCard
+              tier={t("freeTier")}
+              price={t("freePrice")}
+              bestFor={t("freeBestFor")}
+              CTA={
+                <Link href={"/dashboard"}>
+                  <Button className="w-full" variant={"default"}>
+                    {t("getStartedFree")}
+                  </Button>
+                </Link>
+              }
+              benefits={getBenefits(plan.list[0])}
+            />
+          )}
+          {plan && (
+            <PriceCard
+              tier={t("enterpriseTier")}
+              price={t("enterprisePrice")}
+              bestFor={t("enterpriseBestFor")}
+              CTA={
+                <Link href={"mailto:support@wr.do"}>
+                  <Button className="w-full" variant="outline">
+                    {t("contactUs")}
+                  </Button>
+                </Link>
+              }
+              benefits={getBenefits(plan.list[plan.list.length - 1])}
+            />
+          )}
         </div>
       </div>
     </section>
