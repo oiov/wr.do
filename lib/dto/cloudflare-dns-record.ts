@@ -103,7 +103,7 @@ export async function updateUserRecordReview(
 
     const res = await prisma.userRecord.update({
       where: {
-        id,
+        record_id,
       },
       data: {
         userId,
@@ -125,7 +125,7 @@ export async function updateUserRecordReview(
     });
     return { status: "success", data: res };
   } catch (error) {
-    // console.log(error);
+    console.log(error);
     return { status: error };
   }
 }

@@ -350,7 +350,22 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                       />
                     </TableCell>
                     <TableCell className="col-span-1 flex justify-center">
-                      {[0, 1].includes(record.active) ? (
+                      {record.active === 3 ? (
+                        <Button
+                          className="text-nowrap text-sm"
+                          size="sm"
+                          variant={"outline"}
+                          disabled
+                          onClick={() => {
+                            setCurrentEditRecord(record);
+                            setShowForm(false);
+                            setFormType("edit");
+                            setShowForm(!isShowForm);
+                          }}
+                        >
+                          <p>{t("Reject")}</p>
+                        </Button>
+                      ) : [0, 1].includes(record.active) ? (
                         <Button
                           className="text-nowrap text-sm hover:bg-slate-100 dark:hover:text-primary-foreground"
                           size="sm"
@@ -383,22 +398,6 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                         </Button>
                       ) : (
                         "--"
-                      )}
-                      {record.active === 3 && (
-                        <Button
-                          className="text-nowrap text-sm hover:bg-blue-400 dark:hover:text-primary-foreground"
-                          size="sm"
-                          variant={"blue"}
-                          disabled
-                          onClick={() => {
-                            setCurrentEditRecord(record);
-                            setShowForm(false);
-                            setFormType("edit");
-                            setShowForm(!isShowForm);
-                          }}
-                        >
-                          <p>{t("Reject")}</p>
-                        </Button>
                       )}
                     </TableCell>
                   </TableRow>

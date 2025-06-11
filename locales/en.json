@@ -154,7 +154,8 @@
     "Monthly limit of short links created": "Monthly limit of short links created",
     "Monthly limit of subdomains created": "Monthly limit of subdomains created",
     "Monthly limit of emails sent": "Monthly limit of emails sent",
-    "Monthly limit of email addresses created": "Monthly limit of email addresses created"
+    "Monthly limit of email addresses created": "Monthly limit of email addresses created",
+    "Reject": "Reject"
   },
   "Components": {
     "Dashboard": "Dashboard",

@@ -76,6 +76,7 @@ export function RecordForm({
     handleSubmit,
     register,
     formState: { errors },
+    getValues,
     setValue,
   } = useForm<FormData>({
     resolver: zodResolver(createRecordSchema),
@@ -169,7 +170,30 @@ export function RecordForm({
             description: await response.text(),
           });
         } else {
-          const res = await response.json();
+          toast.success(`Update successfully!`);
+          setShowForm(false);
+          onRefresh();
+        }
+      }
+    });
+  };
+
+  const handleRejectRecord = async (data: CreateDNSRecord) => {
+    startTransition(async () => {
+      if (type === "edit") {
+        const response = await fetch(`${action}/reject`, {
+          method: "POST",
+          body: JSON.stringify({
+            recordId: initData?.record_id,
+            record: data,
+            userId: initData?.userId,
+          }),
+        });
+        if (!response.ok || response.status !== 200) {
+          toast.error("Update Failed", {
+            description: await response.text(),
+          });
+        } else {
           toast.success(`Update successfully!`);
           setShowForm(false);
           onRefresh();
@@ -487,6 +511,7 @@ export function RecordForm({
               )}
             </Button>
           )}
+
           <Button
             type="reset"
             variant="outline"
@@ -495,6 +520,20 @@ export function RecordForm({
           >
             {t("Cancel")}
           </Button>
+          {type === "edit" && initData?.active === 2 && isAdmin && (
+            <Button
+              type="button"
+              className="w-[80px] px-0"
+              onClick={() => handleRejectRecord(getValues())}
+              disabled={isPending}
+            >
+              {isPending ? (
+                <Icons.spinner className="size-4 animate-spin" />
+              ) : (
+                <p>{t("Reject")}</p>
+              )}
+            </Button>
+          )}
           <Button
             type="submit"
             variant="blue"
