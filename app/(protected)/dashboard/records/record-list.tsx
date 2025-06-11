@@ -275,12 +275,13 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                       }
                     </TableCell>
                     <TableCell className="col-span-1 hidden items-center justify-center gap-1 sm:flex">
-                      {record.active !== 2 ? (
+                      {[0, 1].includes(record.active) && (
                         <SwitchWrapper
                           record={record}
                           onChangeStatu={handleChangeStatu}
                         />
-                      ) : (
+                      )}
+                      {record.active === 2 && (
                         <Badge
                           className="text-nowrap rounded-md"
                           variant={"yellow"}
@@ -288,7 +289,16 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                           {t("Pending")}
                         </Badge>
                       )}
-                      {record.active !== 1 && (
+                      {record.active === 3 && (
+                        <Badge
+                          className="text-nowrap rounded-md"
+                          variant={"outline"}
+                        >
+                          {t("Rejected")}
+                        </Badge>
+                      )}
+
+                      {![1, 3].includes(record.active) && (
                         <TooltipProvider>
                           <Tooltip delayDuration={200}>
                             <TooltipTrigger className="truncate">
@@ -336,7 +346,7 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                       <TooltipProvider>
                         <Tooltip delayDuration={200}>
                           <TooltipTrigger className="truncate">
-                            {record.user.name ?? record.user.email}
+                            {record.user.name}: {record.user.email}
                           </TooltipTrigger>
                           <TooltipContent>
                             {record.user.name ?? record.user.email}
@@ -352,7 +362,7 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                     <TableCell className="col-span-1 flex justify-center">
                       {record.active === 3 ? (
                         <Button
-                          className="text-nowrap text-sm"
+                          className="h-7 text-nowrap px-1 text-xs sm:px-1.5"
                           size="sm"
                           variant={"outline"}
                           disabled
@@ -363,11 +373,14 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                             setShowForm(!isShowForm);
                           }}
                         >
-                          <p>{t("Reject")}</p>
+                          <p className="hidden text-nowrap sm:block">
+                            {t("Reject")}
+                          </p>
+                          <Icons.close className="mx-0.5 size-4 sm:ml-1 sm:size-3" />
                         </Button>
                       ) : [0, 1].includes(record.active) ? (
                         <Button
-                          className="text-nowrap text-sm hover:bg-slate-100 dark:hover:text-primary-foreground"
+                          className="h-7 text-nowrap px-1 text-xs hover:bg-slate-100 dark:hover:text-primary-foreground sm:px-1.5"
                           size="sm"
                           variant={"outline"}
                           onClick={() => {
@@ -377,14 +390,16 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                             setShowForm(!isShowForm);
                           }}
                         >
-                          <p>{t("Edit")}</p>
-                          <PenLine className="ml-1 size-4" />
+                          <p className="hidden text-nowrap sm:block">
+                            {t("Edit")}
+                          </p>
+                          <PenLine className="mx-0.5 size-4 sm:ml-1 sm:size-3" />
                         </Button>
                       ) : record.active === 2 &&
                         user.role === "ADMIN" &&
                         isAdmin ? (
                         <Button
-                          className="text-nowrap text-sm hover:bg-blue-400 dark:hover:text-primary-foreground"
+                          className="h-7 text-nowrap px-1 text-xs hover:bg-blue-400 dark:hover:text-primary-foreground sm:px-1.5"
                           size="sm"
                           variant={"blue"}
                           onClick={() => {
@@ -394,7 +409,10 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                             setShowForm(!isShowForm);
                           }}
                         >
-                          <p>{t("Review")}</p>
+                          <p className="hidden text-nowrap sm:block">
+                            {t("Review")}
+                          </p>
+                          <Icons.eye className="mx-0.5 size-4 sm:ml-1 sm:size-3" />
                         </Button>
                       ) : (
                         "--"

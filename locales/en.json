@@ -155,7 +155,8 @@
     "Monthly limit of subdomains created": "Monthly limit of subdomains created",
     "Monthly limit of emails sent": "Monthly limit of emails sent",
     "Monthly limit of email addresses created": "Monthly limit of email addresses created",
-    "Reject": "Reject"
+    "Reject": "Reject",
+    "Rejected": "Rejected"
   },
   "Components": {
     "Dashboard": "Dashboard",
