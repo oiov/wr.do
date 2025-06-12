@@ -346,10 +346,10 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                       <TooltipProvider>
                         <Tooltip delayDuration={200}>
                           <TooltipTrigger className="truncate">
-                            {record.user.name}: {record.user.email}
+                            {record.user.name ?? record.user.email}
                           </TooltipTrigger>
                           <TooltipContent>
-                            {record.user.name ?? record.user.email}
+                            {record.user.name}: {record.user.email}
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>

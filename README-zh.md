@@ -126,7 +126,7 @@ Follow https://localhost:3000/setup
 - Discord: https://discord.gg/AHPQYuZu3m
 - 微信群：
 
-![](https://wr.do/s/group)
+<img width="300" src="https://wr.do/s/group" />
 
 ## 许可证
 
