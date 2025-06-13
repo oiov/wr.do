@@ -8,8 +8,11 @@ import useSWR from "swr";
 import { fetcher } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { Icons } from "@/components/shared/icons";
@@ -80,6 +83,59 @@ export default function AppConfigs({}: {}) {
               />
             )}
           </div>
+          <Collapsible>
+            <CollapsibleTrigger className="flex w-full items-center justify-between">
+              <div className="space-y-1 text-start leading-none">
+                <p className="font-medium">{t("Login Methods")}</p>
+                <p className="text-xs text-muted-foreground">
+                  {t("Select the login methods that users can use to log in")}
+                </p>
+              </div>
+              <Icons.chevronDown className="ml-2 size-4" />
+            </CollapsibleTrigger>
+            <CollapsibleContent className="mt-2 space-y-3 rounded-md bg-neutral-100 p-3">
+              {configs && (
+                <>
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="text-sm">GitHub OAuth</p>
+                    <Switch
+                      defaultChecked={configs.enable_github_oauth}
+                      onCheckedChange={(v) =>
+                        handleChange(v, "enable_github_oauth", "BOOLEAN")
+                      }
+                    />
+                  </div>
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="text-sm">Google OAuth</p>
+                    <Switch
+                      defaultChecked={configs.enable_google_oauth}
+                      onCheckedChange={(v) =>
+                        handleChange(v, "enable_google_oauth", "BOOLEAN")
+                      }
+                    />
+                  </div>
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="text-sm">LinuxDo OAuth</p>
+                    <Switch
+                      defaultChecked={configs.enable_liunxdo_oauth}
+                      onCheckedChange={(v) =>
+                        handleChange(v, "enable_liunxdo_oauth", "BOOLEAN")
+                      }
+                    />
+                  </div>
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="text-sm">{t("Resend Email")}</p>
+                    <Switch
+                      defaultChecked={configs.enable_resend_email_login}
+                      onCheckedChange={(v) =>
+                        handleChange(v, "enable_resend_email_login", "BOOLEAN")
+                      }
+                    />
+                  </div>
+                </>
+              )}
+            </CollapsibleContent>
+          </Collapsible>
           <div className="flex items-center justify-between space-x-2">
             <div className="space-y-1 leading-none">
               <p className="font-medium">{t("Subdomain Apply Mode")}</p>
@@ -98,6 +154,7 @@ export default function AppConfigs({}: {}) {
               />
             )}
           </div>
+
           <div className="flex flex-col items-start justify-start gap-3">
             <div className="space-y-1 leading-none">
               <p className="font-medium">{t("Notification")}</p>

@@ -463,6 +463,9 @@
     "Subdomain Apply Mode": "子域名申请模式",
     "Enable subdomain apply mode, each submission requires administrator review": "启用子域名申请模式，每次提交需要管理员审核",
     "Notification": "系统通知",
-    "Set system notification, this will be displayed in the header": "设置系统通知，将在网页顶部显示"
+    "Set system notification, this will be displayed in the header": "设置系统通知，将在网页顶部显示",
+    "Login Methods": "登录方式",
+    "Select the login methods that users can use to log in": "选择用户可以使用的登录方式",
+    "Resend Email": "Resend 邮箱登录"
   }
 }

@@ -463,6 +463,9 @@
     "Subdomain Apply Mode": "Subdomain Apply Mode",
     "Enable subdomain apply mode, each submission requires administrator review": "Enable subdomain apply mode, each submission requires administrator review",
     "Notification": "系统通知",
-    "Set system notification, this will be displayed in the header": "Set system notification, this will be displayed in the header"
+    "Set system notification, this will be displayed in the header": "Set system notification, this will be displayed in the header",
+    "Login Methods": "Login Methods",
+    "Select the login methods that users can use to log in": "Select the login methods that users can use to log in",
+    "Resend Email": "Resend Email"
   }
 }

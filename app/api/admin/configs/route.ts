@@ -19,6 +19,10 @@ export async function GET(req: NextRequest) {
       "enable_user_registration",
       "enable_subdomain_apply",
       "system_notification",
+      "enable_github_oauth",
+      "enable_google_oauth",
+      "enable_liunxdo_oauth",
+      "enable_resend_email_login",
     ]);
 
     return Response.json(configs, { status: 200 });

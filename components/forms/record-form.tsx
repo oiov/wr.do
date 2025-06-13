@@ -17,7 +17,7 @@ import useSWR from "swr";
 
 import { CreateDNSRecord, RecordType } from "@/lib/cloudflare";
 import { UserRecordFormData } from "@/lib/dto/cloudflare-dns-record";
-import { RECORD_TYPE_ENUMS, TTL_ENUMS } from "@/lib/enums";
+import { TTL_ENUMS } from "@/lib/enums";
 import { fetcher } from "@/lib/utils";
 import { createRecordSchema } from "@/lib/validations/record";
 import { Button } from "@/components/ui/button";

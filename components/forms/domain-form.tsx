@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useState,
-  useTransition,
-} from "react";
+import { Dispatch, SetStateAction, useState, useTransition } from "react";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";
@@ -14,7 +8,6 @@ import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { getZoneDetail } from "@/lib/cloudflare";
 import { DomainFormData } from "@/lib/dto/domains";
 import { cn } from "@/lib/utils";
 import { createDomainSchema } from "@/lib/validations/domain";
