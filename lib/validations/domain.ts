@@ -9,6 +9,7 @@ export const createDomainSchema = z.object({
   cf_zone_id: z.string().optional(),
   cf_api_key: z.string().optional(),
   cf_email: z.string().optional(),
+  cf_record_types: z.string().optional(),
   cf_api_key_encrypted: z.boolean().default(false),
   resend_api_key: z.string().optional(),
   max_short_links: z.number().optional(),

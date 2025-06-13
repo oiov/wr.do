@@ -3,6 +3,7 @@
 import {
   Dispatch,
   SetStateAction,
+  useEffect,
   useMemo,
   useState,
   useTransition,
@@ -68,6 +69,7 @@ export function RecordForm({
     initData?.zone_name || "wr.do",
   );
   const [email, setEmail] = useState(initData?.user.email || user.email);
+  const [allowedRecordTypes, setAllowedRecordTypes] = useState<string[]>([]);
   const isAdmin = action.indexOf("admin") > -1;
 
   const t = useTranslations("List");
@@ -92,14 +94,12 @@ export function RecordForm({
   });
 
   // Fetch the record domains
-  const { data: recordDomains, isLoading } = useSWR<{ domain_name: string }[]>(
-    "/api/domain?feature=record",
-    fetcher,
-    {
-      revalidateOnFocus: false,
-      dedupingInterval: 10000,
-    },
-  );
+  const { data: recordDomains, isLoading } = useSWR<
+    { domain_name: string; cf_record_types: string }[]
+  >("/api/domain?feature=record", fetcher, {
+    revalidateOnFocus: false,
+    dedupingInterval: 10000,
+  });
 
   const { data: configs } = useSWR<Record<string, any>>(
     "/api/configs?key=enable_subdomain_apply",
@@ -118,6 +118,16 @@ export function RecordForm({
 
     return recordDomains[0].domain_name;
   }, [recordDomains, initData?.zone_name]);
+
+  useEffect(() => {
+    if (recordDomains && recordDomains.length > 0) {
+      setAllowedRecordTypes(
+        recordDomains
+          .find((d) => d.domain_name === validDefaultDomain)!
+          .cf_record_types.split(","),
+      );
+    }
+  }, [currentZoneName, recordDomains, validDefaultDomain]);
 
   const onSubmit = handleSubmit((data) => {
     if (isAdmin && type === "edit" && initData?.active === 2) {
@@ -357,25 +367,29 @@ export function RecordForm({
             </p>
           </FormSectionColumns>
           <FormSectionColumns title={t("Type")} required>
-            <Select
-              onValueChange={(value: RecordType) => {
-                setValue("type", value);
-                setCurrentRecordType(value);
-              }}
-              name={"type"}
-              defaultValue={initData?.type || "CNAME"}
-            >
-              <SelectTrigger className="w-full shadow-inner">
-                <SelectValue placeholder="Select a type" />
-              </SelectTrigger>
-              <SelectContent>
-                {RECORD_TYPE_ENUMS.map((type) => (
-                  <SelectItem key={type.value} value={type.value}>
-                    {type.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            {isLoading ? (
+              <Skeleton className="h-9 w-full" />
+            ) : (
+              <Select
+                onValueChange={(value: RecordType) => {
+                  setValue("type", value);
+                  setCurrentRecordType(value);
+                }}
+                name={"type"}
+                defaultValue={initData?.type || "CNAME"}
+              >
+                <SelectTrigger className="w-full shadow-inner">
+                  <SelectValue placeholder="Select a type" />
+                </SelectTrigger>
+                <SelectContent>
+                  {allowedRecordTypes.map((type) => (
+                    <SelectItem key={type} value={type}>
+                      {type}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
             <p className="p-1 text-[13px] text-muted-foreground">
               {t("Required")}.
             </p>
@@ -394,8 +408,7 @@ export function RecordForm({
                   size={32}
                   {...register("name")}
                 />
-                {(currentRecordType === "CNAME" ||
-                  currentRecordType === "A") && (
+                {["CNAME", "A", "AAAA"].includes(currentRecordType) && (
                   <span className="absolute right-2 top-1/2 -translate-y-1/2 text-sm text-slate-500">
                     .{currentZoneName}
                   </span>
@@ -417,9 +430,9 @@ export function RecordForm({
           <FormSectionColumns
             required
             title={
-              currentRecordType === "CNAME"
+              ["CNAME"].includes(currentRecordType)
                 ? t("Content")
-                : currentRecordType === "A"
+                : ["A", "AAAA"].includes(currentRecordType)
                   ? t("IPv4 address")
                   : t("Content")
             }
@@ -442,9 +455,9 @@ export function RecordForm({
                 </p>
               ) : (
                 <p className="pb-0.5 text-[13px] text-muted-foreground">
-                  {currentRecordType === "CNAME"
+                  {["CNAME"].includes(currentRecordType)
                     ? `${t("Required")}. ${t("Example")} www.example.com`
-                    : currentRecordType === "A"
+                    : ["A", "AAAA"].includes(currentRecordType)
                       ? `${t("Required")}. ${t("Example")} 8.8.8.8`
                       : t("Required")}
                 </p>
@@ -476,7 +489,7 @@ export function RecordForm({
               {t("Optional")}. {t("Time To Live")}.
             </p>
           </FormSectionColumns>
-          {["A", "CNAME"].includes(currentRecordType) && (
+          {["CNAME", "A", "AAAA"].includes(currentRecordType) && (
             <FormSectionColumns title={t("Proxy")}>
               <div className="flex w-full items-center gap-2">
                 <Label className="sr-only" htmlFor="proxy">

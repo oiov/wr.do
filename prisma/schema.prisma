@@ -261,6 +261,7 @@ model Domain {
   cf_zone_id           String?
   cf_api_key           String?
   cf_email             String?
+  cf_record_types      String  @default("CNAME,A,TXT")
   cf_api_key_encrypted Boolean
   resend_api_key       String?
   max_short_links      Int?

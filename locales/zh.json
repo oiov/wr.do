@@ -163,7 +163,10 @@
     "Monthly limit of tracked clicks (times)": "每月最大跟踪点击量限制(次)",
     "Limit on the number of allowed domains": "允许的域名数量限制",
     "Only active plans can be used": "只有启用的计划才能生效",
-    "Plan name must be unique": "计划名称必须唯一"
+    "Plan name must be unique": "计划名称必须唯一",
+    "Record Types": "DNS 记录类型",
+    "Allowed record types": "请填写标准的 DNS 记录类型",
+    "use `,` to separate": "使用 `,` 分隔"
   },
   "Components": {
     "Dashboard": "用户面板",

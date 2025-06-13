@@ -163,7 +163,10 @@
     "Monthly limit of tracked clicks (times)": "Monthly limit of tracked clicks (times)",
     "Limit on the number of allowed domains": "Limit on the number of allowed domains",
     "Only active plans can be used": "Only active plans can be used",
-    "Plan name must be unique": "Plan name must be unique"
+    "Plan name must be unique": "Plan name must be unique",
+    "Record Types": "Record Types",
+    "Allowed record types": "Allowed record types",
+    "use `,` to separate": "use `,` to separate"
   },
   "Components": {
     "Dashboard": "Dashboard",

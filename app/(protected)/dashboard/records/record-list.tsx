@@ -365,7 +365,7 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                           className="h-7 text-nowrap px-1 text-xs sm:px-1.5"
                           size="sm"
                           variant={"outline"}
-                          disabled
+                          disabled={!isAdmin}
                           onClick={() => {
                             setCurrentEditRecord(record);
                             setShowForm(false);

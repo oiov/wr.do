@@ -84,6 +84,7 @@ export function DomainForm({
       cf_zone_id: initData?.cf_zone_id || "",
       cf_api_key: initData?.cf_api_key || "",
       cf_email: initData?.cf_email || "",
+      cf_record_types: initData?.cf_record_types || "CNAME,A,TXT",
       cf_api_key_encrypted: initData?.cf_api_key_encrypted || false,
       resend_api_key: initData?.resend_api_key || "",
       max_short_links: initData?.max_short_links || 0,
@@ -460,6 +461,34 @@ export function DomainForm({
                         >
                           {t("How to get cloudflare account email?")}
                         </Link>
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </FormSectionColumns>
+            <FormSectionColumns title="">
+              <div className="flex w-full items-start justify-between gap-2">
+                <Label className="mt-2.5 text-nowrap" htmlFor="record-types">
+                  {t("Record Types")}:
+                </Label>
+                <div className="w-full sm:w-3/5">
+                  <Input
+                    id="record-types"
+                    className="flex-1 bg-neutral-50 shadow-inner"
+                    size={32}
+                    {...register("cf_record_types")}
+                    disabled={!currentRecordStatus}
+                  />
+                  <div className="flex flex-col justify-between p-1">
+                    {errors?.cf_record_types ? (
+                      <p className="pb-0.5 text-[13px] text-red-600">
+                        {errors.cf_record_types.message}
+                      </p>
+                    ) : (
+                      <p className="pb-0.5 text-[13px] text-muted-foreground">
+                        {t("Required")}. {t("Allowed record types")},{" "}
+                        {t("use `,` to separate")}
                       </p>
                     )}
                   </div>
