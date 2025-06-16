@@ -242,7 +242,9 @@ export async function getUserRecordByTypeNameContent(
       type,
       // content,
       name,
-      // active,
+      active: {
+        not: 3,
+      },
     },
   });
 }

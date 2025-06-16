@@ -120,6 +120,12 @@ export function RecordForm({
   }, [recordDomains, initData?.zone_name]);
 
   useEffect(() => {
+    if (validDefaultDomain) {
+      setCurrentZoneName(validDefaultDomain);
+    }
+  }, [validDefaultDomain]);
+
+  useEffect(() => {
     if (recordDomains && recordDomains.length > 0) {
       setAllowedRecordTypes(
         recordDomains
@@ -547,18 +553,20 @@ export function RecordForm({
               )}
             </Button>
           )}
-          <Button
-            type="submit"
-            variant="blue"
-            disabled={isPending}
-            className="w-[80px] shrink-0 px-0"
-          >
-            {isPending ? (
-              <Icons.spinner className="size-4 animate-spin" />
-            ) : (
-              <p>{type === "edit" ? t("Update") : t("Save")}</p>
-            )}
-          </Button>
+          {initData?.active !== 3 && (
+            <Button
+              type="submit"
+              variant="blue"
+              disabled={isPending}
+              className="w-[80px] shrink-0 px-0"
+            >
+              {isPending ? (
+                <Icons.spinner className="size-4 animate-spin" />
+              ) : (
+                <p>{type === "edit" ? t("Update") : t("Save")}</p>
+              )}
+            </Button>
+          )}
         </div>
       </form>
     </div>

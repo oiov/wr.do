@@ -236,7 +236,7 @@ export function applyRecordEmailHtml({
           </table>
           
           <div class="button-container">
-           <a href="${appUrl}/admin/domains" class="button">Review Record</a>
+           <a href="${appUrl}/admin/records" class="button">Review Record</a>
           </div>
         </div>
       </body>
