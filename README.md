@@ -8,6 +8,9 @@
 
 WR.DO is a all-in-one web utility platform featuring short links with analytics, temporary email service, subdomain management, open APIs for screenshots and metadata extraction, plus comprehensive admin dashboard.
 
+- Official website: [https://wr.do](https://wr.do)
+- Demo: [https://699399.xyz](https://699399.xyz) (Account: `admin@admin.com`, Password: `123456`)
+
 ## Features
 
 - 🔗 **Short Link Service**:
