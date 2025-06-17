@@ -349,7 +349,8 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                             {record.user.name ?? record.user.email}
                           </TooltipTrigger>
                           <TooltipContent>
-                            {record.user.name}: {record.user.email}
+                            <p>{record.user.name}</p>
+                            <p>{record.user.email}</p>
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
@@ -365,7 +366,6 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                           className="h-7 text-nowrap px-1 text-xs sm:px-1.5"
                           size="sm"
                           variant={"outline"}
-                          disabled={!isAdmin}
                           onClick={() => {
                             setCurrentEditRecord(record);
                             setShowForm(false);

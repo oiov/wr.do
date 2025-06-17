@@ -29,7 +29,7 @@ export interface UrlMetaProps {
 
 export default function UserUrlMetaInfo({ user, action, urlId }: UrlMetaProps) {
   const t = useTranslations("Components");
-  const [timeRange, setTimeRange] = useState<string>("24h");
+  const [timeRange, setTimeRange] = useState<string>("7d");
   const { data, isLoading } = useSWR<UrlMeta[]>(
     `${action}?id=${urlId}&range=${timeRange}`,
     fetcher,
