@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import { useTranslations } from "next-intl";
@@ -49,7 +49,7 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
   const [isLinuxDoLoading, setIsLinuxDoLoading] =
     React.useState<boolean>(false);
   const searchParams = useSearchParams();
-  const router = useRouter();
+  // const router = useRouter();
 
   const t = useTranslations("Auth");
 
@@ -90,7 +90,8 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
         });
       } else {
         toast.success(t("Welcome back!"));
-        router.push(searchParams?.get("from") || "/dashboard");
+        window.location.reload();
+        // router.push(searchParams?.get("from") || "/dashboard");
       }
     });
   }

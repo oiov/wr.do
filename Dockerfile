@@ -11,7 +11,7 @@ RUN npm install -g pnpm
 
 COPY . .
 
-RUN pnpm config set registry https://registry.npmmirror.com
+# RUN pnpm config set registry https://registry.npmmirror.com
 
 RUN pnpm i --frozen-lockfile
 
