@@ -58,10 +58,10 @@ export async function POST(req: Request) {
 
     if (!matchedZone) {
       return Response.json(
-        `No matching zone found for domain: ${record_name}`,
+        `No matching zone found for domain: ${record.zone_name}`,
         {
           status: 400,
-          statusText: "Invalid domain",
+          statusText: "Invalid zone name",
         },
       );
     }
@@ -78,6 +78,7 @@ export async function POST(req: Request) {
       record.type,
       record_name,
       record.content,
+      record.zone_name,
       1,
     );
     if (user_record && user_record.length > 0) {

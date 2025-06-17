@@ -193,27 +193,7 @@ pnpm dev
 
 通过浏览器访问：[http://localhost:3000](http://localhost:3000)
 
-## 7. 设置系统
-
-#### 创建第一个账号并将账号权限更改为 ADMIN
-
-请按以下步骤操作：
-
-* 1. 通过 [http://localhost:3000/login](http://localhost:3000/login) 注册登录你的第一个账号；
-* 2. 通过 [http://localhost:3000/setup](http://localhost:3000/setup) 将账号权限更改为 ADMIN；
-* 3. 然后根据 **面板引导** 配置系统并添加第一个域名。
-
-![](/_static/docs/setup-1.png)
-
-![](/_static/docs/setup-2.png)
-
-<Callout type="info">
-  将账号权限更改为 ADMIN 后，你可以刷新页面并访问 http://localhost:3000/admin。
-
-<strong>你必须至少添加一个域名，才能使用短链接、邮件或子域名管理等功能。</strong> 
-</Callout>
-
-## 8. 部署
+## 7. 部署教程
 
 详见：[部署指南](/docs/developer/deploy)
 
@@ -228,11 +208,3 @@ https://dash.cloudflare.com/[account_id]/[zone_name]/ssl-tls/configuration
 ```
 
 将 `SSL/TLS 加密模式` 更改为 `Full` 模式。
-
-### 如何修改团队计划配额？
-
-通过 team.ts 文件修改：
-
-```bash
-https://github.com/oiov/wr.do/tree/main/config/team.ts
-```

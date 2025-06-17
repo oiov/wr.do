@@ -77,9 +77,11 @@ export const createDNSRecord = async (
       body: JSON.stringify(record),
     });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error status: ${response.status}`);
-    }
+    // console.log("response.status", await response.json());
+
+    // if (!response.ok) {
+    //   throw new Error(`HTTP error status: ${response.status}`);
+    // }
 
     const data = await response.json();
     return data;
@@ -109,10 +111,6 @@ export const deleteDNSRecord = async (
       method: "DELETE",
       headers,
     });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error status: ${response.status}`);
-    }
 
     const data = await response.json();
     return data;

@@ -226,6 +226,9 @@ function SetAdminRole({ id, email }: { id: string; email: string }) {
 
       <div className="rounded-md border border-dashed p-2 text-xs text-muted-foreground">
         <p className="flex items-start gap-1">
+          • {t("After v1-0-2, this setup guide is not needed anymore")}.
+        </p>
+        <p className="flex items-start gap-1">
           •{" "}
           {t(
             "Only by becoming an administrator can one access the admin panel and add domain names",

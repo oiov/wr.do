@@ -20,7 +20,6 @@ export async function POST(req: Request) {
     const { record: reviewRecord, userId, id } = await req.json();
     const record = {
       ...reviewRecord,
-      // comment: "Created by wr.do (review mode)",
       id,
     };
 
@@ -40,9 +39,11 @@ export async function POST(req: Request) {
       record,
     );
 
+    console.log("[data]", data);
+
     if (!data.success || !data.result?.id) {
-      return Response.json(data.messages, {
-        status: 501,
+      return Response.json(data.errors[0].message, {
+        status: 503,
       });
     } else {
       const res = await updateUserRecordReview(userId, id, {

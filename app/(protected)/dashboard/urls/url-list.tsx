@@ -706,19 +706,21 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                 <RefreshCwIcon className="size-4" />
               )}
             </Button>
-            <Button
-              className="flex shrink-0 gap-1"
-              variant="default"
-              onClick={() => {
-                setCurrentEditUrl(null);
-                setShowForm(false);
-                setFormType("add");
-                setShowForm(!isShowForm);
-              }}
-            >
-              <Icons.add className="size-4" />
-              <span className="hidden sm:inline">{t("Add URL")}</span>
-            </Button>
+            {action.indexOf("admin") === -1 && (
+              <Button
+                className="flex shrink-0 gap-1"
+                variant="default"
+                onClick={() => {
+                  setCurrentEditUrl(null);
+                  setShowForm(false);
+                  setFormType("add");
+                  setShowForm(!isShowForm);
+                }}
+              >
+                <Icons.add className="size-4" />
+                <span className="hidden sm:inline">{t("Add URL")}</span>
+              </Button>
+            )}
           </div>
         </div>
 

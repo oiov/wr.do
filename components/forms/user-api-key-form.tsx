@@ -68,6 +68,7 @@ export function UserApiKeyForm({ user }: UserNameFormProps) {
             <input
               value={apiKey || "Click to generate your API key"}
               disabled
+              type="password"
               className="flex h-9 flex-1 shrink-0 items-center truncate rounded-l-md border border-r-0 border-input bg-transparent px-3 py-2 text-sm"
             />
             <CopyButton

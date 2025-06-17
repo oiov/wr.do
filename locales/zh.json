@@ -19,7 +19,8 @@
     "Domain Name": "域名",
     "Please enter a valid domain name (must be hosted on Cloudflare)": "请输入有效的域名(确保已经托管到 Cloudflare)",
     "Or add later": "或稍后添加",
-    "Submit": "提交"
+    "Submit": "提交",
+    "After v1-0-2, this setup guide is not needed anymore": "此初始化引导在 v1.0.2 版本后, 不再是必要步骤"
   },
   "List": {
     "Short URLs": "短链列表",
@@ -73,9 +74,8 @@
     "per page": "条/页",
     "Total Subdomains": "总计",
     "Subdomain List": "子域名列表",
-    "Please read the": "请阅读",
+    "Before using please read the": "在使用之前请阅读",
     "legitimacy review": "链接合法性审查",
-    "before using": "在使用之前",
     "See": "查看",
     "examples": "示例",
     "for more usage": "了解更多用法",
@@ -166,7 +166,8 @@
     "Plan name must be unique": "计划名称必须唯一",
     "Record Types": "DNS 记录类型",
     "Allowed record types": "请填写标准的 DNS 记录类型",
-    "use `,` to separate": "使用 `,` 分隔"
+    "use `,` to separate": "使用 `,` 分隔",
+    "Agree": "同意"
   },
   "Components": {
     "Dashboard": "用户面板",
@@ -334,7 +335,18 @@
     "Or continue with": "或使用",
     "Email": "邮箱",
     "Sign Up with Email": "使用邮箱注册",
-    "Sign In with Email": "使用邮箱登录"
+    "Sign In with Email": "使用邮箱登录",
+    "Email Code": "邮箱验证",
+    "Password": "账号密码",
+    "Sign In / Sign Up": "点击登录/注册",
+    "Incorrect email or password": "邮箱或密码错误",
+    "Something went wrong": "出错了",
+    "Check your email": "检查您的邮箱",
+    "We sent you a login link": "我们已向您发送登录链接",
+    "Be sure to check your spam too": "请确保检查您的垃圾邮件",
+    "Welcome back!": "欢迎回来!",
+    "Unregistered users will automatically create an account": "未注册用户将自动创建账户",
+    "Administrator has disabled new user registration": "管理员已关闭新用户注册"
   },
   "System": {
     "MENU": "菜单",
@@ -466,6 +478,10 @@
     "Set system notification, this will be displayed in the header": "设置系统通知，将在网页顶部显示",
     "Login Methods": "登录方式",
     "Select the login methods that users can use to log in": "选择用户可以使用的登录方式",
-    "Resend Email": "Resend 邮箱登录"
+    "Resend Email": "Resend 邮箱登录",
+    "Email Password": "账号密码登录",
+    "Your Password": "账号密码",
+    "Update your password": "更新您的密码",
+    "At least 6 characters, Max 32 characters": "密码长度至少6位，最多32位"
   }
 }

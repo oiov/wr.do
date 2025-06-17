@@ -1,4 +1,5 @@
 import type { NextAuthConfig } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
 import Github from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import Resend from "next-auth/providers/resend";
@@ -67,5 +68,29 @@ export default {
       },
     }),
     linuxDoProvider,
+    Credentials({
+      name: "Credentials",
+      credentials: {
+        name: { label: "name", type: "text" },
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        const res = await fetch(
+          process.env.AUTH_URL + "/api/auth/credentials",
+          {
+            method: "POST",
+            body: JSON.stringify(credentials),
+          },
+        );
+        // console.log("[res]", res);
+
+        if (res.ok) {
+          return res.json();
+        }
+
+        return null;
+      },
+    }),
   ],
 } satisfies NextAuthConfig;

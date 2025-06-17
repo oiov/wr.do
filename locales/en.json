@@ -19,7 +19,8 @@
     "Domain Name": "Domain Name",
     "Please enter a valid domain name (must be hosted on Cloudflare)": "Please enter a valid domain name (must be hosted on Cloudflare)",
     "Or add later": "Or add later",
-    "Submit": "Submit"
+    "Submit": "Submit",
+    "After v1-0-2, this setup guide is not needed anymore": "After v1.0.2, this setup guide is not needed anymore"
   },
   "List": {
     "Short URLs": "Short URLs",
@@ -73,9 +74,8 @@
     "per page": "per page",
     "Total Subdomains": "Total Subdomains",
     "Subdomain List": "Subdomains",
-    "Please read the": "Please read the",
+    "Before using please read the": "Before using please read the",
     "Legitimacy review": "Legitimacy review",
-    "before using": "before using",
     "See": "See",
     "examples": "examples",
     "for more usage": "for more usage",
@@ -166,7 +166,8 @@
     "Plan name must be unique": "Plan name must be unique",
     "Record Types": "Record Types",
     "Allowed record types": "Allowed record types",
-    "use `,` to separate": "use `,` to separate"
+    "use `,` to separate": "use `,` to separate",
+    "Agree": "Agree"
   },
   "Components": {
     "Dashboard": "Dashboard",
@@ -334,7 +335,18 @@
     "Or continue with": "Or continue with",
     "Email": "Email",
     "Sign Up with Email": "Sign Up with Email",
-    "Sign In with Email": "Sign In with Email"
+    "Sign In with Email": "Sign In with Email",
+    "Email Code": "Email",
+    "Password": "Password",
+    "Sign In / Sign Up": "Sign In / Sign Up",
+    "Incorrect email or password": "Incorrect email or password",
+    "Something went wrong": "Something went wrong",
+    "Check your email": "Check your email",
+    "We sent you a login link": "We sent you a login link",
+    "Be sure to check your spam too": "Be sure to check your spam too",
+    "Welcome back!": "Welcome back!",
+    "Unregistered users will automatically create an account": "Unregistered users will automatically create an account",
+    "Administrator has disabled new user registration": "Administrator has disabled new user registration"
   },
   "System": {
     "MENU": "Menu",
@@ -466,6 +478,10 @@
     "Set system notification, this will be displayed in the header": "Set system notification, this will be displayed in the header",
     "Login Methods": "Login Methods",
     "Select the login methods that users can use to log in": "Select the login methods that users can use to log in",
-    "Resend Email": "Resend Email"
+    "Resend Email": "Resend Email",
+    "Email Password": "Email Password",
+    "Your Password": "Your Password",
+    "Update your password": "Update your password",
+    "At least 6 characters, Max 32 characters": "At least 6 characters, Max 32 characters"
   }
 }

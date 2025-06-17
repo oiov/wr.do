@@ -28,14 +28,22 @@ export async function POST(req: Request) {
       });
     }
 
-    const res = await deleteDNSRecord(
-      matchedZone.cf_zone_id!,
-      matchedZone.cf_api_key!,
-      matchedZone.cf_email!,
-      record_id,
-    );
+    if (active !== 3) {
+      const res = await deleteDNSRecord(
+        matchedZone.cf_zone_id!,
+        matchedZone.cf_api_key!,
+        matchedZone.cf_email!,
+        record_id,
+      );
 
-    if (res && res.result?.id) {
+      if (res && res.result?.id) {
+        await deleteUserRecord(user.id, record_id, zone_id, active);
+        return Response.json("success", {
+          status: 200,
+          statusText: "success",
+        });
+      }
+    } else {
       await deleteUserRecord(user.id, record_id, zone_id, active);
       return Response.json("success", {
         status: 200,

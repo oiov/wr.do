@@ -11,6 +11,7 @@ export default function DashboardSettingsLoading() {
       <div className="divide-y divide-muted pb-10">
         <SkeletonSection />
         <SkeletonSection />
+        <SkeletonSection />
         <SkeletonSection card />
       </div>
     </>
