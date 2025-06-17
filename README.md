@@ -103,17 +103,20 @@ pnpm install
 
 copy `.env.example` to `.env` and fill in the necessary environment variables.
 
-```bash
-# run on localhost:3000
-pnpm dev
-```
-
 #### Init database
 
 ```bash
 pnpm postinstall
 pnpm db:push
 ```
+
+```bash
+# run on localhost:3000
+pnpm dev
+```
+
+- Default admin account：`admin@admin.com`
+- Default admin password：`123456`
 
 #### Setup Admin Panel
 

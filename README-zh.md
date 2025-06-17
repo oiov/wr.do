@@ -93,9 +93,6 @@ docker compose up -d
 git clone https://github.com/oiov/wr.do
 cd wr.do
 pnpm install
-
-# 在 localhost:3000 上运行
-pnpm dev
 ```
 
 #### 初始化数据库
@@ -104,6 +101,16 @@ pnpm dev
 pnpm postinstall
 pnpm db:push
 ```
+
+```bash
+# 在 localhost:3000 上运行
+pnpm dev
+```
+
+- 默认账号(管理员)：`admin@admin.com`
+- 默认密码：`123456`
+
+> 登录后请及时修改密码
 
 #### 管理员初始化
 
