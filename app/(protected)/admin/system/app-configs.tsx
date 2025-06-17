@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import useSWR from "swr";
 
 import { fetcher } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -20,6 +21,7 @@ import { SkeletonSection } from "@/components/shared/section-skeleton";
 
 export default function AppConfigs({}: {}) {
   const [isPending, startTransition] = useTransition();
+  const [loginMethodCount, setLoginMethodCount] = useState(0);
 
   const { data: configs, isLoading } = useSWR<Record<string, any>>(
     "/api/admin/configs",
@@ -32,6 +34,16 @@ export default function AppConfigs({}: {}) {
   useEffect(() => {
     if (!isLoading && configs?.system_notification) {
       setNotification(configs.system_notification);
+    }
+    // 计算登录方式数量
+    if (!isLoading) {
+      let count = 0;
+      if (configs?.enable_google_oauth) count++;
+      if (configs?.enable_github_oauth) count++;
+      if (configs?.enable_liunxdo_oauth) count++;
+      if (configs?.enable_resend_email_login) count++;
+      if (configs?.enable_email_password_login) count++;
+      setLoginMethodCount(count);
     }
   }, [configs, isLoading]);
 
@@ -83,21 +95,27 @@ export default function AppConfigs({}: {}) {
               />
             )}
           </div>
+
           <Collapsible>
             <CollapsibleTrigger className="flex w-full items-center justify-between">
               <div className="space-y-1 text-start leading-none">
                 <p className="font-medium">{t("Login Methods")}</p>
+
                 <p className="text-xs text-muted-foreground">
                   {t("Select the login methods that users can use to log in")}
                 </p>
               </div>
-              <Icons.chevronDown className="ml-2 size-4" />
+
+              <Icons.chevronDown className="ml-auto mr-2 size-4" />
+              <Badge>{loginMethodCount}</Badge>
             </CollapsibleTrigger>
             <CollapsibleContent className="mt-2 space-y-3 rounded-md bg-neutral-100 p-3">
               {configs && (
                 <>
                   <div className="flex items-center justify-between gap-3">
-                    <p className="text-sm">GitHub OAuth</p>
+                    <p className="flex items-center gap-2 text-sm">
+                      <Icons.github className="size-4" /> GitHub OAuth
+                    </p>
                     <Switch
                       defaultChecked={configs.enable_github_oauth}
                       onCheckedChange={(v) =>
@@ -106,7 +124,10 @@ export default function AppConfigs({}: {}) {
                     />
                   </div>
                   <div className="flex items-center justify-between gap-3">
-                    <p className="text-sm">Google OAuth</p>
+                    <p className="flex items-center gap-2 text-sm">
+                      <Icons.google className="size-4" />
+                      Google OAuth
+                    </p>
                     <Switch
                       defaultChecked={configs.enable_google_oauth}
                       onCheckedChange={(v) =>
@@ -115,7 +136,14 @@ export default function AppConfigs({}: {}) {
                     />
                   </div>
                   <div className="flex items-center justify-between gap-3">
-                    <p className="text-sm">LinuxDo OAuth</p>
+                    <p className="flex items-center gap-2 text-sm">
+                      <img
+                        src="/_static/images/linuxdo.webp"
+                        alt="linuxdo"
+                        className="size-4"
+                      />
+                      LinuxDo OAuth
+                    </p>
                     <Switch
                       defaultChecked={configs.enable_liunxdo_oauth}
                       onCheckedChange={(v) =>
@@ -124,7 +152,10 @@ export default function AppConfigs({}: {}) {
                     />
                   </div>
                   <div className="flex items-center justify-between gap-3">
-                    <p className="text-sm">{t("Resend Email")}</p>
+                    <p className="flex items-center gap-2 text-sm">
+                      <Icons.resend className="size-4" />
+                      {t("Resend Email")}
+                    </p>
                     <Switch
                       defaultChecked={configs.enable_resend_email_login}
                       onCheckedChange={(v) =>
@@ -132,10 +163,27 @@ export default function AppConfigs({}: {}) {
                       }
                     />
                   </div>
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="flex items-center gap-2 text-sm">
+                      <Icons.pwdKey className="size-4" />
+                      {t("Email Password")}
+                    </p>
+                    <Switch
+                      defaultChecked={configs.enable_email_password_login}
+                      onCheckedChange={(v) =>
+                        handleChange(
+                          v,
+                          "enable_email_password_login",
+                          "BOOLEAN",
+                        )
+                      }
+                    />
+                  </div>
                 </>
               )}
             </CollapsibleContent>
           </Collapsible>
+
           <div className="flex items-center justify-between space-x-2">
             <div className="space-y-1 leading-none">
               <p className="font-medium">{t("Subdomain Apply Mode")}</p>
@@ -154,7 +202,6 @@ export default function AppConfigs({}: {}) {
               />
             )}
           </div>
-
           <div className="flex flex-col items-start justify-start gap-3">
             <div className="space-y-1 leading-none">
               <p className="font-medium">{t("Notification")}</p>

@@ -65,9 +65,7 @@ export function RecordForm({
   const [currentRecordType, setCurrentRecordType] = useState(
     initData?.type || "CNAME",
   );
-  const [currentZoneName, setCurrentZoneName] = useState(
-    initData?.zone_name || "wr.do",
-  );
+  const [currentZoneName, setCurrentZoneName] = useState(initData?.zone_name);
   const [email, setEmail] = useState(initData?.user.email || user.email);
   const [allowedRecordTypes, setAllowedRecordTypes] = useState<string[]>([]);
   const isAdmin = action.indexOf("admin") > -1;
@@ -83,7 +81,7 @@ export function RecordForm({
   } = useForm<FormData>({
     resolver: zodResolver(createRecordSchema),
     defaultValues: {
-      zone_name: initData?.zone_name || "wr.do",
+      zone_name: initData?.zone_name,
       type: initData?.type || "CNAME",
       ttl: initData?.ttl || 1,
       proxied: initData?.proxied || false,
@@ -121,6 +119,7 @@ export function RecordForm({
 
   useEffect(() => {
     if (validDefaultDomain) {
+      setValue("zone_name", validDefaultDomain);
       setCurrentZoneName(validDefaultDomain);
     }
   }, [validDefaultDomain]);
@@ -563,7 +562,13 @@ export function RecordForm({
               {isPending ? (
                 <Icons.spinner className="size-4 animate-spin" />
               ) : (
-                <p>{type === "edit" ? t("Update") : t("Save")}</p>
+                <p>
+                  {type === "edit"
+                    ? initData?.active === 2 && isAdmin
+                      ? t("Agree")
+                      : t("Update")
+                    : t("Save")}
+                </p>
               )}
             </Button>
           )}

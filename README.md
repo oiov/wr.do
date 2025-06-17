@@ -8,6 +8,9 @@
 
 WR.DO is a all-in-one web utility platform featuring short links with analytics, temporary email service, subdomain management, open APIs for screenshots and metadata extraction, plus comprehensive admin dashboard.
 
+- Official website: [https://wr.do](https://wr.do)
+- Demo: [https://699399.xyz](https://699399.xyz) (Account: `admin@admin.com`, Password: `123456`)
+
 ## Features
 
 - 🔗 **Short Link Service**:
@@ -73,7 +76,7 @@ See step by step installation tutorial at [Quick Start for Developer](https://wr
 
 ### Deploy with Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/oiov/wr.do.git&project-name=wrdo&env=DATABASE_URL&env=AUTH_SECRET&env=RESEND_API_KEY&env=NEXT_PUBLIC_EMAIL_R2_DOMAIN&env=GITHUB_TOKEN)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/oiov/wr.do.git&project-name=wrdo)
 
 Remember to fill in the necessary environment variables.
 
@@ -103,11 +106,6 @@ pnpm install
 
 copy `.env.example` to `.env` and fill in the necessary environment variables.
 
-```bash
-# run on localhost:3000
-pnpm dev
-```
-
 #### Init database
 
 ```bash
@@ -115,7 +113,17 @@ pnpm postinstall
 pnpm db:push
 ```
 
+```bash
+# run on localhost:3000
+pnpm dev
+```
+
+- Default admin account：`admin@admin.com`
+- Default admin password：`123456`
+
 #### Setup Admin Panel
+
+> After v1.0.2, this setup guide is not needed anymore
 
 Follow https://localhost:3000/setup
 

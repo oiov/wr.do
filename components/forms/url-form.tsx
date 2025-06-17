@@ -1,6 +1,12 @@
 "use client";
 
-import { Dispatch, SetStateAction, useMemo, useTransition } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useMemo,
+  useTransition,
+} from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";
 import { Sparkles } from "lucide-react";
@@ -58,7 +64,6 @@ export function UrlForm({
     handleSubmit,
     register,
     formState: { errors },
-    getValues,
     setValue,
   } = useForm<FormData>({
     resolver: zodResolver(createUrlSchema),
@@ -67,7 +72,7 @@ export function UrlForm({
       target: initData?.target || "",
       url: initData?.url || "",
       active: initData?.active || 1,
-      prefix: initData?.prefix || "wr.do",
+      prefix: initData?.prefix || "",
       visible: initData?.visible || 0,
       expiration: initData?.expiration || "-1",
       password: initData?.password || "",
@@ -95,6 +100,12 @@ export function UrlForm({
 
     return shortDomains[0].domain_name;
   }, [shortDomains, initData?.prefix]);
+
+  useEffect(() => {
+    if (validDefaultDomain) {
+      setValue("prefix", validDefaultDomain);
+    }
+  }, [validDefaultDomain]);
 
   const onSubmit = handleSubmit((data) => {
     if (type === "add") {

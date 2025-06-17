@@ -23,6 +23,7 @@ export async function GET(req: NextRequest) {
       "enable_google_oauth",
       "enable_liunxdo_oauth",
       "enable_resend_email_login",
+      "enable_email_password_login",
     ]);
 
     return Response.json(configs, { status: 200 });

@@ -9,6 +9,9 @@
 
 WR.DO 是一个一站式网络工具平台，集成短链服务、临时邮箱、子域名管理和开放API接口。支持自定义链接、密码保护、访问统计；提供无限制临时邮箱收发；管理多域名DNS记录；内置网站截图、元数据提取等实用API。完整的管理后台，支持用户权限控制和服务配置。
 
+- 官网: [https://wr.do](https://wr.do)
+- Demo: [https://699399.xyz](https://699399.xyz) (Account: `admin@admin.com`, Password: `123456`)
+
 ## 功能列表
 
 - 🔗 **短链服务**：
@@ -73,7 +76,7 @@ WR.DO 是一个一站式网络工具平台，集成短链服务、临时邮箱�
 
 ### 使用 Vercel 部署
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/oiov/wr.do.git&project-name=wrdo&env=DATABASE_URL&env=AUTH_SECRET&env=RESEND_API_KEY&env=NEXT_PUBLIC_EMAIL_R2_DOMAIN&env=GITHUB_TOKEN)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/oiov/wr.do.git&project-name=wrdo)
 
 记得填写必要的环境变量。
 
@@ -93,9 +96,6 @@ docker compose up -d
 git clone https://github.com/oiov/wr.do
 cd wr.do
 pnpm install
-
-# 在 localhost:3000 上运行
-pnpm dev
 ```
 
 #### 初始化数据库
@@ -105,9 +105,21 @@ pnpm postinstall
 pnpm db:push
 ```
 
+```bash
+# 在 localhost:3000 上运行
+pnpm dev
+```
+
+- 默认账号(管理员)：`admin@admin.com`
+- 默认密码：`123456`
+
+> 登录后请及时修改密码
+
 #### 管理员初始化
 
-Follow https://localhost:3000/setup
+> 此初始化引导在 v1.0.2 版本后, 不再是必要步骤
+
+访问 https://localhost:3000/setup
 
 ## 环境变量
 

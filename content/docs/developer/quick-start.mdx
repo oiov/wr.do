@@ -182,27 +182,10 @@ pnpm dev
 ```
 Via [http://localhost:3000](http://localhost:3000)
 
-## 7. Setup System
+- Default admin account：`admin@admin.com`
+- Default admin password：`123456`
 
-#### Create the first account and Change the account's role to ADMIN
-
-Follow the steps below:
-
-- 1. Via [http://localhost:3000/login](http://localhost:3000/login), login with your account.
-- 2. Via [http://localhost:3000/setup](http://localhost:3000/setup), change the account's role to ADMIN.
-- 3. Then follow the **panel guide** to config the system and add the first domain. 
-
-![](/_static/docs/setup-1.png)
-
-![](/_static/docs/setup-2.png)
-
-<Callout type="info">
-  After change the account's role to ADMIN, then you can refresh the website and access http://localhost:3000/admin.
-
-  <strong>You must add at least one domain to start using short links, email or subdomain management features.</strong>
-</Callout>
-
-## 8. Deploy
+## 7. Deploy
 
 See [Deploy Guide](/docs/developer/deploy).
 
@@ -217,11 +200,3 @@ https://dash.cloudflare.com/[account_id]/[zone_name]/ssl-tls/configuration
 ```
 
 Change the `SSL/TLS Encryption` Mode to `Full` in the Cloudflare dashboard.
-
-### How can I change the team plan quota?
-
-Via team.ts:
-
-```bash
-https://github.com/oiov/wr.do/tree/main/config/team.ts
-```

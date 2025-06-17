@@ -87,6 +87,7 @@ export async function POST(req: Request) {
       record.type,
       record_name,
       record.content,
+      record.zone_name,
       1,
     );
     if (user_record && user_record.length > 0) {

@@ -6,6 +6,7 @@ import { DeleteAccountSection } from "@/components/dashboard/delete-account";
 import { DashboardHeader } from "@/components/dashboard/header";
 import { UserApiKeyForm } from "@/components/forms/user-api-key-form";
 import { UserNameForm } from "@/components/forms/user-name-form";
+import { UserPasswordForm } from "@/components/forms/user-password-form";
 import { UserRoleForm } from "@/components/forms/user-role-form";
 
 export const metadata = constructMetadata({
@@ -29,6 +30,7 @@ export default async function SettingsPage() {
         {user.role === "ADMIN" && (
           <UserRoleForm user={{ id: user.id, role: user.role }} />
         )}
+        <UserPasswordForm user={{ id: user.id, name: user.name || "" }} />
         <UserApiKeyForm
           user={{
             id: user.id,

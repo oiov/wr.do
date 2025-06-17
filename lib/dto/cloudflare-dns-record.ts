@@ -103,7 +103,7 @@ export async function updateUserRecordReview(
 
     const res = await prisma.userRecord.update({
       where: {
-        record_id,
+        id,
       },
       data: {
         userId,
@@ -234,6 +234,7 @@ export async function getUserRecordByTypeNameContent(
   type: string,
   name: string,
   content: string,
+  zone_name: string,
   active: number = 1,
 ) {
   return await prisma.userRecord.findMany({
@@ -242,6 +243,7 @@ export async function getUserRecordByTypeNameContent(
       type,
       // content,
       name,
+      zone_name,
       active: {
         not: 3,
       },

@@ -3,7 +3,10 @@ import { User, UserRole } from "@prisma/client";
 import { prisma } from "@/lib/db";
 
 export interface UpdateUserForm
-  extends Omit<User, "id" | "createdAt" | "updatedAt" | "emailVerified"> {}
+  extends Omit<
+    User,
+    "id" | "createdAt" | "updatedAt" | "emailVerified" | "password"
+  > {}
 
 export const getUserByEmail = async (email: string) => {
   try {

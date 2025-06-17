@@ -154,15 +154,15 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
             <div className="grid gap-2">
               <CardTitle>{t("Subdomain List")}</CardTitle>
               <CardDescription className="hidden text-balance sm:block">
-                {t("Please read the")}{" "}
+                {t("Before using please read the")}{" "}
                 <Link
                   target="_blank"
                   className="font-semibold text-yellow-600 after:content-['↗'] hover:underline"
                   href="/docs/dns-records#legitimacy-review"
                 >
                   {t("legitimacy review")}
-                </Link>{" "}
-                {t("before using")}. {t("See")}{" "}
+                </Link>
+                . {t("See")}{" "}
                 <Link
                   target="_blank"
                   className="text-blue-500 hover:underline"
