@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
-import { compare, hash } from "bcrypt";
 
 import { prisma } from "@/lib/db";
+import { hashPassword, verifyPassword } from "@/lib/utils";
 
 export async function POST(req: NextRequest) {
   try {
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
         data: {
           name: "",
           email,
-          password: await hash(password, 10),
+          password: hashPassword(password),
           active: 1,
           role: "USER",
           team: "free",
@@ -31,8 +31,7 @@ export async function POST(req: NextRequest) {
       });
       return Response.json(newUser, { status: 200 });
     } else {
-      const passwordCorrect = await compare(password, user.password || "");
-
+      const passwordCorrect = verifyPassword(password, user.password || "");
       if (passwordCorrect) {
         return Response.json(user, { status: 200 });
       }

@@ -2,9 +2,11 @@
 
 import { revalidatePath } from "next/cache";
 import { auth } from "@/auth";
-import { hash } from "bcrypt";
+
+// import { hash } from "crypt";
 
 import { prisma } from "@/lib/db";
+import { hashPassword } from "@/lib/utils";
 import { userPasswordSchema } from "@/lib/validations/user";
 
 export type FormData = {
@@ -26,7 +28,7 @@ export async function updateUserPassword(userId: string, data: FormData) {
         id: userId,
       },
       data: {
-        password: await hash(password, 10),
+        password: hashPassword(password),
       },
     });
 
