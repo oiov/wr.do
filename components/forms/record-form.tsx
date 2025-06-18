@@ -199,9 +199,10 @@ export function RecordForm({
         const response = await fetch(`${action}/reject`, {
           method: "POST",
           body: JSON.stringify({
-            recordId: initData?.record_id,
-            record: data,
+            id: initData?.id,
             userId: initData?.userId,
+            record: data,
+            recordId: initData?.record_id,
           }),
         });
         if (!response.ok || response.status !== 200) {
@@ -249,6 +250,7 @@ export function RecordForm({
         method: "POST",
         body: JSON.stringify({
           record: data,
+          recordId: initData?.record_id,
           userId: initData?.userId,
           id: initData?.id,
         }),

@@ -17,7 +17,7 @@ export async function POST(req: Request) {
       });
     }
 
-    const { record: reviewRecord, userId, recordId } = await req.json();
+    const { record: reviewRecord, userId, recordId, id } = await req.json();
     const record = {
       ...reviewRecord,
       recordId,
@@ -39,7 +39,7 @@ export async function POST(req: Request) {
     //   record,
     // );
 
-    const res = await updateUserRecordReview(userId, recordId, {
+    const res = await updateUserRecordReview(userId, id, {
       record_id: recordId,
       zone_id: matchedZone.cf_zone_id,
       zone_name: matchedZone.domain_name,

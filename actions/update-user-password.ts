@@ -3,8 +3,6 @@
 import { revalidatePath } from "next/cache";
 import { auth } from "@/auth";
 
-// import { hash } from "crypt";
-
 import { prisma } from "@/lib/db";
 import { hashPassword } from "@/lib/utils";
 import { userPasswordSchema } from "@/lib/validations/user";

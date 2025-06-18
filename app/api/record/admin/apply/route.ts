@@ -39,7 +39,7 @@ export async function POST(req: Request) {
       record,
     );
 
-    console.log("[data]", data);
+    // console.log("[data]", data);
 
     if (!data.success || !data.result?.id) {
       return Response.json(data.errors[0].message, {
