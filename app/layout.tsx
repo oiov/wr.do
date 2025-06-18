@@ -26,13 +26,6 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   return (
     <ViewTransitions>
       <html lang={locale} suppressHydrationWarning>
-        <head>
-          <script
-            defer
-            src="https://umami.oiov.dev/script.js"
-            data-website-id="56549e9d-61df-470d-a1b1-cbf12cfafe9d"
-          ></script>
-        </head>
         <body
           className={cn(
             "min-h-screen bg-background font-sans antialiased",
