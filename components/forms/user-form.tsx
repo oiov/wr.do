@@ -52,7 +52,6 @@ export function UserForm({
     handleSubmit,
     register,
     formState: { errors },
-    getValues,
     setValue,
   } = useForm<FormData>({
     resolver: zodResolver(updateUserSchema),
@@ -64,6 +63,7 @@ export function UserForm({
       image: initData?.image || "",
       role: initData?.role || "USER",
       team: initData?.team || "free",
+      password: "",
     },
   });
 
@@ -215,6 +215,23 @@ export function UserForm({
           </FormSectionColumns>
         </div>
         <div className="items-center justify-start gap-4 md:flex">
+          <FormSectionColumns title="Password">
+            <Label className="sr-only" htmlFor="password">
+              Password
+            </Label>
+            <Input
+              id="password"
+              className="flex-1 shadow-inner"
+              size={20}
+              type="password"
+              {...register("password")}
+            />
+            {errors?.password && (
+              <p className="p-1 text-[13px] text-red-600">
+                {errors.password.message}
+              </p>
+            )}
+          </FormSectionColumns>
           <FormSectionColumns title="Active">
             <div className="flex w-full items-center gap-2">
               <Label className="sr-only" htmlFor="active">

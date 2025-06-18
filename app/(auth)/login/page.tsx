@@ -46,10 +46,6 @@ export default function LoginPage() {
         <Suspense>
           <UserAuthForm />
         </Suspense>
-        {/* <p className="mt-4 break-all rounded-md border border-dashed bg-neutral-50 p-2 text-left text-sm text-gray-600 dark:border-neutral-600 dark:bg-neutral-800 dark:text-zinc-400">
-          📢 To keep our free resources accessible to all, we're allowing only
-          200 new account sign-ups each day.
-        </p> */}
 
         <p className="px-2 text-center text-sm text-muted-foreground">
           {t("By clicking continue, you agree to our")}{" "}

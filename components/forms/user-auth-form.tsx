@@ -155,6 +155,7 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
             )}
           </div>
           <Button
+            className="my-2"
             disabled={
               !loginMethod.registration ||
               isLoading ||
@@ -219,6 +220,7 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
           </div>
 
           <Button
+            className="my-2"
             disabled={
               !loginMethod.registration ||
               isLoading ||
@@ -332,7 +334,7 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
 
       {loginMethod["resend"] && loginMethod["credentials"] ? (
         <Tabs defaultValue="resend">
-          <TabsList className="w-full justify-center">
+          <TabsList className="mb-2 w-full justify-center">
             <TabsTrigger value="resend">{t("Email Code")}</TabsTrigger>
             <TabsTrigger value="password">{t("Password")}</TabsTrigger>
           </TabsList>

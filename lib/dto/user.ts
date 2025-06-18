@@ -2,11 +2,10 @@ import { User, UserRole } from "@prisma/client";
 
 import { prisma } from "@/lib/db";
 
+import { hashPassword, verifyPassword } from "../utils";
+
 export interface UpdateUserForm
-  extends Omit<
-    User,
-    "id" | "createdAt" | "updatedAt" | "emailVerified" | "password"
-  > {}
+  extends Omit<User, "id" | "createdAt" | "updatedAt" | "emailVerified"> {}
 
 export const getUserByEmail = async (email: string) => {
   try {
@@ -109,15 +108,93 @@ export async function getAllUsersActiveApiKeyCount() {
 
 export const updateUser = async (userId: string, data: UpdateUserForm) => {
   try {
-    const session = await prisma.user.update({
-      where: {
-        id: userId,
+    // 1. 验证用户是否存在
+    const existingUser = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        password: true,
+        email: true,
       },
-      data,
     });
-    return session;
+
+    if (!existingUser) {
+      throw new Error("用户不存在");
+    }
+
+    // 2. 准备更新数据
+    const updateData: Partial<UpdateUserForm> = {};
+
+    // 3. 处理基础字段
+    if (data.name !== undefined) updateData.name = data.name;
+    if (data.email !== undefined) {
+      // 检查邮箱是否已被其他用户使用
+      if (data.email !== existingUser.email) {
+        const emailExists = await prisma.user.findFirst({
+          where: {
+            email: data.email,
+            id: { not: userId },
+          },
+        });
+        if (emailExists) {
+          throw new Error("邮箱已被使用");
+        }
+      }
+      updateData.email = data.email;
+    }
+    if (data.role !== undefined) updateData.role = data.role;
+    if (data.active !== undefined) updateData.active = data.active;
+    if (data.team !== undefined) updateData.team = data.team;
+    if (data.image !== undefined) updateData.image = data.image;
+    if (data.apiKey !== undefined) updateData.apiKey = data.apiKey;
+
+    // 4. 处理密码更新
+    if (data.password) {
+      const trimmedPassword = data.password.trim();
+
+      // 检查新密码是否与当前密码相同
+      const isSamePassword = verifyPassword(
+        trimmedPassword,
+        existingUser.password || "",
+      );
+
+      if (!isSamePassword) {
+        updateData.password = hashPassword(trimmedPassword);
+      }
+    }
+
+    if (Object.keys(updateData).length === 0) {
+      return existingUser;
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        ...updateData,
+        updatedAt: new Date(),
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        active: true,
+        team: true,
+        image: true,
+        apiKey: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    return updatedUser;
   } catch (error) {
-    return null;
+    console.error("更新用户失败:", error);
+    if (error instanceof Error) {
+      throw error;
+    }
+
+    throw new Error("更新用户时发生未知错误");
   }
 };
 
