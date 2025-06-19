@@ -229,7 +229,7 @@ export function checkUserStatus(user: any) {
 
 export function getFirstAdminUser() {
   return prisma.user.findFirst({
-    where: { role: UserRole.ADMIN },
+    where: { role: UserRole.ADMIN, email: { not: "admin@admin.com" } },
     select: { email: true },
   });
 }
