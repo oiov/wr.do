@@ -1,5 +1,7 @@
 import * as z from "zod";
 
+import { isValidUrl } from "../utils";
+
 /*
   support:
     xxx
@@ -13,13 +15,14 @@ import * as z from "zod";
     -xxx-
 */
 const urlPattern = /^(?!-)[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*(?<!-)$/;
+
 const targetPattern =
-  /^(https?:\/\/)([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/[a-zA-Z0-9-_.]*)*(\/|\?([a-zA-Z0-9-_.]+=[a-zA-Z0-9-_.]*(&[a-zA-Z0-9-_.]+=[a-zA-Z0-9-_.]*)*)?)?(\.[a-zA-Z]{2,6})?$/;
+  /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/[^\s<>"{}|\\^`\[\]]*)?(\?[^\s<>"{}|\\^`\[\]]*)?(\#[^\s<>"{}|\\^`\[\]]*)?$/;
 
 export const createUrlSchema = z.object({
   id: z.string().optional(),
-  target: z.string().min(6).regex(targetPattern, "Invalid target URL format"),
-  url: z.string().min(2).regex(urlPattern, "Invalid URL format"),
+  target: z.string().min(1).regex(targetPattern, "Invalid target URL format"),
+  url: z.string().min(1).regex(urlPattern, "Invalid URL format"),
   expiration: z.string().default("-1"),
   visible: z.number().default(1),
   active: z.number().default(1),

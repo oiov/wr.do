@@ -33,6 +33,8 @@ WR.DO is a all-in-one web utility platform featuring short links with analytics,
 - 🌐 **Subdomain Management Service**:
   - Manage DNS records across multiple Cloudflare accounts and domains
   - Create various DNS record types (CNAME, A, TXT, etc.)
+  - Support enabling application mode (user submission, admin approval)
+  - Support email notification of administrator and user domain application status
 
 - 📡 **Open API Module**:
   - Website metadata extraction API
