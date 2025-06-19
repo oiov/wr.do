@@ -66,6 +66,7 @@ export function RecordForm({
     initData?.type || "CNAME",
   );
   const [currentZoneName, setCurrentZoneName] = useState(initData?.zone_name);
+  const [limitLen, setLimitLen] = useState(3);
   const [email, setEmail] = useState(initData?.user.email || user.email);
   const [allowedRecordTypes, setAllowedRecordTypes] = useState<string[]>([]);
   const isAdmin = action.indexOf("admin") > -1;
@@ -93,7 +94,11 @@ export function RecordForm({
 
   // Fetch the record domains
   const { data: recordDomains, isLoading } = useSWR<
-    { domain_name: string; cf_record_types: string }[]
+    {
+      domain_name: string;
+      cf_record_types: string;
+      min_record_length: number;
+    }[]
   >("/api/domain?feature=record", fetcher, {
     revalidateOnFocus: false,
     dedupingInterval: 10000,
@@ -130,6 +135,10 @@ export function RecordForm({
         recordDomains
           .find((d) => d.domain_name === validDefaultDomain)!
           .cf_record_types.split(","),
+      );
+      setLimitLen(
+        recordDomains.find((d) => d.domain_name === currentZoneName)
+          ?.min_record_length || 3,
       );
     }
   }, [currentZoneName, recordDomains, validDefaultDomain]);
@@ -413,6 +422,7 @@ export function RecordForm({
                   id="name"
                   className="flex-1 shadow-inner"
                   size={32}
+                  minLength={limitLen}
                   {...register("name")}
                 />
                 {["CNAME", "A", "AAAA"].includes(currentRecordType) && (

@@ -107,7 +107,7 @@ export default function EmailSidebar({
   );
 
   const { data: emailDomains, isLoading: isLoadingDomains } = useSWR<
-    { domain_name: string }[]
+    { domain_name: string; min_email_length: number }[]
   >("/api/domain?feature=email", fetcher, {
     revalidateOnFocus: false,
     dedupingInterval: 10000,
@@ -127,8 +127,11 @@ export default function EmailSidebar({
   const totalPages = data ? Math.ceil(data.total / pageSize) : 0;
 
   const handleSubmitEmail = async (emailSuffix: string) => {
-    if (!emailSuffix || emailSuffix.length < 5) {
-      toast.error("Email address characters must be at least 5");
+    const limit_len =
+      emailDomains?.find((d) => d.domain_name === domainSuffix)
+        ?.min_email_length ?? 1;
+    if (!emailSuffix || emailSuffix.length < limit_len) {
+      toast.error(`Email address characters must be at least ${limit_len}`);
       return;
     }
     if (/[^a-zA-Z0-9_\-\.]/.test(emailSuffix)) {

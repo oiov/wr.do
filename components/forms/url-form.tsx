@@ -5,6 +5,7 @@ import {
   SetStateAction,
   useEffect,
   useMemo,
+  useState,
   useTransition,
 } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -58,6 +59,8 @@ export function UrlForm({
 }: RecordFormProps) {
   const [isPending, startTransition] = useTransition();
   const [isDeleting, startDeleteTransition] = useTransition();
+  const [currentPrefix, setCurrentPrefix] = useState(initData?.prefix || "");
+  const [limitLen, setLimitLen] = useState(3);
   const t = useTranslations("List");
 
   const {
@@ -79,14 +82,12 @@ export function UrlForm({
     },
   });
 
-  const { data: shortDomains, isLoading } = useSWR<{ domain_name: string }[]>(
-    "/api/domain?feature=short",
-    fetcher,
-    {
-      revalidateOnFocus: false,
-      dedupingInterval: 10000,
-    },
-  );
+  const { data: shortDomains, isLoading } = useSWR<
+    { domain_name: string; min_url_length: number }[]
+  >("/api/domain?feature=short", fetcher, {
+    revalidateOnFocus: false,
+    dedupingInterval: 10000,
+  });
 
   const validDefaultDomain = useMemo(() => {
     if (!shortDomains?.length) return undefined;
@@ -104,8 +105,16 @@ export function UrlForm({
   useEffect(() => {
     if (validDefaultDomain) {
       setValue("prefix", validDefaultDomain);
+      setCurrentPrefix(validDefaultDomain);
     }
   }, [validDefaultDomain]);
+
+  useEffect(() => {
+    setLimitLen(
+      shortDomains?.find((d) => d.domain_name === currentPrefix)
+        ?.min_url_length || 3,
+    );
+  }, [currentPrefix]);
 
   const onSubmit = handleSubmit((data) => {
     if (type === "add") {
@@ -233,6 +242,7 @@ export function UrlForm({
                   <Select
                     onValueChange={(value: string) => {
                       setValue("prefix", value);
+                      setCurrentPrefix(value);
                     }}
                     name="prefix"
                     defaultValue={validDefaultDomain}
@@ -260,6 +270,7 @@ export function UrlForm({
                   id="url"
                   className="w-full rounded-none pl-[8px] shadow-inner"
                   size={20}
+                  minLength={limitLen}
                   {...register("url")}
                   disabled={type === "edit"}
                 />

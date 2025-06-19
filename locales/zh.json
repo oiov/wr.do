@@ -167,7 +167,11 @@
     "Record Types": "DNS 记录类型",
     "Allowed record types": "请填写标准的 DNS 记录类型",
     "use `,` to separate": "使用 `,` 分隔",
-    "Agree": "同意"
+    "Agree": "同意",
+    "Min URL Length": "短链后缀最短长度",
+    "Min Email Length": "邮箱前缀最短长度",
+    "Min Subdomain Length": "子域名前缀最短长度",
+    "Limit Configs": "域名限制"
   },
   "Components": {
     "Dashboard": "用户面板",

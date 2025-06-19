@@ -62,12 +62,6 @@ export async function POST(req: NextRequest) {
   }
 
   const prefix = emailAddress.split("@")[0];
-  if (!prefix || prefix.length < 5) {
-    return NextResponse.json("Email address length must be at least 5", {
-      status: 400,
-    });
-  }
-
   if (reservedAddressSuffix.includes(prefix)) {
     return NextResponse.json("Invalid email address", { status: 400 });
   }

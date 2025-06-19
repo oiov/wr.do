@@ -80,6 +80,9 @@ export function DomainForm({
       cf_record_types: initData?.cf_record_types || "CNAME,A,TXT",
       cf_api_key_encrypted: initData?.cf_api_key_encrypted || false,
       resend_api_key: initData?.resend_api_key || "",
+      min_url_length: initData?.min_url_length,
+      min_email_length: initData?.min_email_length,
+      min_record_length: initData?.min_record_length,
       max_short_links: initData?.max_short_links || 0,
       max_email_forwards: initData?.max_email_forwards || 0,
       max_dns_records: initData?.max_dns_records || 0,
@@ -546,6 +549,64 @@ export function DomainForm({
                 </div>
               </div>
             </FormSectionColumns>
+          </CollapsibleContent>
+        </Collapsible>
+
+        <Collapsible className="relative mt-2 rounded-md bg-neutral-100 p-4 dark:bg-neutral-800">
+          <CollapsibleTrigger className="flex w-full items-center justify-between">
+            <h2 className="absolute left-2 top-4 flex gap-2 text-xs font-semibold text-neutral-400">
+              {t("Limit Configs")} ({t("Optional")})
+            </h2>
+            <Icons.chevronDown className="ml-auto size-4" />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="mt-3 space-y-2">
+            <div className="flex w-full items-center justify-between gap-2">
+              <Label className="cursor-pointer" htmlFor="min_url_length">
+                {t("Min URL Length")}:
+              </Label>
+              <Input
+                id="target"
+                className="max-w-20 flex-1 bg-neutral-50 shadow-inner"
+                size={32}
+                type="number"
+                defaultValue={initData?.min_url_length ?? 3}
+                {...register("min_url_length", {
+                  valueAsNumber: true,
+                })}
+              />
+            </div>
+
+            <div className="flex w-full items-center justify-between gap-2">
+              <Label className="cursor-pointer" htmlFor="min_email_length">
+                {t("Min Email Length")}:
+              </Label>
+              <Input
+                id="target"
+                className="max-w-20 flex-1 bg-neutral-50 shadow-inner"
+                size={32}
+                type="number"
+                defaultValue={initData?.min_email_length ?? 3}
+                {...register("min_email_length", {
+                  valueAsNumber: true,
+                })}
+              />
+            </div>
+
+            <div className="flex w-full items-center justify-between gap-2">
+              <Label className="cursor-pointer" htmlFor="min_subdomain_length">
+                {t("Min Subdomain Length")}:
+              </Label>
+              <Input
+                id="target"
+                className="max-w-20 flex-1 bg-neutral-50 shadow-inner"
+                size={32}
+                type="number"
+                defaultValue={initData?.min_record_length ?? 3}
+                {...register("min_record_length", {
+                  valueAsNumber: true,
+                })}
+              />
+            </div>
           </CollapsibleContent>
         </Collapsible>
 

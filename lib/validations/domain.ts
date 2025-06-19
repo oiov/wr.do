@@ -15,5 +15,8 @@ export const createDomainSchema = z.object({
   max_short_links: z.number().optional(),
   max_email_forwards: z.number().optional(),
   max_dns_records: z.number().optional(),
+  min_url_length: z.number().min(1).default(1),
+  min_email_length: z.number().min(1).default(1),
+  min_record_length: z.number().min(1).default(1),
   active: z.boolean().default(true),
 });

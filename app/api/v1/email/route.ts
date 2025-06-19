@@ -50,18 +50,23 @@ export async function POST(req: NextRequest) {
   }
 
   const [prefix, suffix] = emailAddress.split("@");
-  if (!prefix || prefix.length < 5) {
-    return NextResponse.json("Email address length must be at least 5", {
-      status: 400,
-    });
-  }
-
   const zones = await getDomainsByFeature("enable_email", true);
   if (
     !zones.length ||
     !zones.map((zone) => zone.domain_name).includes(suffix)
   ) {
     return NextResponse.json("Invalid email suffix address", { status: 400 });
+  }
+
+  const limit_len =
+    zones.find((zone) => zone.domain_name === suffix)?.min_email_length ?? 3;
+  if (!prefix || prefix.length < limit_len) {
+    return NextResponse.json(
+      `Email address length must be at least ${limit_len}`,
+      {
+        status: 400,
+      },
+    );
   }
 
   if (reservedAddressSuffix.includes(prefix)) {

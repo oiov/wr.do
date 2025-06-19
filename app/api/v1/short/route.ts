@@ -55,6 +55,14 @@ export async function POST(req: Request) {
       });
     }
 
+    const limit_len =
+      zones.find((zone) => zone.domain_name === prefix)?.min_url_length ?? 3;
+    if (!url || url.length < limit_len) {
+      return Response.json(`Slug length must be at least ${limit_len}`, {
+        status: 400,
+      });
+    }
+
     const res = await createUserShortUrl({
       userId: user.id,
       userName: user.name || "Anonymous",

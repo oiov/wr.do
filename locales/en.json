@@ -167,7 +167,11 @@
     "Record Types": "Record Types",
     "Allowed record types": "Allowed record types",
     "use `,` to separate": "use `,` to separate",
-    "Agree": "Agree"
+    "Agree": "Agree",
+    "Min URL Length": "Min URL Length",
+    "Min Email Length": "Min Email Length",
+    "Min Subdomain Length": "Min Subdomain Length",
+    "Limit Configs": "Limit Configs"
   },
   "Components": {
     "Dashboard": "Dashboard",
