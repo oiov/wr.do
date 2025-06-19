@@ -86,7 +86,7 @@ export const sidebarLinks: SidebarNavItem[] = [
       { href: "/dashboard/settings", icon: "userSettings", title: "Settings" },
       { href: "/docs", icon: "bookOpen", title: "Documentation" },
       {
-        href: siteConfig.links.feedback,
+        href: "/feedback",
         icon: "messageQuoted",
         title: "Feedback",
       },

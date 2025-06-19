@@ -10,7 +10,7 @@ export const marketingConfig: MarketingConfig = {
     },
     {
       title: "Feedback",
-      href: siteConfig.links.feedback,
+      href: "/feedback",
     },
   ],
 };
