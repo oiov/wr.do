@@ -1,7 +1,10 @@
+import { env } from "@/env.mjs";
+import { siteConfig } from "@/config/site";
 import { createDNSRecord } from "@/lib/cloudflare";
 import { updateUserRecordReview } from "@/lib/dto/cloudflare-dns-record";
 import { getDomainsByFeature } from "@/lib/dto/domains";
-import { checkUserStatus } from "@/lib/dto/user";
+import { checkUserStatus, getUserById } from "@/lib/dto/user";
+import { applyRecordToUserEmailHtml, resend } from "@/lib/email";
 import { getCurrentUser } from "@/lib/session";
 
 export async function POST(req: Request) {
@@ -62,6 +65,20 @@ export async function POST(req: Request) {
         modified_on: data.result.modified_on,
         active: 0,
       });
+
+      const userInfo = await getUserById(userId);
+      if (userInfo) {
+        await resend.emails.send({
+          from: env.RESEND_FROM_EMAIL,
+          to: userInfo.email || "",
+          subject: "Your subdomain has been applied",
+          html: applyRecordToUserEmailHtml({
+            appUrl: siteConfig.url,
+            appName: siteConfig.name,
+            subdomain: data.result.name,
+          }),
+        });
+      }
 
       if (res.status !== "success") {
         return Response.json(res.status, {

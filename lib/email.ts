@@ -243,3 +243,85 @@ export function applyRecordEmailHtml({
     </html>
   `;
 }
+
+export function applyRecordToUserEmailHtml({
+  appUrl,
+  appName,
+  subdomain,
+}: {
+  appUrl: string;
+  appName: string;
+  subdomain: string;
+}) {
+  return `
+    <html>
+      <head>
+        <title>Record Email - ${appName}</title>
+        <style>
+          body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+          }
+          .wrapper {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+          }
+          .content {
+            padding: 30px;
+            color: #333333;
+          }
+          .content h2 {
+            font-size: 20px;
+            margin: 0 0 15px;
+            color: #1a1a1a;
+          }
+          .content p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 0 0 20px;
+            color: #555555;
+          }
+          .button-container {
+            text-align: center;
+            margin: 20px 0;
+          }
+          .button {
+            display: inline-block;
+            padding: 14px 30px;
+            background-color: #346df1;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+          }
+          .button:hover {
+            background-color: #2858c1;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="wrapper">
+          <table>
+            <tr>
+              <th>Domain: </th>
+              <td>${subdomain}</td>
+            </tr>
+          </table>
+          
+          <div class="button-container">
+           <a href="${appUrl}/dashboard/records" class="button">Active Record</a>
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
+}
