@@ -90,7 +90,7 @@ const VersionNotifier: React.FC<VersionNotifierProps> = ({
   }
 
   return (
-    <div className="max-w-xs rounded-lg border border-gray-200 bg-muted bg-white p-4 shadow-xl dark:border-gray-700 dark:bg-gray-800">
+    <div className="max-w-xs rounded-lg border bg-muted p-4 shadow-xl dark:border-gray-700 dark:bg-gray-800">
       <div className="mb-2 flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <span className="text-sm font-medium text-gray-900 dark:text-white">
