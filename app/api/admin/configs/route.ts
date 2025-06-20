@@ -24,6 +24,8 @@ export async function GET(req: NextRequest) {
       "enable_liunxdo_oauth",
       "enable_resend_email_login",
       "enable_email_password_login",
+      "enable_email_catch_all",
+      "catch_all_emails",
     ]);
 
     return Response.json(configs, { status: 200 });

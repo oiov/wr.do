@@ -477,7 +477,7 @@
     "User Registration": "用户注册",
     "Allow users to sign up": "是否允许用户注册",
     "Subdomain Apply Mode": "子域名申请模式",
-    "Enable subdomain apply mode, each submission requires administrator review": "启用子域名申请模式，每次提交需要管理员审核",
+    "Enable subdomain apply mode, each submission requires administrator review": "启用子域名申请模式，用户每次提交新子域名需要管理员审核（邮件通知管理员审核，审核通过后邮件通知用户）",
     "Notification": "系统通知",
     "Set system notification, this will be displayed in the header": "设置系统通知，将在网页顶部显示",
     "Login Methods": "登录方式",
@@ -486,6 +486,13 @@
     "Email Password": "账号密码登录",
     "Your Password": "账号密码",
     "Update your password": "更新您的密码",
-    "At least 6 characters, Max 32 characters": "密码长度至少6位，最多32位"
+    "At least 6 characters, Max 32 characters": "密码长度至少6位，最多32位",
+    "Subdomain Configs": "子域配置",
+    "Email Configs": "电子邮件配置",
+    "Enable email catch-all, all user's email address which created on this platform will be redirected to the catch-all email address": "启用 Catch-All，所有用户在此平台创建的邮箱所接收的邮件都会被转发到 Catch-All 设置的邮箱地址",
+    "Catch-All Email Address": "Catch-All 邮箱地址",
+    "Set catch-all email address, split by comma if more than one, such as: 1@a-com,2@b-com, Only works when email catch all is enabled": "设置 Catch-All 邮箱地址白名单 (仅支持在此平台创建的邮箱)，多个邮箱地址请用逗号分隔，例如：1@a.com,2@b.com。仅在启用 Catch-All 时生效",
+    "Message Pusher": "消息推送",
+    "Push message to third-party services, such as Telegram, 飞书 etc": "推送消息到第三方服务，例如 Telegram，飞书等"
   }
 }
