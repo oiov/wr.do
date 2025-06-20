@@ -493,6 +493,10 @@
     "Catch-All Email Address": "Catch-All Email Address",
     "Set catch-all email address, split by comma if more than one, such as: 1@a-com,2@b-com, Only works when email catch all is enabled": "Set catch-all email address, split by comma if more than one, such as: 1@a.com,2@b.com, Only works when email catch all is enabled",
     "Message Pusher": "Message Pusher",
-    "Push message to third-party services, such as Telegram, 飞书 etc.": "Push message to third-party services, such as Telegram, 飞书 etc"
+    "Push message to third-party services, such as Telegram, 飞书 etc.": "Push message to third-party services, such as Telegram, 飞书 etc",
+    "Update now": "Update now",
+    "Dismiss": "Dismiss",
+    "New version available": "New version available",
+    "Check for updates": "Check for updates"
   }
 }

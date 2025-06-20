@@ -18,6 +18,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { Icons } from "@/components/shared/icons";
+import VersionNotifier from "@/components/shared/version-notifier";
 
 export default function AppConfigs({}: {}) {
   const [isPending, startTransition] = useTransition();
@@ -236,6 +237,8 @@ export default function AppConfigs({}: {}) {
                 </div>
               )}
             </div>
+
+            <VersionNotifier />
           </div>
         </CollapsibleContent>
       </Collapsible>
