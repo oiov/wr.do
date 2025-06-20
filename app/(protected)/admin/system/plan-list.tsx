@@ -250,7 +250,7 @@ export default function PlanList({ user, action }: PlanListProps) {
 
       {/* form */}
       <Modal
-        className="max-h-[90vh] overflow-y-auto md:max-w-2xl"
+        className="md:max-w-2xl"
         showModal={isShowForm}
         setShowModal={setShowForm}
       >

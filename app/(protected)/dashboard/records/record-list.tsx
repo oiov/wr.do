@@ -448,7 +448,7 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
       </Card>
 
       <Modal
-        className="max-h-[99vh] overflow-y-auto md:max-w-2xl"
+        className="md:max-w-2xl"
         showModal={isShowForm}
         setShowModal={setShowForm}
       >
