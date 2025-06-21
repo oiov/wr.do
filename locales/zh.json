@@ -171,7 +171,17 @@
     "Min URL Length": "短链后缀最短长度",
     "Min Email Length": "邮箱前缀最短长度",
     "Min Subdomain Length": "子域名前缀最短长度",
-    "Limit Configs": "域名限制"
+    "Limit Configs": "域名限制",
+    "Email": "邮箱",
+    "Role": "角色",
+    "Plan": "计划",
+    "Join": "注册",
+    "ADMIN": "管理员",
+    "Admin": "管理员",
+    "USER": "用户",
+    "Total Users": "用户总数",
+    "Edit User": "编辑用户",
+    "Login Password": "用户密码"
   },
   "Components": {
     "Dashboard": "用户面板",

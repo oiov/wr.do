@@ -3,6 +3,7 @@
 import { Dispatch, SetStateAction, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User, UserRole } from "@prisma/client";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import useSWR from "swr";
@@ -47,6 +48,7 @@ export function UserForm({
 }: RecordFormProps) {
   const [isPending, startTransition] = useTransition();
   const [isDeleting, startDeleteTransition] = useTransition();
+  const t = useTranslations("List");
 
   const {
     handleSubmit,
@@ -125,14 +127,14 @@ export function UserForm({
   return (
     <div>
       <div className="rounded-t-lg bg-muted px-4 py-2 text-lg font-semibold">
-        Edit User
+        {t("Edit User")}
       </div>
       <form className="max-w-2xl p-4" onSubmit={onSubmit}>
         <div className="items-center justify-start gap-4 md:flex">
-          <FormSectionColumns title="Email" required>
+          <FormSectionColumns title={t("Email")} required>
             <div className="flex w-full items-center gap-2">
               <Label className="sr-only" htmlFor="email">
-                Email
+                {t("Email")}
               </Label>
               <Input
                 id="email"
@@ -148,9 +150,9 @@ export function UserForm({
               </p>
             )}
           </FormSectionColumns>
-          <FormSectionColumns title="Name">
+          <FormSectionColumns title={t("Name")}>
             <Label className="sr-only" htmlFor="name">
-              Name
+              {t("Name")}
             </Label>
             <Input
               id="name"
@@ -166,7 +168,7 @@ export function UserForm({
           </FormSectionColumns>
         </div>
         <div className="items-center justify-start gap-4 md:flex">
-          <FormSectionColumns title="Role">
+          <FormSectionColumns title={t("Role")}>
             <Select
               onValueChange={(value: string) => {
                 setValue("role", value as UserRole);
@@ -180,13 +182,13 @@ export function UserForm({
               <SelectContent>
                 {ROLE_ENUM.map((role) => (
                   <SelectItem key={role.value} value={role.value}>
-                    {role.label}
+                    {t(role.label)}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </FormSectionColumns>
-          <FormSectionColumns title="Plan">
+          <FormSectionColumns title={t("Plan")}>
             {isLoading ? (
               <Skeleton className="h-9 w-full rounded-r-none border-r-0 shadow-inner" />
             ) : (
@@ -215,9 +217,9 @@ export function UserForm({
           </FormSectionColumns>
         </div>
         <div className="items-center justify-start gap-4 md:flex">
-          <FormSectionColumns title="Password">
+          <FormSectionColumns title={t("Login Password")}>
             <Label className="sr-only" htmlFor="password">
-              Password
+              {t("Login Password")}
             </Label>
             <Input
               id="password"
@@ -232,10 +234,10 @@ export function UserForm({
               </p>
             )}
           </FormSectionColumns>
-          <FormSectionColumns title="Active">
+          <FormSectionColumns title={t("Active")}>
             <div className="flex w-full items-center gap-2">
               <Label className="sr-only" htmlFor="active">
-                Active
+                {t("Active")}
               </Label>
               <Switch
                 id="active"
@@ -260,7 +262,7 @@ export function UserForm({
               {isDeleting ? (
                 <Icons.spinner className="size-4 animate-spin" />
               ) : (
-                <p>Delete</p>
+                <p>{t("Delete")}</p>
               )}
             </Button>
           )}
@@ -270,7 +272,7 @@ export function UserForm({
             className="w-[80px] px-0"
             onClick={() => setShowForm(false)}
           >
-            Cancle
+            {t("Cancel")}
           </Button>
           <Button
             type="submit"
@@ -281,7 +283,7 @@ export function UserForm({
             {isPending ? (
               <Icons.spinner className="size-4 animate-spin" />
             ) : (
-              <p>{type === "edit" ? "Update" : "Save"}</p>
+              <p>{type === "edit" ? t("Update") : t("Save")}</p>
             )}
           </Button>
         </div>

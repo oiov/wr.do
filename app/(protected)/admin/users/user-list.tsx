@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { User } from "@prisma/client";
 import { PenLine, RefreshCwIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import useSWR, { useSWRConfig } from "swr";
 
 import { fetcher } from "@/lib/utils";
@@ -38,8 +39,6 @@ import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
 import { Icons } from "@/components/shared/icons";
 import { PaginationWrapper } from "@/components/shared/pagination";
 import { TimeAgoIntl } from "@/components/shared/time-ago";
-
-import CountUpFn from "../../../../components/dashboard/count-up";
 
 export interface UrlListProps {
   user: Pick<User, "id" | "name">;
@@ -84,6 +83,8 @@ export default function UsersList({ user }: UrlListProps) {
     userName: "",
   });
 
+  const t = useTranslations("List");
+
   const { mutate } = useSWRConfig();
   const { data, isLoading } = useSWR<{ total: number; list: User[] }>(
     `/api/user/admin?page=${currentPage}&size=${pageSize}&email=${searchParams.email}&userName=${searchParams.userName}`,
@@ -105,7 +106,7 @@ export default function UsersList({ user }: UrlListProps) {
       <Card className="xl:col-span-2">
         <CardHeader className="flex flex-row items-center">
           <CardDescription className="text-balance text-lg font-bold">
-            <span>Total Users:</span>{" "}
+            <span>{t("Total Users")}:</span>{" "}
             <span className="font-bold">{data && data.total}</span>
           </CardDescription>
           <div className="ml-auto flex items-center justify-end gap-3">
@@ -178,25 +179,25 @@ export default function UsersList({ user }: UrlListProps) {
             <TableHeader className="bg-gray-100/50 dark:bg-primary-foreground">
               <TableRow className="grid grid-cols-3 items-center sm:grid-cols-8">
                 <TableHead className="col-span-1 flex items-center font-bold">
-                  Name
+                  {t("Name")}
                 </TableHead>
                 <TableHead className="col-span-1 flex items-center font-bold sm:col-span-2">
-                  Email
+                  {t("Email")}
                 </TableHead>
                 <TableHead className="col-span-1 hidden items-center justify-center font-bold sm:flex">
-                  Role
+                  {t("Role")}
                 </TableHead>
                 <TableHead className="col-span-1 hidden items-center justify-center font-bold sm:flex">
-                  Plan
+                  {t("Plan")}
                 </TableHead>
                 <TableHead className="col-span-1 hidden items-center justify-center font-bold sm:flex">
-                  Status
+                  {t("Status")}
                 </TableHead>
                 <TableHead className="col-span-1 hidden items-center justify-center font-bold sm:flex">
-                  Join
+                  {t("Join")}
                 </TableHead>
                 <TableHead className="col-span-1 flex items-center justify-center font-bold">
-                  Actions
+                  {t("Actions")}
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -239,12 +240,12 @@ export default function UsersList({ user }: UrlListProps) {
                     </TableCell>
                     <TableCell className="col-span-1 hidden justify-center sm:flex">
                       <Badge className="text-xs" variant="outline">
-                        {user.role}
+                        {t(user.role)}
                       </Badge>
                     </TableCell>
                     <TableCell className="col-span-1 hidden justify-center sm:flex">
                       <Badge className="text-xs" variant="outline">
-                        {user.team?.toLocaleUpperCase()}
+                        {user.team}
                       </Badge>
                     </TableCell>
                     <TableCell className="col-span-1 hidden justify-center sm:flex">
@@ -264,7 +265,7 @@ export default function UsersList({ user }: UrlListProps) {
                           setShowForm(!isShowForm);
                         }}
                       >
-                        <p>Edit</p>
+                        <p>{t("Edit")}</p>
                         <PenLine className="ml-1 size-4" />
                       </Button>
                     </TableCell>

@@ -281,7 +281,7 @@ export default function AppConfigs({}: {}) {
               <CollapsibleTrigger className="flex w-full items-center justify-between space-x-2">
                 <div className="space-y-1 leading-none">
                   <p className="flex items-center gap-2 font-medium">
-                    Catch-All <Badge>Beta</Badge>
+                    Catch-All
                   </p>
                   <p className="text-start text-xs text-muted-foreground">
                     {t(
@@ -361,7 +361,7 @@ export default function AppConfigs({}: {}) {
               <CollapsibleTrigger className="flex w-full items-center justify-between space-x-2">
                 <div className="space-y-1 leading-none">
                   <p className="flex items-center gap-2 font-medium">
-                    {t("Telegram Pusher")} <Badge>Beta</Badge>
+                    {t("Telegram Pusher")}
                   </p>
                   <p className="text-start text-xs text-muted-foreground">
                     {t("Push message to Telegram groups")}.{" "}

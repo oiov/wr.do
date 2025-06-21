@@ -252,11 +252,15 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                       </Badge>
                     </TableCell>
                     <TableCell className="col-span-1">
-                      <LinkInfoPreviewer
-                        apiKey={user.apiKey ?? ""}
-                        url={"https://" + record.name}
-                        formatUrl={record.name}
-                      />
+                      {[0, 1].includes(record.active) ? (
+                        <LinkInfoPreviewer
+                          apiKey={user.apiKey ?? ""}
+                          url={"https://" + record.name}
+                          formatUrl={record.name}
+                        />
+                      ) : (
+                        record.name
+                      )}
                     </TableCell>
                     <TableCell className="col-span-2 hidden truncate text-nowrap sm:inline-block">
                       <TooltipProvider>

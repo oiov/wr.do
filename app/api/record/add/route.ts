@@ -143,7 +143,7 @@ export async function POST(req: Request) {
 
     if (!data.success || !data.result?.id) {
       // console.log("[data]", data);
-      return Response.json(data.messages, {
+      return Response.json(data.errors[0].message, {
         status: 501,
       });
     } else {

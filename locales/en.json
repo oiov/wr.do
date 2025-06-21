@@ -171,7 +171,17 @@
     "Min URL Length": "Min URL Length",
     "Min Email Length": "Min Email Length",
     "Min Subdomain Length": "Min Subdomain Length",
-    "Limit Configs": "Limit Configs"
+    "Limit Configs": "Limit Configs",
+    "Email": "Email",
+    "Role": "Role",
+    "Plan": "Plan",
+    "Join": "Join",
+    "ADMIN": "ADMIN",
+    "Admin": "Admin",
+    "USER": "USER",
+    "Total Users": "Total Users",
+    "Edit User": "Edit User",
+    "Login Password": "Password"
   },
   "Components": {
     "Dashboard": "Dashboard",
