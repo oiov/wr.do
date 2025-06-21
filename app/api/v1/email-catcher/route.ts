@@ -92,11 +92,12 @@ function shouldPushToTelegram(
     return true;
   }
 
-  // 解析白名单
   const whiteListArray = whiteList
     .split(",")
     .map((email) => email.trim())
     .filter((email) => email.length > 0);
+
+  console.log("[Email]", whiteListArray, email.to);
 
   return whiteListArray.includes(email.to);
 }
@@ -203,36 +204,11 @@ function formatEmailForTelegram(
       : content;
 
   let message = `📧 *New Email*\n\n`;
-  message += `*From:* ${fromInfo}\n`;
-  message += `*To:* ${email.to}\n`;
+  message += `*From:* \`${fromInfo}\`\n`;
+  message += `*To:* \`${email.to}\`\n`;
   message += `*Subject:* ${subject}\n`;
-  message += `*Date:* ${date}\n\n`;
+  message += `*Date:* ${date}\n`;
   message += `\n\`\`\`Content\n${truncatedContent}\n\`\`\``;
 
   return message;
-}
-
-// Markdown 转义函数
-function escapeMarkdown(text: string): string {
-  // Telegram Markdown V2 需要转义的特殊字符
-  return text
-    .replace(/\\/g, "\\\\")
-    .replace(/\*/g, "\\*")
-    .replace(/_/g, "\\_")
-    .replace(/\[/g, "\\[")
-    .replace(/\]/g, "\\]")
-    .replace(/\(/g, "\\(")
-    .replace(/\)/g, "\\)")
-    .replace(/~/g, "\\~")
-    .replace(/`/g, "\\`")
-    .replace(/>/g, "\\>")
-    .replace(/#/g, "\\#")
-    .replace(/\+/g, "\\+")
-    .replace(/-/g, "\\-")
-    .replace(/=/g, "\\=")
-    .replace(/\|/g, "\\|")
-    .replace(/\{/g, "\\{")
-    .replace(/\}/g, "\\}")
-    .replace(/\./g, "\\.")
-    .replace(/!/g, "\\!");
 }
