@@ -27,6 +27,8 @@ WR.DO is a all-in-one web utility platform featuring short links with analytics,
   - Unlimited mailbox creation
   - Receive unlimited emails (powered by Cloudflare Email Worker)
   - Send emails (powered by Resend)
+  - Support catch-all emails
+  - Support push to telegram groups
   - API endpoints for mailbox creation
   - API endpoints for inbox retrieval
 

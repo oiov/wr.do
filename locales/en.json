@@ -493,10 +493,20 @@
     "Catch-All Email Address": "Catch-All Email Address",
     "Set catch-all email address, split by comma if more than one, such as: 1@a-com,2@b-com, Only works when email catch all is enabled": "Set catch-all email address, split by comma if more than one, such as: 1@a.com,2@b.com, Only works when email catch all is enabled",
     "Message Pusher": "Message Pusher",
-    "Push message to third-party services, such as Telegram, 飞书 etc.": "Push message to third-party services, such as Telegram, 飞书 etc",
+    "Push message to Telegram groups": "Push message to Telegram groups",
     "Update now": "Update now",
     "Dismiss": "Dismiss",
     "New version available": "New version available",
-    "Check for updates": "Check for updates"
+    "Check for updates": "Check for updates",
+    "Telegram Pusher": "Telegram Pusher",
+    "Telegram Bot Token": "Telegram Bot Token",
+    "Telegram Group ID": "Telegram Group ID",
+    "Telegram Message Template": "Telegram Message Template",
+    "Telegram Push Email White List": "Telegram Push Email White List",
+    "Set Telegram bot token, Only works when Telegram pusher is enabled": "Set Telegram bot token, Only works when Telegram pusher is enabled",
+    "Set Telegram group ID, split by comma if more than one, such as: -10054275724,-10045343642": "Set Telegram group ID, split by comma if more than one, such as: -10054275724,-10045343642",
+    "Set Telegram email message template": "设置 Telegram 邮件消息模板",
+    "Set Telegram push email white list, split by comma, if not set, will push all emails": "Set Telegram push email white list, split by comma, if not set, will push all emails",
+    "How to configure Telegram bot": "How to configure Telegram bot"
   }
 }

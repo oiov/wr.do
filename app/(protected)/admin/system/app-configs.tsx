@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useTransition } from "react";
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import useSWR from "swr";
@@ -14,6 +15,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
@@ -31,15 +33,21 @@ export default function AppConfigs({}: {}) {
   } = useSWR<Record<string, any>>("/api/admin/configs", fetcher);
   const [notification, setNotification] = useState("");
   const [catchAllEmails, setCatchAllEmails] = useState("");
+  const [tgBotToken, setTgBotToken] = useState("");
+  const [tgChatId, setTgChatId] = useState("");
+  const [tgTemplate, setTgTemplate] = useState("");
+  const [tgWhiteList, setTgWhiteList] = useState("");
 
   const t = useTranslations("Setting");
 
   useEffect(() => {
-    if (!isLoading && configs?.system_notification) {
-      setNotification(configs.system_notification);
-    }
-    if (!isLoading && configs?.catch_all_emails) {
-      setCatchAllEmails(configs.catch_all_emails);
+    if (!isLoading && configs) {
+      setNotification(configs?.system_notification);
+      setCatchAllEmails(configs?.catch_all_emails);
+      setTgBotToken(configs?.tg_email_bot_token);
+      setTgChatId(configs?.tg_email_chat_id);
+      setTgTemplate(configs?.tg_email_template);
+      setTgWhiteList(configs?.tg_email_target_white_list);
     }
     // 计算登录方式数量
     if (!isLoading) {
@@ -60,10 +68,10 @@ export default function AppConfigs({}: {}) {
         body: JSON.stringify({ key, value, type }),
       });
       if (res.ok) {
-        toast.success("Updated!");
+        toast.success("Saved");
         mutate();
       } else {
-        toast.error("Failed!", {
+        toast.error("Failed to save", {
           description: await res.text(),
         });
       }
@@ -71,11 +79,7 @@ export default function AppConfigs({}: {}) {
   };
 
   if (isLoading) {
-    return (
-      <>
-        <Skeleton className="h-48 w-full rounded-lg" />
-      </>
-    );
+    return <Skeleton className="h-48 w-full rounded-lg" />;
   }
 
   return (
@@ -86,7 +90,7 @@ export default function AppConfigs({}: {}) {
           <Icons.chevronDown className="ml-auto size-4" />
           <Icons.settings className="ml-3 size-4 transition-all group-hover:scale-110" />
         </CollapsibleTrigger>
-        <CollapsibleContent className="space-y-3 border-t bg-neutral-100 p-4 dark:bg-neutral-800">
+        <CollapsibleContent className="space-y-3 bg-neutral-100 p-4 dark:bg-neutral-800">
           <div className="space-y-6">
             <div className="flex items-center justify-between space-x-2">
               <div className="space-y-1 leading-none">
@@ -229,9 +233,6 @@ export default function AppConfigs({}: {}) {
                       )
                     }
                   >
-                    {isPending && (
-                      <Icons.spinner className="mr-1 size-4 animate-spin" />
-                    )}
                     {t("Save")}
                   </Button>
                 </div>
@@ -249,90 +250,279 @@ export default function AppConfigs({}: {}) {
           <Icons.chevronDown className="ml-auto size-4" />
           <Icons.mail className="ml-3 size-4 transition-all group-hover:scale-110" />
         </CollapsibleTrigger>
-        <CollapsibleContent className="space-y-3 border-t bg-neutral-100 p-4 dark:bg-neutral-800">
+        <CollapsibleContent className="space-y-3 bg-neutral-100 p-4 dark:bg-neutral-800">
           <div className="space-y-6">
             {/* Catch-All */}
-            <div className="flex items-center justify-between space-x-2">
-              <div className="space-y-1 leading-none">
-                <p className="flex items-center gap-1 font-medium">
-                  Catch-All <Badge>Beta</Badge>
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {t(
-                    "Enable email catch-all, all user's email address which created on this platform will be redirected to the catch-all email address",
-                  )}
-                </p>
-              </div>
-              {configs && (
-                <Switch
-                  defaultChecked={configs.enable_email_catch_all}
-                  onCheckedChange={(v) =>
-                    handleChange(v, "enable_email_catch_all", "BOOLEAN")
-                  }
-                />
-              )}
-            </div>
-            <div className="flex flex-col items-start justify-start gap-3">
-              <div className="space-y-1 leading-none">
-                <p className="font-medium">{t("Catch-All Email Address")}</p>
-                <p className="text-xs text-muted-foreground">
-                  {t(
-                    "Set catch-all email address, split by comma if more than one, such as: 1@a-com,2@b-com, Only works when email catch all is enabled",
-                  )}
-                </p>
-              </div>
-              {configs && (
-                <div className="flex w-full items-start gap-2">
-                  <Textarea
-                    className="h-16 max-h-32 min-h-9 resize-y bg-white dark:bg-neutral-700"
-                    placeholder="1@a.com,2@b.com"
-                    rows={5}
-                    // defaultValue={configs.catch_all_emails}
-                    value={catchAllEmails}
-                    disabled={!configs.enable_email_catch_all}
-                    onChange={(e) => setCatchAllEmails(e.target.value)}
-                  />
-                  <Button
-                    className="h-9 text-nowrap"
-                    disabled={
-                      isPending || catchAllEmails === configs.catch_all_emails
-                    }
-                    onClick={() =>
-                      handleChange(catchAllEmails, "catch_all_emails", "STRING")
-                    }
-                  >
-                    {isPending && (
-                      <Icons.spinner className="mr-1 size-4 animate-spin" />
+            <Collapsible>
+              <CollapsibleTrigger className="flex w-full items-center justify-between space-x-2">
+                <div className="space-y-1 leading-none">
+                  <p className="flex items-center gap-2 font-medium">
+                    Catch-All <Badge>Beta</Badge>
+                  </p>
+                  <p className="text-start text-xs text-muted-foreground">
+                    {t(
+                      "Enable email catch-all, all user's email address which created on this platform will be redirected to the catch-all email address",
                     )}
-                    {t("Save")}
-                  </Button>
+                  </p>
                 </div>
-              )}
-            </div>
+                {configs && (
+                  <div
+                    className="ml-auto flex items-center gap-3"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {configs.enable_email_catch_all &&
+                      !configs.catch_all_emails && (
+                        <Badge className="" variant={"yellow"}>
+                          Need Configs
+                        </Badge>
+                      )}
+                    <Switch
+                      defaultChecked={configs.enable_email_catch_all}
+                      onCheckedChange={(v) =>
+                        handleChange(v, "enable_email_catch_all", "BOOLEAN")
+                      }
+                    />
 
-            {/* Message Pusher */}
-            <div className="flex items-center justify-between space-x-2">
-              <div className="space-y-1 leading-none">
-                <p className="flex items-center gap-1 font-medium">
-                  {t("Message Pusher")}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {t(
-                    "Push message to third-party services, such as Telegram, 飞书 etc",
+                    <Icons.chevronDown className="size-4" />
+                  </div>
+                )}
+              </CollapsibleTrigger>
+              <CollapsibleContent className="mt-4 space-y-4 rounded-md border p-4 shadow-md">
+                <div className="flex flex-col items-start justify-start gap-3">
+                  <div className="space-y-1 leading-none">
+                    <p className="font-medium">
+                      {t("Catch-All Email Address")}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {t(
+                        "Set catch-all email address, split by comma if more than one, such as: 1@a-com,2@b-com, Only works when email catch all is enabled",
+                      )}
+                    </p>
+                  </div>
+                  {configs && (
+                    <div className="flex w-full items-start gap-2">
+                      <Textarea
+                        className="h-16 max-h-32 min-h-9 resize-y bg-white dark:bg-neutral-700"
+                        placeholder="1@a.com,2@b.com"
+                        rows={5}
+                        // defaultValue={configs.catch_all_emails}
+                        value={catchAllEmails}
+                        disabled={!configs.enable_email_catch_all}
+                        onChange={(e) => setCatchAllEmails(e.target.value)}
+                      />
+                      <Button
+                        className="h-9 text-nowrap"
+                        disabled={
+                          isPending ||
+                          catchAllEmails === configs.catch_all_emails
+                        }
+                        onClick={() =>
+                          handleChange(
+                            catchAllEmails,
+                            "catch_all_emails",
+                            "STRING",
+                          )
+                        }
+                      >
+                        {t("Save")}
+                      </Button>
+                    </div>
                   )}
-                  .
-                </p>
-              </div>
-              {configs && (
-                <Switch
-                  defaultChecked={false}
-                  disabled
-                  // onCheckedChange={(v) =>
-                  //   handleChange(v, "enable_email_catch_all", "BOOLEAN")
-                  // }
-                />
-              )}
-            </div>
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+
+            {/* Telegram */}
+            <Collapsible>
+              <CollapsibleTrigger className="flex w-full items-center justify-between space-x-2">
+                <div className="space-y-1 leading-none">
+                  <p className="flex items-center gap-2 font-medium">
+                    {t("Telegram Pusher")} <Badge>Beta</Badge>
+                  </p>
+                  <p className="text-start text-xs text-muted-foreground">
+                    {t("Push message to Telegram groups")}.{" "}
+                    <Link
+                      href="/docs/developer/telegram-bot"
+                      className="text-blue-500"
+                      target="_blank"
+                    >
+                      {t("How to configure Telegram bot")} ?
+                    </Link>
+                  </p>
+                </div>
+                {configs && (
+                  <div
+                    className="ml-auto flex items-center gap-3"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {configs.enable_tg_email_push &&
+                      (!configs.tg_email_bot_token ||
+                        !configs.tg_email_chat_id) && (
+                        <Badge className="" variant={"yellow"}>
+                          Need Configs
+                        </Badge>
+                      )}
+                    <Switch
+                      defaultChecked={configs.enable_tg_email_push}
+                      onCheckedChange={(v) =>
+                        handleChange(v, "enable_tg_email_push", "BOOLEAN")
+                      }
+                    />
+                    <Icons.chevronDown className="size-4" />
+                  </div>
+                )}
+              </CollapsibleTrigger>
+              <CollapsibleContent className="mt-4 space-y-4 rounded-md border p-4 shadow-md">
+                <div className="flex flex-col items-start justify-start gap-3">
+                  <div className="space-y-1 leading-none">
+                    <p className="font-medium">{t("Telegram Bot Token")}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {t(
+                        "Set Telegram bot token, Only works when Telegram pusher is enabled",
+                      )}
+                    </p>
+                  </div>
+                  {configs && (
+                    <div className="flex w-full items-start gap-2">
+                      <Input
+                        className="bg-white dark:bg-neutral-700"
+                        placeholder="Enter your Telegram bot token"
+                        type="password"
+                        value={tgBotToken}
+                        disabled={!configs.enable_tg_email_push}
+                        onChange={(e) => setTgBotToken(e.target.value)}
+                      />
+                      <Button
+                        className="h-9 text-nowrap"
+                        disabled={
+                          isPending || tgBotToken === configs.tg_email_bot_token
+                        }
+                        onClick={() =>
+                          handleChange(
+                            tgBotToken,
+                            "tg_email_bot_token",
+                            "STRING",
+                          )
+                        }
+                      >
+                        {t("Save")}
+                      </Button>
+                    </div>
+                  )}
+                </div>
+                <div className="flex flex-col items-start justify-start gap-3">
+                  <div className="space-y-1 leading-none">
+                    <p className="font-medium">{t("Telegram Group ID")}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {t(
+                        "Set Telegram group ID, split by comma if more than one, such as: -10054275724,-10045343642",
+                      )}
+                    </p>
+                  </div>
+                  {configs && (
+                    <div className="flex w-full items-start gap-2">
+                      <Textarea
+                        className="h-16 max-h-32 min-h-9 resize-y bg-white dark:bg-neutral-700"
+                        placeholder=""
+                        rows={5}
+                        value={tgChatId}
+                        disabled={!configs.enable_tg_email_push}
+                        onChange={(e) => setTgChatId(e.target.value)}
+                      />
+                      <Button
+                        className="h-9 text-nowrap"
+                        disabled={
+                          isPending || tgChatId === configs.tg_email_chat_id
+                        }
+                        onClick={() =>
+                          handleChange(tgChatId, "tg_email_chat_id", "STRING")
+                        }
+                      >
+                        {t("Save")}
+                      </Button>
+                    </div>
+                  )}
+                </div>
+                <div className="flex flex-col items-start justify-start gap-3">
+                  <div className="space-y-1 leading-none">
+                    <p className="font-medium">
+                      {t("Telegram Message Template")}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {t("Set Telegram email message template")}
+                    </p>
+                  </div>
+                  {configs && (
+                    <div className="flex w-full items-start gap-2">
+                      <Textarea
+                        className="h-16 max-h-32 min-h-9 resize-y bg-white dark:bg-neutral-700"
+                        placeholder=""
+                        rows={5}
+                        value={tgTemplate}
+                        disabled={!configs.enable_tg_email_push}
+                        onChange={(e) => setTgTemplate(e.target.value)}
+                      />
+                      <Button
+                        className="h-9 text-nowrap"
+                        disabled={
+                          isPending || tgTemplate === configs.tg_email_template
+                        }
+                        onClick={() =>
+                          handleChange(
+                            tgTemplate,
+                            "tg_email_template",
+                            "STRING",
+                          )
+                        }
+                      >
+                        {t("Save")}
+                      </Button>
+                    </div>
+                  )}
+                </div>
+                <div className="flex flex-col items-start justify-start gap-3">
+                  <div className="space-y-1 leading-none">
+                    <p className="font-medium">
+                      {t("Telegram Push Email White List")}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {t(
+                        "Set Telegram push email white list, split by comma, if not set, will push all emails",
+                      )}
+                    </p>
+                  </div>
+                  {configs && (
+                    <div className="flex w-full items-start gap-2">
+                      <Textarea
+                        className="h-16 max-h-32 min-h-9 resize-y bg-white dark:bg-neutral-700"
+                        placeholder=""
+                        rows={5}
+                        value={tgWhiteList}
+                        disabled={!configs.enable_tg_email_push}
+                        onChange={(e) => setTgWhiteList(e.target.value)}
+                      />
+                      <Button
+                        className="h-9 text-nowrap"
+                        disabled={
+                          isPending ||
+                          tgWhiteList === configs.tg_email_target_white_list
+                        }
+                        onClick={() =>
+                          handleChange(
+                            tgWhiteList,
+                            "tg_email_target_white_list",
+                            "STRING",
+                          )
+                        }
+                      >
+                        {t("Save")}
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+
             {/* Webhook */}
             <div className="flex flex-col items-start justify-start gap-3">
               <div className="space-y-1 leading-none">
@@ -357,9 +547,6 @@ export default function AppConfigs({}: {}) {
                       handleChange(catchAllEmails, "catch_all_emails", "STRING")
                     }
                   >
-                    {isPending && (
-                      <Icons.spinner className="mr-1 size-4 animate-spin" />
-                    )}
                     {t("Save")}
                   </Button>
                 </div>
@@ -375,7 +562,7 @@ export default function AppConfigs({}: {}) {
           <Icons.chevronDown className="ml-auto size-4" />
           <Icons.globeLock className="ml-3 size-4 transition-all group-hover:scale-110" />
         </CollapsibleTrigger>
-        <CollapsibleContent className="space-y-3 border-t bg-neutral-100 p-4 dark:bg-neutral-800">
+        <CollapsibleContent className="space-y-3 bg-neutral-100 p-4 dark:bg-neutral-800">
           <div className="space-y-6">
             <div className="flex items-center justify-between space-x-2">
               <div className="space-y-1 leading-none">

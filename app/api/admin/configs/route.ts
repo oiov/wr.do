@@ -26,6 +26,11 @@ export async function GET(req: NextRequest) {
       "enable_email_password_login",
       "enable_email_catch_all",
       "catch_all_emails",
+      "enable_tg_email_push",
+      "tg_email_bot_token",
+      "tg_email_chat_id",
+      "tg_email_template",
+      "tg_email_target_white_list",
     ]);
 
     return Response.json(configs, { status: 200 });

@@ -28,6 +28,8 @@ WR.DO 是一个一站式网络工具平台，集成短链服务、临时邮箱�
   - 可创建无限数量邮箱
   - 支持接收无限制邮件 （依赖 Cloudflare Email Worker）
   - 支持发送邮件（依赖 Resend）
+  - 支持 Catch-All 配置
+  - 支持 Telegram 推送（多频道/群组）
   - 支持调用 API 创建邮箱
   - 支持调用 API 获取收件箱邮件
   - 
