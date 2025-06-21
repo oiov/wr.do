@@ -176,23 +176,23 @@ function formatEmailForTelegram(
   email: OriginalEmail,
   template?: string,
 ): string {
+  const fromInfo = email.fromName
+    ? `${email.fromName} <${email.from}>`
+    : email.from;
+
   if (template) {
     return template
-      .replace("{{from}}", escapeMarkdown(email.from))
-      .replace("{{fromName}}", escapeMarkdown(email.fromName || email.from))
-      .replace("{{to}}", escapeMarkdown(email.to))
-      .replace("{{subject}}", escapeMarkdown(email.subject || "No Subject"))
-      .replace("{{text}}", escapeMarkdown(email.text || "No content"))
+      .replace("{{from}}", fromInfo)
+      .replace("{{to}}", email.to)
+      .replace("{{subject}}", email.subject || "No Subject")
+      .replace("{{text}}", email.text || "No content")
       .replace("{{date}}", email.date || "--");
   }
 
-  const fromInfo = email.fromName
-    ? `${escapeMarkdown(email.fromName)} <${escapeMarkdown(email.from)}>`
-    : escapeMarkdown(email.from);
-  const subject = escapeMarkdown(email.subject || "No Subject");
-  const content = escapeMarkdown(
-    email.text || email.html?.replace(/<[^>]*>/g, "") || "No content",
-  );
+  const subject = email.subject || "No Subject";
+  const content =
+    email.text || email.html?.replace(/<[^>]*>/g, "") || "No content";
+
   const date = email.date || "Unknown date";
 
   // 限制内容长度
@@ -204,10 +204,10 @@ function formatEmailForTelegram(
 
   let message = `📧 *New Email*\n\n`;
   message += `*From:* ${fromInfo}\n`;
-  message += `*To:* ${escapeMarkdown(email.to)}\n`;
+  message += `*To:* ${email.to}\n`;
   message += `*Subject:* ${subject}\n`;
   message += `*Date:* ${date}\n\n`;
-  message += `*Content:*\n\`\`\`\n${truncatedContent}\n\`\`\``;
+  message += `\n\`\`\`Content\n${truncatedContent}\n\`\`\``;
 
   return message;
 }

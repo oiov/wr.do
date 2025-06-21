@@ -456,7 +456,7 @@ export default function AppConfigs({}: {}) {
                     <div className="flex w-full items-start gap-2">
                       <Textarea
                         className="h-16 max-h-32 min-h-9 resize-y bg-white dark:bg-neutral-700"
-                        placeholder=""
+                        placeholder="Support Markdown, such as: 📧 *New Email* *From:* {{from}} *Subject:* {{subject}} ```content {{text}}```"
                         rows={5}
                         value={tgTemplate}
                         disabled={!configs.enable_tg_email_push}

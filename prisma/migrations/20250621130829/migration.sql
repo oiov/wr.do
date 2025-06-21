@@ -53,7 +53,7 @@ INSERT INTO "system_configs"
 VALUES
   (
     'tg_email_template',
-    '📧 *New Email*\n\n*From:* {{fromName}}\n*Subject:* {{subject}}\n\n```\n{{text}}\n```',
+    '',
     'STRING',
     'Telegram 邮件推送模板'
 );
