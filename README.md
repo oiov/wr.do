@@ -50,6 +50,7 @@ WR.DO is a all-in-one web utility platform featuring short links with analytics,
   - Multi-dimensional dashboard with website analytics
   - Dynamic service configuration (toggle short links, email, subdomain management)
   - User management (permissions, quotas, account control)
+  - Dynamically configure login methods (Google, GitHub, Magic Link, Credentials, LinuxDO)
   - Centralized short link administration
   - Centralized email management
   - Centralized subdomain administration

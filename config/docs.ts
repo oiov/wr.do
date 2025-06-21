@@ -82,6 +82,11 @@ export const docsConfig: DocsConfig = {
       title: "Examples",
       items: [
         {
+          title: "Github Page Custom Domain",
+          href: "/docs/examples/github-page",
+          icon: "page",
+        },
+        {
           title: "Cloudflare Custom Domain",
           href: "/docs/examples/cloudflare",
           icon: "page",
@@ -144,6 +149,11 @@ export const docsConfig: DocsConfig = {
         {
           title: "Database",
           href: "/docs/developer/database",
+          icon: "page",
+        },
+        {
+          title: "Telegram Bot",
+          href: "/docs/developer/telegram-bot",
           icon: "page",
         },
         {

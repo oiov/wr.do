@@ -97,8 +97,6 @@ function shouldPushToTelegram(
     .map((email) => email.trim())
     .filter((email) => email.length > 0);
 
-  console.log("[Email]", whiteListArray, email.to);
-
   return whiteListArray.includes(email.to);
 }
 

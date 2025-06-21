@@ -74,54 +74,55 @@ const VersionNotifier: React.FC<VersionNotifierProps> = ({
     return () => clearInterval(interval);
   }, []);
 
-  if (!showUpdate) {
-    return (
+  return (
+    <>
       <Button
         onClick={checkVersion}
         disabled={isLoading}
         variant={"outline"}
-        // size={"sm"}
-        className={`flex items-center gap-2 ${className}`}
+        size={"sm"}
+        className={`ml-auto flex items-center gap-2 text-xs ${className}`}
       >
         <RefreshCw className={`size-4 ${isLoading ? "animate-spin" : ""}`} />
         {t("Check for updates")}
       </Button>
-    );
-  }
+      {showUpdate && (
+        <div className="fixed bottom-4 right-4 z-50">
+          <div className="max-w-xs rounded-lg border bg-muted p-4 shadow-xl dark:border-gray-700 dark:bg-gray-800">
+            <div className="mb-2 flex items-center justify-between">
+              <div className="mr-6 flex items-center space-x-2">
+                <span className="text-sm font-medium text-gray-900 dark:text-white">
+                  🎉 {t("New version available")}: {latestVersion}
+                </span>
+              </div>
+              <Button
+                onClick={() => setShowUpdate(false)}
+                className="px-2 text-muted-foreground"
+                title="Dismiss"
+                variant={"ghost"}
+                size={"sm"}
+              >
+                <X className="size-4" />
+              </Button>
+            </div>
 
-  return (
-    <div className="max-w-xs rounded-lg border bg-muted p-4 shadow-xl dark:border-gray-700 dark:bg-gray-800">
-      <div className="mb-2 flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <span className="text-sm font-medium text-gray-900 dark:text-white">
-            🎉 {t("New version available")}: {latestVersion}
-          </span>
+            <div className="flex space-x-3">
+              <a
+                href={`https://github.com/${githubRepo}/releases/latest`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 rounded bg-blue-600 px-3 py-2 text-center text-sm font-medium text-white transition-colors hover:bg-blue-700"
+              >
+                {t("Update now")}
+              </a>
+              <Button onClick={dismissUpdate} variant={"outline"} size={"sm"}>
+                {t("Dismiss")}
+              </Button>
+            </div>
+          </div>
         </div>
-        <Button
-          onClick={() => setShowUpdate(false)}
-          className="px-2 text-muted-foreground"
-          title="Dismiss"
-          variant={"ghost"}
-          size={"sm"}
-        >
-          <X className="size-4" />
-        </Button>
-      </div>
-
-      <div className="flex space-x-3">
-        <a
-          href={`https://github.com/${githubRepo}/releases/latest`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex-1 rounded bg-blue-600 px-3 py-2 text-center text-sm font-medium text-white transition-colors hover:bg-blue-700"
-        >
-          {t("Update now")}
-        </a>
-        <Button onClick={dismissUpdate} variant={"outline"} size={"sm"}>
-          {t("Dismiss")}
-        </Button>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

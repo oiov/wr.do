@@ -3,9 +3,11 @@
 import { useEffect, useState, useTransition } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import pkg from "package.json";
 import { toast } from "sonner";
 import useSWR from "swr";
 
+import { siteConfig } from "@/config/site";
 import { fetcher } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -239,7 +241,29 @@ export default function AppConfigs({}: {}) {
               )}
             </div>
 
-            <VersionNotifier />
+            <div
+              className="flex items-center gap-1 text-xs text-muted-foreground/90"
+              style={{ fontFamily: "Bahamas Bold" }}
+            >
+              Powered by
+              <Link
+                href={siteConfig.url}
+                target="_blank"
+                rel="noreferrer"
+                className="font-medium underline-offset-2 hover:underline"
+              >
+                {siteConfig.name}
+              </Link>
+              <Link
+                href={`${siteConfig.links.github}/releases/latest`}
+                target="_blank"
+                rel="noreferrer"
+                className="font-thin underline-offset-2 hover:underline"
+              >
+                v{pkg.version}
+              </Link>
+              <VersionNotifier />
+            </div>
           </div>
         </CollapsibleContent>
       </Collapsible>
