@@ -1,8 +1,14 @@
 <div align="center">
   <h1>WR.DO</h1>
-  <p><a href="https://wr.do/docs/developer">开发文档</a> · <a href="https://discord.gg/AHPQYuZu3m">Discord</a> · English | <a href="/README-zh.md">简体中文</a></p>
-  <p>生成短链接, 创建 DNS 记录, 管理临时邮箱</p>
-  <!-- <img src="https://wr.do/_static/images/light-preview.png"/> -->
+  <p>
+    <a href="https://wr.do/docs/developer">开发文档</a> · <a href="https://wr.do/feedback">Feedback</a> · <a href="/README.md">English</a> | 简体中文
+  </p>
+  <img alt="GitHub Release" src="https://img.shields.io/github/v/release/oiov/wr.do?style=flat-square">
+  <img src="https://img.shields.io/github/stars/oiov/wr.do.svg?logo=github&style=flat-square" alt="star"/>
+  <img alt="GitHub forks" src="https://img.shields.io/github/forks/oiov/wr.do?style=flat-square">
+  <img alt="GitHub Issues or Pull Requests" src="https://img.shields.io/github/issues/oiov/wr.do?style=flat-square"> <br>
+  <img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/oiov/wr.do/docker-build-push.yml?style=flat-square">
+	<img src="https://img.shields.io/github/license/oiov/wr.do?style=flat-square" alt="MIT"/>
 </div>
 
 ## 简介
@@ -10,7 +16,7 @@
 WR.DO 是一个一站式网络工具平台，集成短链服务、临时邮箱、子域名管理和开放API接口。支持自定义链接、密码保护、访问统计；提供无限制临时邮箱收发；管理多域名DNS记录；内置网站截图、元数据提取等实用API。完整的管理后台，支持用户权限控制和服务配置。
 
 - 官网: [https://wr.do](https://wr.do)
-- Demo: [https://699399.xyz](https://699399.xyz) (Account: `admin@admin.com`, Password: `123456`)
+- Demo: [https://699399.xyz](https://699399.xyz) (账号: `admin@admin.com`, 密码: `123456`)
 
 ## 功能列表
 

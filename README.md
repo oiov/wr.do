@@ -1,7 +1,12 @@
 <div align="center">
   <h1>WR.DO</h1>
-  <p><a href="https://wr.do/docs/developer">Docs</a> · <a href="https://discord.gg/AHPQYuZu3m">Discord</a> · English | <a href="/README-zh.md">简体中文</a></p>
-  <p>Make Short Links, Manage DNS Records, Receive Emails.</p>
+  <p><a href="https://wr.do/docs/developer">Docs</a> · <a href="https://wr.do/feedback">Feedback</a> · English | <a href="/README-zh.md">简体中文</a></p>
+  <img alt="GitHub Release" src="https://img.shields.io/github/v/release/oiov/wr.do?style=flat-square">
+  <img src="https://img.shields.io/github/stars/oiov/wr.do.svg?logo=github&style=flat-square" alt="star"/>
+  <img alt="GitHub forks" src="https://img.shields.io/github/forks/oiov/wr.do?style=flat-square">
+  <img alt="GitHub Issues or Pull Requests" src="https://img.shields.io/github/issues/oiov/wr.do?style=flat-square"> <br>
+  <img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/oiov/wr.do/docker-build-push.yml?style=flat-square">
+	<img src="https://img.shields.io/github/license/oiov/wr.do?style=flat-square" alt="MIT"/>
 </div>
 
 ## Introduction
