@@ -265,7 +265,7 @@ export default function UsersList({ user }: UrlListProps) {
                           setShowForm(!isShowForm);
                         }}
                       >
-                        <p>{t("Edit")}</p>
+                        <p className="text-nowrap">{t("Edit")}</p>
                         <PenLine className="ml-1 size-4" />
                       </Button>
                     </TableCell>

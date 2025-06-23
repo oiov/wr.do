@@ -112,6 +112,12 @@ export async function getDomainsByFeatureClient(feature: string) {
   }
 }
 
+export async function getDomainByName(domain_name: string) {
+  return await prisma.domain.findUnique({
+    where: { domain_name },
+  });
+}
+
 export async function checkDomainIsConfiguratedResend(domain_name: string) {
   try {
     const domain = await prisma.domain.findUnique({

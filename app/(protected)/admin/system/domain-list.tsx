@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import Link from "next/link";
 import { User } from "@prisma/client";
 import { PenLine, RefreshCwIcon } from "lucide-react";
@@ -13,6 +13,13 @@ import { fetcher } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -67,8 +74,10 @@ function TableColumnSekleton() {
 
 export default function DomainList({ user, action }: DomainListProps) {
   const { isMobile } = useMediaQuery();
+  const [isPending, startTransition] = useTransition();
   const t = useTranslations("List");
   const [isShowForm, setShowForm] = useState(false);
+  const [isShowDuplicateForm, setShowDuplicateForm] = useState(false);
   const [formType, setFormType] = useState<FormType>("add");
   const [currentEditDomain, setCurrentEditDomain] =
     useState<DomainFormData | null>(null);
@@ -121,6 +130,26 @@ export default function DomainList({ user, action }: DomainListProps) {
     } else {
       toast.error("Activation failed!");
     }
+  };
+
+  const handleDuplicate = () => {
+    startTransition(async () => {
+      const response = await fetch(`${action}/duplicate`, {
+        method: "POST",
+        body: JSON.stringify({
+          domain: currentEditDomain?.domain_name,
+        }),
+      });
+      if (!response.ok || response.status !== 200) {
+        toast.error("Duplicate Failed!", {
+          description: await response.text(),
+        });
+      } else {
+        toast.success(`Duplicate successfully!`);
+        setShowDuplicateForm(false);
+        handleRefresh();
+      }
+    });
   };
 
   return (
@@ -290,27 +319,52 @@ export default function DomainList({ user, action }: DomainListProps) {
                         <TimeAgoIntl date={domain.updatedAt as Date} />
                       </TableCell>
                       <TableCell className="col-span-1 flex items-center gap-1">
-                        <Button
-                          className="h-7 px-1 text-xs hover:bg-slate-100 dark:hover:text-primary-foreground sm:px-1.5"
-                          size="sm"
-                          variant={"outline"}
-                          onClick={() => {
-                            setCurrentEditDomain(domain);
-                            setShowForm(false);
-                            setFormType("edit");
-                            setShowForm(!isShowForm);
-                          }}
-                        >
-                          <p className="hidden text-nowrap sm:block">
-                            {t("Edit")}
-                          </p>
-                          <PenLine className="mx-0.5 size-4 sm:ml-1 sm:size-3" />
-                        </Button>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              className="size-[25px] p-1.5"
+                              size="sm"
+                              variant="ghost"
+                            >
+                              <Icons.moreVertical className="size-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent>
+                            <DropdownMenuItem asChild>
+                              <Button
+                                className="flex w-full items-center gap-2 text-nowrap"
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => {
+                                  setCurrentEditDomain(domain);
+                                  setShowForm(false);
+                                  setFormType("edit");
+                                  setShowForm(!isShowForm);
+                                }}
+                              >
+                                {/* <PenLine className="mx-0.5 size-4" /> */}
+                                {t("Edit")}
+                              </Button>
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem asChild>
+                              <Button
+                                className="flex w-full items-center gap-2"
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => {
+                                  setCurrentEditDomain(domain);
+                                  setShowDuplicateForm(false);
+                                  setShowDuplicateForm(!isShowDuplicateForm);
+                                }}
+                              >
+                                {t("Duplicate")}
+                              </Button>
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </TableCell>
                     </TableRow>
-                    {/* {isShowDomainInfo && selectedDomain?.id === domain.id && (
-                      <DomainInfo domain={domain} />
-                    )} */}
                   </div>
                 ))
               ) : (
@@ -354,6 +408,42 @@ export default function DomainList({ user, action }: DomainListProps) {
           action={action}
           onRefresh={handleRefresh}
         />
+      </Modal>
+
+      <Modal
+        showModal={isShowDuplicateForm}
+        setShowModal={setShowDuplicateForm}
+      >
+        <div className="flex flex-col items-start border-b p-4 pt-8 sm:px-16">
+          <h2 className="mb-2 text-lg font-bold">
+            {t("Confirm duplicate domain")} ?
+          </h2>
+          <p>
+            {t(
+              "This will duplicate all configuration information for the {domain} domain, and create a new domain",
+              { domain: currentEditDomain?.domain_name || "" },
+            )}
+            .
+          </p>
+
+          <div className="mt-6 flex w-full items-center justify-between gap-2">
+            <Button
+              type="reset"
+              variant="destructive"
+              className="w-[100px] px-0"
+              onClick={() => setShowDuplicateForm(false)}
+            >
+              {t("Cancel")}
+            </Button>
+            <Button
+              className="w-full text-nowrap"
+              disabled={isPending}
+              onClick={() => handleDuplicate()}
+            >
+              {t("Duplicate")}
+            </Button>
+          </div>
+        </div>
       </Modal>
     </>
   );

@@ -181,7 +181,10 @@
     "USER": "USER",
     "Total Users": "Total Users",
     "Edit User": "Edit User",
-    "Login Password": "Password"
+    "Login Password": "Password",
+    "Duplicate": "Duplicate",
+    "Confirm duplicate domain": "Confirm duplicate domain",
+    "This will duplicate all configuration information for the {domain} domain, and create a new domain": "This will duplicate all configuration information for the {domain} domain, and create a new domain"
   },
   "Components": {
     "Dashboard": "Dashboard",

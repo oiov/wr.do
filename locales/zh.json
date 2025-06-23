@@ -181,7 +181,10 @@
     "USER": "用户",
     "Total Users": "用户总数",
     "Edit User": "编辑用户",
-    "Login Password": "用户密码"
+    "Login Password": "用户密码",
+    "Duplicate": "复制",
+    "Confirm duplicate domain": "确认复制域名",
+    "This will duplicate all configuration information for the {domain} domain, and create a new domain": "这将复制 {domain} 域名的所有配置信息，并创建一个新域名"
   },
   "Components": {
     "Dashboard": "用户面板",
