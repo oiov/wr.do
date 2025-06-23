@@ -30,7 +30,14 @@ export async function POST(req: Request) {
       });
     }
 
-    let record_name = ["A", "CNAME"].includes(record.type)
+    if (reservedDomains.includes(record.name)) {
+      return Response.json("Domain name is reserved", {
+        status: 403,
+        statusText: "Reserved domain",
+      });
+    }
+
+    let record_name = ["A", "CNAME", "AAAA"].includes(record.type)
       ? record.name
       : `${record.name}.${record.zone_name}`;
 
@@ -51,13 +58,6 @@ export async function POST(req: Request) {
           statusText: "Invalid domain",
         },
       );
-    }
-
-    if (reservedDomains.includes(record_name)) {
-      return Response.json("Domain name is reserved", {
-        status: 403,
-        statusText: "Reserved domain",
-      });
     }
 
     const data = await updateDNSRecord(

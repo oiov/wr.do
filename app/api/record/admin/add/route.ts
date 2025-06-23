@@ -53,7 +53,7 @@ export async function POST(req: Request) {
       id: generateSecret(16),
     };
 
-    let record_name = ["A", "CNAME"].includes(record.type)
+    let record_name = ["A", "CNAME", "AAAA"].includes(record.type)
       ? record.name
       : `${record.name}.${record.zone_name}`;
 
@@ -74,12 +74,6 @@ export async function POST(req: Request) {
           statusText: "Invalid domain",
         },
       );
-    }
-
-    if (reservedDomains.includes(record_name)) {
-      return Response.json("Domain name is reserved", {
-        status: 403,
-      });
     }
 
     const user_record = await getUserRecordByTypeNameContent(

@@ -31,7 +31,7 @@ export async function POST(req: Request) {
       });
     }
 
-    let record_name = ["A", "CNAME"].includes(record.type)
+    let record_name = ["A", "CNAME", "AAAA"].includes(record.type)
       ? record.name
       : `${record.name}.${record.zone_name}`;
 
