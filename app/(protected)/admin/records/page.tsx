@@ -5,6 +5,7 @@ import { constructMetadata } from "@/lib/utils";
 import { DashboardHeader } from "@/components/dashboard/header";
 
 import UserRecordsList from "../../dashboard/records/record-list";
+import UserRecordStatus from "../../dashboard/records/record-statu";
 
 export const metadata = constructMetadata({
   title: "DNS Records",
@@ -23,6 +24,16 @@ export default async function DashboardPage() {
         text="List and manage records"
         link="/docs/dns-records"
         linkText="DNS records"
+      />
+      <UserRecordStatus
+        user={{
+          id: user.id,
+          name: user.name || "",
+          apiKey: user.apiKey || "",
+          email: user.email || "",
+          role: user.role,
+        }}
+        action="/api/record/admin"
       />
       <UserRecordsList
         user={{

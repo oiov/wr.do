@@ -1,11 +1,17 @@
 import { cn } from "@/lib/utils";
 
-export default function StatusDot({ status }: { status: number }) {
+export default function StatusDot({
+  status,
+  color = "bg-green-500",
+}: {
+  status: number;
+  color?: string;
+}) {
   return (
     <div
       className={cn(
-        "h-[9px] w-[9px] rounded-full",
-        status === 1 ? "animate-pulse bg-green-500" : "bg-yellow-500",
+        "h-[9px] w-[9px] animate-pulse rounded-full",
+        status === 1 ? color : "bg-yellow-500",
       )}
     />
   );

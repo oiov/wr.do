@@ -300,7 +300,11 @@
     "All the time": "所有时间",
     "No Visits": "无访问记录",
     "You don't have any visits yet in": "您还没有任何访问记录于",
-    "System Settings": "系统设置"
+    "System Settings": "系统设置",
+    "Active": "有效解析",
+    "Inactive": "无效解析",
+    "Pending": "审核中",
+    "Rejected": "已拒绝"
   },
   "Landing": {
     "settings": "设置",

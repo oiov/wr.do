@@ -229,6 +229,45 @@ export async function getUserRecordCount(
   }
 }
 
+export async function getUserRecordStatus(
+  userId: string,
+  role: UserRole = "USER",
+) {
+  const whereCondition = role === "USER" ? { userId } : {};
+
+  const statusCounts = await prisma.userRecord.groupBy({
+    by: ["active"],
+    where: whereCondition,
+    _count: {
+      _all: true,
+    },
+  });
+
+  const total = await prisma.userRecord.count({
+    where: whereCondition,
+  });
+
+  const counts = statusCounts.reduce(
+    (acc, item) => {
+      // if (!item.active) {
+      //   acc[0] = item._count._all;
+      //   return acc;
+      // }
+      acc[item.active ?? 0] = item._count._all;
+      return acc;
+    },
+    {} as Record<number, number>,
+  );
+
+  return {
+    total,
+    inactive: counts[0] || 0,
+    active: counts[1] || 0,
+    pending: counts[2] || 0,
+    rejected: counts[3] || 0,
+  };
+}
+
 export async function getUserRecordByTypeNameContent(
   userId: string,
   type: string,

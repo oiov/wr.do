@@ -7,7 +7,6 @@ import {
 import { getDomainsByFeature } from "@/lib/dto/domains";
 import { getPlanQuota } from "@/lib/dto/plan";
 import { checkUserStatus, getUserByEmail } from "@/lib/dto/user";
-import { reservedDomains } from "@/lib/enums";
 import { getCurrentUser } from "@/lib/session";
 import { generateSecret } from "@/lib/utils";
 

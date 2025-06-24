@@ -327,7 +327,7 @@ export default function AppConfigs({}: {}) {
                     <div className="flex w-full items-start gap-2">
                       <Textarea
                         className="h-16 max-h-32 min-h-9 resize-y bg-white dark:bg-neutral-700"
-                        placeholder="1@a.com,2@b.com"
+                        placeholder="example1@wr.do,example2@wr.do"
                         rows={5}
                         // defaultValue={configs.catch_all_emails}
                         value={catchAllEmails}

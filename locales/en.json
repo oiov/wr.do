@@ -300,7 +300,11 @@
     "All the time": "All the time",
     "No Visits": "No Visits",
     "You don't have any visits yet in": "You don't have any visits yet in",
-    "System Settings": "System Settings"
+    "System Settings": "System Settings",
+    "Active": "Active",
+    "Inactive": "Inactive",
+    "Pending": "Pending",
+    "Rejected": "Rejected"
   },
   "Landing": {
     "settings": "Settings",
