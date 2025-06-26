@@ -184,7 +184,8 @@
     "Login Password": "用户密码",
     "Duplicate": "复制",
     "Confirm duplicate domain": "确认复制域名",
-    "This will duplicate all configuration information for the {domain} domain, and create a new domain": "这将复制 {domain} 域名的所有配置信息，并创建一个新域名"
+    "This will duplicate all configuration information for the {domain} domain, and create a new domain": "这将复制 {domain} 域名的所有配置信息，并创建一个新域名",
+    "Add User": "添加用户"
   },
   "Components": {
     "Dashboard": "用户面板",
@@ -360,7 +361,7 @@
     "Email Code": "邮箱验证",
     "Password": "账号密码",
     "Sign In / Sign Up": "点击登录/注册",
-    "Incorrect email or password": "邮箱或密码错误",
+    "Incorrect email or password": "邮箱或密码错误，或管理员关闭了新用户注册",
     "Something went wrong": "出错了",
     "Check your email": "检查您的邮箱",
     "We sent you a login link": "我们已向您发送登录链接",

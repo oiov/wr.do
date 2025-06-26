@@ -29,7 +29,7 @@ import { Switch } from "../ui/switch";
 
 export type FormData = User;
 
-export type FormType = "edit";
+export type FormType = "add" | "edit";
 
 export interface RecordFormProps {
   user: Pick<User, "id" | "name">;
@@ -81,8 +81,28 @@ export function UserForm({
   const onSubmit = handleSubmit((data) => {
     if (type === "edit") {
       handleUpdate(data);
+    } else if (type === "add") {
+      handleCreate(data);
     }
   });
+
+  const handleCreate = async (data: User) => {
+    startTransition(async () => {
+      const response = await fetch("/api/user/admin/add", {
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+      if (!response.ok || response.status !== 200) {
+        toast.error("Create Failed", {
+          description: response.statusText,
+        });
+      } else {
+        toast.success(`Create successfully!`);
+        setShowForm(false);
+        onRefresh();
+      }
+    });
+  };
 
   const handleUpdate = async (data: User) => {
     startTransition(async () => {
@@ -127,7 +147,7 @@ export function UserForm({
   return (
     <div>
       <div className="rounded-t-lg bg-muted px-4 py-2 text-lg font-semibold">
-        {t("Edit User")}
+        {type === "add" ? t("Add User") : t("Edit User")}
       </div>
       <form className="max-w-2xl p-4" onSubmit={onSubmit}>
         <div className="items-center justify-start gap-4 md:flex">
@@ -140,7 +160,7 @@ export function UserForm({
                 id="email"
                 className="flex-1 shadow-inner"
                 size={32}
-                disabled
+                disabled={type === "edit"}
                 {...register("email")}
               />
             </div>

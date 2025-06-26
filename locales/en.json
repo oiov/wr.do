@@ -184,7 +184,8 @@
     "Login Password": "Password",
     "Duplicate": "Duplicate",
     "Confirm duplicate domain": "Confirm duplicate domain",
-    "This will duplicate all configuration information for the {domain} domain, and create a new domain": "This will duplicate all configuration information for the {domain} domain, and create a new domain"
+    "This will duplicate all configuration information for the {domain} domain, and create a new domain": "This will duplicate all configuration information for the {domain} domain, and create a new domain",
+    "Add User": "Add User"
   },
   "Components": {
     "Dashboard": "Dashboard",
@@ -360,7 +361,7 @@
     "Email Code": "Email",
     "Password": "Password",
     "Sign In / Sign Up": "Sign In / Sign Up",
-    "Incorrect email or password": "Incorrect email or password",
+    "Incorrect email or password": "Incorrect email or password, or administrator closed new user registration",
     "Something went wrong": "Something went wrong",
     "Check your email": "Check your email",
     "We sent you a login link": "We sent you a login link",

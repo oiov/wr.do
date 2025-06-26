@@ -34,7 +34,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { UserForm } from "@/components/forms/user-form";
+import { FormType, UserForm } from "@/components/forms/user-form";
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
 import { Icons } from "@/components/shared/icons";
 import { PaginationWrapper } from "@/components/shared/pagination";
@@ -74,6 +74,7 @@ function TableColumnSekleton({ className }: { className?: string }) {
 
 export default function UsersList({ user }: UrlListProps) {
   const { isMobile } = useMediaQuery();
+  const [formType, setFormType] = useState<FormType>("add");
   const [isShowForm, setShowForm] = useState(false);
   const [currentEditUser, setcurrentEditUser] = useState<User | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -120,6 +121,19 @@ export default function UsersList({ user }: UrlListProps) {
               ) : (
                 <RefreshCwIcon className="size-4" />
               )}
+            </Button>
+            <Button
+              className="flex shrink-0 gap-1"
+              variant="default"
+              onClick={() => {
+                setcurrentEditUser(null);
+                setShowForm(false);
+                setFormType("add");
+                setShowForm(!isShowForm);
+              }}
+            >
+              <Icons.add className="size-4" />
+              <span className="hidden sm:inline">{t("Add User")}</span>
             </Button>
           </div>
         </CardHeader>
@@ -262,6 +276,7 @@ export default function UsersList({ user }: UrlListProps) {
                         onClick={() => {
                           setcurrentEditUser(user);
                           setShowForm(false);
+                          setFormType("edit");
                           setShowForm(!isShowForm);
                         }}
                       >
@@ -304,7 +319,7 @@ export default function UsersList({ user }: UrlListProps) {
           user={{ id: user.id, name: user.name || "" }}
           isShowForm={isShowForm}
           setShowForm={setShowForm}
-          type="edit"
+          type={formType}
           initData={currentEditUser}
           onRefresh={handleRefresh}
         />

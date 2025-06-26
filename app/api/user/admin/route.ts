@@ -1,4 +1,3 @@
-import { env } from "@/env.mjs";
 import { checkUserStatus, getAllUsers } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";
 

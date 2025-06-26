@@ -221,12 +221,7 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
 
           <Button
             className="my-2"
-            disabled={
-              !loginMethod.registration ||
-              isLoading ||
-              isGoogleLoading ||
-              isGithubLoading
-            }
+            disabled={isLoading || isGoogleLoading || isGithubLoading}
           >
             {isLoading && (
               <Icons.spinner className="mr-2 size-4 animate-spin" />

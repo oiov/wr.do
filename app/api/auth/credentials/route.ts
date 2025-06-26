@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 
 import { prisma } from "@/lib/db";
+import { getMultipleConfigs } from "@/lib/dto/system-config";
 import { hashPassword, verifyPassword } from "@/lib/utils";
 
 export async function POST(req: NextRequest) {
@@ -17,6 +18,10 @@ export async function POST(req: NextRequest) {
     });
 
     if (!user) {
+      const configs = await getMultipleConfigs(["enable_user_registration"]);
+      if (!configs.enable_user_registration) {
+        return Response.json("User registration is disabled", { status: 403 });
+      }
       const newUser = await prisma.user.create({
         data: {
           name: "",

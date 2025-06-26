@@ -547,8 +547,8 @@ export default function EmailSidebar({
                 </div>
                 <span className="line-clamp-1 hover:line-clamp-none">
                   {isAdminModel
-                    ? `Created by ${email.user || email.email.slice(0, 5)} at`
-                    : ""}{" "}
+                    ? `${email.user || email.email.slice(0, 5)} · `
+                    : ""}
                   <TimeAgoIntl date={email.createdAt} />
                 </span>
               </div>
