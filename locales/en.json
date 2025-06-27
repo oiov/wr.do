@@ -369,7 +369,8 @@
     "Welcome back!": "Welcome back!",
     "Unregistered users will automatically create an account": "Unregistered users will automatically create an account",
     "Administrator has disabled new user registration": "Administrator has disabled new user registration",
-    "Email domain not supported, Please use one of the following:": "Email domain not supported. Please use one of the following:"
+    "Email domain not supported, Please use one of the following:": "Email domain not supported. Please use one of the following:",
+    "Auth configuration error": "Auth configuration error"
   },
   "System": {
     "MENU": "Menu",

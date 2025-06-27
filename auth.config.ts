@@ -83,12 +83,9 @@ export default {
             body: JSON.stringify(credentials),
           },
         );
-        // console.log("[res]", res);
-
         if (res.ok) {
           return res.json();
         }
-
         return null;
       },
     }),

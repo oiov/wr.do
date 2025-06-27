@@ -118,8 +118,14 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
       // console.log("[signInResult]", signInResult);
 
       if (signInResult?.error) {
+        const errorMaps = {
+          Configuration: t("Auth configuration error"),
+          CredentialsSignin: t("Incorrect email or password"),
+        };
+        const errorMessage =
+          errorMaps[signInResult.error] || t("Unknown error");
         toast.error(t("Something went wrong"), {
-          description: `[${signInResult?.error}] ${t("Incorrect email or password")}.`,
+          description: `[${signInResult.error}] ${errorMessage}.`,
         });
       } else {
         toast.success(t("Welcome back!"));

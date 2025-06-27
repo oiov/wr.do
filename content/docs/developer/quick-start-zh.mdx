@@ -62,7 +62,7 @@ pnpm db:push
 `AUTH_SECRET` 环境变量用于加密 token 和邮件验证哈希（NextAuth.js）。
 你可以通过 [https://generate-secret.vercel.app/32](https://generate-secret.vercel.app/32) 生成
 
-`AUTH_URL` 是用于 NextAuth.js 的回调 URL，如果使用docker部署，需要设置为你的**站点域名**；如果使用vercel部署，可不填。
+`AUTH_URL` 是用于 NextAuth.js 的回调 URL。
 
 注意，`AUTH_URL` 与 `NEXT_PUBLIC_APP_URL` 需要保持一致
 
