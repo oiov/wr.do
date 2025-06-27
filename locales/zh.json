@@ -370,7 +370,8 @@
     "Unregistered users will automatically create an account": "未注册用户将自动创建账户",
     "Administrator has disabled new user registration": "管理员已关闭新用户注册",
     "Email domain not supported, Please use one of the following:": "暂不支持此邮箱后缀，请使用以下邮箱:",
-    "Auth configuration error": "权限校验配置错误"
+    "Auth configuration error": "权限校验配置错误",
+    "Unknown error": "未知错误"
   },
   "System": {
     "MENU": "菜单",
