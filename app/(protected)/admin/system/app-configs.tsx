@@ -47,6 +47,7 @@ export default function AppConfigs({}: {}) {
     if (!isLoading && configs) {
       setNotification(configs?.system_notification);
       setCatchAllEmails(configs?.catch_all_emails);
+      setEmailSuffix(configs?.email_registration_suffix_limit_white_list);
       setTgBotToken(configs?.tg_email_bot_token);
       setTgChatId(configs?.tg_email_chat_id);
       setTgTemplate(configs?.tg_email_template);
