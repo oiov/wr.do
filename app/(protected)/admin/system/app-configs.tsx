@@ -35,6 +35,7 @@ export default function AppConfigs({}: {}) {
   } = useSWR<Record<string, any>>("/api/admin/configs", fetcher);
   const [notification, setNotification] = useState("");
   const [catchAllEmails, setCatchAllEmails] = useState("");
+  const [emailSuffix, setEmailSuffix] = useState("");
   const [tgBotToken, setTgBotToken] = useState("");
   const [tgChatId, setTgChatId] = useState("");
   const [tgTemplate, setTgTemplate] = useState("");
@@ -203,6 +204,93 @@ export default function AppConfigs({}: {}) {
               </CollapsibleContent>
             </Collapsible>
 
+            <Collapsible>
+              <CollapsibleTrigger className="flex w-full items-center justify-between space-x-2">
+                <div className="space-y-1 leading-none">
+                  <p className="flex items-center gap-2 font-medium">
+                    {t("Email Suffix Limit")}
+                  </p>
+                  <p className="text-start text-xs text-muted-foreground">
+                    {t(
+                      "Enable eamil suffix limit, only works for resend email login and email password login methods",
+                    )}
+                  </p>
+                </div>
+                {configs && (
+                  <div
+                    className="ml-auto flex items-center gap-3"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {configs.enable_email_registration_suffix_limit &&
+                      !configs.email_registration_suffix_limit_white_list && (
+                        <Badge variant="yellow">
+                          <Icons.warning className="mr-1 size-3" />{" "}
+                          {t("Need to configure")}
+                        </Badge>
+                      )}
+                    <Switch
+                      defaultChecked={
+                        configs.enable_email_registration_suffix_limit
+                      }
+                      onCheckedChange={(v) =>
+                        handleChange(
+                          v,
+                          "enable_email_registration_suffix_limit",
+                          "BOOLEAN",
+                        )
+                      }
+                    />
+                    <Icons.chevronDown className="size-4" />
+                  </div>
+                )}
+              </CollapsibleTrigger>
+              <CollapsibleContent className="mt-4 space-y-4 rounded-md border p-4 shadow-md">
+                <div className="flex flex-col items-start justify-start gap-3">
+                  <div className="space-y-1 leading-none">
+                    <p className="font-medium">
+                      {t("Email Suffix White List")}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {t(
+                        "Set email suffix white list, split by comma, such as: gmail-com,yahoo-com,hotmail-com",
+                      )}
+                    </p>
+                  </div>
+                  {configs && (
+                    <div className="flex w-full items-start gap-2">
+                      <Textarea
+                        className="h-16 max-h-32 min-h-9 resize-y bg-white dark:bg-neutral-700"
+                        placeholder="gmail.com,yahoo.com,hotmail.com"
+                        rows={5}
+                        value={emailSuffix}
+                        disabled={
+                          !configs.enable_email_registration_suffix_limit
+                        }
+                        onChange={(e) => setEmailSuffix(e.target.value)}
+                      />
+                      <Button
+                        className="h-9 text-nowrap"
+                        disabled={
+                          isPending ||
+                          emailSuffix ===
+                            configs.email_registration_suffix_limit_white_list
+                        }
+                        onClick={() =>
+                          handleChange(
+                            emailSuffix,
+                            "email_registration_suffix_limit_white_list",
+                            "STRING",
+                          )
+                        }
+                      >
+                        {t("Save")}
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+
             <div className="flex flex-col items-start justify-start gap-3">
               <div className="space-y-1 leading-none">
                 <p className="font-medium">{t("Notification")}</p>
@@ -296,8 +384,9 @@ export default function AppConfigs({}: {}) {
                   >
                     {configs.enable_email_catch_all &&
                       !configs.catch_all_emails && (
-                        <Badge className="" variant={"yellow"}>
-                          Need Configs
+                        <Badge variant="yellow">
+                          <Icons.warning className="mr-1 size-3" />{" "}
+                          {t("Need to configure")}
                         </Badge>
                       )}
                     <Switch
@@ -382,8 +471,9 @@ export default function AppConfigs({}: {}) {
                     {configs.enable_tg_email_push &&
                       (!configs.tg_email_bot_token ||
                         !configs.tg_email_chat_id) && (
-                        <Badge className="" variant={"yellow"}>
-                          Need Configs
+                        <Badge variant="yellow">
+                          <Icons.warning className="mr-1 size-3" />{" "}
+                          {t("Need to configure")}
                         </Badge>
                       )}
                     <Switch
@@ -548,7 +638,7 @@ export default function AppConfigs({}: {}) {
             </Collapsible>
 
             {/* Webhook */}
-            <div className="flex flex-col items-start justify-start gap-3">
+            {/* <div className="flex flex-col items-start justify-start gap-3">
               <div className="space-y-1 leading-none">
                 <p className="font-medium">Webhook</p>
                 <p className="text-xs text-muted-foreground"></p>
@@ -575,7 +665,7 @@ export default function AppConfigs({}: {}) {
                   </Button>
                 </div>
               )}
-            </div>
+            </div> */}
           </div>
         </CollapsibleContent>
       </Collapsible>

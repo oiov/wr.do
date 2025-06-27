@@ -42,18 +42,50 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
   } = useForm<FormData2>({
     resolver: zodResolver(userPasswordAuthSchema),
   });
-  // const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [isLoading, startTransition] = React.useTransition();
   const [isGoogleLoading, setIsGoogleLoading] = React.useState<boolean>(false);
   const [isGithubLoading, setIsGithubLoading] = React.useState<boolean>(false);
   const [isLinuxDoLoading, setIsLinuxDoLoading] =
     React.useState<boolean>(false);
+  const [suffixWhiteList, setSuffixWhiteList] = React.useState<string[]>([]);
   const searchParams = useSearchParams();
-  // const router = useRouter();
 
   const t = useTranslations("Auth");
 
+  const { data: loginMethod, isLoading: isLoadingMethod } = useSWR<
+    Record<string, any>
+  >("/api/feature", fetcher, {
+    revalidateOnFocus: false,
+  });
+
+  React.useEffect(() => {
+    if (
+      loginMethod &&
+      !!loginMethod["enableSuffixLimit"] &&
+      loginMethod["suffixWhiteList"].length > 0
+    ) {
+      setSuffixWhiteList(loginMethod["suffixWhiteList"].split(","));
+    }
+  }, [loginMethod]);
+
+  const checkEmailSuffix = (email: string) => {
+    if (suffixWhiteList.length > 0) {
+      const suffix = email.split("@")[1];
+      if (!suffixWhiteList.includes(suffix)) {
+        toast.warning(
+          t("Email domain not supported, Please use one of the following:"),
+          {
+            description: suffixWhiteList.join(", "),
+          },
+        );
+        return false;
+      }
+    }
+    return true;
+  };
+
   async function onSubmit(data: FormData) {
+    if (!checkEmailSuffix(data.email)) return;
     startTransition(async () => {
       const signInResult = await signIn("resend", {
         email: data.email.toLowerCase(),
@@ -73,6 +105,7 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
     });
   }
   async function onSubmitPwd(data: FormData2) {
+    if (!checkEmailSuffix(data.email)) return;
     startTransition(async () => {
       const signInResult = await signIn("credentials", {
         name: data.name,
@@ -95,12 +128,6 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
       }
     });
   }
-
-  const { data: loginMethod, isLoading: isLoadingMethod } = useSWR<
-    Record<string, boolean>
-  >("/api/feature", fetcher, {
-    revalidateOnFocus: false,
-  });
 
   const rendeSeparator = () => {
     return (

@@ -368,7 +368,8 @@
     "Be sure to check your spam too": "Be sure to check your spam too",
     "Welcome back!": "Welcome back!",
     "Unregistered users will automatically create an account": "Unregistered users will automatically create an account",
-    "Administrator has disabled new user registration": "Administrator has disabled new user registration"
+    "Administrator has disabled new user registration": "Administrator has disabled new user registration",
+    "Email domain not supported, Please use one of the following:": "Email domain not supported. Please use one of the following:"
   },
   "System": {
     "MENU": "Menu",
@@ -525,6 +526,11 @@
     "Set Telegram group ID, split by comma if more than one, such as: -10054275724,-10045343642": "Set Telegram group ID, split by comma if more than one, such as: -10054275724,-10045343642",
     "Set Telegram email message template": "设置 Telegram 邮件消息模板",
     "Set Telegram push email white list, split by comma, if not set, will push all emails": "Set Telegram push email white list, split by comma, if not set, will push all emails",
-    "How to configure Telegram bot": "How to configure Telegram bot"
+    "How to configure Telegram bot": "How to configure Telegram bot",
+    "Email Suffix Limit": "Email Suffix Limit",
+    "Enable eamil suffix limit, only works for resend email login and email password login methods": "Enable eamil suffix limit, only works for resend email login and email password login methods",
+    "Need to configure": "Need to configure",
+    "Email Suffix White List": "Email Suffix White List",
+    "Set email suffix white list, split by comma, such as: gmail-com,yahoo-com,hotmail-com": "Set email suffix white list, split by comma, such as: gmail.com,yahoo.com,hotmail.com"
   }
 }

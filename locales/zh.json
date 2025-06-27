@@ -368,7 +368,8 @@
     "Be sure to check your spam too": "请确保检查您的垃圾邮件",
     "Welcome back!": "欢迎回来!",
     "Unregistered users will automatically create an account": "未注册用户将自动创建账户",
-    "Administrator has disabled new user registration": "管理员已关闭新用户注册"
+    "Administrator has disabled new user registration": "管理员已关闭新用户注册",
+    "Email domain not supported, Please use one of the following:": "暂不支持此邮箱后缀，请使用以下邮箱:"
   },
   "System": {
     "MENU": "菜单",
@@ -525,6 +526,11 @@
     "Set Telegram group ID, split by comma if more than one, such as: -10054275724,-10045343642": "设置 Telegram 群组/频道 ID，多个群组/频道 ID请用逗号分隔，例如：-10054275724,-10045343642",
     "Set Telegram email message template": "设置 Telegram 邮件消息模板",
     "Set Telegram push email white list, split by comma, if not set, will push all emails": "设置 Telegram 推送邮件白名单，多个邮箱地址请用逗号分隔，若不设置，将推送所有邮件",
-    "How to configure Telegram bot": "如何配置 Telegram Bot"
+    "How to configure Telegram bot": "如何配置 Telegram Bot",
+    "Email Suffix Limit": "注册邮箱后缀限制",
+    "Enable eamil suffix limit, only works for resend email login and email password login methods": "开启注册邮箱后缀限制，仅适用于 Resend 邮箱登录和账号密码登录方式",
+    "Need to configure": "需要配置",
+    "Email Suffix White List": "白名单",
+    "Set email suffix white list, split by comma, such as: gmail-com,yahoo-com,hotmail-com": "设置邮箱后缀白名单，多个后缀请用逗号分隔，例如：gmail.com,yahoo.com,hotmail.com"
   }
 }
