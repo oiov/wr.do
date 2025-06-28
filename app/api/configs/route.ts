@@ -4,6 +4,12 @@ import { getMultipleConfigs } from "@/lib/dto/system-config";
 
 export const dynamic = "force-dynamic";
 
+const allowed_keys = [
+  "enable_user_registration",
+  "enable_subdomain_apply",
+  "system_notification",
+];
+
 export async function GET(req: NextRequest) {
   try {
     const url = new URL(req.url);
@@ -13,11 +19,13 @@ export async function GET(req: NextRequest) {
       return Response.json("key is required", { status: 400 });
     }
 
-    const configs = await getMultipleConfigs(keys);
+    for (const key of keys) {
+      if (!allowed_keys.includes(key)) {
+        return Response.json("Invalid key", { status: 400 });
+      }
+    }
 
-    // "enable_user_registration",
-    // "enable_subdomain_apply",
-    // "system_notification",
+    const configs = await getMultipleConfigs(keys);
 
     return Response.json(configs, { status: 200 });
   } catch (error) {
