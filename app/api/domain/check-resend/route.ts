@@ -26,8 +26,10 @@ export async function GET(req: NextRequest) {
     });
 
     if (error) {
-      console.error(error);
-      return Response.json(400, { status: 400 });
+      console.log("Resend error:", error);
+      return Response.json(`${error.message}`, {
+        status: 400,
+      });
     }
 
     return Response.json(200, { status: 200 });

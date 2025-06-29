@@ -209,11 +209,12 @@ export function DomainForm({
           setIsCheckedResendConfig(true);
           return;
         }
+      } else {
+        setIsCheckedResendConfig(false);
+        toast.error("Failed to send email", {
+          description: await res.text(),
+        });
       }
-      setIsCheckedResendConfig(false);
-      toast.error("Access Failed", {
-        description: "Please check your Resend API key and try again.",
-      });
     });
   };
 
