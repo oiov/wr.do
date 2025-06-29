@@ -167,7 +167,7 @@ export interface UrlStatusStats {
   actived: number; // 正常可用
   disabled: number; // 已禁用
   expired: number; // 已过期
-  passwordProtected: number; // 密码保护
+  passwordprotected: number; // 密码保护
 }
 
 function isValidExpirationValue(expiration: string): boolean {
@@ -200,7 +200,7 @@ export async function getUrlStatusOptimized(
       actived: 0,
       disabled: 0,
       expired: 0,
-      passwordProtected: 0,
+      passwordprotected: 0,
     };
 
     // 遍历记录并分类
@@ -229,7 +229,7 @@ export async function getUrlStatusOptimized(
       } else if (isDisabled) {
         stats.disabled++;
       } else if (hasPassword) {
-        stats.passwordProtected++;
+        stats.passwordprotected++;
       } else {
         stats.actived++;
       }
