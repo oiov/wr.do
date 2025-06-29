@@ -1,4 +1,4 @@
-import { checkUserStatus, updateUser } from "@/lib/dto/user";
+import { checkUserStatus, deleteUserById } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";
 
 export async function POST(req: Request) {
@@ -11,18 +11,14 @@ export async function POST(req: Request) {
       });
     }
 
-    const { id, data } = await req.json();
+    const { id } = await req.json();
+    if (!id) {
+      return Response.json("Id is required", {
+        status: 400,
+      });
+    }
 
-    const res = await updateUser(id, {
-      name: data.name,
-      email: data.email,
-      role: data.role,
-      active: data.active,
-      team: data.team,
-      image: data.image,
-      apiKey: data.apiKey,
-      password: data.password,
-    });
+    const res = await deleteUserById(id);
     if (!res?.id) {
       return Response.json("An error occurred", {
         status: 400,

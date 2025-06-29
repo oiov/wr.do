@@ -88,7 +88,7 @@ export default function AppConfigs({}: {}) {
 
   return (
     <Card>
-      <Collapsible className="group">
+      <Collapsible defaultOpen className="group">
         <CollapsibleTrigger className="flex w-full items-center justify-between bg-neutral-50 px-4 py-5 dark:bg-neutral-900">
           <div className="text-lg font-bold">{t("App Configs")}</div>
           <Icons.chevronDown className="ml-auto size-4" />
