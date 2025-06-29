@@ -320,7 +320,11 @@
     "retry": "Retry",
     "backToHome": "Back to Home",
     "goBack": "Go Back",
-    "contactSupportIfError": "If you believe this is an error, please contact technical support"
+    "contactSupportIfError": "If you believe this is an error, please contact technical support",
+    "Actived": "Active",
+    "Disabled": "Disabled",
+    "Expired": "Expired",
+    "PasswordProtected": "Password Protected"
   },
   "Landing": {
     "settings": "Settings",

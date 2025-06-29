@@ -8,7 +8,12 @@ export default function DashboardUrlsLoading() {
         heading="Manage Short URLs"
         text="List and manage short urls"
       />
-      <Skeleton className="h-32 w-full rounded-lg" />
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-4">
+        <Skeleton className="h-[102px] w-full rounded-lg" />
+        <Skeleton className="h-[102px] w-full rounded-lg" />
+        <Skeleton className="h-[102px] w-full rounded-lg" />
+        <Skeleton className="h-[102px] w-full rounded-lg" />
+      </div>
       <Skeleton className="h-[400px] w-full rounded-lg" />
     </>
   );

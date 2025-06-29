@@ -3,9 +3,9 @@ import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/session";
 import { constructMetadata } from "@/lib/utils";
 import { DashboardHeader } from "@/components/dashboard/header";
+import { UserRecordStatus } from "@/components/dashboard/status-card";
 
 import UserRecordsList from "./record-list";
-import UserRecordStatus from "./record-statu";
 
 export const metadata = constructMetadata({
   title: "DNS Records",
@@ -25,16 +25,7 @@ export default async function DashboardPage() {
         link="/docs/dns-records"
         linkText="DNS records"
       />
-      <UserRecordStatus
-        user={{
-          id: user.id,
-          name: user.name || "",
-          apiKey: user.apiKey || "",
-          email: user.email || "",
-          role: user.role,
-        }}
-        action="/api/record"
-      />
+      <UserRecordStatus action="/api/record" />
       <UserRecordsList
         user={{
           id: user.id,

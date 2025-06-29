@@ -24,7 +24,6 @@ export default async function DashboardPage() {
         link="/docs/short-urls"
         linkText="short urls"
       />
-
       <UserUrlsList
         user={{
           id: user.id,

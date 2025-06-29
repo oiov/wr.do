@@ -47,6 +47,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { UrlStatus } from "@/components/dashboard/status-card";
 import { FormType } from "@/components/forms/record-form";
 import { UrlForm } from "@/components/forms/url-form";
 import ApiReference from "@/components/shared/api-reference";
@@ -725,11 +726,13 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
         </div>
 
         <TabsContent className="space-y-3" value="List">
+          <UrlStatus action={action} />
           {rendeSeachInputs()}
           {rendeList()}
           {rendLogs()}
         </TabsContent>
         <TabsContent className="space-y-3" value="Grid">
+          <UrlStatus action={action} />
           {rendeSeachInputs()}
           {rendeGrid()}
           {rendLogs()}

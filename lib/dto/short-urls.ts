@@ -2,6 +2,7 @@ import { UrlMeta, UserRole } from "@prisma/client";
 
 import { prisma } from "@/lib/db";
 
+import { EXPIRATION_ENUMS } from "../enums";
 import { getStartDate } from "../utils";
 
 export interface ShortUrlFormData {
@@ -151,6 +152,93 @@ export async function getUrlClicksByIds(
   } catch (error) {
     console.error("Error fetching clicks:", error);
     return Object.fromEntries(ids.map((id) => [id, 0]));
+  }
+}
+
+export async function getUrlStatus(userId: string, role: UserRole = "USER") {
+  try {
+  } catch (error) {
+    return { status: error };
+  }
+}
+
+export interface UrlStatusStats {
+  total: number;
+  actived: number; // 正常可用
+  disabled: number; // 已禁用
+  expired: number; // 已过期
+  passwordProtected: number; // 密码保护
+}
+
+function isValidExpirationValue(expiration: string): boolean {
+  return EXPIRATION_ENUMS.some((item) => item.value === expiration);
+}
+
+export async function getUrlStatusOptimized(
+  userId: string,
+  role: UserRole = "USER",
+): Promise<UrlStatusStats | { status: any }> {
+  try {
+    const whereCondition = role === "USER" ? { userId } : {};
+
+    const urlRecords = await prisma.userUrl.findMany({
+      where: whereCondition,
+      select: {
+        id: true,
+        userId: true,
+        active: true,
+        expiration: true,
+        password: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    const now = Date.now();
+    const stats: UrlStatusStats = {
+      total: urlRecords.length,
+      actived: 0,
+      disabled: 0,
+      expired: 0,
+      passwordProtected: 0,
+    };
+
+    // 遍历记录并分类
+    urlRecords.forEach((record) => {
+      const updatedAt = new Date(
+        record.updatedAt || record.createdAt!,
+      ).getTime();
+
+      // 判断是否过期
+      let isExpired = false;
+      if (
+        record.expiration !== "-1" &&
+        isValidExpirationValue(record.expiration)
+      ) {
+        const expirationSeconds = Number(record.expiration);
+        const expirationMilliseconds = expirationSeconds * 1000;
+        const expirationTime = updatedAt + expirationMilliseconds;
+        isExpired = now > expirationTime;
+      }
+
+      const isDisabled = record.active === 0;
+      const hasPassword = Boolean(record.password && record.password.trim());
+
+      if (isExpired) {
+        stats.expired++;
+      } else if (isDisabled) {
+        stats.disabled++;
+      } else if (hasPassword) {
+        stats.passwordProtected++;
+      } else {
+        stats.actived++;
+      }
+    });
+
+    return stats;
+  } catch (error) {
+    console.error("Error getting URL status (optimized):", error);
+    return { status: error };
   }
 }
 

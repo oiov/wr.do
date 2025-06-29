@@ -320,7 +320,11 @@
     "retry": "重试",
     "backToHome": "返回首页",
     "goBack": "返回上页",
-    "contactSupportIfError": "如果您认为这是一个错误，请联系技术支持"
+    "contactSupportIfError": "如果您认为这是一个错误，请联系技术支持",
+    "Actived": "有效",
+    "Disabled": "已禁用",
+    "Expired": "已过期",
+    "PasswordProtected": "密码保护"
   },
   "Landing": {
     "settings": "设置",
