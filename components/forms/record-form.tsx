@@ -63,7 +63,7 @@ export function RecordForm({
   const [isPending, startTransition] = useTransition();
   const [isDeleting, startDeleteTransition] = useTransition();
   const [currentRecordType, setCurrentRecordType] = useState(
-    initData?.type || "CNAME",
+    initData?.type || "A",
   );
   const [currentZoneName, setCurrentZoneName] = useState(initData?.zone_name);
   const [limitLen, setLimitLen] = useState(3);
@@ -83,7 +83,7 @@ export function RecordForm({
     resolver: zodResolver(createRecordSchema),
     defaultValues: {
       zone_name: initData?.zone_name,
-      type: initData?.type || "CNAME",
+      type: initData?.type || "A",
       ttl: initData?.ttl || 1,
       proxied: initData?.proxied || false,
       comment: initData?.comment || "",
@@ -392,7 +392,7 @@ export function RecordForm({
                   setCurrentRecordType(value);
                 }}
                 name={"type"}
-                defaultValue={initData?.type || "CNAME"}
+                defaultValue={initData?.type || "A"}
               >
                 <SelectTrigger className="w-full shadow-inner">
                   <SelectValue placeholder="Select a type" />

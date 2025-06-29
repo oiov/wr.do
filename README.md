@@ -148,6 +148,7 @@ Via [Installation For Developer](https://wr.do/docs/developer).
 - Prisma ORM as the database toolkit
 - Cloudflare as the primary cloud infrastructure
 - Vercel as the recommended deployment platform
+- Resend as the primary email service
 
 ## Community Group
 

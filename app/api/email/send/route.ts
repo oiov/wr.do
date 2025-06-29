@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Resend } from "resend";
 
 import { checkDomainIsConfiguratedResend } from "@/lib/dto/domains";
 import { getUserSendEmailCount, saveUserSendEmail } from "@/lib/dto/email";
 import { getPlanQuota } from "@/lib/dto/plan";
 import { checkUserStatus } from "@/lib/dto/user";
-import { resend } from "@/lib/email";
 import { getCurrentUser } from "@/lib/session";
 import { restrictByTimeRange } from "@/lib/team";
 import { isValidEmail } from "@/lib/utils";
@@ -36,13 +36,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json("Invalid email address", { status: 403 });
     }
 
-    if (!(await checkDomainIsConfiguratedResend(from.split("@")[1]))) {
+    const resend_key = await checkDomainIsConfiguratedResend(
+      from.split("@")[1],
+    );
+
+    if (!resend_key) {
       return NextResponse.json(
         "This domain is not configured for sending emails",
         { status: 400 },
       );
     }
 
+    const resend = new Resend(resend_key);
     const { error } = await resend.emails.send({
       from,
       to,
@@ -51,8 +56,10 @@ export async function POST(req: NextRequest) {
     });
 
     if (error) {
-      console.log("Resend error:", error);
-      return NextResponse.json("Failed to send email", { status: 500 });
+      console.log("Resend error:", error); // ？？？如果删掉这句log，下面一行读取error的message会返回undefined
+      return NextResponse.json(`${error.message}`, {
+        status: 400,
+      });
     }
 
     await saveUserSendEmail(user.id, from, to, subject, html);

@@ -143,6 +143,7 @@ pnpm dev
 - Prisma ORM 作为数据库工具
 - Cloudflare 作为主要的云基础设施
 - Vercel 作为推荐的部署平台
+- Resend 作为邮件服务
 
 ## 社区群组
 

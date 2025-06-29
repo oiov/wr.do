@@ -126,7 +126,7 @@ export async function checkDomainIsConfiguratedResend(domain_name: string) {
         resend_api_key: true,
       },
     });
-    return Boolean(domain?.resend_api_key);
+    return domain?.resend_api_key;
   } catch (error) {
     throw new Error(`Failed to fetch domain config: ${error.message}`);
   }
