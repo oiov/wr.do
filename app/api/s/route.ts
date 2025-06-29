@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     if (!slug || !ip) return Response.json("Missing[0000]");
 
     const res = await getUrlBySuffix(slug);
-    if (!res) return Response.json("Disabled[0002]");
+    if (!res) return Response.json("Missing[0000]");
 
     if (res.active !== 1) return Response.json("Disabled[0002]");
 

@@ -13,10 +13,10 @@ export const config = {
 const isVercel = process.env.VERCEL;
 
 const redirectMap = {
-  "Missing[0000]": "/docs/short-urls#missing-links",
-  "Expired[0001]": "/docs/short-urls#expired-links",
-  "Disabled[0002]": "/docs/short-urls#disabled-links",
-  "Error[0003]": "/docs/short-urls#error-links",
+  "Missing[0000]": "/link-status?error=missing&slug=",
+  "Expired[0001]": "/link-status?error=expired&slug=",
+  "Disabled[0002]": "/link-status?error=disabled&slug=",
+  "Error[0003]": "/link-status?error=system&slug=",
   "PasswordRequired[0004]": "/password-prompt?error=0&slug=",
   "IncorrectPassword[0005]": "/password-prompt?error=1&slug=",
 };
@@ -67,7 +67,7 @@ async function handleShortUrl(req: NextAuthRequest) {
 
   if (!res.ok)
     return NextResponse.redirect(
-      `${siteConfig.url}${redirectMap["Error[0003]"]}`,
+      `${siteConfig.url}${redirectMap["Error[0003]"]}${slug}`,
       302,
     );
 
@@ -75,7 +75,7 @@ async function handleShortUrl(req: NextAuthRequest) {
 
   if (!target || typeof target !== "string") {
     return NextResponse.redirect(
-      `${siteConfig.url}${redirectMap["Error[0003]"]}`,
+      `${siteConfig.url}${redirectMap["Error[0003]"]}${slug}`,
       302,
     );
   }
@@ -91,7 +91,7 @@ async function handleShortUrl(req: NextAuthRequest) {
     }
 
     return NextResponse.redirect(
-      `${siteConfig.url}${redirectMap[target]}`,
+      `${siteConfig.url}${redirectMap[target]}${slug}`,
       302,
     );
   }

@@ -305,7 +305,22 @@
     "Active": "有效解析",
     "Inactive": "无效解析",
     "Pending": "审核中",
-    "Rejected": "已拒绝"
+    "Rejected": "已拒绝",
+    "linkNotExist": "链接不存在",
+    "linkNotExistDescription": "很抱歉，您访问的短链接不存在。可能已被删除或从未创建过。",
+    "linkExpired": "链接已过期",
+    "linkExpiredDescription": "这个短链接已经过期，无法继续使用。",
+    "linkDisabled": "链接已禁用",
+    "linkDisabledDescription": "这个短链接已被创建者禁用。",
+    "systemError": "系统错误",
+    "systemErrorDescription": "处理您的请求时发生了错误，请稍后重试。",
+    "contactCreatorReactivate": "请联系短链接创建者重新激活或创建新的短链接。",
+    "contactCreatorOrAdmin": "请联系短链接创建者或系统管理员。",
+    "shortLink": "短链接",
+    "retry": "重试",
+    "backToHome": "返回首页",
+    "goBack": "返回上页",
+    "contactSupportIfError": "如果您认为这是一个错误，请联系技术支持"
   },
   "Landing": {
     "settings": "设置",

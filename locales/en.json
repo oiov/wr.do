@@ -305,7 +305,22 @@
     "Active": "Active",
     "Inactive": "Inactive",
     "Pending": "Pending",
-    "Rejected": "Rejected"
+    "Rejected": "Rejected",
+    "linkNotExist": "Link Not Found",
+    "linkNotExistDescription": "Sorry, the short link you are trying to access does not exist. It may have been deleted or never created.",
+    "linkExpired": "Link Expired",
+    "linkExpiredDescription": "This short link has expired and can no longer be used.",
+    "linkDisabled": "Link Disabled",
+    "linkDisabledDescription": "This short link has been disabled by its creator.",
+    "systemError": "System Error",
+    "systemErrorDescription": "An error occurred while processing your request. Please try again later.",
+    "contactCreatorReactivate": "Please contact the creator of this short link to reactivate or create a new short link",
+    "contactCreatorOrAdmin": "Please contact the creator of this short link or system administrator",
+    "shortLink": "Short Link",
+    "retry": "Retry",
+    "backToHome": "Back to Home",
+    "goBack": "Go Back",
+    "contactSupportIfError": "If you believe this is an error, please contact technical support"
   },
   "Landing": {
     "settings": "Settings",

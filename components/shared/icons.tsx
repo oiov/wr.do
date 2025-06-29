@@ -567,4 +567,91 @@ export const Icons = {
       </defs>
     </svg>
   ),
+  disabledLink: ({ ...props }: LucideProps) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      strokeWidth="2"
+      stroke="currentColor"
+      fill="none"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M9 15l3 -3m2 -2l1 -1" />
+      <path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464" />
+      <path d="M3 3l18 18" />
+      <path d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463" />
+    </svg>
+  ),
+  notFonudLink: ({ ...props }: LucideProps) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      strokeWidth="2"
+      stroke="currentColor"
+      fill="none"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M3 7v4a1 1 0 0 0 1 1h3" />
+      <path d="M7 7v10" />
+      <path d="M10 8v8a1 1 0 0 0 1 1h2a1 1 0 0 0 1 -1v-8a1 1 0 0 0 -1 -1h-2a1 1 0 0 0 -1 1z" />
+      <path d="M17 7v4a1 1 0 0 0 1 1h3" />
+      <path d="M21 7v10" />
+    </svg>
+  ),
+  expiredLink: ({ ...props }: LucideProps) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="48"
+      height="48"
+      viewBox="0 0 48 48"
+      {...props}
+    >
+      <title>expire</title>
+      <g id="Layer_2" data-name="Layer 2">
+        <g id="invisible_box" data-name="invisible box">
+          <rect width="48" height="48" fill="none" />
+        </g>
+        <g id="Q3_icons" data-name="Q3 icons">
+          <g>
+            <path d="M14.2,31.9h0a2,2,0,0,0-.9-2.9A11.8,11.8,0,0,1,6.1,16.8,12,12,0,0,1,16.9,6a12.1,12.1,0,0,1,11.2,5.6,2.3,2.3,0,0,0,2.3.9h0a2,2,0,0,0,1.1-3,15.8,15.8,0,0,0-15-7.4,16,16,0,0,0-4.8,30.6A2,2,0,0,0,14.2,31.9Z" />
+            <path d="M16.5,11.5v5h-5a2,2,0,0,0,0,4h9v-9a2,2,0,0,0-4,0Z" />
+            <path d="M45.7,43l-15-26a2,2,0,0,0-3.4,0l-15,26A2,2,0,0,0,14,46H44A2,2,0,0,0,45.7,43ZM29,42a2,2,0,1,1,2-2A2,2,0,0,1,29,42Zm2-8a2,2,0,0,1-4,0V26a2,2,0,0,1,4,0Z" />
+          </g>
+        </g>
+      </g>
+    </svg>
+  ),
+  systemErrorLink: ({ ...props }: LucideProps) => (
+    <svg
+      id="icon"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 32 32"
+      {...props}
+    >
+      <defs></defs>
+      <title>data-error</title>
+      <circle cx="11" cy="8" r="1" />
+      <circle cx="11" cy="16" r="1" />
+      <circle cx="11" cy="24" r="1" />
+      <path d="M24,3H8A2,2,0,0,0,6,5V27a2,2,0,0,0,2,2h8V27H8V21H26V5A2,2,0,0,0,24,3Zm0,16H8V13H24Zm0-8H8V5H24Z" />
+      <polygon points="29.24 29.58 26.41 26.75 29.24 23.92 27.83 22.51 25 25.33 22.17 22.51 20.76 23.92 23.59 26.75 20.76 29.58 22.17 30.99 25 28.16 27.83 30.99 29.24 29.58" />
+      <rect
+        id="_Transparent_Rectangle_"
+        data-name="&lt;Transparent Rectangle&gt;"
+        className="fill-none"
+        width="32"
+        height="32"
+      />
+    </svg>
+  ),
 };
