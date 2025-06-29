@@ -726,13 +726,13 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
         </div>
 
         <TabsContent className="space-y-3" value="List">
-          <UrlStatus action={action} />
+          {pathname !== "/dashboard" && <UrlStatus action={action} />}
           {rendeSeachInputs()}
           {rendeList()}
           {rendLogs()}
         </TabsContent>
         <TabsContent className="space-y-3" value="Grid">
-          <UrlStatus action={action} />
+          {pathname !== "/dashboard" && <UrlStatus action={action} />}
           {rendeSeachInputs()}
           {rendeGrid()}
           {rendLogs()}
