@@ -88,7 +88,7 @@ export default function AppConfigs({}: {}) {
 
   return (
     <Card>
-      <Collapsible defaultOpen className="group">
+      <Collapsible className="group">
         <CollapsibleTrigger className="flex w-full items-center justify-between bg-neutral-50 px-4 py-5 dark:bg-neutral-900">
           <div className="text-lg font-bold">{t("App Configs")}</div>
           <Icons.chevronDown className="ml-auto size-4" />
@@ -637,36 +637,6 @@ export default function AppConfigs({}: {}) {
                 </div>
               </CollapsibleContent>
             </Collapsible>
-
-            {/* Webhook */}
-            {/* <div className="flex flex-col items-start justify-start gap-3">
-              <div className="space-y-1 leading-none">
-                <p className="font-medium">Webhook</p>
-                <p className="text-xs text-muted-foreground"></p>
-              </div>
-              {configs && (
-                <div className="flex w-full items-start gap-2">
-                  <Textarea
-                    className="h-16 max-h-32 min-h-9 resize-y bg-white dark:bg-neutral-700"
-                    placeholder=""
-                    rows={5}
-                    // defaultValue={configs.catch_all_emails}
-                    // value={catchAllEmails}
-                    disabled
-                    // onChange={(e) => setCatchAllEmails(e.target.value)}
-                  />
-                  <Button
-                    className="h-9 text-nowrap"
-                    disabled
-                    onClick={() =>
-                      handleChange(catchAllEmails, "catch_all_emails", "STRING")
-                    }
-                  >
-                    {t("Save")}
-                  </Button>
-                </div>
-              )}
-            </div> */}
           </div>
         </CollapsibleContent>
       </Collapsible>
@@ -693,6 +663,31 @@ export default function AppConfigs({}: {}) {
                   defaultChecked={configs.enable_subdomain_apply}
                   onCheckedChange={(v) =>
                     handleChange(v, "enable_subdomain_apply", "BOOLEAN")
+                  }
+                />
+              )}
+            </div>
+
+            <div className="flex items-center justify-between space-x-2">
+              <div className="space-y-1 leading-none">
+                <p className="font-medium">
+                  {t("Application Status Email Notifications")}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {t(
+                    "Send email notifications for subdomain application status updates; Notifies administrators when users submit applications and notifies users of approval results; Only available when subdomain application mode is enabled",
+                  )}
+                </p>
+              </div>
+              {configs && (
+                <Switch
+                  defaultChecked={configs.enable_subdomain_status_email_pusher}
+                  onCheckedChange={(v) =>
+                    handleChange(
+                      v,
+                      "enable_subdomain_status_email_pusher",
+                      "BOOLEAN",
+                    )
                   }
                 />
               )}

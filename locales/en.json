@@ -100,7 +100,7 @@
     "The administrator has enabled application mode": "The administrator has enabled application mode",
     "After submission, you need to wait for administrator approval before the record takes effect": "After submission, you need to wait for administrator approval before the record takes effect",
     "What are you planning to use the subdomain for?": "What are you planning to use the subdomain for?",
-    "At least 20 characters": "At least 20 characters",
+    "At least 20 characters, Max 100 characters": "At least 20 characters, Max 100 characters",
     "User email": "User email",
     "Domain": "Domain",
     "No domains configured": "No domains configured",
@@ -533,6 +533,8 @@
     "Enable eamil suffix limit, only works for resend email login and email password login methods": "Enable eamil suffix limit, only works for resend email login and email password login methods",
     "Need to configure": "Need to configure",
     "Email Suffix White List": "Email Suffix White List",
-    "Set email suffix white list, split by comma, such as: gmail-com,yahoo-com,hotmail-com": "Set email suffix white list, split by comma, such as: gmail.com,yahoo.com,hotmail.com"
+    "Set email suffix white list, split by comma, such as: gmail-com,yahoo-com,hotmail-com": "Set email suffix white list, split by comma, such as: gmail.com,yahoo.com,hotmail.com",
+    "Application Status Email Notifications": "Application Status Email Notifications",
+    "Send email notifications for subdomain application status updates; Notifies administrators when users submit applications and notifies users of approval results; Only available when subdomain application mode is enabled": "Send email notifications for subdomain application status updates; Notifies administrators when users submit applications and notifies users of approval results; Only available when subdomain application mode is enabled"
   }
 }

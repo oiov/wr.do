@@ -100,7 +100,7 @@
     "The administrator has enabled application mode": "管理员已启用 [用户申请 - 管理员审核] 模式",
     "After submission, you need to wait for administrator approval before the record takes effect": "提交后, 您需要等待管理员审核才能生效",
     "What are you planning to use the subdomain for?": "您计划使用此域名做什么？",
-    "At least 20 characters": "至少 20 个字符",
+    "At least 20 characters, Max 100 characters": "至少 20 个字符，最多 100 个字符",
     "User email": "用户邮箱",
     "Domain": "根域名",
     "No domains configured": "未配置域名",
@@ -498,7 +498,7 @@
     "User Registration": "用户注册",
     "Allow users to sign up": "是否允许用户注册",
     "Subdomain Apply Mode": "子域名申请模式",
-    "Enable subdomain apply mode, each submission requires administrator review": "启用子域名申请模式，用户每次提交新子域名需要管理员审核（邮件通知管理员审核，审核通过后邮件通知用户）",
+    "Enable subdomain apply mode, each submission requires administrator review": "启用子域名申请模式，用户每次提交新子域名需要管理员审核",
     "Notification": "系统通知",
     "Set system notification, this will be displayed in the header": "设置系统通知，将在网页顶部显示",
     "Login Methods": "登录方式",
@@ -533,6 +533,8 @@
     "Enable eamil suffix limit, only works for resend email login and email password login methods": "开启注册邮箱后缀限制，仅适用于 Resend 邮箱登录和账号密码登录方式",
     "Need to configure": "需要配置",
     "Email Suffix White List": "白名单",
-    "Set email suffix white list, split by comma, such as: gmail-com,yahoo-com,hotmail-com": "设置邮箱后缀白名单，多个后缀请用逗号分隔，例如：gmail.com,yahoo.com,hotmail.com"
+    "Set email suffix white list, split by comma, such as: gmail-com,yahoo-com,hotmail-com": "设置邮箱后缀白名单，多个后缀请用逗号分隔，例如：gmail.com,yahoo.com,hotmail.com",
+    "Application Status Email Notifications": "申请状态邮件通知",
+    "Send email notifications for subdomain application status updates; Notifies administrators when users submit applications and notifies users of approval results; Only available when subdomain application mode is enabled": "开启后，用户申请子域名时将邮件通知管理员审核，审核完成后邮件通知用户结果。此功能仅在子域申请模式开启时有效"
   }
 }

@@ -342,7 +342,7 @@ export function RecordForm({
               />
             </div>
             <p className="p-1 text-[13px] text-muted-foreground">
-              {t("At least 20 characters")}
+              {t("At least 20 characters, Max 100 characters")}
             </p>
           </FormSectionColumns>
         )}

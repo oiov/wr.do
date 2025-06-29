@@ -8,7 +8,7 @@ import {
 } from "@/lib/dto/cloudflare-dns-record";
 import { getDomainsByFeature } from "@/lib/dto/domains";
 import { getPlanQuota } from "@/lib/dto/plan";
-import { getConfigValue } from "@/lib/dto/system-config";
+import { getMultipleConfigs } from "@/lib/dto/system-config";
 import { checkUserStatus, getFirstAdminUser } from "@/lib/dto/user";
 import { applyRecordEmailHtml, resend } from "@/lib/email";
 import { reservedDomains } from "@/lib/enums";
@@ -86,12 +86,13 @@ export async function POST(req: Request) {
       });
     }
 
-    const enableSubdomainApply = await getConfigValue<boolean>(
+    const configs = await getMultipleConfigs([
       "enable_subdomain_apply",
-    );
+      "enable_subdomain_status_email_pusher",
+    ]);
 
     // apply subdomain
-    if (enableSubdomainApply) {
+    if (configs.enable_subdomain_apply) {
       const res = await createUserRecord(user.id, {
         record_id: generateSecret(16),
         zone_id: matchedZone.cf_zone_id,
@@ -115,7 +116,7 @@ export async function POST(req: Request) {
         });
       }
       const admin_user = await getFirstAdminUser();
-      if (admin_user) {
+      if (configs.enable_subdomain_status_email_pusher && admin_user) {
         await resend.emails.send({
           from: env.RESEND_FROM_EMAIL,
           to: admin_user.email || "",

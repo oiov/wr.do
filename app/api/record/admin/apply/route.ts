@@ -3,6 +3,7 @@ import { siteConfig } from "@/config/site";
 import { createDNSRecord } from "@/lib/cloudflare";
 import { updateUserRecordReview } from "@/lib/dto/cloudflare-dns-record";
 import { getDomainsByFeature } from "@/lib/dto/domains";
+import { getMultipleConfigs } from "@/lib/dto/system-config";
 import { checkUserStatus, getUserById } from "@/lib/dto/user";
 import { applyRecordToUserEmailHtml, resend } from "@/lib/email";
 import { getCurrentUser } from "@/lib/session";
@@ -66,8 +67,11 @@ export async function POST(req: Request) {
         active: 0,
       });
 
+      const configs = await getMultipleConfigs([
+        "enable_subdomain_status_email_pusher",
+      ]);
       const userInfo = await getUserById(userId);
-      if (userInfo) {
+      if (configs.enable_subdomain_status_email_pusher && userInfo) {
         await resend.emails.send({
           from: env.RESEND_FROM_EMAIL,
           to: userInfo.email || "",
