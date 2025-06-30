@@ -159,49 +159,7 @@ This project is configured with a sync workflow for the upstream repository [oio
 - 🚨 **Smart Error Handling** - Auto-create detailed Issues when sync fails
 - 🧹 **Auto Cleanup Notifications** - Automatically close previous sync failure Issues
 
-### How to Manually Trigger Sync
-
-#### Method 1: Via GitHub Web Interface
-
-1. Go to the repository's **Actions** page
-2. Select **"上游同步 | Upstream Sync"** workflow from the left sidebar
-3. Click **"Run workflow"** button
-4. Choose whether to add comments after sync (enabled by default)
-5. Click **"Run workflow"** to confirm execution
-
-#### Method 2: Via GitHub CLI
-
-```bash
-# Install and login to GitHub CLI
-gh auth login
-
-# Trigger sync workflow
-gh workflow run "上游同步 | Upstream Sync" --repo your-username/wr.do
-
-# Check workflow run status
-gh run list --workflow="上游同步 | Upstream Sync" --repo your-username/wr.do
-```
-
-### Checking Sync Status
-
-- **Workflow History**: View "上游同步 | Upstream Sync" workflow run records in Actions page
-- **Sync Comments**: After successful sync, comments with sync time, source repo info, etc. are added to the latest commit
-- **Error Reports**: When sync fails, detailed Issues with error information and solutions are automatically created
-
-### Troubleshooting
-
-**Merge Conflicts**: If you encounter merge conflicts, manual resolution is required:
-
-```bash
-git clone https://github.com/your-username/wr.do.git
-cd wr.do
-git remote add upstream https://github.com/oiov/wr.do.git
-git fetch upstream
-git merge upstream/main
-# Resolve conflicts, then commit and push
-```
-
-**Permission Issues**: Ensure repository Actions permissions are enabled and "Allow GitHub Actions to create and approve pull requests" is enabled in settings.
+See [How to Trigger Sync](/docs/developer/sync) for details.
 
 ## Community Group
 

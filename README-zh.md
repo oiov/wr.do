@@ -154,46 +154,7 @@ pnpm dev
 - 🚨 **智能错误处理** - 同步失败时自动创建详细的 Issue
 - 🧹 **自动清理通知** - 自动关闭之前的同步失败 Issue
 
-### 如何手动触发同步
-
-#### 方法 1: 通过 GitHub Web 界面
-1. 进入仓库的 **Actions** 页面
-2. 在左侧选择 **"上游同步 | Upstream Sync"** 工作流
-3. 点击 **"Run workflow"** 按钮
-4. 选择是否在同步后添加评论（默认开启）
-5. 点击 **"Run workflow"** 确认执行
-
-#### 方法 2: 通过 GitHub CLI
-```bash
-# 安装并登录 GitHub CLI
-gh auth login
-
-# 触发同步工作流
-gh workflow run "上游同步 | Upstream Sync" --repo your-username/wr.do
-
-# 查看工作流运行状态
-gh run list --workflow="上游同步 | Upstream Sync" --repo your-username/wr.do
-```
-
-### 同步状态查看
-
-- **工作流历史**: 在 Actions 页面查看 "上游同步 | Upstream Sync" 工作流的运行记录
-- **同步评论**: 同步成功后会在最新 commit 上添加包含同步时间、源仓库信息等的评论
-- **错误报告**: 同步失败时会自动创建包含详细错误信息和解决方案的 Issue
-
-### 常见问题解决
-
-**合并冲突**: 如遇到合并冲突，需要手动解决：
-```bash
-git clone https://github.com/your-username/wr.do.git
-cd wr.do
-git remote add upstream https://github.com/oiov/wr.do.git
-git fetch upstream
-git merge upstream/main
-# 解决冲突后提交并推送
-```
-
-**权限问题**: 确保仓库的 Actions 权限已启用，并在设置中允许 GitHub Actions 创建和批准 pull requests。
+前往[如何手动触发同步](/docs/developer/sync)查看详细文档。
 
 ## 社区群组
 
