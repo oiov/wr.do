@@ -1,7 +1,83 @@
-# .dockerignore
-# node_modules
-# npm-debug.log
-# README.md
-# .env*
-# .next
-# .git
+# .dockerignore - 优化 Docker 构建上下文
+
+# 依赖目录（在 Dockerfile 中单独处理）
+node_modules
+.pnpm-store
+
+# 构建输出目录
+.next/
+out/
+dist/
+build/
+
+# 环境变量文件
+.env*
+!.env.example
+
+# 日志文件
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+.pnpm-debug.log*
+
+# 运行时文件
+*.pid
+*.seed
+*.pid.lock
+
+# 测试和覆盖率
+coverage/
+.nyc_output/
+__tests__/
+**/*.test.*
+**/*.spec.*
+jest.config.*
+cypress/
+
+# IDE 和编辑器
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+
+# Git 和版本控制
+.git/
+.gitignore
+
+# GitHub 工作流（不需要在容器中）
+.github/
+
+# 文档文件
+README*.md
+LICENSE*
+docs/
+
+# 开发工具配置
+.eslintrc*
+.prettierrc*
+.editorconfig
+.husky/
+
+# 缓存目录
+.cache/
+.parcel-cache/
+.turbo/
+.swc/
+
+# 部署相关
+.vercel/
+.netlify/
+
+# Docker 相关文件
+Dockerfile*
+docker-compose*.yml
+
+# 临时文件
+tmp/
+temp/
+*.tmp

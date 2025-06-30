@@ -1,4 +1,4 @@
-name: Build and Push Docker Image to GHCR
+name: 构建推送 Docker 镜像 | Build and Push Docker Image to GHCR
 
 on:
   push:
@@ -23,15 +23,43 @@ jobs:
 
     steps:
       # 检出代码
-      - name: Checkout repository
+      - name: 检出代码 | Checkout repository
         uses: actions/checkout@v4
 
-      # 设置 Docker Buildx（支持多平台构建）
-      - name: Set up Docker Buildx
+      # 设置 Node.js 环境（用于缓存 pnpm）
+      - name: 设置 Node.js | Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # 设置 pnpm
+      - name: 设置 pnpm | Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
+
+      # 缓存 pnpm 依赖
+      - name: 缓存 pnpm 依赖 | Cache pnpm dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pnpm-store
+            node_modules
+            .next/cache
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      # 设置 Docker Buildx（支持多平台构建和高级缓存）
+      - name: 设置 Docker Buildx | Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+        with:
+          driver-opts: |
+            image=moby/buildkit:v0.12.0
+          buildkitd-flags: --allow-insecure-entitlement security.insecure --allow-insecure-entitlement network.host
 
       # 登录到 GitHub Container Registry
-      - name: Log in to GitHub Container Registry
+      - name: 登录容器注册表 | Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
@@ -39,26 +67,40 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       # 提取 Docker 镜像元数据（标签、版本等）
-      - name: Extract Docker metadata
+      - name: 提取镜像元数据 | Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=sha,format=short  
-            type=ref,event=branch,prefix=  
+            type=sha,format=short
+            type=ref,event=branch,prefix=
             type=ref,event=tag
+          labels: |
+            org.opencontainers.image.title=WR.DO
+            org.opencontainers.image.description=All-in-one web utility platform
+            org.opencontainers.image.vendor=oiov
 
       # 构建并推送 Docker 镜像
-      - name: Build and push Docker image
+      - name: 构建推送镜像 | Build and push Docker image
         uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile
-          push: true # ${{ github.event_name != 'pull_request' }}
+          platforms: linux/amd64,linux/arm64
+          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             ENVIRONMENT=${{ github.event.inputs.environment || 'production' }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+            BUILDKIT_INLINE_CACHE=1
+          # 多级缓存策略
+          cache-from: |
+            type=gha,scope=${{ github.workflow }}
+            type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:cache
+          cache-to: |
+            type=gha,scope=${{ github.workflow }},mode=max
+            type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:cache,mode=max
+          # 启用高级缓存特性
+          provenance: false
+          sbom: false

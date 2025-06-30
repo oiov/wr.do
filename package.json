@@ -5,6 +5,10 @@
     "name": "oiov",
     "url": "https://github.com/oiov"
   },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=8.0.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
