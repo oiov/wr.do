@@ -127,6 +127,11 @@ export const docsConfig: DocsConfig = {
           icon: "page",
         },
         {
+          title: "Auto Sync",
+          href: "/docs/developer/sync",
+          icon: "page",
+        },
+        {
           title: "Cloudflare",
           href: "/docs/developer/cloudflare",
           icon: "page",

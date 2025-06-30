@@ -39,7 +39,6 @@ export async function getUserShortUrls(
     role === "USER"
       ? {
           userId,
-          // active,
         }
       : {};
 
