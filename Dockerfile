@@ -16,14 +16,17 @@ FROM base AS deps
 # 复制依赖配置文件（优化缓存层次）
 COPY package.json pnpm-lock.yaml ./
 
-# 复制 prisma目录
-COPY prisma ./
+# 复制 prisma 目录
+COPY prisma ./prisma
 
 # 配置 pnpm store 目录
 RUN --mount=type=cache,target=/root/.pnpm-store pnpm config set store-dir /root/.pnpm-store
 
-# 使用缓存挂载安装依赖
-RUN --mount=type=cache,target=/root/.pnpm-store --mount=type=cache,target=/app/node_modules/.cache pnpm install --frozen-lockfile --prefer-offline
+# 跳过 postinstall 脚本安装依赖，然后手动运行 prisma generate
+RUN --mount=type=cache,target=/root/.pnpm-store --mount=type=cache,target=/app/node_modules/.cache pnpm install --frozen-lockfile --prefer-offline --ignore-scripts
+
+# 手动运行 prisma generate
+RUN pnpm prisma generate
 
 # 构建阶段
 FROM base AS builder
@@ -33,6 +36,7 @@ COPY --from=deps /app/node_modules ./node_modules
 
 # 复制配置文件（优先复制，利用缓存）
 COPY package.json pnpm-lock.yaml ./
+COPY prisma ./prisma
 COPY next.config.mjs ./
 COPY tailwind.config.ts ./
 COPY tsconfig.json ./
@@ -45,6 +49,12 @@ COPY env.mjs ./
 COPY middleware.ts ./
 COPY auth.config.ts ./
 COPY auth.ts ./
+
+# 复制 Google Analytics 文件
+COPY gtag.js ./
+
+# 复制字体资源
+COPY assets ./assets
 
 # 复制源代码目录
 COPY app ./app
@@ -61,11 +71,14 @@ COPY content ./content
 
 # 复制资源文件
 COPY public ./public
-COPY prisma ./prisma
 COPY scripts ./scripts
 
-# 复制环境变量示例
+# 复制环境变量示例和其他配置文件
 COPY .env.example ./
+COPY setup.mjs ./
+
+# 确保 prisma client 在构建阶段可用
+RUN pnpm prisma generate
 
 # 使用缓存挂载构建应用
 RUN --mount=type=cache,target=/app/.next/cache pnpm run build
