@@ -16,11 +16,11 @@ FROM base AS deps
 # 只复制依赖相关文件（优化缓存）
 COPY package.json pnpm-lock.yaml ./
 
+# 配置 pnpm store 目录
+RUN --mount=type=cache,target=/root/.pnpm-store pnpm config set store-dir /root/.pnpm-store
+
 # 使用缓存挂载安装依赖
-RUN --mount=type=cache,target=/root/.pnpm-store \
-  --mount=type=cache,target=/app/node_modules/.cache \
-  pnpm config set store-dir /root/.pnpm-store &&
-  pnpm install --frozen-lockfile --prefer-offline
+RUN --mount=type=cache,target=/root/.pnpm-store --mount=type=cache,target=/app/node_modules/.cache pnpm install --frozen-lockfile --prefer-offline
 
 # 构建阶段
 FROM base AS builder
@@ -65,15 +65,16 @@ COPY scripts ./scripts
 COPY .env.example ./
 
 # 使用缓存挂载构建应用
-RUN --mount=type=cache,target=/app/.next/cache \
-  pnpm run build
+RUN --mount=type=cache,target=/app/.next/cache pnpm run build
 
 # 运行时阶段
 FROM base AS runner
 
-# 创建非 root 用户
-RUN addgroup --system --gid 1001 nodejs &&
-  adduser --system --uid 1001 nextjs
+# 创建系统用户组
+RUN addgroup --system --gid 1001 nodejs
+
+# 创建系统用户
+RUN adduser --system --uid 1001 nextjs
 
 # 设置环境变量
 ENV NODE_ENV=production
@@ -81,10 +82,11 @@ ENV IS_DOCKER=true
 ENV HOSTNAME=0.0.0.0
 ENV PORT=3000
 
+# 配置 pnpm store 目录
+RUN --mount=type=cache,target=/root/.pnpm-store pnpm config set store-dir /root/.pnpm-store
+
 # 使用缓存挂载安装运行时依赖
-RUN --mount=type=cache,target=/root/.pnpm-store \
-  pnpm config set store-dir /root/.pnpm-store &&
-  pnpm add npm-run-all dotenv prisma@5.17.0 @prisma/client@5.17.0
+RUN --mount=type=cache,target=/root/.pnpm-store pnpm add npm-run-all dotenv prisma@5.17.0 @prisma/client@5.17.0
 
 # 复制构建产物
 COPY --from=builder /app/public ./public
