@@ -13,8 +13,11 @@ RUN npm install -g pnpm
 # 依赖安装阶段
 FROM base AS deps
 
-# 只复制依赖相关文件（优化缓存）
+# 复制依赖配置文件（优化缓存层次）
 COPY package.json pnpm-lock.yaml ./
+
+# 复制 prisma目录
+COPY prisma ./
 
 # 配置 pnpm store 目录
 RUN --mount=type=cache,target=/root/.pnpm-store pnpm config set store-dir /root/.pnpm-store
