@@ -159,7 +159,7 @@ This project is configured with a sync workflow for the upstream repository [oio
 - 🚨 **Smart Error Handling** - Auto-create detailed Issues when sync fails
 - 🧹 **Auto Cleanup Notifications** - Automatically close previous sync failure Issues
 
-See [How to Trigger Sync](/docs/developer/sync) for details.
+See [How to Trigger Sync](https://wr.do/docs/developer/sync) for details.
 
 ## Community Group
 

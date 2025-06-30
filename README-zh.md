@@ -154,7 +154,7 @@ pnpm dev
 - 🚨 **智能错误处理** - 同步失败时自动创建详细的 Issue
 - 🧹 **自动清理通知** - 自动关闭之前的同步失败 Issue
 
-前往[如何手动触发同步](/docs/developer/sync)查看详细文档。
+前往[如何手动触发同步](https://wr.do/docs/developer/sync)查看详细文档。
 
 ## 社区群组
 
