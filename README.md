@@ -137,6 +137,10 @@ pnpm dev
 
 Follow https://localhost:3000/setup
 
+## Deploy with Edgeone
+
+[![使用 EdgeOne Pages 部署](https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg)](https://edgeone.ai/pages/new?repository-url=https%3A%2F%2Fgithub.com%2Foiov%2Fwr.do)
+
 ## Environment Variables
 
 Via [Installation For Developer](https://wr.do/docs/developer).
@@ -182,4 +186,3 @@ See [How to Trigger Sync](https://wr.do/docs/developer/sync) for details.
  </picture>
 </a>
 
-[![Powered by DartNode](https://dartnode.com/branding/DN-Open-Source-sm.png)](https://dartnode.com "Powered by DartNode - Free VPS for Open Source")
