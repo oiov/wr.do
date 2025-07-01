@@ -10,9 +10,10 @@ import { ViewTransitions } from "next-view-transitions";
 import { cn, constructMetadata } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
 import ModalProvider from "@/components/modals/providers";
+import UmamiAnalytics from "@/components/shared/UmamiAnalytics";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
 
-import GoogleAnalytics from "./GoogleAnalytics";
+import GoogleAnalytics from "../components/shared/GoogleAnalytics";
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -49,6 +50,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             </SessionProvider>
           </NextIntlClientProvider>
           <GoogleAnalytics />
+          <UmamiAnalytics />
         </body>
       </html>
     </ViewTransitions>
