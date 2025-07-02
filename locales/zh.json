@@ -89,7 +89,7 @@
     "The record is currently pending for admin approval": "正在等待管理员审核",
     "The target is currently inaccessible": "目标链接目前无法访问",
     "Please check the target and try again": "请检查解析记录并重试",
-    "If the target is not activated within 3 days": "如果目标链接在 3 天内依然无法访问",
+    "If the target is not activated within 3 days": "如果目标链接在 3 天后依然无法访问",
     "the administrator will": "管理员将",
     "delete this record": "删除此记录",
     "Review": "审核",
@@ -424,7 +424,8 @@
     "Admin": "管理面板",
     "Sign in": "登录",
     "Log out": "退出登录",
-    "System Settings": "系统设置"
+    "System Settings": "系统设置",
+    "Cloud Storage": "云存储"
   },
   "Email": {
     "Search emails": "搜索邮箱...",
@@ -554,6 +555,11 @@
     "Email Suffix White List": "白名单",
     "Set email suffix white list, split by comma, such as: gmail-com,yahoo-com,hotmail-com": "设置邮箱后缀白名单，多个后缀请用逗号分隔，例如：gmail.com,yahoo.com,hotmail.com",
     "Application Status Email Notifications": "申请状态邮件通知",
-    "Send email notifications for subdomain application status updates; Notifies administrators when users submit applications and notifies users of approval results; Only available when subdomain application mode is enabled": "开启后，用户申请子域名时将邮件通知管理员审核，审核完成后邮件通知用户结果。此功能仅在子域申请模式开启时有效"
+    "Send email notifications for subdomain application status updates; Notifies administrators when users submit applications and notifies users of approval results; Only available when subdomain application mode is enabled": "开启后，用户申请子域名时将邮件通知管理员审核，审核完成后邮件通知用户结果。此功能仅在子域申请模式开启时有效",
+    "Cloud Storage Configs": "云存储配置",
+    "Verified": "已就绪",
+    "Verify Configuration": "验证配置",
+    "Clear": "清空",
+    "How to get the R2 credentials?": "如何获取 R2 授权配置？"
   }
 }

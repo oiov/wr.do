@@ -10,9 +10,13 @@ export const sidebarLinks: SidebarNavItem[] = [
     items: [
       { href: "/dashboard", icon: "dashboard", title: "Dashboard" },
       { href: "/dashboard/urls", icon: "link", title: "Short Urls" },
-      { href: "/emails", icon: "mail", title: "Emails" },
       { href: "/dashboard/records", icon: "globe", title: "DNS Records" },
-      { href: "/chat", icon: "messages", title: "WRoom" },
+      { href: "/emails", icon: "mail", title: "Emails" },
+      {
+        href: "/dashboard/storage",
+        icon: "cloudUpload",
+        title: "Cloud Storage",
+      },
     ],
   },
   {

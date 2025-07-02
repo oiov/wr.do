@@ -290,7 +290,6 @@ export function PlanForm({
                 className="flex-1 shadow-inner"
                 size={32}
                 type="number"
-                disabled
                 {...register("slDomains", { valueAsNumber: true })}
               />
             </div>

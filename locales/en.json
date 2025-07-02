@@ -424,7 +424,8 @@
     "Admin": "Admin",
     "Sign in": "Sign in",
     "Log out": "Log out",
-    "System Settings": "System Settings"
+    "System Settings": "System Settings",
+    "Cloud Storage": "Cloud Storage"
   },
   "Email": {
     "Search emails": "Search emails",
@@ -554,6 +555,11 @@
     "Email Suffix White List": "Email Suffix White List",
     "Set email suffix white list, split by comma, such as: gmail-com,yahoo-com,hotmail-com": "Set email suffix white list, split by comma, such as: gmail.com,yahoo.com,hotmail.com",
     "Application Status Email Notifications": "Application Status Email Notifications",
-    "Send email notifications for subdomain application status updates; Notifies administrators when users submit applications and notifies users of approval results; Only available when subdomain application mode is enabled": "Send email notifications for subdomain application status updates; Notifies administrators when users submit applications and notifies users of approval results; Only available when subdomain application mode is enabled"
+    "Send email notifications for subdomain application status updates; Notifies administrators when users submit applications and notifies users of approval results; Only available when subdomain application mode is enabled": "Send email notifications for subdomain application status updates; Notifies administrators when users submit applications and notifies users of approval results; Only available when subdomain application mode is enabled",
+    "Cloud Storage Configs": "Cloud Storage Configs",
+    "Verified": "Verified",
+    "Verify Configuration": "Verify Configuration",
+    "Clear": "Clear",
+    "How to get the R2 credentials?": "How to get the R2 credentials?"
   }
 }
