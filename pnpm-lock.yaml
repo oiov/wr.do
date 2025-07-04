@@ -278,6 +278,9 @@ importers:
       react-dom:
         specifier: 18.3.1
         version: 18.3.1(react@18.3.1)
+      react-dropzone:
+        specifier: ^14.3.8
+        version: 14.3.8(react@18.3.1)
       react-email:
         specifier: 2.1.5
         version: 2.1.5(@opentelemetry/api@1.8.0)(@swc/helpers@0.5.5)(eslint@8.57.0)
@@ -4120,6 +4123,10 @@ packages:
     resolution: {integrity: sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==}
     engines: {node: '>= 4.0.0'}
 
+  attr-accept@2.2.5:
+    resolution: {integrity: sha512-0bDNnY/u6pPwHDMoF0FieU354oBi0a8rD9FcsLwzcGWbc8KS8KPIi7y+s13OlVY+gMWc/9xEMUgNE6Qm8ZllYQ==}
+    engines: {node: '>=4'}
+
   autoprefixer@10.4.14:
     resolution: {integrity: sha512-FQzyfOsTlwVzjHxKEqRIAdJx9niO6VCBCoEwax/VLSoQF29ggECcPuBqUMZ+u8jCZOPSy8b8/8KnuFbp0SaFZQ==}
     engines: {node: ^10 || ^12 || >=14}
@@ -5262,6 +5269,10 @@ packages:
   file-entry-cache@6.0.1:
     resolution: {integrity: sha512-7Gps/XWymbLk2QLYK4NzpMOrYjMhdIxXuIvy2QBsLE6ljuodKvdkWs/cpyJJ3CVIVpH0Oi1Hvg1ovbMzLdFBBg==}
     engines: {node: ^10.12.0 || >=12.0.0}
+
+  file-selector@2.1.2:
+    resolution: {integrity: sha512-QgXo+mXTe8ljeqUFaX3QVHc5osSItJ/Km+xpocx0aSqWGMSCf6qYs/VnzZgS864Pjn5iceMRFigeAV7AfTlaig==}
+    engines: {node: '>= 12'}
 
   filelist@1.0.4:
     resolution: {integrity: sha512-w1cEuf3S+DrLCQL7ET6kz+gmlJdbq9J7yXCSjK/OZCPA+qEN1WyF4ZAf0YYJa4/shHJra2t/d/r8SV4Ji+x+8Q==}
@@ -7087,6 +7098,12 @@ packages:
     resolution: {integrity: sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==}
     peerDependencies:
       react: ^18.3.1
+
+  react-dropzone@14.3.8:
+    resolution: {integrity: sha512-sBgODnq+lcA4P296DY4wacOZz3JFpD99fp+hb//iBO2HHnyeZU3FwWyXJ6salNpqQdsZrgMrotuko/BdJMV8Ug==}
+    engines: {node: '>= 10.13'}
+    peerDependencies:
+      react: '>= 16.8 || 18.0.0'
 
   react-email@2.1.5:
     resolution: {integrity: sha512-SjGt5XiqNwrC6FT0rAxERj0MC9binUOVZDzspAxcRHpxjZavvePAHvV29uROWNQ1Ha7ssg1sfy4dTQi7bjCXrg==}
@@ -13057,6 +13074,8 @@ snapshots:
 
   at-least-node@1.0.0: {}
 
+  attr-accept@2.2.5: {}
+
   autoprefixer@10.4.14(postcss@8.4.38):
     dependencies:
       browserslist: 4.23.0
@@ -14104,7 +14123,7 @@ snapshots:
       eslint: 8.57.0
       eslint-import-resolver-node: 0.3.9
       eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@6.20.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.0(@typescript-eslint/parser@7.16.1(eslint@8.57.0)(typescript@5.5.3))(eslint@8.57.0))(eslint@8.57.0)
-      eslint-plugin-import: 2.29.0(@typescript-eslint/parser@6.20.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
+      eslint-plugin-import: 2.29.0(@typescript-eslint/parser@6.20.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.20.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.0(@typescript-eslint/parser@7.16.1(eslint@8.57.0)(typescript@5.5.3))(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
       eslint-plugin-jsx-a11y: 6.8.0(eslint@8.57.0)
       eslint-plugin-react: 7.35.0(eslint@8.57.0)
       eslint-plugin-react-hooks: 4.6.0(eslint@8.57.0)
@@ -14140,8 +14159,8 @@ snapshots:
       debug: 4.3.4
       enhanced-resolve: 5.15.0
       eslint: 8.57.0
-      eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.20.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
-      eslint-plugin-import: 2.29.0(@typescript-eslint/parser@6.20.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
+      eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.20.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.20.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.0(@typescript-eslint/parser@7.16.1(eslint@8.57.0)(typescript@5.5.3))(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
+      eslint-plugin-import: 2.29.0(@typescript-eslint/parser@6.20.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.20.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.0(@typescript-eslint/parser@7.16.1(eslint@8.57.0)(typescript@5.5.3))(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
       fast-glob: 3.3.2
       get-tsconfig: 4.7.2
       is-core-module: 2.13.1
@@ -14152,7 +14171,7 @@ snapshots:
       - eslint-import-resolver-webpack
       - supports-color
 
-  eslint-module-utils@2.8.0(@typescript-eslint/parser@6.20.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0):
+  eslint-module-utils@2.8.0(@typescript-eslint/parser@6.20.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.20.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.0(@typescript-eslint/parser@7.16.1(eslint@8.57.0)(typescript@5.5.3))(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
@@ -14163,7 +14182,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.29.0(@typescript-eslint/parser@6.20.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0):
+  eslint-plugin-import@2.29.0(@typescript-eslint/parser@6.20.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.20.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.0(@typescript-eslint/parser@7.16.1(eslint@8.57.0)(typescript@5.5.3))(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0):
     dependencies:
       array-includes: 3.1.8
       array.prototype.findlastindex: 1.2.3
@@ -14173,7 +14192,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 8.57.0
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.20.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
+      eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.20.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.20.0(eslint@8.57.0)(typescript@5.5.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.0(@typescript-eslint/parser@7.16.1(eslint@8.57.0)(typescript@5.5.3))(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
       hasown: 2.0.2
       is-core-module: 2.13.1
       is-glob: 4.0.3
@@ -14435,6 +14454,10 @@ snapshots:
     dependencies:
       flat-cache: 3.2.0
 
+  file-selector@2.1.2:
+    dependencies:
+      tslib: 2.8.1
+
   filelist@1.0.4:
     dependencies:
       minimatch: 5.1.6
@@ -14500,7 +14523,7 @@ snapshots:
 
   framer-motion@10.17.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
-      tslib: 2.6.2
+      tslib: 2.8.1
     optionalDependencies:
       '@emotion/is-prop-valid': 0.8.8
       react: 18.3.1
@@ -16592,6 +16615,13 @@ snapshots:
       react: 18.3.1
       scheduler: 0.23.2
 
+  react-dropzone@14.3.8(react@18.3.1):
+    dependencies:
+      attr-accept: 2.2.5
+      file-selector: 2.1.2
+      prop-types: 15.8.1
+      react: 18.3.1
+
   react-email@2.1.5(@opentelemetry/api@1.8.0)(@swc/helpers@0.5.5)(eslint@8.57.0):
     dependencies:
       '@babel/core': 7.24.5
@@ -16681,7 +16711,7 @@ snapshots:
     dependencies:
       react: 18.3.1
       react-style-singleton: 2.2.1(@types/react@18.2.47)(react@18.3.1)
-      tslib: 2.6.2
+      tslib: 2.8.1
     optionalDependencies:
       '@types/react': 18.2.47
 
@@ -16689,7 +16719,7 @@ snapshots:
     dependencies:
       react: 18.3.1
       react-style-singleton: 2.2.1(@types/react@18.3.3)(react@18.3.1)
-      tslib: 2.6.2
+      tslib: 2.8.1
     optionalDependencies:
       '@types/react': 18.3.3
 
@@ -16739,7 +16769,7 @@ snapshots:
       get-nonce: 1.0.1
       invariant: 2.2.4
       react: 18.3.1
-      tslib: 2.6.2
+      tslib: 2.8.1
     optionalDependencies:
       '@types/react': 18.2.47
 
@@ -16748,7 +16778,7 @@ snapshots:
       get-nonce: 1.0.1
       invariant: 2.2.4
       react: 18.3.1
-      tslib: 2.6.2
+      tslib: 2.8.1
     optionalDependencies:
       '@types/react': 18.3.3
 
@@ -17844,14 +17874,14 @@ snapshots:
   use-callback-ref@1.3.0(@types/react@18.2.47)(react@18.3.1):
     dependencies:
       react: 18.3.1
-      tslib: 2.6.2
+      tslib: 2.8.1
     optionalDependencies:
       '@types/react': 18.2.47
 
   use-callback-ref@1.3.0(@types/react@18.3.3)(react@18.3.1):
     dependencies:
       react: 18.3.1
-      tslib: 2.6.2
+      tslib: 2.8.1
     optionalDependencies:
       '@types/react': 18.3.3
 
@@ -17883,7 +17913,7 @@ snapshots:
     dependencies:
       detect-node-es: 1.1.0
       react: 18.3.1
-      tslib: 2.6.2
+      tslib: 2.8.1
     optionalDependencies:
       '@types/react': 18.2.47
 
@@ -17891,7 +17921,7 @@ snapshots:
     dependencies:
       detect-node-es: 1.1.0
       react: 18.3.1
-      tslib: 2.6.2
+      tslib: 2.8.1
     optionalDependencies:
       '@types/react': 18.3.3
 

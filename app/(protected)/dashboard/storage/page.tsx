@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/session";
 import { constructMetadata } from "@/lib/utils";
 import { DashboardHeader } from "@/components/dashboard/header";
-import FileManager from "@/components/shared/file-manager";
+import UserFileList from "@/components/file/file-list";
 
 export const metadata = constructMetadata({
   title: "Cloud Storage",
@@ -19,12 +19,20 @@ export default async function DashboardPage() {
     <>
       <DashboardHeader
         heading="Cloud Storage"
-        text="List and manage cloud storage."
+        text="List and manage cloud storage"
         link="/docs/cloud-storage"
         linkText="Cloud Storage"
       />
-
-      <FileManager />
+      <UserFileList
+        user={{
+          id: user.id,
+          name: user.name || "",
+          apiKey: user.apiKey || "",
+          email: user.email || "",
+          role: user.role,
+        }}
+        action="/api/storage"
+      />
     </>
   );
 }

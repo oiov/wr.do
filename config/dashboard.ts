@@ -14,7 +14,7 @@ export const sidebarLinks: SidebarNavItem[] = [
       { href: "/emails", icon: "mail", title: "Emails" },
       {
         href: "/dashboard/storage",
-        icon: "cloudUpload",
+        icon: "storage",
         title: "Cloud Storage",
       },
     ],

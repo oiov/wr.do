@@ -397,3 +397,9 @@ export function verifyPassword(
   const hashToVerify = crypto.scryptSync(password, salt, 64).toString("hex");
   return hash === hashToVerify;
 }
+
+export const formatFileSizeX = (bytes: number) => {
+  if (bytes < 1048576) return (bytes / 1024).toFixed() + " KB";
+  if (bytes < 1073741824) return (bytes / 1048576).toFixed(2) + " MB";
+  return (bytes / 1073741824).toFixed(2) + " GB";
+};

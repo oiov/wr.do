@@ -399,7 +399,7 @@ export function DomainForm({
             <FormSectionColumns title="">
               <div className="flex w-full items-start justify-between gap-2">
                 <Label className="mt-2.5 text-nowrap" htmlFor="api-key">
-                  {t("API Token")}:
+                  {t("API Key")}:
                 </Label>
                 <div className="w-full sm:w-3/5">
                   <Input
@@ -422,7 +422,7 @@ export function DomainForm({
                           href="/docs/developer/cloudflare"
                           target="_blank"
                         >
-                          {t("How to get api token?")}
+                          {t("How to get api key?")}
                         </Link>
                       </p>
                     )}
