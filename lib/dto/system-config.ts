@@ -35,7 +35,8 @@ function parseConfigValue(value: string, type: ConfigType): any {
     case "OBJECT":
       try {
         return JSON.parse(value);
-      } catch {
+      } catch (e) {
+        console.error(e);
         return {};
       }
     case "STRING":

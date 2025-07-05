@@ -4,7 +4,7 @@ import React, { Dispatch, SetStateAction, useCallback } from "react";
 import { useTranslations } from "next-intl";
 import { useDropzone } from "react-dropzone";
 
-import { BucketInfo } from "@/components/file/file-list";
+import { BucketInfo } from "@/components/file";
 
 import { Icons } from "../shared/icons";
 import { Button } from "../ui/button";

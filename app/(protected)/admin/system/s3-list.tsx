@@ -1,7 +1,8 @@
 "use client";
 
-import { use, useEffect, useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import Link from "next/link";
+import { AnimatePresence, motion } from "framer-motion";
 import { CloudCog } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
@@ -37,13 +38,17 @@ export default function S3Configs({}: {}) {
     account_id: "",
     access_key_id: "",
     secret_access_key: "",
-    bucket: "",
     endpoint: "",
-    region: "auto",
-    custom_domain: "",
-    prefix: "",
     enabled: true,
-    file_types: "",
+    buckets: [
+      {
+        bucket: "",
+        custom_domain: "",
+        prefix: "",
+        file_types: "",
+        region: "auto",
+      },
+    ],
   });
 
   const {
@@ -119,7 +124,7 @@ export default function S3Configs({}: {}) {
 
   return (
     <Card>
-      <Collapsible className="group">
+      <Collapsible className="group" defaultOpen>
         <CollapsibleTrigger className="flex w-full items-center justify-between bg-neutral-50 px-4 py-5 dark:bg-neutral-900">
           <div className="text-lg font-bold">{t("Cloud Storage Configs")}</div>
           <Icons.chevronDown className="ml-auto size-4" />
@@ -171,73 +176,8 @@ export default function S3Configs({}: {}) {
                     }
                   />
                 </div>
-                <div className="space-y-1">
-                  <Label>Bucket Name</Label>
-                  <Input
-                    value={r2Credentials.bucket}
-                    placeholder="bucket1,bucket2"
-                    onChange={(e) =>
-                      setR2Credentials({
-                        ...r2Credentials,
-                        bucket: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                <div className="space-y-1">
-                  <Label>Region</Label>
-                  <Input
-                    value={r2Credentials.region}
-                    placeholder="auto"
-                    onChange={(e) =>
-                      setR2Credentials({
-                        ...r2Credentials,
-                        region: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                <div className="space-y-1">
-                  <Label>Custom Domain (Optional)</Label>
-                  <Input
-                    value={r2Credentials.custom_domain}
-                    placeholder="https://example.com,https://example2.com"
-                    onChange={(e) =>
-                      setR2Credentials({
-                        ...r2Credentials,
-                        custom_domain: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                <div className="space-y-1">
-                  <Label>Prefix (Optional)</Label>
-                  <Input
-                    value={r2Credentials.prefix}
-                    placeholder=""
-                    onChange={(e) =>
-                      setR2Credentials({
-                        ...r2Credentials,
-                        prefix: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                <div className="space-y-1">
-                  <Label>File Types</Label>
-                  <Input
-                    value={r2Credentials.file_types}
-                    placeholder="png,jpg"
-                    onChange={(e) =>
-                      setR2Credentials({
-                        ...r2Credentials,
-                        file_types: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                <div className="flex flex-col space-y-2">
-                  <Label>Enabled</Label>
+                <div className="flex flex-col justify-center space-y-3">
+                  <Label className="">Enabled</Label>
                   <Switch
                     checked={r2Credentials.enabled}
                     onCheckedChange={(e) =>
@@ -249,6 +189,215 @@ export default function S3Configs({}: {}) {
                   />
                 </div>
               </div>
+              {r2Credentials.buckets.map((bucket, index) => (
+                <motion.div
+                  className="relative grid grid-cols-1 gap-4 rounded-lg border border-dashed border-muted-foreground px-3 pb-3 pt-8 text-neutral-600 dark:text-neutral-400 sm:grid-cols-3"
+                  key={`bucket-${index}`}
+                  layout
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{
+                    layout: { duration: 0.3, ease: "easeInOut" },
+                    opacity: { duration: 0.2 },
+                    scale: { duration: 0.2 },
+                  }}
+                >
+                  <p className="absolute left-2 top-2 text-xs text-muted-foreground">
+                    Bucket {index + 1}
+                  </p>
+                  <div className="absolute right-2 top-2 flex items-center justify-between space-x-2">
+                    {index > 0 && (
+                      <Button
+                        className="h-[30px] px-1.5"
+                        size={"sm"}
+                        variant={"ghost"}
+                        onClick={() => {
+                          const newBuckets = [...r2Credentials.buckets];
+                          newBuckets.splice(index, 1);
+                          newBuckets.splice(index - 1, 0, bucket);
+                          setR2Credentials({
+                            ...r2Credentials,
+                            buckets: newBuckets,
+                          });
+                        }}
+                      >
+                        <Icons.arrowUp className="size-4" />{" "}
+                      </Button>
+                    )}
+
+                    {index < r2Credentials.buckets.length - 1 && (
+                      <Button
+                        className="h-[30px] px-1.5"
+                        size={"sm"}
+                        variant={"ghost"}
+                        onClick={() => {
+                          const newBuckets = [...r2Credentials.buckets];
+                          newBuckets.splice(index, 1);
+                          newBuckets.splice(index + 1, 0, bucket);
+                          setR2Credentials({
+                            ...r2Credentials,
+                            buckets: newBuckets,
+                          });
+                        }}
+                      >
+                        <Icons.arrowDown className="size-4" />{" "}
+                      </Button>
+                    )}
+
+                    <Button
+                      className="ml-auto h-[30px] px-1.5"
+                      size={"sm"}
+                      variant={"outline"}
+                      onClick={() => {
+                        const newBuckets = [...r2Credentials.buckets];
+                        newBuckets.splice(index + 1, 0, {
+                          bucket: "",
+                          prefix: "",
+                          file_types: "",
+                          region: "auto",
+                          custom_domain: "",
+                          file_size: "26214400",
+                        });
+                        setR2Credentials({
+                          ...r2Credentials,
+                          buckets: newBuckets,
+                        });
+                      }}
+                    >
+                      <Icons.add className="size-4" />{" "}
+                    </Button>
+                    {index !== 0 && (
+                      <Button
+                        className="h-[30px] px-1.5"
+                        size={"sm"}
+                        variant={"outline"}
+                      >
+                        <Icons.trash
+                          className="size-4"
+                          onClick={() => {
+                            const newBuckets = [...r2Credentials.buckets];
+                            newBuckets.splice(index, 1);
+                            setR2Credentials({
+                              ...r2Credentials,
+                              buckets: newBuckets,
+                            });
+                          }}
+                        />
+                      </Button>
+                    )}
+                  </div>
+
+                  <div className="space-y-1">
+                    <Label>Bucket Name</Label>
+                    <Input
+                      value={bucket.bucket}
+                      placeholder="bucket name"
+                      onChange={(e) => {
+                        const newBuckets = [...r2Credentials.buckets];
+                        newBuckets[index] = {
+                          ...bucket,
+                          bucket: e.target.value,
+                        };
+                        setR2Credentials({
+                          ...r2Credentials,
+                          buckets: newBuckets,
+                        });
+                      }}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label>Custom Domain (Optional)</Label>
+                    <Input
+                      value={bucket.custom_domain}
+                      placeholder="https://example.com"
+                      onChange={(e) => {
+                        const newBuckets = [...r2Credentials.buckets];
+                        newBuckets[index] = {
+                          ...bucket,
+                          custom_domain: e.target.value,
+                        };
+                        setR2Credentials({
+                          ...r2Credentials,
+                          buckets: newBuckets,
+                        });
+                      }}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label>Max File Size</Label>
+                    <Input
+                      value={bucket.file_size}
+                      placeholder=""
+                      onChange={(e) => {
+                        const newBuckets = [...r2Credentials.buckets];
+                        newBuckets[index] = {
+                          ...bucket,
+                          file_size: e.target.value,
+                        };
+                        setR2Credentials({
+                          ...r2Credentials,
+                          buckets: newBuckets,
+                        });
+                      }}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label>Region</Label>
+                    <Input
+                      value={bucket.region}
+                      placeholder="auto"
+                      onChange={(e) => {
+                        const newBuckets = [...r2Credentials.buckets];
+                        newBuckets[index] = {
+                          ...bucket,
+                          region: e.target.value,
+                        };
+                        setR2Credentials({
+                          ...r2Credentials,
+                          buckets: newBuckets,
+                        });
+                      }}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label>Prefix (Optional)</Label>
+                    <Input
+                      value={bucket.prefix}
+                      placeholder=""
+                      onChange={(e) => {
+                        const newBuckets = [...r2Credentials.buckets];
+                        newBuckets[index] = {
+                          ...bucket,
+                          prefix: e.target.value,
+                        };
+                        setR2Credentials({
+                          ...r2Credentials,
+                          buckets: newBuckets,
+                        });
+                      }}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label>Allowed File Types (Optional)</Label>
+                    <Input
+                      value={bucket.file_types}
+                      placeholder="png,jpg"
+                      onChange={(e) => {
+                        const newBuckets = [...r2Credentials.buckets];
+                        newBuckets[index] = {
+                          ...bucket,
+                          file_types: e.target.value,
+                        };
+                        setR2Credentials({
+                          ...r2Credentials,
+                          buckets: newBuckets,
+                        });
+                      }}
+                    />
+                  </div>
+                </motion.div>
+              ))}
               <div className="flex items-center justify-between gap-3">
                 <Link
                   className="text-sm text-blue-500 hover:underline"
@@ -268,11 +417,8 @@ export default function S3Configs({}: {}) {
                       endpoint: "",
                       access_key_id: "",
                       secret_access_key: "",
-                      bucket: "",
-                      region: "",
+                      buckets: [],
                       account_id: "",
-                      custom_domain: "",
-                      prefix: "",
                       enabled: false,
                     });
                   }}

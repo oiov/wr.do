@@ -7,10 +7,12 @@ import {
   UploadPartCommand,
 } from "@aws-sdk/client-s3";
 
+import { createUserFile } from "@/lib/dto/files";
 import { getMultipleConfigs } from "@/lib/dto/system-config";
 import { checkUserStatus } from "@/lib/dto/user";
-import { createS3Client } from "@/lib/r2";
+import { CloudStorageCredentials, createS3Client, getFileInfo } from "@/lib/r2";
 import { getCurrentUser } from "@/lib/session";
+import { extractFileNameAndExtension } from "@/lib/utils";
 
 export async function POST(request: Request): Promise<Response> {
   const user = checkUserStatus(await getCurrentUser());
@@ -35,8 +37,8 @@ export async function POST(request: Request): Promise<Response> {
       status: 403,
     });
   }
-  const buckets = configs.s3_config_01.bucket.split(",");
-  if (!buckets.includes(bucket)) {
+  const buckets = configs.s3_config_01.buckets || [];
+  if (!buckets.find((b) => b.bucket === bucket)) {
     return NextResponse.json("Bucket does not exist", {
       status: 403,
     });
@@ -52,7 +54,12 @@ export async function POST(request: Request): Promise<Response> {
     case "create-multipart-upload":
       return createMultipartUpload(formData, R2);
     case "complete-multipart-upload":
-      return completeMultipartUpload(formData, R2);
+      return completeMultipartUpload(
+        formData,
+        R2,
+        user.id,
+        configs.s3_config_01,
+      );
     case "abort-multipart-upload":
       return abortMultipartUpload(formData, R2);
     case "upload-part":
@@ -72,11 +79,13 @@ async function createMultipartUpload(
   const fileName = formData.get("fileName") as string;
   const fileType = formData.get("fileType") as string;
   const bucket = formData.get("bucket") as string;
+  const prefix = (formData.get("prefix") as string) || "";
 
+  const fileKey = generateFileKey(fileName, prefix);
   try {
     const params = {
       Bucket: bucket,
-      Key: fileName,
+      Key: fileKey,
       ContentType: fileType,
     };
 
@@ -102,10 +111,16 @@ async function createMultipartUpload(
 async function completeMultipartUpload(
   formData: FormData,
   R2: S3Client,
+  userId: string,
+  bucketInfo: CloudStorageCredentials,
 ): Promise<Response> {
   const key = formData.get("key") as string;
   const uploadId = formData.get("uploadId") as string;
   const bucket = formData.get("bucket") as string;
+  const size = parseInt(formData.get("fileSize") as string);
+  const fileType = formData.get("fileType") as string;
+  // const fileName = formData.get("fileName") as string;
+
   const parts = JSON.parse(formData.get("parts") as string);
 
   try {
@@ -117,6 +132,24 @@ async function completeMultipartUpload(
     };
     const command = new CompleteMultipartUploadCommand({ ...params });
     const response = await R2.send(command);
+
+    const extractKey = extractFileNameAndExtension(key);
+
+    await createUserFile({
+      userId,
+      name: extractKey.fileName,
+      originalName: extractKey.nameWithoutExtension,
+      mimeType: fileType,
+      path: key,
+      etag: "",
+      storageClass: "",
+      channel: bucketInfo.channel || "",
+      platform: bucketInfo.platform || "",
+      providerName: bucketInfo.provider_name || "",
+      size,
+      bucket,
+      lastModified: new Date(),
+    });
 
     return new Response(JSON.stringify(response), { status: 200 });
   } catch (err) {
@@ -186,4 +219,17 @@ async function uploadPart(formData: FormData, R2: S3Client): Promise<Response> {
       status: 500,
     });
   }
+}
+
+export function generateFileKey(fileName: string, prefix?: string): string {
+  if (prefix) {
+    return `${prefix}/${fileName}`;
+  }
+
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}/${month}/${day}/${fileName}`;
 }

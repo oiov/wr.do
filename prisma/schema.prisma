@@ -70,6 +70,7 @@ model User {
   ScrapeMeta    ScrapeMeta[]
   UserEmail     UserEmail[]
   UserSendEmail UserSendEmail[]
+  UserFile      UserFile[]
 
   @@index([createdAt])
   @@map(name: "users")
@@ -322,4 +323,34 @@ model Plan {
   updatedAt DateTime @default(now())
 
   @@map("plans")
+}
+
+model UserFile {
+  id         String  @id @default(uuid())
+  userId     String
+  shortUrlId String?
+
+  name         String
+  originalName String?
+  mimeType     String
+  size         Int
+  path         String
+  etag         String?
+  storageClass String?
+
+  channel      String
+  platform     String
+  providerName String
+  bucket       String
+
+  status Int @default(1) // 0 删除, 1 正常, 2 禁用
+
+  lastModified DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, providerName, status, lastModified, createdAt])
+  @@map(name: "user_files")
 }

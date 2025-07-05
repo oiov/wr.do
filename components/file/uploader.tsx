@@ -2,8 +2,9 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
-import { BucketInfo } from "@/components/file/file-list";
+import { BucketInfo } from "@/components/file";
 
 import { Icons } from "../shared/icons";
 import { Button } from "../ui/button";
@@ -64,6 +65,7 @@ export default function Uploader({
     formData.append("fileName", file.name);
     formData.append("fileType", file.type);
     formData.append("bucket", bucketInfo.bucket);
+    formData.append("prefix", bucketInfo.prefix || "");
     formData.append("endPoint", "create-multipart-upload");
     const response = await fetch(`${action}/r2/uploads`, {
       method: "POST",
@@ -126,6 +128,7 @@ export default function Uploader({
     uploadId: string,
     key: string,
     parts: { ETag: string; PartNumber: number }[],
+    file: File,
   ): Promise<{ Location: string }> => {
     const formData = new FormData();
 
@@ -133,6 +136,9 @@ export default function Uploader({
     formData.append("uploadId", uploadId);
     formData.append("bucket", bucketInfo.bucket);
     formData.append("parts", JSON.stringify(parts));
+    formData.append("fileSize", file.size.toString());
+    formData.append("fileType", file.type);
+    formData.append("fileName", file.name);
     formData.append("endPoint", "complete-multipart-upload");
     const response = await fetch(`${action}/r2/uploads`, {
       method: "POST",
@@ -170,9 +176,15 @@ export default function Uploader({
     return data;
   };
 
-  // Manages the entire file upload process
   const uploadFile = async (file: File): Promise<void> => {
     try {
+      if (file.size > Number(bucketInfo.file_size || "26214400")) {
+        toast.warning("Upload Failed", {
+          description: `File '${file.name}' size exceeds the maximum allowed size of ${bucketInfo.file_size} bytes.`,
+        });
+        return;
+      }
+
       const { uploadId, key } = await startUpload(file);
 
       setProgressList((prev) => [
@@ -201,7 +213,7 @@ export default function Uploader({
         );
       });
 
-      const result = await completeUpload(uploadId, key, parts);
+      const result = await completeUpload(uploadId, key, parts, file);
 
       setProgressList(
         (prev) =>
@@ -256,7 +268,7 @@ export default function Uploader({
             </DrawerHeader>
             <DrawerDescription className="px-4">
               <div className="flex items-center space-x-1 text-sm text-muted-foreground">
-                <span>{t("Uploud channel")}: </span>
+                <span>Bucket: </span>
                 <div className="truncate">{bucketInfo.provider_name}</div>
                 <Icons.arrowRight className="size-3" />
                 <div className="font-medium text-blue-600 dark:text-blue-400">

@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/session";
 import { constructMetadata } from "@/lib/utils";
 import { DashboardHeader } from "@/components/dashboard/header";
-import UserFileList from "@/components/file/file-list";
+import UserFileList from "@/components/file";
 
 export const metadata = constructMetadata({
   title: "Cloud Storage",

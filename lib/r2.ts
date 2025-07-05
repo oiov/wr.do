@@ -1,13 +1,10 @@
 import {
-  AbortMultipartUploadCommand,
-  CompleteMultipartUploadCommand,
-  CreateMultipartUploadCommand,
   DeleteObjectCommand,
   GetObjectCommand,
+  HeadObjectCommand,
   ListObjectsV2Command,
   PutObjectCommand,
   S3Client,
-  UploadPartCommand,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
@@ -19,12 +16,8 @@ export interface CloudStorageCredentials {
   account_id?: string;
   access_key_id?: string;
   secret_access_key?: string;
-  bucket?: string;
   endpoint?: string;
-  region?: string;
-  custom_domain?: string;
-  prefix?: string;
-  file_types?: string;
+  buckets: BucketItem[];
 }
 
 export interface ClientStorageCredentials {
@@ -32,11 +25,16 @@ export interface ClientStorageCredentials {
   platform?: string;
   channel?: string;
   provider_name?: string;
-  buckets?: string[];
-  region?: string;
-  custom_domain?: string[];
+  buckets: BucketItem[];
+}
+
+export interface BucketItem {
+  bucket: string;
+  custom_domain?: string;
   prefix?: string;
-  file_types?: string[];
+  file_types?: string;
+  file_size?: string;
+  region?: string;
 }
 
 export interface FileObject {
@@ -139,6 +137,29 @@ export async function listFiles(
     return response.Contents || [];
   } catch (error) {
     console.error("Error listing files:", error);
+    throw error;
+  }
+}
+
+export async function getFileInfo(R2: S3Client, bucket: string, key: string) {
+  try {
+    const headCommand = new HeadObjectCommand({
+      Bucket: bucket,
+      Key: key,
+    });
+
+    const headResponse = await R2.send(headCommand);
+
+    return {
+      size: headResponse.ContentLength || 0,
+      etag: headResponse.ETag || "",
+      lastModified: headResponse.LastModified || new Date(),
+      contentType: headResponse.ContentType || "",
+      storageClass: headResponse.StorageClass || "",
+      metadata: headResponse.Metadata || {},
+    };
+  } catch (error) {
+    console.error("Error getting file info:", error);
     throw error;
   }
 }

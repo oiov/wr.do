@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 
 import { cn, formatFileSize } from "@/lib/utils";
-import { BucketInfo } from "@/components/file/file-list";
+import { BucketInfo } from "@/components/file";
 
 import { CopyButton } from "../shared/copy-button";
 import { Icons } from "../shared/icons";

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { getUserFiles } from "@/lib/dto/files";
 import { getMultipleConfigs } from "@/lib/dto/system-config";
 import { checkUserStatus } from "@/lib/dto/user";
 import {
@@ -16,6 +17,8 @@ export async function GET(req: NextRequest) {
     if (user instanceof Response) return user;
 
     const url = new URL(req.url);
+    const page = url.searchParams.get("page");
+    const size = url.searchParams.get("size");
     const bucket = url.searchParams.get("bucket") || "";
 
     const configs = await getMultipleConfigs(["s3_config_01"]);
@@ -34,24 +37,25 @@ export async function GET(req: NextRequest) {
         status: 403,
       });
     }
-    const buckets = configs.s3_config_01.bucket.split(",");
-    if (!buckets.includes(bucket)) {
+    const buckets = configs.s3_config_01.buckets || [];
+    if (!buckets.find((b) => b.bucket === bucket)) {
       return NextResponse.json("Bucket does not exist", {
         status: 403,
       });
     }
 
-    const files = await listFiles(
-      configs.s3_config_01.prefix || "",
-      createS3Client(
-        configs.s3_config_01.endpoint,
-        configs.s3_config_01.access_key_id,
-        configs.s3_config_01.secret_access_key,
-      ),
+    const res = await getUserFiles({
+      page: Number(page) || 1,
+      limit: Number(size) || 20,
       bucket,
-    );
-    return NextResponse.json(files);
+      userId: user.id,
+      channel: configs.s3_config_01.channel,
+      platform: configs.s3_config_01.platform,
+    });
+
+    return NextResponse.json(res);
   } catch (error) {
+    console.error("Error listing files:", error);
     return NextResponse.json({ error: "Error listing files" }, { status: 500 });
   }
 }
@@ -84,8 +88,8 @@ export async function POST(request: NextRequest) {
         status: 403,
       });
     }
-    const buckets = configs.s3_config_01.bucket.split(",");
-    if (!buckets.includes(bucket)) {
+    const buckets = configs.s3_config_01.buckets || [];
+    if (!buckets.find((b) => b.bucket === bucket)) {
       return NextResponse.json("Bucket does not exist", {
         status: 403,
       });
@@ -138,12 +142,13 @@ export async function DELETE(request: NextRequest) {
         status: 403,
       });
     }
-    const buckets = configs.s3_config_01.bucket.split(",");
-    if (!buckets.includes(bucket)) {
+    const buckets = configs.s3_config_01.buckets || [];
+    if (!buckets.find((b) => b.bucket === bucket)) {
       return NextResponse.json("Bucket does not exist", {
         status: 403,
       });
     }
+
     await deleteFile(
       key,
       createS3Client(
@@ -158,3 +163,50 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ error: "Error deleting file" }, { status: 500 });
   }
 }
+
+// export async function GET(req: NextRequest) {
+//   try {
+//     const user = checkUserStatus(await getCurrentUser());
+//     if (user instanceof Response) return user;
+
+//     const url = new URL(req.url);
+//     const bucket = url.searchParams.get("bucket") || "";
+
+//     const configs = await getMultipleConfigs(["s3_config_01"]);
+//     if (!configs.s3_config_01.enabled) {
+//       return NextResponse.json("S3 is not enabled", {
+//         status: 403,
+//       });
+//     }
+//     if (
+//       !configs.s3_config_01 ||
+//       !configs.s3_config_01.access_key_id ||
+//       !configs.s3_config_01.secret_access_key ||
+//       !configs.s3_config_01.endpoint
+//     ) {
+//       return NextResponse.json("Invalid S3 config", {
+//         status: 403,
+//       });
+//     }
+//     const buckets = configs.s3_config_01.buckets || [];
+//     if (!buckets.find((b) => b.bucket === bucket)) {
+//       return NextResponse.json("Bucket does not exist", {
+//         status: 403,
+//       });
+//     }
+
+//     const files = await listFiles(
+//       configs.s3_config_01.prefix || "",
+//       createS3Client(
+//         configs.s3_config_01.endpoint,
+//         configs.s3_config_01.access_key_id,
+//         configs.s3_config_01.secret_access_key,
+//       ),
+//       bucket,
+//     );
+//     return NextResponse.json(files);
+//   } catch (error) {
+//     console.error("Error listing files:", error);
+//     return NextResponse.json({ error: "Error listing files" }, { status: 500 });
+//   }
+// }
