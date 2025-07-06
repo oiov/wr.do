@@ -185,7 +185,17 @@
     "Duplicate": "复制",
     "Confirm duplicate domain": "确认复制域名",
     "This will duplicate all configuration information for the {domain} domain, and create a new domain": "这将复制 {domain} 域名的所有配置信息，并创建一个新域名",
-    "Add User": "添加用户"
+    "Add User": "添加用户",
+    "Loading storage buckets": "正在加载存储桶",
+    "No buckets found": "未配置存储桶",
+    "The administrator has not configured the storage bucket, no file can be uploaded": "管理员未配置存储桶，无法上传文件",
+    "No Files": "暂无文件",
+    "You don't upload any files yet": "您还没有上传任何文件",
+    "Size": "大小",
+    "Date": "日期",
+    "Download": "下载文件",
+    "Generate short link": "生成短链",
+    "Delete File": "删除文件"
   },
   "Components": {
     "Dashboard": "用户面板",
@@ -574,6 +584,18 @@
     "Verified": "已就绪",
     "Verify Configuration": "验证配置",
     "Clear": "清空",
-    "How to get the R2 credentials?": "如何获取 R2 授权配置？"
+    "How to get the R2 credentials?": "如何获取 R2 授权配置？",
+    "Endpoint": "S3 端点",
+    "Access Key ID": "访问密钥 ID",
+    "Secret Access Key": "机密访问密钥",
+    "Enabled": "启用",
+    "Bucket": "存储桶",
+    "Bucket Name": "存储桶名称",
+    "Public Domain": "公开域名或自定义域名",
+    "Max File Size": "上传文件大小限制",
+    "Region": "存储桶区域",
+    "Prefix": "前缀",
+    "Optional": "可选",
+    "Allowed File Types": "允许的文件类型"
   }
 }

@@ -189,6 +189,54 @@ export const truncate = (str: string, length: number) => {
   return `${str.slice(0, length)}...`;
 };
 
+export const truncateMiddle = (
+  text: string,
+  maxLength: number = 20,
+): string => {
+  if (text.length <= maxLength) return text;
+
+  // 找到最后一个点的位置（文件扩展名）
+  const lastDotIndex = text.lastIndexOf(".");
+
+  if (lastDotIndex === -1 || lastDotIndex === 0) {
+    // 没有扩展名，直接中间截断
+    const half = Math.floor((maxLength - 3) / 2);
+    return text.slice(0, half) + "..." + text.slice(-half);
+  }
+
+  const extension = text.slice(lastDotIndex);
+  const nameWithoutExt = text.slice(0, lastDotIndex);
+
+  // 如果扩展名太长，直接截断整个文件名
+  if (extension.length > maxLength / 2) {
+    const half = Math.floor((maxLength - 3) / 2);
+    return text.slice(0, half) + "..." + text.slice(-half);
+  }
+
+  // 计算可用于文件名的长度
+  const availableLength = maxLength - extension.length - 3;
+
+  if (availableLength <= 0) {
+    return "..." + extension;
+  }
+
+  // 如果文件名部分不需要截断
+  if (nameWithoutExt.length <= availableLength) {
+    return text;
+  }
+
+  // 中间截断文件名部分
+  const startLength = Math.ceil(availableLength / 2);
+  const endLength = Math.floor(availableLength / 2);
+
+  return (
+    nameWithoutExt.slice(0, startLength) +
+    "..." +
+    nameWithoutExt.slice(-endLength) +
+    extension
+  );
+};
+
 export const getBlurDataURL = async (url: string | null) => {
   if (!url) {
     return "data:image/webp;base64,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";

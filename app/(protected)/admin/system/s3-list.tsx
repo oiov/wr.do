@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import useSWR from "swr";
 
 import { CloudStorageCredentials } from "@/lib/r2";
-import { cn, fetcher } from "@/lib/utils";
+import { cn, fetcher, formatFileSize } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -140,7 +140,7 @@ export default function S3Configs({}: {}) {
             <CollapsibleContent className="mt-3 space-y-4 rounded-lg border p-6 shadow-md">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div className="space-y-1">
-                  <Label>Endpoint</Label>
+                  <Label>{t("Endpoint")}</Label>
                   <Input
                     value={r2Credentials.endpoint}
                     placeholder="https://<account_id>.r2.cloudflarestorage.com"
@@ -153,7 +153,7 @@ export default function S3Configs({}: {}) {
                   />
                 </div>
                 <div className="space-y-1">
-                  <Label>Access Key ID</Label>
+                  <Label>{t("Access Key ID")}</Label>
                   <Input
                     value={r2Credentials.access_key_id}
                     onChange={(e) =>
@@ -165,7 +165,7 @@ export default function S3Configs({}: {}) {
                   />
                 </div>
                 <div className="space-y-1">
-                  <Label>Secret Access Key</Label>
+                  <Label>{t("Secret Access Key")}</Label>
                   <Input
                     value={r2Credentials.secret_access_key}
                     onChange={(e) =>
@@ -177,7 +177,7 @@ export default function S3Configs({}: {}) {
                   />
                 </div>
                 <div className="flex flex-col justify-center space-y-3">
-                  <Label className="">Enabled</Label>
+                  <Label>{t("Enabled")}</Label>
                   <Switch
                     checked={r2Credentials.enabled}
                     onCheckedChange={(e) =>
@@ -191,7 +191,7 @@ export default function S3Configs({}: {}) {
               </div>
               {r2Credentials.buckets.map((bucket, index) => (
                 <motion.div
-                  className="relative grid grid-cols-1 gap-4 rounded-lg border border-dashed border-muted-foreground px-3 pb-3 pt-8 text-neutral-600 dark:text-neutral-400 sm:grid-cols-3"
+                  className="relative grid grid-cols-1 gap-4 rounded-lg border border-dashed border-muted-foreground px-3 pb-3 pt-10 text-neutral-600 dark:text-neutral-400 sm:grid-cols-3"
                   key={`bucket-${index}`}
                   layout
                   initial={{ opacity: 0, scale: 0.9 }}
@@ -203,8 +203,8 @@ export default function S3Configs({}: {}) {
                     scale: { duration: 0.2 },
                   }}
                 >
-                  <p className="absolute left-2 top-2 text-xs text-muted-foreground">
-                    Bucket {index + 1}
+                  <p className="absolute left-2 top-3 text-xs text-muted-foreground">
+                    {t("Bucket")} {index + 1}
                   </p>
                   <div className="absolute right-2 top-2 flex items-center justify-between space-x-2">
                     {index > 0 && (
@@ -289,7 +289,7 @@ export default function S3Configs({}: {}) {
                   </div>
 
                   <div className="space-y-1">
-                    <Label>Bucket Name</Label>
+                    <Label>{t("Bucket Name")}</Label>
                     <Input
                       value={bucket.bucket}
                       placeholder="bucket name"
@@ -307,10 +307,10 @@ export default function S3Configs({}: {}) {
                     />
                   </div>
                   <div className="space-y-1">
-                    <Label>Custom Domain (Optional)</Label>
+                    <Label>{t("Public Domain")}</Label>
                     <Input
                       value={bucket.custom_domain}
-                      placeholder="https://example.com"
+                      placeholder="https://endpoint or custom domain"
                       onChange={(e) => {
                         const newBuckets = [...r2Credentials.buckets];
                         newBuckets[index] = {
@@ -325,25 +325,33 @@ export default function S3Configs({}: {}) {
                     />
                   </div>
                   <div className="space-y-1">
-                    <Label>Max File Size</Label>
-                    <Input
-                      value={bucket.file_size}
-                      placeholder=""
-                      onChange={(e) => {
-                        const newBuckets = [...r2Credentials.buckets];
-                        newBuckets[index] = {
-                          ...bucket,
-                          file_size: e.target.value,
-                        };
-                        setR2Credentials({
-                          ...r2Credentials,
-                          buckets: newBuckets,
-                        });
-                      }}
-                    />
+                    <Label>{t("Max File Size")} (Bytes)</Label>
+                    <div className="relative">
+                      <Input
+                        value={bucket.file_size}
+                        placeholder=""
+                        onChange={(e) => {
+                          const newBuckets = [...r2Credentials.buckets];
+                          newBuckets[index] = {
+                            ...bucket,
+                            file_size: e.target.value,
+                          };
+                          setR2Credentials({
+                            ...r2Credentials,
+                            buckets: newBuckets,
+                          });
+                        }}
+                      />
+                      <span className="absolute right-2 top-[11px] text-xs text-muted-foreground">
+                        =
+                        {formatFileSize(Number(bucket.file_size || "0"), {
+                          precision: 0,
+                        })}
+                      </span>
+                    </div>
                   </div>
                   <div className="space-y-1">
-                    <Label>Region</Label>
+                    <Label>{t("Region")}</Label>
                     <Input
                       value={bucket.region}
                       placeholder="auto"
@@ -361,10 +369,12 @@ export default function S3Configs({}: {}) {
                     />
                   </div>
                   <div className="space-y-1">
-                    <Label>Prefix (Optional)</Label>
+                    <Label>
+                      {t("Prefix")} ({t("Optional")})
+                    </Label>
                     <Input
                       value={bucket.prefix}
-                      placeholder=""
+                      placeholder="2025/08/08"
                       onChange={(e) => {
                         const newBuckets = [...r2Credentials.buckets];
                         newBuckets[index] = {
@@ -379,10 +389,13 @@ export default function S3Configs({}: {}) {
                     />
                   </div>
                   <div className="space-y-1">
-                    <Label>Allowed File Types (Optional)</Label>
+                    <Label>
+                      {t("Allowed File Types")} ({t("Optional")})
+                    </Label>
                     <Input
                       value={bucket.file_types}
-                      placeholder="png,jpg"
+                      placeholder=""
+                      disabled
                       onChange={(e) => {
                         const newBuckets = [...r2Credentials.buckets];
                         newBuckets[index] = {

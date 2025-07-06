@@ -185,7 +185,17 @@
     "Duplicate": "Duplicate",
     "Confirm duplicate domain": "Confirm duplicate domain",
     "This will duplicate all configuration information for the {domain} domain, and create a new domain": "This will duplicate all configuration information for the {domain} domain, and create a new domain",
-    "Add User": "Add User"
+    "Add User": "Add User",
+    "Loading storage buckets": "Loading storage buckets",
+    "No buckets found": "No buckets found",
+    "The administrator has not configured the storage bucket, no file can be uploaded": "The administrator has not configured the storage bucket, no file can be uploaded",
+    "No Files": "No Files",
+    "You don't upload any files yet": "You don't upload any files yet",
+    "Size": "Size",
+    "Date": "Date",
+    "Download": "Download",
+    "Generate short link": "Shorten link",
+    "Delete File": "Delete"
   },
   "Components": {
     "Dashboard": "Dashboard",
@@ -574,6 +584,18 @@
     "Verified": "Verified",
     "Verify Configuration": "Verify Configuration",
     "Clear": "Clear",
-    "How to get the R2 credentials?": "How to get the R2 credentials?"
+    "How to get the R2 credentials?": "How to get the R2 credentials?",
+    "Endpoint": "Endpoint",
+    "Access Key ID": "Access Key ID",
+    "Secret Access Key": "Secret Access Key",
+    "Enabled": "Enabled",
+    "Bucket": "Bucket",
+    "Bucket Name": "Bucket Name",
+    "Public Domain": "Public Domain",
+    "Max File Size": "Max File Size",
+    "Region": "Region",
+    "Prefix": "Prefix",
+    "Optional": "Optional",
+    "Allowed File Types": "Allowed File Types"
   }
 }

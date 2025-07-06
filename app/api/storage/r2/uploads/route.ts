@@ -10,7 +10,7 @@ import {
 import { createUserFile } from "@/lib/dto/files";
 import { getMultipleConfigs } from "@/lib/dto/system-config";
 import { checkUserStatus } from "@/lib/dto/user";
-import { CloudStorageCredentials, createS3Client, getFileInfo } from "@/lib/r2";
+import { CloudStorageCredentials, createS3Client } from "@/lib/r2";
 import { getCurrentUser } from "@/lib/session";
 import { extractFileNameAndExtension, generateFileKey } from "@/lib/utils";
 

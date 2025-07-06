@@ -1,6 +1,13 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, UserFile } from "@prisma/client";
 
 import { prisma } from "../db";
+
+export interface UserFileData extends UserFile {
+  user: {
+    name: string;
+    email: string;
+  };
+}
 
 export interface CreateUserFileInput {
   userId: string;
@@ -70,8 +77,8 @@ export async function createUserFile(data: CreateUserFileInput) {
     });
     return { success: true, data: userFile };
   } catch (error) {
-    console.error("创建文件记录失败:", error);
-    return { success: false, error: "创建文件记录失败" };
+    console.error("Failed to create file record:", error);
+    return { success: false, error: "Failed to create file record" };
   }
 }
 
@@ -92,8 +99,8 @@ export async function getUserFileById(id: string) {
     });
     return { success: true, data: userFile };
   } catch (error) {
-    console.error("查询文件记录失败:", error);
-    return { success: false, error: "查询文件记录失败" };
+    console.error("Failed to query file record:", error);
+    return { success: false, error: "Failed to query file record" };
   }
 }
 
@@ -124,7 +131,7 @@ export async function getUserFiles(options: QueryUserFileOptions = {}) {
       ...(shortUrlId && { shortUrlId }),
     };
 
-    const [files, total] = await Promise.all([
+    const [files, total, totalSize] = await Promise.all([
       prisma.userFile.findMany({
         where,
         include: {
@@ -140,10 +147,15 @@ export async function getUserFiles(options: QueryUserFileOptions = {}) {
         take: limit,
       }),
       prisma.userFile.count({ where }),
+      prisma.userFile.aggregate({
+        where,
+        _sum: { size: true },
+      }),
     ]);
 
     return {
       total,
+      totalSize: totalSize._sum.size || 0,
       list: files,
     };
   } catch (error) {
@@ -173,8 +185,8 @@ export async function updateUserFile(id: string, data: UpdateUserFileInput) {
     });
     return { success: true, data: userFile };
   } catch (error) {
-    console.error("更新文件记录失败:", error);
-    return { success: false, error: "更新文件记录失败" };
+    console.error("Failed to update file record:", error);
+    return { success: false, error: "Failed to update file record" };
   }
 }
 
@@ -190,8 +202,8 @@ export async function softDeleteUserFile(id: string) {
     });
     return { success: true, data: userFile };
   } catch (error) {
-    console.error("删除文件记录失败:", error);
-    return { success: false, error: "删除文件记录失败" };
+    console.error("Delete file record failed:", error);
+    return { success: false, error: "Delete file record failed" };
   }
 }
 
@@ -209,8 +221,8 @@ export async function softDeleteUserFiles(ids: string[]) {
     });
     return { success: true, data: result };
   } catch (error) {
-    console.error("批量删除文件记录失败:", error);
-    return { success: false, error: "批量删除文件记录失败" };
+    console.error("Delete file records failed:", error);
+    return { success: false, error: "Delete file records failed" };
   }
 }
 
@@ -222,8 +234,8 @@ export async function deleteUserFile(id: string) {
     });
     return { success: true, data: userFile };
   } catch (error) {
-    console.error("删除文件记录失败:", error);
-    return { success: false, error: "删除文件记录失败" };
+    console.error("Delete file record failed:", error);
+    return { success: false, error: "Delete file record failed" };
   }
 }
 
@@ -255,8 +267,8 @@ export async function getUserFileStats(userId: string) {
       },
     };
   } catch (error) {
-    console.error("获取文件统计失败:", error);
-    return { success: false, error: "获取文件统计失败" };
+    console.error("Failed to get file statistics:", error);
+    return { success: false, error: "Failed to get file statistics" };
   }
 }
 
@@ -284,8 +296,8 @@ export async function getUserFileByPath(path: string, providerName?: string) {
 
     return { success: true, data: userFile };
   } catch (error) {
-    console.error("根据路径查找文件失败:", error);
-    return { success: false, error: "根据路径查找文件失败" };
+    console.error("Failed to query file record:", error);
+    return { success: false, error: "Failed to query file record" };
   }
 }
 
@@ -295,7 +307,7 @@ export async function getUserFileByShortUrlId(shortUrlId: string) {
     const userFile = await prisma.userFile.findFirst({
       where: {
         shortUrlId,
-        status: 1, // 只查询正常状态的文件
+        status: 1,
       },
       include: {
         user: {
@@ -309,12 +321,12 @@ export async function getUserFileByShortUrlId(shortUrlId: string) {
     });
     return { success: true, data: userFile };
   } catch (error) {
-    console.error("根据短链接ID查询文件失败:", error);
-    return { success: false, error: "根据短链接ID查询文件失败" };
+    console.error("Failed to query file record:", error);
+    return { success: false, error: "Failed to query file record" };
   }
 }
 
-// 清理过期文件记录（可选功能）
+// 清理过期文件记录
 export async function cleanupExpiredFiles(days: number = 30) {
   try {
     const expiredDate = new Date();
@@ -331,7 +343,7 @@ export async function cleanupExpiredFiles(days: number = 30) {
 
     return { success: true, data: result };
   } catch (error) {
-    console.error("清理过期文件失败:", error);
-    return { success: false, error: "清理过期文件失败" };
+    console.error("Failed to clean up expired files:", error);
+    return { success: false, error: "Failed to clean up expired files" };
   }
 }

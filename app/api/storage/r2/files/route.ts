@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { getUserFiles } from "@/lib/dto/files";
+import { getUserFiles, softDeleteUserFiles } from "@/lib/dto/files";
 import { getMultipleConfigs } from "@/lib/dto/system-config";
 import { checkUserStatus } from "@/lib/dto/user";
 import {
@@ -118,9 +118,9 @@ export async function DELETE(request: NextRequest) {
     const user = checkUserStatus(await getCurrentUser());
     if (user instanceof Response) return user;
 
-    const { key, bucket } = await request.json();
+    const { keys, ids, bucket } = await request.json();
 
-    if (!key || !bucket) {
+    if (!keys || !ids || !bucket) {
       return NextResponse.json("key and bucket is required", {
         status: 400,
       });
@@ -149,15 +149,16 @@ export async function DELETE(request: NextRequest) {
       });
     }
 
-    await deleteFile(
-      key,
-      createS3Client(
-        configs.s3_config_01.endpoint,
-        configs.s3_config_01.access_key_id,
-        configs.s3_config_01.secret_access_key,
-      ),
-      bucket,
+    const R2 = createS3Client(
+      configs.s3_config_01.endpoint,
+      configs.s3_config_01.access_key_id,
+      configs.s3_config_01.secret_access_key,
     );
+
+    for (const key of keys) {
+      await deleteFile(key, R2, bucket);
+    }
+    await softDeleteUserFiles(ids);
     return NextResponse.json({ message: "File deleted successfully" });
   } catch (error) {
     return NextResponse.json({ error: "Error deleting file" }, { status: 500 });

@@ -37,9 +37,11 @@ export type UploadProgressType = {
 export default function Uploader({
   bucketInfo,
   action,
+  onRefresh,
 }: {
   bucketInfo: BucketInfo;
   action: string;
+  onRefresh: () => void;
 }) {
   const t = useTranslations("Components");
   const [isOpen, setIsOpen] = useState(false);
@@ -230,6 +232,8 @@ export default function Uploader({
               : item,
           ) ?? [],
       );
+
+      onRefresh();
     } catch (error) {
       console.error(error);
     }
@@ -246,7 +250,7 @@ export default function Uploader({
     <>
       {!isOpen && (
         <Button
-          className="flex h-9 items-center gap-1"
+          className="flex h-9 items-center gap-1 text-nowrap"
           onClick={() => setIsOpen(true)}
         >
           <Icons.cloudUpload className="size-5" />
