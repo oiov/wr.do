@@ -158,6 +158,22 @@ export default function UserFileList({
     }
   };
 
+  if (files?.total === 0) {
+    return (
+      <EmptyPlaceholder className="col-span-full shadow-none">
+        <EmptyPlaceholder.Icon name="fileText" />
+        <EmptyPlaceholder.Title>{t("No Files")}</EmptyPlaceholder.Title>
+        <EmptyPlaceholder.Description>
+          {t("You don't upload any files yet")}
+        </EmptyPlaceholder.Description>
+      </EmptyPlaceholder>
+    );
+  }
+
+  useEffect(() => {
+    handleGetFileShortLinkByIds();
+  }, [files]);
+
   const handleGetFileShortLinkByIds = async () => {
     try {
       const ids = files?.list.map((f) => f.shortUrlId || "");
@@ -175,22 +191,6 @@ export default function UserFileList({
       console.error("Error get short link:", error);
     }
   };
-
-  if (files?.total === 0) {
-    return (
-      <EmptyPlaceholder className="col-span-full shadow-none">
-        <EmptyPlaceholder.Icon name="fileText" />
-        <EmptyPlaceholder.Title>{t("No Files")}</EmptyPlaceholder.Title>
-        <EmptyPlaceholder.Description>
-          {t("You don't upload any files yet")}
-        </EmptyPlaceholder.Description>
-      </EmptyPlaceholder>
-    );
-  }
-
-  useEffect(() => {
-    handleGetFileShortLinkByIds();
-  }, [files]);
 
   const renderListView = () => (
     <div className="overflow-hidden rounded-lg border bg-primary-foreground">
