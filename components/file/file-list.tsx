@@ -158,25 +158,10 @@ export default function UserFileList({
     }
   };
 
-  if (files?.total === 0) {
-    return (
-      <EmptyPlaceholder className="col-span-full shadow-none">
-        <EmptyPlaceholder.Icon name="fileText" />
-        <EmptyPlaceholder.Title>{t("No Files")}</EmptyPlaceholder.Title>
-        <EmptyPlaceholder.Description>
-          {t("You don't upload any files yet")}
-        </EmptyPlaceholder.Description>
-      </EmptyPlaceholder>
-    );
-  }
-
-  useEffect(() => {
-    handleGetFileShortLinkByIds();
-  }, [files]);
-
   const handleGetFileShortLinkByIds = async () => {
+    if (!files || !files.list) return;
     try {
-      const ids = files?.list.map((f) => f.shortUrlId || "");
+      const ids = files.list.map((f) => f.shortUrlId || "");
       if (!ids?.some((id) => id !== "")) return;
       const response = await fetch(`${action}/r2/short`, {
         method: "POST",
@@ -191,6 +176,22 @@ export default function UserFileList({
       console.error("Error get short link:", error);
     }
   };
+
+  useEffect(() => {
+    handleGetFileShortLinkByIds();
+  }, [files]);
+
+  if (files?.total === 0) {
+    return (
+      <EmptyPlaceholder className="col-span-full shadow-none">
+        <EmptyPlaceholder.Icon name="fileText" />
+        <EmptyPlaceholder.Title>{t("No Files")}</EmptyPlaceholder.Title>
+        <EmptyPlaceholder.Description>
+          {t("You don't upload any files yet")}
+        </EmptyPlaceholder.Description>
+      </EmptyPlaceholder>
+    );
+  }
 
   const renderListView = () => (
     <div className="overflow-hidden rounded-lg border bg-primary-foreground">
