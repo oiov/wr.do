@@ -12,7 +12,7 @@ import { getMultipleConfigs } from "@/lib/dto/system-config";
 import { checkUserStatus } from "@/lib/dto/user";
 import { CloudStorageCredentials, createS3Client, getFileInfo } from "@/lib/r2";
 import { getCurrentUser } from "@/lib/session";
-import { extractFileNameAndExtension } from "@/lib/utils";
+import { extractFileNameAndExtension, generateFileKey } from "@/lib/utils";
 
 export async function POST(request: Request): Promise<Response> {
   const user = checkUserStatus(await getCurrentUser());
@@ -219,17 +219,4 @@ async function uploadPart(formData: FormData, R2: S3Client): Promise<Response> {
       status: 500,
     });
   }
-}
-
-export function generateFileKey(fileName: string, prefix?: string): string {
-  if (prefix) {
-    return `${prefix}/${fileName}`;
-  }
-
-  const date = new Date();
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-
-  return `${year}/${month}/${day}/${fileName}`;
 }

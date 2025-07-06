@@ -1,9 +1,0 @@
-# *
-User-agent: *
-Allow: /
-
-# Host
-Host: https://wr.do
-
-# Sitemaps
-Sitemap: https://wr.do/sitemap.xml

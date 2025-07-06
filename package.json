@@ -8,7 +8,6 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "postbuild": "next-sitemap",
     "turbo": "next dev --turbo",
     "start": "next start",
     "start-docker": "npm-run-all check-db start-server",
@@ -102,7 +101,6 @@
     "next-contentlayer2": "^0.5.0",
     "next-intl": "^4.1.0",
     "next-pwa": "^5.6.0",
-    "next-sitemap": "^4.2.3",
     "next-themes": "^0.3.0",
     "next-view-transitions": "^0.3.0",
     "nodemailer": "^6.9.14",
