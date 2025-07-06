@@ -195,7 +195,10 @@
     "Date": "Date",
     "Download": "Download",
     "Generate short link": "Shorten link",
-    "Delete File": "Delete"
+    "Delete File": "Delete",
+    "Select all": "Select all",
+    "Delete selected": "Delete selected",
+    "Update short link": "Update short link"
   },
   "Components": {
     "Dashboard": "Dashboard",

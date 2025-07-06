@@ -195,7 +195,10 @@
     "Date": "日期",
     "Download": "下载文件",
     "Generate short link": "生成短链",
-    "Delete File": "删除文件"
+    "Delete File": "删除文件",
+    "Select all": "全部选中",
+    "Delete selected": "删除选中",
+    "Update short link": "更新短链"
   },
   "Components": {
     "Dashboard": "用户面板",

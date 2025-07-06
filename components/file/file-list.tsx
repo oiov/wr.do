@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   Archive,
@@ -15,16 +15,9 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import useSWR, { useSWRConfig } from "swr";
 
 import { UserFileData } from "@/lib/dto/files";
-import {
-  extractFileNameAndExtension,
-  fetcher,
-  formatDate,
-  formatFileSize,
-  truncateMiddle,
-} from "@/lib/utils";
+import { cn, formatDate, formatFileSize, truncateMiddle } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import {
   Tooltip,
@@ -32,13 +25,15 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { BucketInfo, DisplayType } from "@/components/file";
+import { BucketInfo, DisplayType, FileListData } from "@/components/file";
 
+import { UrlForm } from "../forms/url-form";
 import { CopyButton } from "../shared/copy-button";
 import { EmptyPlaceholder } from "../shared/empty-placeholder";
 import { Icons } from "../shared/icons";
 import { PaginationWrapper } from "../shared/pagination";
 import { TimeAgoIntl } from "../shared/time-ago";
+import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
 import {
@@ -48,61 +43,57 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { Modal } from "../ui/modal";
 import { Skeleton } from "../ui/skeleton";
 import { TableCell, TableRow } from "../ui/table";
 
 export default function UserFileList({
+  files,
+  isLoading,
   bucketInfo,
   action,
   view,
+  showMutiCheckBox,
   currentPage,
   pageSize,
   setCurrentPage,
   setPageSize,
+  selectedFiles,
+  setSelectedFiles,
   onRefresh,
+  onSelectAll,
 }: {
+  files?: FileListData;
+  isLoading: boolean;
   bucketInfo: BucketInfo;
   action: string;
   view: DisplayType;
+  showMutiCheckBox: boolean;
   currentPage: number;
   pageSize: number;
   setCurrentPage: (page: number) => void;
   setPageSize: (size: number) => void;
+  selectedFiles: UserFileData[];
+  setSelectedFiles: (files: UserFileData[]) => void;
   onRefresh: () => void;
+  onSelectAll: () => void;
+  onDeleteAll: () => void;
 }) {
   const t = useTranslations("List");
   const { isMobile } = useMediaQuery();
+  const [isShowForm, setShowForm] = useState(false);
+  const [shortTarget, setShortTarget] = useState<UserFileData | null>(null);
+  const [shortLinks, setShortLinks] = useState<string[]>([]);
 
-  const [selectedFiles, setSelectedFiles] = useState<UserFileData[]>([]);
-  // const [showMutiCheckBox, setShowMutiCheckBox] = useState(false);
-
-  const { data: files, isLoading } = useSWR<{
-    total: number;
-    totalSize: number;
-    list: UserFileData[];
-  }>(
-    bucketInfo.bucket
-      ? `${action}/r2/files?bucket=${bucketInfo.bucket}&page=${currentPage}&size=${pageSize}`
-      : null,
-    fetcher,
-    {
-      revalidateOnFocus: false,
-    },
-  );
+  const getFileUrl = (key: string) => {
+    return `${bucketInfo.custom_domain}/${key}`;
+  };
 
   const handleSelectFile = (file: UserFileData) => {
     if (selectedFiles.includes(file)) {
       setSelectedFiles(selectedFiles.filter((f) => f.id !== file.id));
     } else {
       setSelectedFiles([...selectedFiles, file]);
-    }
-  };
-
-  const handleSelectAllFiles = () => {
-    if (selectedFiles.length === files?.list.length) {
-      setSelectedFiles([]);
-    } else {
-      setSelectedFiles(files?.list || []);
     }
   };
 
@@ -121,43 +112,67 @@ export default function UserFileList({
     }
   };
 
-  const handleDeleteMany = async () => {
+  const handleDeleteSingle = async (file: UserFileData) => {
+    if (!confirm("Are you sure you want to delete this file?")) return;
+
     try {
-      await fetch(`${action}/r2/files`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          keys: selectedFiles.map((f) => f.path),
-          ids: selectedFiles.map((f) => f.id),
-          bucket: bucketInfo.bucket,
+      toast.promise(
+        fetch(`${action}/r2/files`, {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            keys: [file.path],
+            ids: [file.id],
+            bucket: bucketInfo.bucket,
+          }),
         }),
-      });
-      toast.success("File deleted successfully!");
-      onRefresh();
+        {
+          loading: "Deleting file...",
+          success: "File deleted successfully!",
+          error: "Error deleting file",
+          finally: onRefresh,
+        },
+      );
     } catch (error) {
       console.error("Error deleting file:", error);
       toast.success("Error deleting file");
     }
   };
 
-  const handleDeleteSingle = async (file: UserFileData) => {
-    if (!confirm("Are you sure you want to delete this file?")) return;
-
+  const handleGenerateShortLink = async (urlId: string) => {
+    if (!shortTarget) return;
     try {
-      await fetch(`${action}/r2/files`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          keys: [file.path],
-          ids: [file.id],
-          bucket: bucketInfo.bucket,
-        }),
+      const response = await fetch(`${action}/r2/short`, {
+        method: "PUT",
+        body: JSON.stringify({ urlId, fileId: shortTarget?.id }),
       });
-      toast.success("File deleted successfully!");
-      onRefresh();
+      if (!response.ok || response.status !== 200) {
+        toast.error("Error generating short link");
+      } else {
+        onRefresh();
+        // handleGetFileShortLinkByIds();
+      }
     } catch (error) {
-      console.error("Error deleting file:", error);
-      toast.success("Error deleting file");
+      console.error("Error generating short link:", error);
+      toast.error("Error generating short link");
+    }
+  };
+
+  const handleGetFileShortLinkByIds = async () => {
+    try {
+      const ids = files?.list.map((f) => f.shortUrlId || "");
+      if (!ids?.some((id) => id !== "")) return;
+      const response = await fetch(`${action}/r2/short`, {
+        method: "POST",
+        body: JSON.stringify({ ids }),
+      });
+      if (!response.ok || response.status !== 200) {
+      } else {
+        const data = await response.json();
+        setShortLinks(data.urls);
+      }
+    } catch (error) {
+      console.error("Error get short link:", error);
     }
   };
 
@@ -173,17 +188,25 @@ export default function UserFileList({
     );
   }
 
+  useEffect(() => {
+    handleGetFileShortLinkByIds();
+  }, [files]);
+
   const renderListView = () => (
     <div className="overflow-hidden rounded-lg border bg-primary-foreground">
-      <div className="text-mute-foreground grid grid-cols-5 gap-4 bg-neutral-100 px-6 py-3 text-sm font-medium dark:bg-neutral-800 sm:grid-cols-12">
-        <div className="col-span-1 hidden sm:flex">
-          <Checkbox
-            className="mr-3 size-4 border-neutral-300 bg-neutral-100 data-[state=checked]:border-neutral-900 data-[state=checked]:bg-neutral-600 data-[state=checked]:text-neutral-100 dark:border-neutral-700 dark:bg-neutral-800 dark:data-[state=checked]:border-neutral-300 dark:data-[state=checked]:bg-neutral-300"
-            checked={selectedFiles.length === files?.list.length}
-            onCheckedChange={() => handleSelectAllFiles()}
-          />
+      <div className="text-mute-foreground grid grid-cols-6 gap-4 bg-neutral-100 px-6 py-3 text-sm font-medium dark:bg-neutral-800 sm:grid-cols-12">
+        {showMutiCheckBox && (
+          <div className="col-span-1 flex">
+            <Checkbox
+              className="mr-3 size-4 border-neutral-300 bg-neutral-100 data-[state=checked]:border-neutral-900 data-[state=checked]:bg-neutral-600 data-[state=checked]:text-neutral-100 dark:border-neutral-700 dark:bg-neutral-800 dark:data-[state=checked]:border-neutral-300 dark:data-[state=checked]:bg-neutral-300"
+              checked={selectedFiles.length === files?.list.length}
+              onCheckedChange={() => onSelectAll()}
+            />
+          </div>
+        )}
+        <div className={cn(showMutiCheckBox ? "col-span-3" : "col-span-4")}>
+          {t("Name")}
         </div>
-        <div className="col-span-3">{t("Name")}</div>
         <div className="col-span-1">{t("Size")}</div>
         <div className="col-span-2 hidden sm:flex">{t("Type")}</div>
         <div className="col-span-2 hidden sm:flex">{t("User")}</div>
@@ -200,14 +223,14 @@ export default function UserFileList({
         </>
       ) : (
         <div className="divide-y divide-neutral-200 dark:divide-neutral-600">
-          {files &&
-            files.list.map((file) => (
-              <div
-                key={file.id}
-                className="text-mute-foreground grid grid-cols-5 gap-4 px-6 py-4 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-600 sm:grid-cols-12"
-              >
+          {files?.list.map((file, index) => (
+            <div
+              key={file.id}
+              className="text-mute-foreground grid grid-cols-6 gap-4 px-6 py-4 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-600 sm:grid-cols-12"
+            >
+              {showMutiCheckBox && (
                 <div
-                  className="col-span-1 hidden items-center gap-2 sm:flex"
+                  className="col-span-1 flex items-center gap-2"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <Checkbox
@@ -218,112 +241,150 @@ export default function UserFileList({
                     className="mr-3 size-4 border-neutral-300 bg-neutral-100 data-[state=checked]:border-neutral-900 data-[state=checked]:bg-neutral-600 data-[state=checked]:text-neutral-100 dark:border-neutral-700 dark:bg-neutral-800 dark:data-[state=checked]:border-neutral-300 dark:data-[state=checked]:bg-neutral-300"
                   />
                 </div>
-                <div className="col-span-3 flex items-center space-x-3 text-sm">
-                  <TooltipProvider>
-                    <Tooltip delayDuration={0}>
-                      <TooltipTrigger className="flex items-center justify-start gap-1 break-all text-start">
-                        {truncateMiddle(file.path)}
-                        <CopyButton
-                          value={`${bucketInfo.custom_domain}/${file.path}`}
+              )}
+              <div
+                className={cn(
+                  "items-center space-x-3 text-sm",
+                  showMutiCheckBox ? "col-span-3" : "col-span-4",
+                )}
+              >
+                <TooltipProvider>
+                  <Tooltip delayDuration={0}>
+                    <TooltipTrigger className="flex items-center justify-start gap-1 break-all text-start">
+                      {truncateMiddle(file.path)}
+                      <CopyButton
+                        className="size-6"
+                        value={getFileUrl(file.path)}
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="right"
+                      className="w-72 space-y-1 text-wrap p-3 text-start"
+                    >
+                      {file.mimeType.startsWith("image/") && (
+                        <img
+                          className="max-h-[70vh] w-72 rounded shadow"
+                          width={300}
+                          height={300}
+                          src={getFileUrl(file.path)}
+                          alt={`${file.path}`}
                         />
-                      </TooltipTrigger>
-                      <TooltipContent
-                        side="right"
-                        className="text-wrap p-3 text-start"
-                      >
-                        {file.mimeType.startsWith("image/") ? (
-                          <img
-                            className="mb-2 rounded shadow"
-                            width={300}
-                            height={300}
-                            src={
-                              bucketInfo.custom_domain
-                                ? `${bucketInfo.custom_domain}/${file.path}`
-                                : `${file.path}`
-                            }
-                            alt={`${file.path}`}
+                      )}
+                      {file.shortUrlId && (
+                        <div className="flex items-start gap-1">
+                          <strong>Shorten:</strong>
+                          <Link
+                            href={"https://" + shortLinks[index]}
+                            className="text-wrap break-all hover:text-blue-500"
+                            target="_blank"
+                          >
+                            https://{shortLinks[index]}
+                          </Link>
+                          <CopyButton
+                            className="size-6"
+                            value={getFileUrl(file.path)}
                           />
-                        ) : (
-                          file.path
-                        )}
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
-                <div className="col-span-1 flex items-center text-nowrap text-sm">
-                  {formatFileSize(file.size || 0)}
-                </div>
-                <div className="col-span-2 hidden items-center text-sm sm:flex">
-                  <span className="truncate">{file.mimeType || "-"}</span>
-                </div>
-                <div className="col-span-2 hidden items-center text-sm sm:flex">
-                  <TooltipProvider>
-                    <Tooltip delayDuration={200}>
-                      <TooltipTrigger className="truncate">
-                        {file.user.name ?? file.user.email}
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>{file.user.name}</p>
-                        <p>{file.user.email}</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
-                <div className="col-span-2 hidden items-center text-nowrap text-sm sm:flex">
-                  <TimeAgoIntl date={file.updatedAt as Date} />
-                </div>
-                <div className="col-span-1 flex items-center">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
+                        </div>
+                      )}
+                      <div className="flex items-start gap-1">
+                        <strong>Origin:</strong>
+                        <Link
+                          href={getFileUrl(file.path)}
+                          className="text-wrap break-all hover:text-blue-500"
+                          target="_blank"
+                        >
+                          {getFileUrl(file.path)}
+                        </Link>
+                        <CopyButton
+                          className="size-6"
+                          value={getFileUrl(file.path)}
+                        />
+                      </div>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+              <div className="col-span-1 flex items-center text-nowrap text-xs">
+                {formatFileSize(file.size || 0)}
+              </div>
+              <div className="col-span-2 hidden items-center text-xs sm:flex">
+                <Badge className="truncate" variant="outline">
+                  {file.mimeType || "-"}
+                </Badge>
+              </div>
+              <div className="col-span-2 hidden items-center text-xs sm:flex">
+                <TooltipProvider>
+                  <Tooltip delayDuration={200}>
+                    <TooltipTrigger className="truncate">
+                      {file.user.name ?? file.user.email}
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{file.user.name}</p>
+                      <p>{file.user.email}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+              <div className="col-span-2 hidden items-center text-nowrap text-xs sm:flex">
+                <TimeAgoIntl date={file.updatedAt as Date} />
+              </div>
+              <div className="col-span-1 flex items-center">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      className="size-[25px] p-1.5"
+                      size="sm"
+                      variant="ghost"
+                    >
+                      <Icons.moreVertical className="size-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem asChild>
                       <Button
-                        className="size-[25px] p-1.5"
+                        className="flex w-full items-center gap-2"
                         size="sm"
                         variant="ghost"
+                        onClick={() => {
+                          setShortTarget(file);
+                          setShowForm(true);
+                        }}
                       >
-                        <Icons.moreVertical className="size-4" />
+                        <Icons.link className="size-4" />
+                        {file.shortUrlId
+                          ? t("Update short link")
+                          : t("Generate short link")}
                       </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuItem asChild>
-                        <Button
-                          className="flex w-full items-center gap-2"
-                          size="sm"
-                          variant="ghost"
-                          // onClick={() => handleDownload(file.path)}
-                        >
-                          <Icons.link className="size-4" />
-                          {t("Generate short link")}
-                        </Button>
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem asChild>
-                        <Button
-                          className="flex w-full items-center gap-2"
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => handleDownload(file.path)}
-                        >
-                          <Icons.download className="size-4" />
-                          {t("Download")}
-                        </Button>
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem asChild>
-                        <Button
-                          className="flex w-full items-center gap-2 text-red-500"
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => file.path && handleDeleteSingle(file)}
-                        >
-                          <Icons.trash className="size-4" />
-                          {t("Delete File")}
-                        </Button>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Button
+                        className="flex w-full items-center gap-2"
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => handleDownload(file.path)}
+                      >
+                        <Icons.download className="size-4" />
+                        {t("Download")}
+                      </Button>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Button
+                        className="flex w-full items-center gap-2 text-red-500"
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => file.path && handleDeleteSingle(file)}
+                      >
+                        <Icons.trash className="size-4" />
+                        {t("Delete File")}
+                      </Button>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
-            ))}
+            </div>
+          ))}
         </div>
       )}
     </div>
@@ -340,90 +401,113 @@ export default function UserFileList({
         [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((v) => (
           <Skeleton key={v} className="size-[100px]" />
         ))}
-      {files &&
-        files.list.map((file) => (
-          <div
-            key={file.id}
-            className="group relative flex cursor-pointer items-end rounded-md transition-all"
-          >
-            <div className="flex flex-col items-center justify-center space-y-2">
-              {React.cloneElement(
-                getFileIcon(file.path, file.mimeType, bucketInfo),
-                {
-                  size: 40,
-                },
-              )}
-              <div className="w-full text-center">
-                <TooltipProvider>
-                  <Tooltip delayDuration={0}>
-                    <TooltipTrigger className="mx-auto line-clamp-2 max-w-[60px] break-all px-2 pb-1 text-left text-xs font-medium text-muted-foreground group-hover:text-blue-500 sm:max-w-[100px]">
-                      {truncateMiddle(file.path || "")}
-                    </TooltipTrigger>
-                    <TooltipContent
-                      side="right"
-                      className="max-w-[300px] space-y-1 p-3 text-start"
-                    >
-                      {file.mimeType.startsWith("image/") && (
-                        <img
-                          className="mb-2 rounded shadow"
-                          width={300}
-                          height={300}
-                          src={
-                            bucketInfo.custom_domain
-                              ? `${bucketInfo.custom_domain}/${file.path}`
-                              : `${file.path}`
-                          }
-                          alt={`${file.path}`}
-                        />
-                      )}
-                      <div className="flex items-center gap-2 break-all text-sm">
+      {files?.list.map((file, index) => (
+        <div
+          key={file.id}
+          className={cn(
+            "group relative flex cursor-pointer items-end rounded-md transition-all hover:bg-blue-50",
+            selectedFiles.find((f) => f.id === file.id) !== undefined &&
+              "bg-blue-50",
+          )}
+        >
+          <div className="flex flex-col items-center justify-center space-y-2">
+            {showMutiCheckBox && (
+              <Checkbox
+                checked={
+                  selectedFiles.find((f) => f.id === file.id) !== undefined
+                }
+                onCheckedChange={() => handleSelectFile(file)}
+                className="absolute left-1 top-1 size-4 border-neutral-300 bg-neutral-100 data-[state=checked]:border-neutral-900 data-[state=checked]:bg-neutral-600 data-[state=checked]:text-neutral-100 dark:border-neutral-700 dark:bg-neutral-800 dark:data-[state=checked]:border-neutral-300 dark:data-[state=checked]:bg-neutral-300"
+              />
+            )}
+            {React.cloneElement(
+              getFileIcon(file.path, file.mimeType, bucketInfo),
+              {
+                size: 40,
+              },
+            )}
+            <div className="w-full text-center">
+              <TooltipProvider>
+                <Tooltip delayDuration={0}>
+                  <TooltipTrigger className="mx-auto line-clamp-2 max-w-[60px] break-all px-2 pb-1 text-left text-xs font-medium text-muted-foreground group-hover:text-blue-500 sm:max-w-[100px]">
+                    {truncateMiddle(file.path || "")}
+                  </TooltipTrigger>
+                  <TooltipContent
+                    side="right"
+                    className="max-w-[300px] space-y-1 p-3 text-start"
+                  >
+                    {file.mimeType.startsWith("image/") && (
+                      <img
+                        className="mb-2 max-h-[70vh] rounded shadow"
+                        width={300}
+                        height={300}
+                        src={getFileUrl(file.path)}
+                        alt={`${file.path}`}
+                      />
+                    )}
+                    {file.shortUrlId && (
+                      <div className="space-x-1 text-xs">
+                        <strong>Shorten:</strong>
                         <Link
+                          href={"https://" + shortLinks[index]}
+                          className="text-wrap break-all hover:text-blue-500"
                           target="_blank"
-                          href={`${bucketInfo.custom_domain}/${file.path}`}
                         >
-                          {file.path}
+                          https://{shortLinks[index]}
                         </Link>
                         <CopyButton
-                          value={`${bucketInfo.custom_domain}/${file.path}`}
+                          className="size-6"
+                          value={getFileUrl(file.path)}
                         />
                       </div>
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        <strong>Size:</strong> {formatFileSize(file.size || 0)}
-                      </p>
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        <strong>Type:</strong> {file.mimeType || "-"}
-                      </p>
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        <strong>Modified:</strong>{" "}
-                        {formatDate(file.lastModified?.toString() || "")}
-                      </p>
-                      <div className="flex justify-end space-x-1">
-                        <Button
-                          onClick={() => file.path && handleDownload(file.path)}
-                          className="size-7"
-                          title="下载"
-                          size="icon"
-                          variant={"blue"}
-                        >
-                          <Download size={14} />
-                        </Button>
-                        <Button
-                          onClick={() => handleDeleteSingle(file)}
-                          className="size-7"
-                          title="删除"
-                          size="icon"
-                          variant={"destructive"}
-                        >
-                          <Trash2 size={14} />
-                        </Button>
-                      </div>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
+                    )}
+                    <div className="space-x-1 text-xs">
+                      <strong>Origin:</strong>
+                      <Link
+                        href={getFileUrl(file.path)}
+                        className="text-wrap break-all hover:text-blue-500"
+                        target="_blank"
+                      >
+                        {getFileUrl(file.path)}
+                      </Link>
+                    </div>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      <strong>Size:</strong> {formatFileSize(file.size || 0)}
+                    </p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      <strong>Type:</strong> {file.mimeType || "-"}
+                    </p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      <strong>Modified:</strong>{" "}
+                      {formatDate(file.lastModified?.toString() || "")}
+                    </p>
+                    <div className="flex justify-end space-x-1">
+                      <Button
+                        onClick={() => file.path && handleDownload(file.path)}
+                        className="size-7"
+                        title="下载"
+                        size="icon"
+                        variant={"blue"}
+                      >
+                        <Download size={14} />
+                      </Button>
+                      <Button
+                        onClick={() => handleDeleteSingle(file)}
+                        className="size-7"
+                        title="删除"
+                        size="icon"
+                        variant={"destructive"}
+                      >
+                        <Trash2 size={14} />
+                      </Button>
+                    </div>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
           </div>
-        ))}
+        </div>
+      ))}
     </div>
   );
 
@@ -440,6 +524,32 @@ export default function UserFileList({
           setPageSize={setPageSize}
         />
       )}
+
+      <Modal
+        className="md:max-w-2xl"
+        showModal={isShowForm}
+        setShowModal={setShowForm}
+      >
+        <UrlForm
+          user={{ id: "", name: "" }}
+          isShowForm={isShowForm}
+          setShowForm={setShowForm}
+          type="add"
+          initData={{
+            target: getFileUrl(shortTarget?.path || ""),
+            userId: "",
+            userName: "",
+            url: "",
+            prefix: "",
+            visible: 1,
+            active: 1,
+            expiration: "-1",
+            password: "",
+          }}
+          action="/api/url"
+          onRefresh={handleGenerateShortLink}
+        />
+      </Modal>
     </>
   );
 }
@@ -495,7 +605,7 @@ const getFileIcon = (
     // 其他图片格式显示缩略图
     return (
       <img
-        className="max-h-24 max-w-24 rounded shadow"
+        className="max-h-12 max-w-24 rounded shadow"
         height={60}
         width={60}
         src={

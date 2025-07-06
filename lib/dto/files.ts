@@ -176,7 +176,6 @@ export async function updateUserFile(id: string, data: UpdateUserFileInput) {
       include: {
         user: {
           select: {
-            id: true,
             name: true,
             email: true,
           },

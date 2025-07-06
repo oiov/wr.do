@@ -1,13 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { User } from "@prisma/client";
 import { RefreshCwIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 import useSWR, { useSWRConfig } from "swr";
 
+import { UserFileData } from "@/lib/dto/files";
 import { BucketItem, ClientStorageCredentials } from "@/lib/r2";
-import { fetcher } from "@/lib/utils";
+import { cn, fetcher, formatFileSize } from "@/lib/utils";
 import {
   Select,
   SelectContent,
@@ -25,6 +27,13 @@ import { Icons } from "@/components/shared/icons";
 
 import { EmptyPlaceholder } from "../shared/empty-placeholder";
 import { Button } from "../ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 export interface FileListProps {
   user: Pick<User, "id" | "name" | "apiKey" | "email" | "role">;
@@ -39,11 +48,18 @@ export interface BucketInfo extends BucketItem {
 
 export type DisplayType = "List" | "Grid";
 
+export interface FileListData {
+  total: number;
+  totalSize: number;
+  list: UserFileData[];
+}
+
 export default function UserFileManager({ user, action }: FileListProps) {
   const t = useTranslations("List");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [displayType, setDisplayType] = useState<DisplayType>("List");
+  const [showMutiCheckBox, setShowMutiCheckBox] = useState(false);
   const [bucketInfo, setBucketInfo] = useState<BucketInfo>({
     bucket: "",
     custom_domain: "",
@@ -53,12 +69,28 @@ export default function UserFileManager({ user, action }: FileListProps) {
     provider_name: "",
   });
 
+  const [selectedFiles, setSelectedFiles] = useState<UserFileData[]>([]);
+  const [isDeleting, startDeleteTransition] = useTransition();
+
+  const [userStorageLimit, setUserStorageLimit] = useState(524288000); // 500 MB
+
   const { mutate } = useSWRConfig();
 
   const { data: r2Configs, isLoading } = useSWR<ClientStorageCredentials>(
     `${action}/r2/configs`,
     fetcher,
     { revalidateOnFocus: false },
+  );
+
+  const { data: files, isLoading: isLoadingFiles } = useSWR<FileListData>(
+    bucketInfo.bucket
+      ? `${action}/r2/files?bucket=${bucketInfo.bucket}&page=${currentPage}&size=${pageSize}`
+      : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      dedupingInterval: 5000, // 防抖
+    },
   );
 
   useEffect(() => {
@@ -89,10 +121,45 @@ export default function UserFileManager({ user, action }: FileListProps) {
     });
   };
 
+  const handleSelectAllFiles = () => {
+    if (selectedFiles.length === files?.list.length) {
+      setSelectedFiles([]);
+    } else {
+      setSelectedFiles(files?.list || []);
+    }
+  };
+
+  const handleDeleteAllFiles = () => {
+    startDeleteTransition(async () => {
+      try {
+        toast.promise(
+          fetch(`${action}/r2/files`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              keys: selectedFiles.map((file) => file.path),
+              ids: selectedFiles.map((file) => file.id),
+              bucket: bucketInfo.bucket,
+            }),
+          }),
+          {
+            loading: "Deleting files...",
+            success: "Files deleted successfully!",
+            error: "Error deleting files",
+            finally: handleRefresh,
+          },
+        );
+      } catch (error) {
+        console.error("Error deleting files:", error);
+        toast.success("Error deleting files");
+      }
+    });
+  };
+
   return (
     <div>
       <Tabs value={displayType}>
-        <div className="mb-4 flex items-center justify-between gap-3">
+        <div className="mb-4 flex items-center justify-between gap-2">
           <TabsList className="mr-auto">
             <TabsTrigger value="List" onClick={() => setDisplayType("List")}>
               <Icons.list className="size-4" />
@@ -101,6 +168,13 @@ export default function UserFileManager({ user, action }: FileListProps) {
               <Icons.layoutGrid className="size-4" />
             </TabsTrigger>
           </TabsList>
+
+          {files && (
+            <p>
+              {formatFileSize(files.totalSize)}/
+              {formatFileSize(userStorageLimit)}
+            </p>
+          )}
 
           {isLoading ? (
             <Skeleton className="h-9 w-[120px] rounded border-r-0 shadow-inner" />
@@ -137,6 +211,62 @@ export default function UserFileManager({ user, action }: FileListProps) {
             action={action}
             onRefresh={handleRefresh}
           />
+
+          <div className="flex items-center">
+            <Button
+              className={cn(
+                "h-9 rounded-r-none border-r-0",
+                showMutiCheckBox
+                  ? "border-0 bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground"
+                  : "",
+              )}
+              variant="outline"
+              size="icon"
+              onClick={() => setShowMutiCheckBox(!showMutiCheckBox)}
+            >
+              <Icons.listChecks className="size-4" />
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                className={cn(
+                  "flex h-9 w-8 items-center justify-center gap-1 rounded-r-md border",
+                  showMutiCheckBox
+                    ? "border-neutral-600 bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground"
+                    : "",
+                )}
+              >
+                <Icons.chevronDown className="size-4" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleSelectAllFiles}
+                    className="w-full"
+                  >
+                    <span className="text-xs">{t("Select all")}</span>
+                  </Button>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="w-full"
+                    onClick={handleDeleteAllFiles}
+                    disabled={isDeleting || selectedFiles.length === 0}
+                  >
+                    {isDeleting && (
+                      <Icons.spinner className="mr-1 size-4 animate-spin" />
+                    )}
+                    <span className="text-xs">{t("Delete selected")}</span>
+                  </Button>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+
           <Button
             className="h-9"
             size={"icon"}
@@ -158,7 +288,7 @@ export default function UserFileManager({ user, action }: FileListProps) {
               <Icons.storage className="size-10" />
             </div>
             <div className="flex items-center justify-center gap-2 text-muted-foreground">
-              <RefreshCwIcon className="size-4 animate-spin" />
+              <Icons.spinner className="mr-1 size-4 animate-spin" />
               {t("Loading storage buckets")}...
             </div>
           </div>
@@ -180,14 +310,21 @@ export default function UserFileManager({ user, action }: FileListProps) {
 
         {!isLoading && r2Configs?.buckets && r2Configs.buckets.length > 0 && (
           <UserFileList
+            files={files}
+            isLoading={isLoadingFiles}
             view={displayType}
             bucketInfo={bucketInfo}
             action={action}
+            showMutiCheckBox={showMutiCheckBox}
             currentPage={currentPage}
             pageSize={pageSize}
             setCurrentPage={setCurrentPage}
             setPageSize={setPageSize}
+            selectedFiles={selectedFiles}
+            setSelectedFiles={setSelectedFiles}
             onRefresh={handleRefresh}
+            onSelectAll={handleSelectAllFiles}
+            onDeleteAll={handleDeleteAllFiles}
           />
         )}
       </Tabs>
