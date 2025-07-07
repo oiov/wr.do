@@ -11,7 +11,7 @@
 
 ## Introduction
 
-WR.DO is a all-in-one web utility platform featuring short links with analytics, temporary email service, subdomain management, open APIs for screenshots and metadata extraction, plus comprehensive admin dashboard.
+WR.DO is a all-in-one web utility platform featuring short links with analytics, temporary email service, subdomain management, file storage, open APIs for screenshots and metadata extraction, and comprehensive admin dashboard.
 
 - Official website: [https://wr.do](https://wr.do)
 - Demo: [https://699399.xyz](https://699399.xyz) (Account: `admin@admin.com`, Password: `123456`)
@@ -42,6 +42,16 @@ WR.DO is a all-in-one web utility platform featuring short links with analytics,
   - Create various DNS record types (CNAME, A, TXT, etc.)
   - Support enabling application mode (user submission, admin approval)
   - Support email notification of administrator and user domain application status
+
+- 💳 **Cloud Storage Service**
+  - Connects to multiple channels (S3 API) cloud storage platforms (Cloudflare R2, AWS S3)
+  - Supports single-channel multi-bucket configuration
+  - Dynamic configuration (user quota settings) for file upload size limits
+  - Supports drag-and-drop, batch, and chunked file uploads
+  - Supports batch file deletion
+  - Quickly generates short links and QR codes for files
+  - Supports online preview of certain file types
+  - Supports file uploads via API calls
 
 - 📡 **Open API Module**:
   - Website metadata extraction API

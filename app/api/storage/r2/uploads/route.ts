@@ -90,7 +90,7 @@ async function createMultipartUpload(
   const limit = await restrictByTimeRange({
     model: "userUrl",
     userId: user.id,
-    limit: plan.stMaxFileSize,
+    limit: Number(plan.stMaxFileSize),
     rangeType: "month",
   });
   if (limit) return Response.json(limit.statusText, { status: limit.status });
