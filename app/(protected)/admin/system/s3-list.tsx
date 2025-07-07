@@ -324,7 +324,7 @@ export default function S3Configs({}: {}) {
                       }}
                     />
                   </div>
-                  <div className="space-y-1">
+                  {/* <div className="space-y-1">
                     <Label>{t("Max File Size")} (Bytes)</Label>
                     <div className="relative">
                       <Input
@@ -349,7 +349,7 @@ export default function S3Configs({}: {}) {
                         })}
                       </span>
                     </div>
-                  </div>
+                  </div> */}
                   <div className="space-y-1">
                     <Label>{t("Region")}</Label>
                     <Input

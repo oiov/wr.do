@@ -61,6 +61,7 @@ import {
   SunMedium,
   Trash2,
   Type,
+  Unlink,
   Unplug,
   User,
   UserCog,
@@ -378,6 +379,7 @@ export const Icons = {
     </svg>
   ),
   link: Link,
+  unLink: Unlink,
   mail: Mail,
   mailPlus: MailPlus,
   mailOpen: MailOpen,

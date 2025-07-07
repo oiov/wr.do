@@ -6,12 +6,15 @@ import {
   S3Client,
   UploadPartCommand,
 } from "@aws-sdk/client-s3";
+import { User } from "@prisma/client";
 
 import { createUserFile } from "@/lib/dto/files";
+import { getPlanQuota } from "@/lib/dto/plan";
 import { getMultipleConfigs } from "@/lib/dto/system-config";
 import { checkUserStatus } from "@/lib/dto/user";
 import { CloudStorageCredentials, createS3Client } from "@/lib/r2";
 import { getCurrentUser } from "@/lib/session";
+import { restrictByTimeRange } from "@/lib/team";
 import { extractFileNameAndExtension, generateFileKey } from "@/lib/utils";
 
 export async function POST(request: Request): Promise<Response> {
@@ -52,7 +55,7 @@ export async function POST(request: Request): Promise<Response> {
 
   switch (endpoint) {
     case "create-multipart-upload":
-      return createMultipartUpload(formData, R2);
+      return createMultipartUpload(user, formData, R2);
     case "complete-multipart-upload":
       return completeMultipartUpload(
         formData,
@@ -73,13 +76,24 @@ export async function POST(request: Request): Promise<Response> {
 
 // Initiates a multipart upload
 async function createMultipartUpload(
+  user: User,
   formData: FormData,
   R2: S3Client,
 ): Promise<Response> {
   const fileName = formData.get("fileName") as string;
   const fileType = formData.get("fileType") as string;
+  const fileSize = Number(formData.get("fileSize") as string);
   const bucket = formData.get("bucket") as string;
   const prefix = (formData.get("prefix") as string) || "";
+
+  const plan = await getPlanQuota(user.team!);
+  const limit = await restrictByTimeRange({
+    model: "userUrl",
+    userId: user.id,
+    limit: plan.stMaxFileSize,
+    rangeType: "month",
+  });
+  if (limit) return Response.json(limit.statusText, { status: limit.status });
 
   const fileKey = generateFileKey(fileName, prefix);
   try {

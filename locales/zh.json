@@ -200,7 +200,20 @@
     "Delete selected": "删除选中",
     "Update short link": "更新短链",
     "QR Code": "二维码",
-    "Raw Data": "在线预览"
+    "Raw Data": "在线预览",
+    "Storage Service": "存储服务",
+    "Max File Size": "单文件大小上限",
+    "Maximum uploaded single file size in bytes": "单个文件最大上传大小（字节）",
+    "Max Total Size": "总文件大小上限",
+    "Maximum uploaded total file size in bytes": "所有文件最大上传总大小（字节）",
+    "storageUsage": "存储空间使用情况",
+    "used": "已使用",
+    "usedSpace": "已使用空间",
+    "totalCapacity": "总容量",
+    "availableSpace": "剩余空间",
+    "storageFull": "存储空间即将用完",
+    "storageHigh": "存储空间使用较多",
+    "storageGood": "存储空间充足"
   },
   "Components": {
     "Dashboard": "用户面板",

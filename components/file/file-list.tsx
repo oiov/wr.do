@@ -20,7 +20,6 @@ import { toast } from "sonner";
 import { UserFileData } from "@/lib/dto/files";
 import {
   cn,
-  downloadFile,
   downloadFileFromUrl,
   formatDate,
   formatFileSize,
@@ -217,22 +216,25 @@ export default function UserFileList({
     <>
       {file.shortUrlId && (
         <div className="flex items-center gap-2">
-          <Icons.link className="size-3 flex-shrink-0 text-blue-500" />
+          <Icons.unLink className="size-3 flex-shrink-0 text-blue-500" />
           <Link
             href={"https://" + shortLinks[index]}
-            className="line-clamp-1 truncate rounded-md bg-neutral-100 p-1.5 text-xs hover:text-blue-500"
+            className="line-clamp-1 truncate rounded-md bg-neutral-100 p-1.5 text-xs hover:text-blue-500 dark:bg-neutral-800"
             target="_blank"
           >
             https://{shortLinks[index]}
           </Link>
-          <CopyButton className="size-6" value={getFileUrl(file.path)} />
+          <CopyButton
+            className="size-6"
+            value={`https://${shortLinks[index]}`}
+          />
         </div>
       )}
       <div className="flex items-center gap-2">
         <Icons.link className="size-3 flex-shrink-0" />
         <Link
           href={getFileUrl(file.path)}
-          className="line-clamp-1 truncate rounded-md bg-neutral-100 p-1.5 text-xs hover:text-blue-500"
+          className="line-clamp-1 truncate rounded-md bg-neutral-100 p-1.5 text-xs hover:text-blue-500 dark:bg-neutral-800"
           target="_blank"
         >
           {getFileUrl(file.path)}
@@ -241,7 +243,7 @@ export default function UserFileList({
       </div>
       <div className="flex items-center gap-2">
         <Icons.code className="size-3 flex-shrink-0" />
-        <p className="line-clamp-1 truncate rounded-md bg-neutral-100 p-1.5 text-xs hover:text-blue-500">
+        <p className="line-clamp-1 truncate rounded-md bg-neutral-100 p-1.5 text-xs hover:text-blue-500 dark:bg-neutral-800">
           {`<img src="${getFileUrl(file.path)}" alt="${file.name}">${getFileUrl(file.path)}</img>`}
         </p>
         <CopyButton
@@ -251,7 +253,7 @@ export default function UserFileList({
       </div>
       <div className="flex items-center gap-2">
         <Icons.type className="size-3 flex-shrink-0" />
-        <p className="line-clamp-1 truncate rounded-md bg-neutral-100 p-1.5 text-xs hover:text-blue-500">
+        <p className="line-clamp-1 truncate rounded-md bg-neutral-100 p-1.5 text-xs hover:text-blue-500 dark:bg-neutral-800">
           {`[${file.name}](${getFileUrl(file.path)})`}
         </p>
         <CopyButton

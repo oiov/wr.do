@@ -9,7 +9,7 @@ import useSWR, { useSWRConfig } from "swr";
 
 import { UserFileData } from "@/lib/dto/files";
 import { BucketItem, ClientStorageCredentials } from "@/lib/r2";
-import { cn, fetcher, formatFileSize } from "@/lib/utils";
+import { cn, fetcher } from "@/lib/utils";
 import {
   Select,
   SelectContent,
@@ -21,6 +21,12 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import UserFileList from "@/components/file/file-list";
 import Uploader from "@/components/file/uploader";
 import { Icons } from "@/components/shared/icons";
@@ -34,6 +40,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { CircularStorageIndicator, FileSizeDisplay } from "./storage-size";
 
 export interface FileListProps {
   user: Pick<User, "id" | "name" | "apiKey" | "email" | "role" | "team">;
@@ -54,6 +61,11 @@ export interface FileListData {
   list: UserFileData[];
 }
 
+export interface StorageUserPlan {
+  stMaxTotalSize: string;
+  stMaxFileSize: string;
+}
+
 export default function UserFileManager({ user, action }: FileListProps) {
   const t = useTranslations("List");
   const [currentPage, setCurrentPage] = useState(1);
@@ -72,8 +84,6 @@ export default function UserFileManager({ user, action }: FileListProps) {
   const [selectedFiles, setSelectedFiles] = useState<UserFileData[]>([]);
   const [isDeleting, startDeleteTransition] = useTransition();
 
-  const [userStorageLimit, setUserStorageLimit] = useState(524288000); // 500 MB
-
   const { mutate } = useSWRConfig();
 
   const { data: r2Configs, isLoading } = useSWR<ClientStorageCredentials>(
@@ -91,6 +101,11 @@ export default function UserFileManager({ user, action }: FileListProps) {
       revalidateOnFocus: false,
       dedupingInterval: 5000, // 防抖
     },
+  );
+
+  const { data: plan } = useSWR<StorageUserPlan>(
+    `/api/plan?team=${user.team}`,
+    fetcher,
   );
 
   useEffect(() => {
@@ -169,11 +184,21 @@ export default function UserFileManager({ user, action }: FileListProps) {
             </TabsTrigger>
           </TabsList>
 
-          {files && (
-            <p>
-              {formatFileSize(files.totalSize)}/
-              {formatFileSize(userStorageLimit)}
-            </p>
+          {files && files.totalSize > 0 && plan && (
+            <TooltipProvider>
+              <Tooltip delayDuration={0}>
+                <TooltipTrigger className="flex items-center gap-2">
+                  <CircularStorageIndicator
+                    files={files}
+                    plan={plan}
+                    size={36}
+                  />
+                </TooltipTrigger>
+                <TooltipContent className="w-80">
+                  <FileSizeDisplay files={files} plan={plan} t={t} />
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           )}
 
           {isLoading ? (
@@ -210,6 +235,7 @@ export default function UserFileManager({ user, action }: FileListProps) {
             bucketInfo={bucketInfo}
             action={action}
             onRefresh={handleRefresh}
+            plan={plan}
           />
 
           <div className="flex items-center">

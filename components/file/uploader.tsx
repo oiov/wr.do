@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { formatFileSize } from "@/lib/utils";
-import { BucketInfo } from "@/components/file";
+import { BucketInfo, StorageUserPlan } from "@/components/file";
 
 import { Icons } from "../shared/icons";
 import { Button } from "../ui/button";
@@ -38,10 +38,12 @@ export type UploadProgressType = {
 export default function Uploader({
   bucketInfo,
   action,
+  plan,
   onRefresh,
 }: {
   bucketInfo: BucketInfo;
   action: string;
+  plan?: StorageUserPlan;
   onRefresh: () => void;
 }) {
   const t = useTranslations("Components");
@@ -67,6 +69,7 @@ export default function Uploader({
     const formData = new FormData();
     formData.append("fileName", file.name);
     formData.append("fileType", file.type);
+    formData.append("fileSize", file.size.toString());
     formData.append("bucket", bucketInfo.bucket);
     formData.append("prefix", bucketInfo.prefix || "");
     formData.append("endPoint", "create-multipart-upload");
@@ -181,9 +184,9 @@ export default function Uploader({
 
   const uploadFile = async (file: File): Promise<void> => {
     try {
-      if (file.size > Number(bucketInfo.file_size || "26214400")) {
+      if (file.size > Number(plan?.stMaxFileSize || "26214400")) {
         toast.warning("Upload Failed", {
-          description: `File '${file.name}' size exceeds the maximum allowed size of ${formatFileSize(Number(bucketInfo.file_size || "0"))} bytes.`,
+          description: `File '${file.name}' size exceeds the maximum allowed size of ${formatFileSize(Number(plan?.stMaxFileSize || "0"))} bytes.`,
         });
         return;
       }
@@ -271,7 +274,7 @@ export default function Uploader({
                 </Button>
               </DrawerClose>
             </DrawerHeader>
-            <DrawerDescription className="px-4">
+            <DrawerDescription className="flex items-center justify-between px-4">
               <div className="flex items-center space-x-1 text-sm text-muted-foreground">
                 <div className="truncate">{bucketInfo.provider_name}</div>
                 <Icons.arrowRight className="size-3" />
@@ -279,6 +282,12 @@ export default function Uploader({
                   {bucketInfo.bucket}
                 </div>
               </div>
+              <p>
+                Max:{" "}
+                {formatFileSize(Number(plan?.stMaxFileSize || "0"), {
+                  precision: 0,
+                })}
+              </p>
             </DrawerDescription>
 
             <div className="space-y-4 p-4">

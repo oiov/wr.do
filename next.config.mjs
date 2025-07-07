@@ -122,5 +122,4 @@ const withPWA = nextPWA({
   disable: false,
 });
 
-// module.exports = withContentlayer(withPWA(withNextIntl(nextConfig)));
 export default withContentlayer(withPWA(withNextIntl(nextConfig)));

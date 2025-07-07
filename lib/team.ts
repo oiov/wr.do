@@ -67,7 +67,7 @@ export async function restrictByTimeRange({
   if (count >= limit) {
     return {
       status: 409,
-      statusText: `You have exceeded the ${rangeType}ly ${model.toString()} creation limit (${limit}). Please try again later.`,
+      statusText: `You have exceeded the ${rangeType}ly ${model.toString()} usage limit (${limit}). Please try again later.`,
     };
   }
   return null;

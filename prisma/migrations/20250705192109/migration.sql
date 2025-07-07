@@ -27,3 +27,9 @@ ON "user_files"("userId", "providerName", "status", "lastModified", "createdAt")
 
 ALTER TABLE "user_files" ADD CONSTRAINT "user_files_userId_fkey" 
 FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- BigInt
+ALTER TABLE "plans" ADD COLUMN "stMaxFileSize" TEXT NOT NULL DEFAULT '26214400';
+ALTER TABLE "plans" ADD COLUMN "stMaxTotalSize" TEXT NOT NULL DEFAULT '524288000';
+ALTER TABLE "plans" ADD COLUMN "stMaxFileCount" INTEGER NOT NULL DEFAULT 1000;
+

@@ -200,7 +200,20 @@
     "Delete selected": "Delete selected",
     "Update short link": "Update short link",
     "QR Code": "QR Code",
-    "Raw Data": "Raw Data"
+    "Raw Data": "Raw Data",
+    "Storage Service": "Storage Service",
+    "Max File Size": "Max File Size",
+    "Maximum uploaded single file size in bytes": "Maximum uploaded single file size in bytes",
+    "Max Total Size": "Max Total Size",
+    "Maximum uploaded total file size in bytes": "Maximum uploaded total file size in bytes",
+    "storageUsage": "Storage Usage",
+    "used": "Used",
+    "usedSpace": "Used Space",
+    "totalCapacity": "Total Capacity",
+    "availableSpace": "Available Space",
+    "storageFull": "Storage space is almost full",
+    "storageHigh": "Storage space usage is high",
+    "storageGood": "Storage space is sufficient"
   },
   "Components": {
     "Dashboard": "Dashboard",
