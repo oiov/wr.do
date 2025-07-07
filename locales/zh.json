@@ -198,7 +198,9 @@
     "Delete File": "删除文件",
     "Select all": "全部选中",
     "Delete selected": "删除选中",
-    "Update short link": "更新短链"
+    "Update short link": "更新短链",
+    "QR Code": "二维码",
+    "Raw Data": "在线预览"
   },
   "Components": {
     "Dashboard": "用户面板",

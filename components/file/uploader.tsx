@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
+import { formatFileSize } from "@/lib/utils";
 import { BucketInfo } from "@/components/file";
 
 import { Icons } from "../shared/icons";
@@ -182,7 +183,7 @@ export default function Uploader({
     try {
       if (file.size > Number(bucketInfo.file_size || "26214400")) {
         toast.warning("Upload Failed", {
-          description: `File '${file.name}' size exceeds the maximum allowed size of ${bucketInfo.file_size} bytes.`,
+          description: `File '${file.name}' size exceeds the maximum allowed size of ${formatFileSize(Number(bucketInfo.file_size || "0"))} bytes.`,
         });
         return;
       }

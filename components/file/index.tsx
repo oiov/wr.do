@@ -36,7 +36,7 @@ import {
 } from "../ui/dropdown-menu";
 
 export interface FileListProps {
-  user: Pick<User, "id" | "name" | "apiKey" | "email" | "role">;
+  user: Pick<User, "id" | "name" | "apiKey" | "email" | "role" | "team">;
   action: string;
 }
 
@@ -310,6 +310,7 @@ export default function UserFileManager({ user, action }: FileListProps) {
 
         {!isLoading && r2Configs?.buckets && r2Configs.buckets.length > 0 && (
           <UserFileList
+            user={user}
             files={files}
             isLoading={isLoadingFiles}
             view={displayType}

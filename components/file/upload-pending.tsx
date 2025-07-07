@@ -7,6 +7,7 @@ import { BucketInfo } from "@/components/file";
 
 import { CopyButton } from "../shared/copy-button";
 import { Icons } from "../shared/icons";
+import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { UploadPendingItemType, UploadProgressType } from "./uploader";
 
@@ -24,7 +25,21 @@ const UploadPending = ({
   const t = useTranslations("Components");
   return (
     <div className="space-y-2 rounded-lg">
-      {pendingUpload && <h2 className="font-semibold">{t("Upload List")}</h2>}
+      {progressList && (
+        <div className="flex items-center justify-between gap-3">
+          <h2 className="font-semibold">{t("Upload List")}</h2>
+          <Badge className="flex items-center gap-1">
+            {progressList.filter((i) => i.progress === 100).length}
+            <span>/</span>
+            {progressList.length}
+          </Badge>
+        </div>
+      )}
+      {pendingUpload && (
+        <p className="rounded-md border border-dashed bg-yellow-100 p-2 text-sm text-muted-foreground dark:bg-neutral-600">
+          Do not close the window until the upload is complete
+        </p>
+      )}
       {pendingUpload &&
         pendingUpload.map((item) => {
           const progress =

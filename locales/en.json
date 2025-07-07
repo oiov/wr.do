@@ -198,7 +198,9 @@
     "Delete File": "Delete",
     "Select all": "Select all",
     "Delete selected": "Delete selected",
-    "Update short link": "Update short link"
+    "Update short link": "Update short link",
+    "QR Code": "QR Code",
+    "Raw Data": "Raw Data"
   },
   "Components": {
     "Dashboard": "Dashboard",

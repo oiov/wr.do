@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { User } from "@prisma/client";
 import {
   Archive,
   Download,
@@ -17,7 +18,14 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { UserFileData } from "@/lib/dto/files";
-import { cn, formatDate, formatFileSize, truncateMiddle } from "@/lib/utils";
+import {
+  cn,
+  downloadFile,
+  downloadFileFromUrl,
+  formatDate,
+  formatFileSize,
+  truncateMiddle,
+} from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import {
   Tooltip,
@@ -32,6 +40,7 @@ import { CopyButton } from "../shared/copy-button";
 import { EmptyPlaceholder } from "../shared/empty-placeholder";
 import { Icons } from "../shared/icons";
 import { PaginationWrapper } from "../shared/pagination";
+import QRCodeEditor from "../shared/qr";
 import { TimeAgoIntl } from "../shared/time-ago";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
@@ -47,22 +56,8 @@ import { Modal } from "../ui/modal";
 import { Skeleton } from "../ui/skeleton";
 import { TableCell, TableRow } from "../ui/table";
 
-export default function UserFileList({
-  files,
-  isLoading,
-  bucketInfo,
-  action,
-  view,
-  showMutiCheckBox,
-  currentPage,
-  pageSize,
-  setCurrentPage,
-  setPageSize,
-  selectedFiles,
-  setSelectedFiles,
-  onRefresh,
-  onSelectAll,
-}: {
+interface Props {
+  user: Pick<User, "id" | "name" | "apiKey" | "email" | "role" | "team">;
   files?: FileListData;
   isLoading: boolean;
   bucketInfo: BucketInfo;
@@ -78,12 +73,33 @@ export default function UserFileList({
   onRefresh: () => void;
   onSelectAll: () => void;
   onDeleteAll: () => void;
-}) {
+}
+
+export default function UserFileList({
+  user,
+  files,
+  isLoading,
+  bucketInfo,
+  action,
+  view,
+  showMutiCheckBox,
+  currentPage,
+  pageSize,
+  setCurrentPage,
+  setPageSize,
+  selectedFiles,
+  setSelectedFiles,
+  onRefresh,
+  onSelectAll,
+}: Props) {
   const t = useTranslations("List");
   const { isMobile } = useMediaQuery();
   const [isShowForm, setShowForm] = useState(false);
   const [shortTarget, setShortTarget] = useState<UserFileData | null>(null);
   const [shortLinks, setShortLinks] = useState<string[]>([]);
+  const [isShowQrcode, setShowQrcode] = useState(false);
+  const [currentSelectFile, setCurrentSelectFile] =
+    useState<UserFileData | null>();
 
   const getFileUrl = (key: string) => {
     return `${bucketInfo.custom_domain}/${key}`;
@@ -97,7 +113,11 @@ export default function UserFileList({
     }
   };
 
-  const handleDownload = async (key: string) => {
+  const handleDownload = async (file: UserFileData) => {
+    downloadFileFromUrl(getFileUrl(file.path), file.name);
+  };
+
+  const handlePreviewRawFile = async (key: string) => {
     try {
       const response = await fetch(`${action}/r2/files`, {
         method: "POST",
@@ -347,6 +367,21 @@ export default function UserFileList({
                         size="sm"
                         variant="ghost"
                         onClick={() => {
+                          setCurrentSelectFile(file);
+                          setShowQrcode(!isShowQrcode);
+                        }}
+                      >
+                        <Icons.qrcode className="size-4" />
+                        {t("QR Code")}
+                      </Button>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Button
+                        className="flex w-full items-center gap-2"
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => {
                           setShortTarget(file);
                           setShowForm(true);
                         }}
@@ -363,7 +398,19 @@ export default function UserFileList({
                         className="flex w-full items-center gap-2"
                         size="sm"
                         variant="ghost"
-                        onClick={() => handleDownload(file.path)}
+                        onClick={() => handlePreviewRawFile(file.path)}
+                      >
+                        <Icons.eye className="size-4" />
+                        {t("Raw Data")}
+                      </Button>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Button
+                        className="flex w-full items-center gap-2"
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => handleDownload(file)}
                       >
                         <Icons.download className="size-4" />
                         {t("Download")}
@@ -439,7 +486,7 @@ export default function UserFileList({
                   >
                     {file.mimeType.startsWith("image/") && (
                       <img
-                        className="mb-2 max-h-[70vh] rounded shadow"
+                        className="mb-2 max-h-[70vh] w-fit rounded shadow"
                         width={300}
                         height={300}
                         src={getFileUrl(file.path)}
@@ -482,24 +529,44 @@ export default function UserFileList({
                       <strong>Modified:</strong>{" "}
                       {formatDate(file.lastModified?.toString() || "")}
                     </p>
-                    <div className="flex justify-end space-x-1">
+                    <div className="flex items-center justify-end space-x-1 pt-2">
                       <Button
-                        onClick={() => file.path && handleDownload(file.path)}
-                        className="size-7"
+                        className="flex h-7 w-full items-center gap-2"
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handlePreviewRawFile(file.path)}
+                      >
+                        <Icons.eye className="size-4" />
+                        {t("Raw Data")}
+                      </Button>
+                      <Button
+                        className="h-7 px-1.5 text-xs hover:bg-slate-100 dark:hover:text-primary-foreground"
+                        size="sm"
+                        variant={"outline"}
+                        onClick={() => {
+                          setCurrentSelectFile(file);
+                          setShowQrcode(!isShowQrcode);
+                        }}
+                      >
+                        <Icons.qrcode className="size-4" />
+                      </Button>
+                      <Button
+                        onClick={() => handlePreviewRawFile(file.path)}
+                        className="h-7 px-1.5"
                         title="下载"
-                        size="icon"
+                        size="sm"
                         variant={"blue"}
                       >
-                        <Download size={14} />
+                        <Download className="size-4" />
                       </Button>
                       <Button
                         onClick={() => handleDeleteSingle(file)}
-                        className="size-7"
+                        className="h-7 px-1.5"
                         title="删除"
-                        size="icon"
+                        size="sm"
                         variant={"destructive"}
                       >
-                        <Trash2 size={14} />
+                        <Trash2 className="size-4" />
                       </Button>
                     </div>
                   </TooltipContent>
@@ -550,6 +617,23 @@ export default function UserFileList({
           action="/api/url"
           onRefresh={handleGenerateShortLink}
         />
+      </Modal>
+
+      <Modal
+        className="md:max-w-lg"
+        showModal={isShowQrcode}
+        setShowModal={setShowQrcode}
+      >
+        {currentSelectFile && (
+          <QRCodeEditor
+            user={{
+              id: user.id,
+              apiKey: user.apiKey || "",
+              team: user.team || "free",
+            }}
+            url={getFileUrl(currentSelectFile.path)}
+          />
+        )}
       </Modal>
     </>
   );
@@ -606,7 +690,7 @@ const getFileIcon = (
     // 其他图片格式显示缩略图
     return (
       <img
-        className="max-h-12 max-w-24 rounded shadow"
+        className="max-h-12 w-fit max-w-24 rounded shadow"
         height={60}
         width={60}
         src={
