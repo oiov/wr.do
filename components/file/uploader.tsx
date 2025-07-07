@@ -273,7 +273,6 @@ export default function Uploader({
             </DrawerHeader>
             <DrawerDescription className="px-4">
               <div className="flex items-center space-x-1 text-sm text-muted-foreground">
-                <span>Bucket: </span>
                 <div className="truncate">{bucketInfo.provider_name}</div>
                 <Icons.arrowRight className="size-3" />
                 <div className="font-medium text-blue-600 dark:text-blue-400">

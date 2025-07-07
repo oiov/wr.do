@@ -213,6 +213,55 @@ export default function UserFileList({
     );
   }
 
+  const renderFileLinks = (file: UserFileData, index: number) => (
+    <>
+      {file.shortUrlId && (
+        <div className="flex items-center gap-2">
+          <Icons.link className="size-3 flex-shrink-0 text-blue-500" />
+          <Link
+            href={"https://" + shortLinks[index]}
+            className="line-clamp-1 truncate rounded-md bg-neutral-100 p-1.5 text-xs hover:text-blue-500"
+            target="_blank"
+          >
+            https://{shortLinks[index]}
+          </Link>
+          <CopyButton className="size-6" value={getFileUrl(file.path)} />
+        </div>
+      )}
+      <div className="flex items-center gap-2">
+        <Icons.link className="size-3 flex-shrink-0" />
+        <Link
+          href={getFileUrl(file.path)}
+          className="line-clamp-1 truncate rounded-md bg-neutral-100 p-1.5 text-xs hover:text-blue-500"
+          target="_blank"
+        >
+          {getFileUrl(file.path)}
+        </Link>
+        <CopyButton className="size-6" value={getFileUrl(file.path)} />
+      </div>
+      <div className="flex items-center gap-2">
+        <Icons.code className="size-3 flex-shrink-0" />
+        <p className="line-clamp-1 truncate rounded-md bg-neutral-100 p-1.5 text-xs hover:text-blue-500">
+          {`<img src="${getFileUrl(file.path)}" alt="${file.name}">${getFileUrl(file.path)}</img>`}
+        </p>
+        <CopyButton
+          className="size-6"
+          value={`<img src="${getFileUrl(file.path)}" alt="${file.name}">${getFileUrl(file.path)}</img>`}
+        />
+      </div>
+      <div className="flex items-center gap-2">
+        <Icons.type className="size-3 flex-shrink-0" />
+        <p className="line-clamp-1 truncate rounded-md bg-neutral-100 p-1.5 text-xs hover:text-blue-500">
+          {`[${file.name}](${getFileUrl(file.path)})`}
+        </p>
+        <CopyButton
+          className="size-6"
+          value={`[${file.name}](${getFileUrl(file.path)})`}
+        />
+      </div>
+    </>
+  );
+
   const renderListView = () => (
     <div className="overflow-hidden rounded-lg border bg-primary-foreground">
       <div className="text-mute-foreground grid grid-cols-6 gap-4 bg-neutral-100 px-6 py-3 text-sm font-medium dark:bg-neutral-800 sm:grid-cols-12">
@@ -291,36 +340,7 @@ export default function UserFileList({
                           alt={`${file.path}`}
                         />
                       )}
-                      {file.shortUrlId && (
-                        <div className="flex items-start gap-1">
-                          <strong>Shorten:</strong>
-                          <Link
-                            href={"https://" + shortLinks[index]}
-                            className="text-wrap break-all hover:text-blue-500"
-                            target="_blank"
-                          >
-                            https://{shortLinks[index]}
-                          </Link>
-                          <CopyButton
-                            className="size-6"
-                            value={getFileUrl(file.path)}
-                          />
-                        </div>
-                      )}
-                      <div className="flex items-start gap-1">
-                        <strong>Origin:</strong>
-                        <Link
-                          href={getFileUrl(file.path)}
-                          className="text-wrap break-all hover:text-blue-500"
-                          target="_blank"
-                        >
-                          {getFileUrl(file.path)}
-                        </Link>
-                        <CopyButton
-                          className="size-6"
-                          value={getFileUrl(file.path)}
-                        />
-                      </div>
+                      {renderFileLinks(file, index)}
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -457,6 +477,7 @@ export default function UserFileList({
             selectedFiles.find((f) => f.id === file.id) !== undefined &&
               "bg-blue-50",
           )}
+          onClick={() => handleSelectFile(file)}
         >
           <div className="flex flex-col items-center justify-center space-y-2">
             {showMutiCheckBox && (
@@ -464,7 +485,7 @@ export default function UserFileList({
                 checked={
                   selectedFiles.find((f) => f.id === file.id) !== undefined
                 }
-                onCheckedChange={() => handleSelectFile(file)}
+                // onCheckedChange={() => handleSelectFile(file)}
                 className="absolute left-1 top-1 size-4 border-neutral-300 bg-neutral-100 data-[state=checked]:border-neutral-900 data-[state=checked]:bg-neutral-600 data-[state=checked]:text-neutral-100 dark:border-neutral-700 dark:bg-neutral-800 dark:data-[state=checked]:border-neutral-300 dark:data-[state=checked]:bg-neutral-300"
               />
             )}
@@ -493,32 +514,9 @@ export default function UserFileList({
                         alt={`${file.path}`}
                       />
                     )}
-                    {file.shortUrlId && (
-                      <div className="space-x-1 text-xs">
-                        <strong>Shorten:</strong>
-                        <Link
-                          href={"https://" + shortLinks[index]}
-                          className="text-wrap break-all hover:text-blue-500"
-                          target="_blank"
-                        >
-                          https://{shortLinks[index]}
-                        </Link>
-                        <CopyButton
-                          className="size-6"
-                          value={getFileUrl(file.path)}
-                        />
-                      </div>
-                    )}
-                    <div className="space-x-1 text-xs">
-                      <strong>Origin:</strong>
-                      <Link
-                        href={getFileUrl(file.path)}
-                        className="text-wrap break-all hover:text-blue-500"
-                        target="_blank"
-                      >
-                        {getFileUrl(file.path)}
-                      </Link>
-                    </div>
+                    <p className="mt-1 text-sm font-semibold text-muted-foreground">
+                      {file.path}
+                    </p>
                     <p className="mt-1 text-xs text-muted-foreground">
                       <strong>Size:</strong> {formatFileSize(file.size || 0)}
                     </p>
@@ -529,9 +527,10 @@ export default function UserFileList({
                       <strong>Modified:</strong>{" "}
                       {formatDate(file.lastModified?.toString() || "")}
                     </p>
+                    {renderFileLinks(file, index)}
                     <div className="flex items-center justify-end space-x-1 pt-2">
                       <Button
-                        className="flex h-7 w-full items-center gap-2"
+                        className="flex h-7 w-full items-center gap-2 text-xs"
                         size="sm"
                         variant="outline"
                         onClick={() => handlePreviewRawFile(file.path)}
