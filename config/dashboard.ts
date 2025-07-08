@@ -77,6 +77,12 @@ export const sidebarLinks: SidebarNavItem[] = [
         authorizeOnly: UserRole.ADMIN,
       },
       {
+        href: "/admin/storage",
+        icon: "storage",
+        title: "Cloud Storage Manage",
+        authorizeOnly: UserRole.ADMIN,
+      },
+      {
         href: "/admin/system",
         icon: "settings",
         title: "System Settings",

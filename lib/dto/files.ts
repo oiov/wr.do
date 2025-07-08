@@ -111,7 +111,7 @@ export async function getUserFiles(options: QueryUserFileOptions = {}) {
       bucket,
       userId,
       providerName,
-      status = 1,
+      status,
       channel,
       platform,
       shortUrlId,
@@ -122,8 +122,8 @@ export async function getUserFiles(options: QueryUserFileOptions = {}) {
     } = options;
 
     const where: Prisma.UserFileWhereInput = {
-      status,
       bucket,
+      ...(status && { status }),
       ...(userId && { userId }),
       ...(providerName && { providerName }),
       ...(channel && { channel }),

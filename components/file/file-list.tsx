@@ -53,6 +53,7 @@ import {
 } from "../ui/dropdown-menu";
 import { Modal } from "../ui/modal";
 import { Skeleton } from "../ui/skeleton";
+import { Switch } from "../ui/switch";
 import { TableCell, TableRow } from "../ui/table";
 
 interface Props {
@@ -99,6 +100,8 @@ export default function UserFileList({
   const [isShowQrcode, setShowQrcode] = useState(false);
   const [currentSelectFile, setCurrentSelectFile] =
     useState<UserFileData | null>();
+
+  const isAdmin = action.includes("/admin");
 
   const getFileUrl = (key: string) => {
     return `${bucketInfo.custom_domain}/${key}`;
@@ -214,7 +217,7 @@ export default function UserFileList({
 
   const renderFileLinks = (file: UserFileData, index: number) => (
     <>
-      {file.shortUrlId && (
+      {!isAdmin && file.shortUrlId && (
         <div className="flex items-center gap-2">
           <Icons.unLink className="size-3 flex-shrink-0 text-blue-500" />
           <Link
@@ -266,7 +269,7 @@ export default function UserFileList({
 
   const renderListView = () => (
     <div className="overflow-hidden rounded-lg border bg-primary-foreground">
-      <div className="text-mute-foreground grid grid-cols-6 gap-4 bg-neutral-100 px-6 py-3 text-sm font-medium dark:bg-neutral-800 sm:grid-cols-12">
+      <div className="text-mute-foreground grid grid-cols-6 gap-4 bg-neutral-100 px-6 py-3 text-sm font-medium dark:bg-neutral-800 sm:grid-cols-9">
         {showMutiCheckBox && (
           <div className="col-span-1 flex">
             <Checkbox
@@ -276,13 +279,14 @@ export default function UserFileList({
             />
           </div>
         )}
-        <div className={cn(showMutiCheckBox ? "col-span-3" : "col-span-4")}>
+        <div className={cn(showMutiCheckBox ? "col-span-2" : "col-span-3")}>
           {t("Name")}
         </div>
         <div className="col-span-1">{t("Size")}</div>
-        <div className="col-span-2 hidden sm:flex">{t("Type")}</div>
-        <div className="col-span-2 hidden sm:flex">{t("User")}</div>
-        <div className="col-span-2 hidden sm:flex">{t("Date")}</div>
+        <div className="col-span-1 hidden sm:flex">{t("Type")}</div>
+        <div className="col-span-1 hidden sm:flex">{t("User")}</div>
+        <div className="col-span-1 hidden sm:flex">{t("Date")}</div>
+        <div className="col-span-1 hidden sm:flex">{t("Active")}</div>
         <div className="col-span-1">{t("Actions")}</div>
       </div>
       {isLoading ? (
@@ -298,7 +302,7 @@ export default function UserFileList({
           {files?.list.map((file, index) => (
             <div
               key={file.id}
-              className="text-mute-foreground grid grid-cols-6 gap-4 px-6 py-4 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-600 sm:grid-cols-12"
+              className="text-mute-foreground grid grid-cols-6 gap-4 px-6 py-4 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-600 sm:grid-cols-9"
             >
               {showMutiCheckBox && (
                 <div
@@ -317,7 +321,7 @@ export default function UserFileList({
               <div
                 className={cn(
                   "items-center space-x-3 text-sm",
-                  showMutiCheckBox ? "col-span-3" : "col-span-4",
+                  showMutiCheckBox ? "col-span-2" : "col-span-3",
                 )}
               >
                 <TooltipProvider>
@@ -350,12 +354,12 @@ export default function UserFileList({
               <div className="col-span-1 flex items-center text-nowrap text-xs">
                 {formatFileSize(file.size || 0)}
               </div>
-              <div className="col-span-2 hidden items-center text-xs sm:flex">
+              <div className="col-span-1 hidden items-center text-xs sm:flex">
                 <Badge className="truncate" variant="outline">
                   {file.mimeType || "-"}
                 </Badge>
               </div>
-              <div className="col-span-2 hidden items-center text-xs sm:flex">
+              <div className="col-span-1 hidden items-center text-xs sm:flex">
                 <TooltipProvider>
                   <Tooltip delayDuration={200}>
                     <TooltipTrigger className="truncate">
@@ -368,8 +372,11 @@ export default function UserFileList({
                   </Tooltip>
                 </TooltipProvider>
               </div>
-              <div className="col-span-2 hidden items-center text-nowrap text-xs sm:flex">
+              <div className="col-span-1 hidden items-center text-nowrap text-xs sm:flex">
                 <TimeAgoIntl date={file.updatedAt as Date} />
+              </div>
+              <div className="col-span-1 hidden items-center text-xs sm:flex">
+                <Switch checked={file.status === 1} />
               </div>
               <div className="col-span-1 flex items-center">
                 <DropdownMenu>

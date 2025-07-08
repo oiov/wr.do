@@ -10,6 +10,12 @@ export async function GET(req: NextRequest) {
   try {
     const user = checkUserStatus(await getCurrentUser());
     if (user instanceof Response) return user;
+    if (user.role !== "ADMIN") {
+      return Response.json("Unauthorized", {
+        status: 401,
+        statusText: "Unauthorized",
+      });
+    }
 
     const url = new URL(req.url);
     const page = url.searchParams.get("page");
@@ -43,8 +49,6 @@ export async function GET(req: NextRequest) {
       page: Number(page) || 1,
       limit: Number(size) || 20,
       bucket,
-      userId: user.id,
-      status: 1,
       channel: configs.s3_config_01.channel,
       platform: configs.s3_config_01.platform,
     });
@@ -60,6 +64,12 @@ export async function POST(request: NextRequest) {
   try {
     const user = checkUserStatus(await getCurrentUser());
     if (user instanceof Response) return user;
+    if (user.role !== "ADMIN") {
+      return Response.json("Unauthorized", {
+        status: 401,
+        statusText: "Unauthorized",
+      });
+    }
 
     const { key, bucket } = await request.json();
     if (!key || !bucket) {
@@ -113,6 +123,12 @@ export async function DELETE(request: NextRequest) {
   try {
     const user = checkUserStatus(await getCurrentUser());
     if (user instanceof Response) return user;
+    if (user.role !== "ADMIN") {
+      return Response.json("Unauthorized", {
+        status: 401,
+        statusText: "Unauthorized",
+      });
+    }
 
     const { keys, ids, bucket } = await request.json();
 

@@ -83,6 +83,8 @@ export default function UserFileManager({ user, action }: FileListProps) {
   const [selectedFiles, setSelectedFiles] = useState<UserFileData[]>([]);
   const [isDeleting, startDeleteTransition] = useTransition();
 
+  const isAdmin = action.includes("/admin");
+
   const { mutate } = useSWRConfig();
 
   const { data: r2Configs, isLoading } = useSWR<ClientStorageCredentials>(
@@ -230,12 +232,14 @@ export default function UserFileManager({ user, action }: FileListProps) {
             </Select>
           )}
 
-          <Uploader
-            bucketInfo={bucketInfo}
-            action={action}
-            onRefresh={handleRefresh}
-            plan={plan}
-          />
+          {!isAdmin && (
+            <Uploader
+              bucketInfo={bucketInfo}
+              action={action}
+              onRefresh={handleRefresh}
+              plan={plan}
+            />
+          )}
 
           <div className="flex items-center">
             <Button

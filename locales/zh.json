@@ -467,7 +467,8 @@
     "Sign in": "登录",
     "Log out": "退出登录",
     "System Settings": "系统设置",
-    "Cloud Storage": "云存储"
+    "Cloud Storage": "云存储",
+    "Cloud Storage Manage": "云存储管理"
   },
   "Email": {
     "Search emails": "搜索邮箱...",
