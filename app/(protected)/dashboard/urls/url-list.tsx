@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { User } from "@prisma/client";
-import { PenLine, RefreshCwIcon } from "lucide-react";
+import { PenLine } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import useSWR, { useSWRConfig } from "swr";
@@ -702,9 +702,9 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
               disabled={isLoading}
             >
               {isLoading ? (
-                <RefreshCwIcon className="size-4 animate-spin" />
+                <Icons.refreshCw className="size-4 animate-spin" />
               ) : (
-                <RefreshCwIcon className="size-4" />
+                <Icons.refreshCw className="size-4" />
               )}
             </Button>
             {action.indexOf("admin") === -1 && (

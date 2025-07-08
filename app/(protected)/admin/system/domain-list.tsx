@@ -3,7 +3,6 @@
 import { useState, useTransition } from "react";
 import Link from "next/link";
 import { User } from "@prisma/client";
-import { PenLine, RefreshCwIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import useSWR, { useSWRConfig } from "swr";
@@ -172,9 +171,9 @@ export default function DomainList({ user, action }: DomainListProps) {
               disabled={isLoading}
             >
               {isLoading ? (
-                <RefreshCwIcon className="size-4 animate-spin" />
+                <Icons.refreshCw className="size-4 animate-spin" />
               ) : (
-                <RefreshCwIcon className="size-4" />
+                <Icons.refreshCw className="size-4" />
               )}
             </Button>
             <Button

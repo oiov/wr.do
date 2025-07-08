@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useTransition } from "react";
 import { User } from "@prisma/client";
-import { RefreshCwIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import useSWR, { useSWRConfig } from "swr";
@@ -295,15 +294,15 @@ export default function UserFileManager({ user, action }: FileListProps) {
 
           <Button
             className="h-9"
-            size={"icon"}
-            variant={"outline"}
+            size="icon"
+            variant="outline"
             onClick={() => handleRefresh()}
-            disabled={isLoading}
+            disabled={isLoadingFiles}
           >
-            {isLoading ? (
-              <RefreshCwIcon className="size-4 animate-spin" />
+            {isLoadingFiles ? (
+              <Icons.refreshCw className="size-4 animate-spin" />
             ) : (
-              <RefreshCwIcon className="size-4" />
+              <Icons.refreshCw className="size-4" />
             )}
           </Button>
         </div>

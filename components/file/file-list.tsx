@@ -200,7 +200,7 @@ export default function UserFileList({
     handleGetFileShortLinkByIds();
   }, [files]);
 
-  if (files?.total === 0) {
+  if (files && files.total === 0) {
     return (
       <EmptyPlaceholder className="col-span-full shadow-none">
         <EmptyPlaceholder.Icon name="fileText" />
@@ -524,6 +524,9 @@ export default function UserFileList({
                     </p>
                     <p className="mt-1 text-xs text-muted-foreground">
                       <strong>Type:</strong> {file.mimeType || "-"}
+                    </p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      <strong>User:</strong> {file.user.name || file.user.email}
                     </p>
                     <p className="mt-1 text-xs text-muted-foreground">
                       <strong>Modified:</strong>{" "}

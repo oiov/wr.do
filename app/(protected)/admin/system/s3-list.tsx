@@ -191,7 +191,7 @@ export default function S3Configs({}: {}) {
               </div>
               {r2Credentials.buckets.map((bucket, index) => (
                 <motion.div
-                  className="relative grid grid-cols-1 gap-4 rounded-lg border border-dashed border-muted-foreground px-3 pb-3 pt-10 text-neutral-600 dark:text-neutral-400 sm:grid-cols-3"
+                  className="relative grid grid-cols-1 gap-4 rounded-lg border border-dashed border-muted-foreground px-3 pb-3 pt-10 text-neutral-600 dark:text-neutral-400 sm:grid-cols-4"
                   key={`bucket-${index}`}
                   layout
                   initial={{ opacity: 0, scale: 0.9 }}
@@ -289,7 +289,7 @@ export default function S3Configs({}: {}) {
                   </div>
 
                   <div className="space-y-1">
-                    <Label>{t("Bucket Name")}</Label>
+                    <Label>{t("Bucket Name")}*</Label>
                     <Input
                       value={bucket.bucket}
                       placeholder="bucket name"
@@ -307,7 +307,7 @@ export default function S3Configs({}: {}) {
                     />
                   </div>
                   <div className="space-y-1">
-                    <Label>{t("Public Domain")}</Label>
+                    <Label>{t("Public Domain")}*</Label>
                     <Input
                       value={bucket.custom_domain}
                       placeholder="https://endpoint or custom domain"
@@ -388,7 +388,7 @@ export default function S3Configs({}: {}) {
                       }}
                     />
                   </div>
-                  <div className="space-y-1">
+                  {/* <div className="space-y-1">
                     <Label>
                       {t("Allowed File Types")} ({t("Optional")})
                     </Label>
@@ -408,7 +408,7 @@ export default function S3Configs({}: {}) {
                         });
                       }}
                     />
-                  </div>
+                  </div> */}
                 </motion.div>
               ))}
               <div className="flex items-center justify-between gap-3">
