@@ -12,7 +12,6 @@ import Link from "next/link";
 import { debounce } from "lodash";
 import { useTranslations } from "next-intl";
 import { HexColorPicker } from "react-colorful";
-import { toast } from "sonner";
 
 import { getQRAsCanvas, getQRAsSVGDataUri, getQRData } from "@/lib/qr";
 import { WRDO_QR_LOGO } from "@/lib/qr/constants";

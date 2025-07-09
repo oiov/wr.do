@@ -47,7 +47,7 @@ export interface RecordFormProps {
   type: FormType;
   initData?: ShortUrlFormData | null;
   action: string;
-  onRefresh: () => void;
+  onRefresh: (id?: string) => void;
 }
 
 export function UrlForm({
@@ -141,10 +141,10 @@ export function UrlForm({
           description: await response.text(),
         });
       } else {
-        // const res = await response.json();
+        const res = await response.json();
         toast.success(`Created successfully!`);
         setShowForm(false);
-        onRefresh();
+        onRefresh(res.id);
       }
     });
   };

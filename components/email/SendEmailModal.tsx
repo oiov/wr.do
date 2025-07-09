@@ -94,7 +94,7 @@ export function SendEmailModal({
         </Button>
       )}
 
-      <Drawer open={isOpen} onOpenChange={setIsOpen}>
+      <Drawer open={isOpen} direction="right" onOpenChange={setIsOpen}>
         <DrawerContent className="fixed bottom-0 right-0 top-0 w-full rounded-none sm:max-w-xl">
           <DrawerHeader>
             <DrawerTitle className="flex items-center gap-1">

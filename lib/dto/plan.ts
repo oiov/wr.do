@@ -12,6 +12,9 @@ export interface PlanQuota {
   emEmailAddresses: number;
   emDomains: number;
   emSendEmails: number;
+  stMaxFileSize: string;
+  stMaxTotalSize: string;
+  stMaxFileCount: number;
   appSupport: string;
   appApiAccess: boolean;
   isActive: boolean;
@@ -42,6 +45,9 @@ export async function getPlanQuota(planName: string) {
       emEmailAddresses: 0,
       emDomains: 0,
       emSendEmails: 0,
+      stMaxFileSize: "26214400",
+      stMaxTotalSize: "524288000",
+      stMaxFileCount: 1000,
       appSupport: "BASIC",
       appApiAccess: true,
       isActive: true,
@@ -60,6 +66,9 @@ export async function getPlanQuota(planName: string) {
     emEmailAddresses: plan.emEmailAddresses,
     emDomains: plan.emDomains,
     emSendEmails: plan.emSendEmails,
+    stMaxFileSize: plan.stMaxFileSize,
+    stMaxTotalSize: plan.stMaxTotalSize,
+    stMaxFileCount: plan.stMaxFileCount,
     appSupport: plan.appSupport.toLowerCase(),
     appApiAccess: plan.appApiAccess,
     isActive: plan.isActive,
@@ -121,6 +130,9 @@ export async function updatePlanQuota(plan: PlanQuotaFormData) {
       emEmailAddresses: plan.emEmailAddresses,
       emDomains: plan.emDomains,
       emSendEmails: plan.emSendEmails,
+      stMaxFileSize: plan.stMaxFileSize,
+      stMaxTotalSize: plan.stMaxTotalSize,
+      stMaxFileCount: plan.stMaxFileCount,
       appSupport: plan.appSupport.toUpperCase() as any,
       appApiAccess: plan.appApiAccess,
       isActive: plan.isActive,
@@ -144,6 +156,9 @@ export async function createPlan(plan: PlanQuota) {
       emEmailAddresses: plan.emEmailAddresses,
       emDomains: plan.emDomains,
       emSendEmails: plan.emSendEmails,
+      stMaxFileSize: plan.stMaxFileSize,
+      stMaxTotalSize: plan.stMaxTotalSize,
+      stMaxFileCount: plan.stMaxFileCount,
       appSupport: plan.appSupport.toUpperCase() as any,
       appApiAccess: plan.appApiAccess,
       isActive: true,

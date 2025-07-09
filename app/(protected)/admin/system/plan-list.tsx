@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { User } from "@prisma/client";
-import { PenLine, RefreshCwIcon } from "lucide-react";
+import { PenLine } from "lucide-react";
 import { useTranslations } from "next-intl";
 import useSWR, { useSWRConfig } from "swr";
 
@@ -111,9 +111,9 @@ export default function PlanList({ user, action }: PlanListProps) {
               disabled={isLoading}
             >
               {isLoading ? (
-                <RefreshCwIcon className="size-4 animate-spin" />
+                <Icons.refreshCw className="size-4 animate-spin" />
               ) : (
-                <RefreshCwIcon className="size-4" />
+                <Icons.refreshCw className="size-4" />
               )}
             </Button>
             <Button

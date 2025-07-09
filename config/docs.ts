@@ -157,6 +157,11 @@ export const docsConfig: DocsConfig = {
           icon: "page",
         },
         {
+          title: "Cloud Storage",
+          href: "/docs/developer/cloud-storage",
+          icon: "page",
+        },
+        {
           title: "Telegram Bot",
           href: "/docs/developer/telegram-bot",
           icon: "page",

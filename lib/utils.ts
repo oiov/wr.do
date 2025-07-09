@@ -189,6 +189,54 @@ export const truncate = (str: string, length: number) => {
   return `${str.slice(0, length)}...`;
 };
 
+export const truncateMiddle = (
+  text: string,
+  maxLength: number = 20,
+): string => {
+  if (text.length <= maxLength) return text;
+
+  // 找到最后一个点的位置（文件扩展名）
+  const lastDotIndex = text.lastIndexOf(".");
+
+  if (lastDotIndex === -1 || lastDotIndex === 0) {
+    // 没有扩展名，直接中间截断
+    const half = Math.floor((maxLength - 3) / 2);
+    return text.slice(0, half) + "..." + text.slice(-half);
+  }
+
+  const extension = text.slice(lastDotIndex);
+  const nameWithoutExt = text.slice(0, lastDotIndex);
+
+  // 如果扩展名太长，直接截断整个文件名
+  if (extension.length > maxLength / 2) {
+    const half = Math.floor((maxLength - 3) / 2);
+    return text.slice(0, half) + "..." + text.slice(-half);
+  }
+
+  // 计算可用于文件名的长度
+  const availableLength = maxLength - extension.length - 3;
+
+  if (availableLength <= 0) {
+    return "..." + extension;
+  }
+
+  // 如果文件名部分不需要截断
+  if (nameWithoutExt.length <= availableLength) {
+    return text;
+  }
+
+  // 中间截断文件名部分
+  const startLength = Math.ceil(availableLength / 2);
+  const endLength = Math.floor(availableLength / 2);
+
+  return (
+    nameWithoutExt.slice(0, startLength) +
+    "..." +
+    nameWithoutExt.slice(-endLength) +
+    extension
+  );
+};
+
 export const getBlurDataURL = async (url: string | null) => {
   if (!url) {
     return "data:image/webp;base64,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
@@ -274,12 +322,40 @@ export function htmlToText(html: string): string {
   return doc.body.textContent || "";
 }
 
-export function formatFileSize(bytes: number): string {
-  if (bytes === 0) return "0 B";
-  const k = 1024;
-  const sizes = ["B", "KB", "MB", "GB"];
+export function formatFileSize(
+  bytes: number,
+  options: {
+    precision?: number;
+    binary?: boolean; // true for 1024, false for 1000
+    longNames?: boolean; // true for "bytes", false for "B"
+  } = {},
+): string {
+  const { precision = 1, binary = true, longNames = false } = options;
+
+  // 输入验证
+  if (typeof bytes !== "number" || isNaN(bytes) || bytes < 0) {
+    return longNames ? "0 bytes" : "0 B";
+  }
+
+  if (bytes === 0) {
+    return longNames ? "0 bytes" : "0 B";
+  }
+
+  const k = binary ? 1024 : 1000;
+  const sizes = longNames
+    ? ["bytes", "KB", "MB", "GB", "TB", "PB"]
+    : ["B", "KB", "MB", "GB", "TB", "PB"];
+
   const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return `${(bytes / Math.pow(k, i)).toFixed(1)} ${sizes[i]}`;
+  const sizeIndex = Math.min(i, sizes.length - 1);
+  const size = bytes / Math.pow(k, sizeIndex);
+
+  // 特殊处理 bytes 单位的复数形式
+  if (longNames && sizeIndex === 0) {
+    return bytes === 1 ? "1 byte" : `${bytes} bytes`;
+  }
+
+  return `${size.toFixed(precision)} ${sizes[sizeIndex]}`;
 }
 
 export function downloadFile(url: string, filename: string): Promise<void> {
@@ -396,4 +472,102 @@ export function verifyPassword(
   const [salt, hash] = storedPassword.split(":");
   const hashToVerify = crypto.scryptSync(password, salt, 64).toString("hex");
   return hash === hashToVerify;
+}
+
+export const formatFileSizeX = (bytes: number) => {
+  if (bytes < 1048576) return (bytes / 1024).toFixed() + " KB";
+  if (bytes < 1073741824) return (bytes / 1048576).toFixed(2) + " MB";
+  return (bytes / 1073741824).toFixed(2) + " GB";
+};
+
+export function extractFileName(filePath: string): string {
+  if (!filePath || typeof filePath !== "string") {
+    return "";
+  }
+
+  // 移除开头的斜杠
+  let normalizedPath = filePath.trim();
+  while (normalizedPath.startsWith("/")) {
+    normalizedPath = normalizedPath.substring(1);
+  }
+
+  // 移除结尾的斜杠
+  while (normalizedPath.endsWith("/")) {
+    normalizedPath = normalizedPath.substring(0, normalizedPath.length - 1);
+  }
+
+  // 如果路径为空，返回空字符串
+  if (!normalizedPath) {
+    return "";
+  }
+
+  // 提取文件名
+  const lastSlashIndex = normalizedPath.lastIndexOf("/");
+  return lastSlashIndex === -1
+    ? normalizedPath
+    : normalizedPath.substring(lastSlashIndex + 1);
+}
+
+// 提取文件扩展名
+export function extractFileExtension(filePath: string): string {
+  const fileName = extractFileName(filePath);
+
+  if (!fileName) {
+    return "";
+  }
+
+  const lastDotIndex = fileName.lastIndexOf(".");
+
+  // 如果没有找到点，或者点在开头（隐藏文件），返回空字符串
+  if (lastDotIndex === -1 || lastDotIndex === 0) {
+    return "";
+  }
+
+  return fileName.substring(lastDotIndex + 1);
+}
+
+// 同时提取文件名和扩展名的组合函数
+export function extractFileNameAndExtension(filePath: string): {
+  fileName: string;
+  extension: string;
+  nameWithoutExtension: string;
+} {
+  const fileName = extractFileName(filePath);
+
+  if (!fileName) {
+    return {
+      fileName: "",
+      extension: "",
+      nameWithoutExtension: "",
+    };
+  }
+
+  const lastDotIndex = fileName.lastIndexOf(".");
+
+  if (lastDotIndex === -1 || lastDotIndex === 0) {
+    return {
+      fileName: fileName,
+      extension: "",
+      nameWithoutExtension: fileName,
+    };
+  }
+
+  return {
+    fileName: fileName,
+    extension: fileName.substring(lastDotIndex + 1),
+    nameWithoutExtension: fileName.substring(0, lastDotIndex),
+  };
+}
+
+export function generateFileKey(fileName: string, prefix?: string): string {
+  if (prefix) {
+    return `${prefix}/${fileName}`;
+  }
+
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}/${month}/${day}/${fileName}`;
 }

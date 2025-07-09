@@ -10,10 +10,9 @@ import { ViewTransitions } from "next-view-transitions";
 import { cn, constructMetadata } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
 import ModalProvider from "@/components/modals/providers";
+import GoogleAnalytics from "@/components/shared/GoogleAnalytics";
 import UmamiAnalytics from "@/components/shared/UmamiAnalytics";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
-
-import GoogleAnalytics from "../components/shared/GoogleAnalytics";
 
 interface RootLayoutProps {
   children: React.ReactNode;

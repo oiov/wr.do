@@ -10,9 +10,13 @@ export const sidebarLinks: SidebarNavItem[] = [
     items: [
       { href: "/dashboard", icon: "dashboard", title: "Dashboard" },
       { href: "/dashboard/urls", icon: "link", title: "Short Urls" },
-      { href: "/emails", icon: "mail", title: "Emails" },
       { href: "/dashboard/records", icon: "globe", title: "DNS Records" },
-      { href: "/chat", icon: "messages", title: "WRoom" },
+      { href: "/emails", icon: "mail", title: "Emails" },
+      {
+        href: "/dashboard/storage",
+        icon: "storage",
+        title: "Cloud Storage",
+      },
     ],
   },
   {
@@ -70,6 +74,12 @@ export const sidebarLinks: SidebarNavItem[] = [
         href: "/admin/records",
         icon: "globe",
         title: "Records",
+        authorizeOnly: UserRole.ADMIN,
+      },
+      {
+        href: "/admin/storage",
+        icon: "storage",
+        title: "Cloud Storage Manage",
         authorizeOnly: UserRole.ADMIN,
       },
       {

@@ -200,9 +200,12 @@ export const updateUser = async (userId: string, data: UpdateUserForm) => {
 
 export const deleteUserById = async (userId: string) => {
   try {
-    const session = await prisma.user.delete({
+    const session = await prisma.user.update({
       where: {
         id: userId,
+      },
+      data: {
+        active: 0,
       },
     });
     return session;

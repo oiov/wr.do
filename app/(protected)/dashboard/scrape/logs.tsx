@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { RefreshCwIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import useSWR, { useSWRConfig } from "swr";
 
@@ -17,6 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Icons } from "@/components/shared/icons";
 import { PaginationWrapper } from "@/components/shared/pagination";
 
 export interface LogsTableData {
@@ -132,9 +132,9 @@ const LogsTable = ({ userId, target }) => {
             className="ml-2 h-8 px-2 py-0"
           >
             {isLoading ? (
-              <RefreshCwIcon className={`size-4 animate-spin`} />
+              <Icons.refreshCw className={`size-4 animate-spin`} />
             ) : (
-              <RefreshCwIcon className={`size-4`} />
+              <Icons.refreshCw className={`size-4`} />
             )}
           </Button>
         </div>

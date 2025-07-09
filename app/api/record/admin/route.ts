@@ -2,6 +2,8 @@ import { getUserRecords } from "@/lib/dto/cloudflare-dns-record";
 import { checkUserStatus } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req: Request) {
   try {
     const user = checkUserStatus(await getCurrentUser());
@@ -26,6 +28,7 @@ export async function GET(req: Request) {
 
     return Response.json(data);
   } catch (error) {
+    console.error("[Error]", error);
     return Response.json(error?.statusText || error, {
       status: error.status || 500,
     });

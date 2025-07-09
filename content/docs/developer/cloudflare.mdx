@@ -18,7 +18,7 @@ The `Short URL Service` and `Email Service` require no additional configuration 
 To enable the `DNS Record Service`, you must complete the `Cloudflare Configs(Optional)` form with the following fields:
 
 - Zone ID
-- API Token
+- API Key
 - Email
 
 These fields are used to configure the Cloudflare API. If your domain is hosted through Cloudflare, you can find these details in the Cloudflare dashboard.
@@ -29,9 +29,9 @@ The unique identifier for a domain hosted on Cloudflare, located at:
 
 https://dash.cloudflare.com/[account_id]/[zone_name]
 
-### API Token
+### API Key
 
-Visit https://dash.cloudflare.com/profile/api-tokens, and find the Global API Key under the API Tokens section.
+Visit https://dash.cloudflare.com/profile/api-tokens, and find the **Global API** Key under the API Tokens section.
 
 ### Email
 
@@ -39,7 +39,7 @@ Email for registering a Cloudflare account
 
 <Callout type="info">
 You can manage domains hosted under different Cloudflare accounts, 
-provided the API Token and Email are sourced from the same account.
+provided the API Key and Email are sourced from the same account.
 </Callout>
 
 ---
@@ -72,11 +72,11 @@ NEXT_PUBLIC_CLOUDFLARE_ZONE_NAME=example.com,example2.com
 ### CLOUDFLARE_API_KEY
 
 - Description: The API key used to authenticate requests to the Cloudflare API.
-- Where to find: In the Cloudflare dashboard, go to Profile > API Tokens and locate your Global API Key.
+- Where to find: In the Cloudflare dashboard, go to Profile > API Tokens and locate your **Global API Key**.
 - Example: 1234567890abcdef1234567890abcdef
 - Security Note: Keep this key confidential and never expose it in client-side code.
 
-> Instructions: Visit https://dash.cloudflare.com/profile/api-tokens, and find the Global API Key under the API Tokens section.
+> Instructions: Visit https://dash.cloudflare.com/profile/api-tokens, and find the **Global API Key** under the API Tokens section.
 
 ### CLOUDFLARE_EMAIL
 

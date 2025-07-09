@@ -4,12 +4,13 @@ import { Dispatch, SetStateAction, useState, useTransition } from "react";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";
-import { create } from "lodash";
+import { create, get } from "lodash";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { PlanQuotaFormData } from "@/lib/dto/plan";
+import { formatFileSize } from "@/lib/utils";
 import { createPlanSchema } from "@/lib/validations/plan";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -43,6 +44,12 @@ export function PlanForm({
   const t = useTranslations("List");
   const [isPending, startTransition] = useTransition();
   const [isDeleting, startDeleteTransition] = useTransition();
+  const [currentStMaxTotalSize, setCurrentStMaxTotalSize] = useState(
+    initData?.stMaxTotalSize || "5242880000",
+  );
+  const [currentStMaxFileSize, setCurrentStMaxFileSize] = useState(
+    initData?.stMaxFileSize || "26214400",
+  );
 
   const {
     handleSubmit,
@@ -64,6 +71,9 @@ export function PlanForm({
       emEmailAddresses: initData?.emEmailAddresses || 100,
       emDomains: initData?.emDomains || 1,
       emSendEmails: initData?.emSendEmails || 100,
+      stMaxFileSize: initData?.stMaxFileSize || "26214400",
+      stMaxTotalSize: initData?.stMaxTotalSize || "524288000",
+      stMaxFileCount: initData?.stMaxFileCount || 1000,
       appSupport: initData?.appSupport || "BASIC",
       appApiAccess: initData?.appApiAccess || false,
       isActive: initData?.isActive || false,
@@ -290,7 +300,6 @@ export function PlanForm({
                 className="flex-1 shadow-inner"
                 size={32}
                 type="number"
-                disabled
                 {...register("slDomains", { valueAsNumber: true })}
               />
             </div>
@@ -392,6 +401,81 @@ export function PlanForm({
               ) : (
                 <p className="pb-0.5 text-[13px] text-muted-foreground">
                   {t("Monthly limit of subdomains created")}.
+                </p>
+              )}
+            </div>
+          </FormSectionColumns>
+        </div>
+
+        <div className="relative grid-cols-1 gap-2 rounded-md border bg-neutral-50 px-3 pb-3 pt-8 dark:bg-neutral-900 md:grid md:grid-cols-2">
+          <h2 className="absolute left-2 top-2 text-xs font-semibold text-neutral-400">
+            {t("Storage Service")}
+          </h2>
+          {/* Max File Size - stMaxFileSize */}
+          <FormSectionColumns title={t("Max File Size")} required>
+            <div className="flex w-full items-center gap-2">
+              <Label className="sr-only" htmlFor="Record-Limit">
+                {t("Max File Size")}
+              </Label>
+              <div className="relative flex-1">
+                <Input
+                  id="max-file-size"
+                  className="shadow-inner"
+                  size={32}
+                  {...register("stMaxFileSize")}
+                  onChange={(e) => setCurrentStMaxFileSize(e.target.value)}
+                />
+                <span className="absolute right-2 top-[11px] text-xs text-muted-foreground">
+                  =
+                  {formatFileSize(Number(currentStMaxFileSize), {
+                    precision: 0,
+                  })}
+                </span>
+              </div>
+            </div>
+            <div className="flex flex-col justify-between p-1">
+              {errors?.stMaxFileSize ? (
+                <p className="pb-0.5 text-[13px] text-red-600">
+                  {errors.stMaxFileSize.message}
+                </p>
+              ) : (
+                <p className="pb-0.5 text-[13px] text-muted-foreground">
+                  {t("Maximum uploaded single file size in bytes")}.
+                </p>
+              )}
+            </div>
+          </FormSectionColumns>
+          {/* Max File Size - stMaxTotalSize */}
+          <FormSectionColumns title={t("Max Total Size")} required>
+            <div className="flex w-full items-center gap-2">
+              <Label className="sr-only" htmlFor="Record-Limit">
+                {t("Max Total Size")}
+              </Label>
+              <div className="relative flex-1">
+                <Input
+                  id="max-total-size"
+                  className="shadow-inner"
+                  size={32}
+                  type="number"
+                  {...register("stMaxTotalSize")}
+                  onChange={(e) => setCurrentStMaxTotalSize(e.target.value)}
+                />
+                <span className="absolute right-2 top-[11px] text-xs text-muted-foreground">
+                  =
+                  {formatFileSize(Number(currentStMaxTotalSize), {
+                    precision: 0,
+                  })}
+                </span>
+              </div>
+            </div>
+            <div className="flex flex-col justify-between p-1">
+              {errors?.stMaxTotalSize ? (
+                <p className="pb-0.5 text-[13px] text-red-600">
+                  {errors.stMaxTotalSize.message}
+                </p>
+              ) : (
+                <p className="pb-0.5 text-[13px] text-muted-foreground">
+                  {t("Maximum uploaded total file size in bytes")}.
                 </p>
               )}
             </div>

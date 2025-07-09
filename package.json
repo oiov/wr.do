@@ -1,6 +1,6 @@
 {
   "name": "wr.do",
-  "version": "1.0.8",
+  "version": "1.1.0",
   "author": {
     "name": "oiov",
     "url": "https://github.com/oiov"
@@ -8,7 +8,6 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "postbuild": "next-sitemap",
     "turbo": "next dev --turbo",
     "start": "next start",
     "start-docker": "npm-run-all check-db start-server",
@@ -26,6 +25,8 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.4.1",
+    "@aws-sdk/client-s3": "^3.840.0",
+    "@aws-sdk/s3-request-presigner": "^3.840.0",
     "@hookform/resolvers": "^3.9.0",
     "@mantine/hooks": "^8.0.1",
     "@prisma/client": "^5.17.0",
@@ -100,7 +101,6 @@
     "next-contentlayer2": "^0.5.0",
     "next-intl": "^4.1.0",
     "next-pwa": "^5.6.0",
-    "next-sitemap": "^4.2.3",
     "next-themes": "^0.3.0",
     "next-view-transitions": "^0.3.0",
     "nodemailer": "^6.9.14",
@@ -113,6 +113,7 @@
     "react-countup": "^6.5.3",
     "react-day-picker": "^8.10.1",
     "react-dom": "18.3.1",
+    "react-dropzone": "^14.3.8",
     "react-email": "2.1.5",
     "react-globe.gl": "^2.33.2",
     "react-hook-form": "^7.52.1",

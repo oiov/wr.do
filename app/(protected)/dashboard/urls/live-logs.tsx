@@ -180,9 +180,9 @@ export default function LiveLog({ admin = false }: { admin?: boolean }) {
             disabled={!isLive}
           >
             {isLoading ? (
-              <RefreshCwIcon className="size-4 animate-spin" />
+              <Icons.refreshCw className="size-4 animate-spin" />
             ) : (
-              <RefreshCwIcon className="size-4" />
+              <Icons.refreshCw className="size-4" />
             )}
           </Button>
           <Button

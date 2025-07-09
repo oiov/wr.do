@@ -15,6 +15,7 @@ export function Notification() {
   const { data, isLoading, error } = useSWR<Record<string, any>>(
     "/api/configs?key=system_notification",
     fetcher,
+    { dedupingInterval: 30000 },
   );
 
   const handleClose = () => {
