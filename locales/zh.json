@@ -366,7 +366,8 @@
     "Cancel": "取消",
     "Clear": "清空",
     "Upload Files": "上传文件",
-    "Uploud channel": "渠道"
+    "Uploud channel": "渠道",
+    "Do not close the window until the upload is complete": "在上传完成之前不要浏览器关闭窗口"
   },
   "Landing": {
     "settings": "设置",

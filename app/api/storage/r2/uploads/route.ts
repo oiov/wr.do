@@ -87,10 +87,13 @@ async function createMultipartUpload(
   const prefix = (formData.get("prefix") as string) || "";
 
   const plan = await getPlanQuota(user.team!);
+  if (Number(fileSize) > Number(plan.stMaxFileSize)) {
+    return Response.json("File size limit exceeded", { status: 403 });
+  }
   const limit = await restrictByTimeRange({
-    model: "userUrl",
+    model: "userFile",
     userId: user.id,
-    limit: Number(plan.stMaxFileSize),
+    limit: Number(plan.stMaxFileCount),
     rangeType: "month",
   });
   if (limit) return Response.json(limit.statusText, { status: limit.status });

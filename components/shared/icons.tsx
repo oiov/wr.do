@@ -31,6 +31,7 @@ import {
   Home,
   Image,
   Inbox,
+  Info,
   Laptop,
   LayoutGrid,
   LayoutPanelLeft,
@@ -323,6 +324,7 @@ export const Icons = {
   sun: SunMedium,
   trash: Trash2,
   inbox: Inbox,
+  info: Info,
   twitter: ({ ...props }: LucideProps) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
