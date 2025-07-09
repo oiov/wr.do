@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
     }
 
     return NextResponse.json({
-      buckets: configs.s3_config_01.buckets,
+      buckets: configs.s3_config_01.buckets.filter((b) => b.public), // public
       enabled: configs.s3_config_01.enabled,
       provider_name: configs.s3_config_01.provider_name,
       platform: configs.s3_config_01.platform,

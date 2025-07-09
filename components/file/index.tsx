@@ -78,6 +78,7 @@ export default function UserFileManager({ user, action }: FileListProps) {
     platform: "",
     channel: "",
     provider_name: "",
+    public: true,
   });
 
   const [selectedFiles, setSelectedFiles] = useState<UserFileData[]>([]);

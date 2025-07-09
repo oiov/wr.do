@@ -35,6 +35,7 @@ export interface BucketItem {
   file_types?: string;
   file_size?: string;
   region?: string;
+  public: boolean;
 }
 
 export interface FileObject {

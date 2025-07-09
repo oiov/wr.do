@@ -12,6 +12,7 @@ import {
   FileType2,
   Folder,
   Image,
+  ImageOff,
   Trash2,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -269,7 +270,7 @@ export default function UserFileList({
 
   const renderListView = () => (
     <div className="overflow-hidden rounded-lg border bg-primary-foreground">
-      <div className="text-mute-foreground grid grid-cols-6 gap-4 bg-neutral-100 px-6 py-3 text-sm font-medium dark:bg-neutral-800 sm:grid-cols-9">
+      <div className="text-mute-foreground grid grid-cols-6 gap-4 bg-neutral-100 px-6 py-3 text-sm font-medium dark:bg-neutral-800 sm:grid-cols-10">
         {showMutiCheckBox && (
           <div className="col-span-1 flex">
             <Checkbox
@@ -282,8 +283,8 @@ export default function UserFileList({
         <div className={cn(showMutiCheckBox ? "col-span-2" : "col-span-3")}>
           {t("Name")}
         </div>
+        <div className="col-span-2 hidden sm:flex">{t("Type")}</div>
         <div className="col-span-1">{t("Size")}</div>
-        <div className="col-span-1 hidden sm:flex">{t("Type")}</div>
         <div className="col-span-1 hidden sm:flex">{t("User")}</div>
         <div className="col-span-1 hidden sm:flex">{t("Date")}</div>
         <div className="col-span-1 hidden sm:flex">{t("Active")}</div>
@@ -302,7 +303,7 @@ export default function UserFileList({
           {files?.list.map((file, index) => (
             <div
               key={file.id}
-              className="text-mute-foreground grid grid-cols-6 gap-4 px-6 py-4 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-600 sm:grid-cols-9"
+              className="text-mute-foreground grid grid-cols-6 gap-4 px-6 py-4 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-600 sm:grid-cols-10"
             >
               {showMutiCheckBox && (
                 <div
@@ -326,12 +327,19 @@ export default function UserFileList({
               >
                 <TooltipProvider>
                   <Tooltip delayDuration={0}>
-                    <TooltipTrigger className="flex items-center justify-start gap-1 break-all text-start">
+                    <TooltipTrigger
+                      className={cn(
+                        "flex items-center justify-start gap-1 break-all text-start",
+                        file.status !== 1 && "text-muted-foreground",
+                      )}
+                    >
                       {truncateMiddle(file.path)}
-                      <CopyButton
-                        className="size-6"
-                        value={getFileUrl(file.path)}
-                      />
+                      {file.status === 1 && (
+                        <CopyButton
+                          className="size-6"
+                          value={getFileUrl(file.path)}
+                        />
+                      )}
                     </TooltipTrigger>
                     <TooltipContent
                       side="right"
@@ -351,13 +359,13 @@ export default function UserFileList({
                   </Tooltip>
                 </TooltipProvider>
               </div>
-              <div className="col-span-1 flex items-center text-nowrap text-xs">
-                {formatFileSize(file.size || 0)}
-              </div>
-              <div className="col-span-1 hidden items-center text-xs sm:flex">
+              <div className="col-span-2 hidden items-center text-xs sm:flex">
                 <Badge className="truncate" variant="outline">
                   {file.mimeType || "-"}
                 </Badge>
+              </div>
+              <div className="col-span-1 flex items-center text-nowrap text-xs">
+                {formatFileSize(file.size || 0)}
               </div>
               <div className="col-span-1 hidden items-center text-xs sm:flex">
                 <TooltipProvider>
@@ -376,7 +384,7 @@ export default function UserFileList({
                 <TimeAgoIntl date={file.updatedAt as Date} />
               </div>
               <div className="col-span-1 hidden items-center text-xs sm:flex">
-                <Switch checked={file.status === 1} />
+                <Switch checked={file.status === 1} disabled />
               </div>
               <div className="col-span-1 flex items-center">
                 <DropdownMenu>
@@ -488,7 +496,7 @@ export default function UserFileList({
           )}
           onClick={() => handleSelectFile(file)}
         >
-          <div className="flex flex-col items-center justify-center space-y-2">
+          <div className="flex flex-col items-center justify-center space-y-1 py-1">
             {showMutiCheckBox && (
               <Checkbox
                 checked={
@@ -498,12 +506,7 @@ export default function UserFileList({
                 className="absolute left-1 top-1 size-4 border-neutral-300 bg-neutral-100 data-[state=checked]:border-neutral-900 data-[state=checked]:bg-neutral-600 data-[state=checked]:text-neutral-100 dark:border-neutral-700 dark:bg-neutral-800 dark:data-[state=checked]:border-neutral-300 dark:data-[state=checked]:bg-neutral-300"
               />
             )}
-            {React.cloneElement(
-              getFileIcon(file.path, file.mimeType, bucketInfo),
-              {
-                size: 40,
-              },
-            )}
+            {React.cloneElement(getFileIcon(file, bucketInfo), { size: 40 })}
             <div className="w-full text-center">
               <TooltipProvider>
                 <Tooltip delayDuration={0}>
@@ -514,15 +517,16 @@ export default function UserFileList({
                     side="right"
                     className="max-w-[300px] space-y-1 p-3 text-start"
                   >
-                    {file.mimeType.startsWith("image/") && (
-                      <img
-                        className="mb-2 max-h-[70vh] w-fit rounded shadow"
-                        width={300}
-                        height={300}
-                        src={getFileUrl(file.path)}
-                        alt={`${file.path}`}
-                      />
-                    )}
+                    {file.mimeType.startsWith("image/") &&
+                      file.status === 1 && (
+                        <img
+                          className="mb-2 max-h-[70vh] w-fit rounded shadow"
+                          width={300}
+                          height={300}
+                          src={getFileUrl(file.path)}
+                          alt={`${file.path}`}
+                        />
+                      )}
                     <p className="mt-1 text-sm font-semibold text-muted-foreground">
                       {file.path}
                     </p>
@@ -546,6 +550,7 @@ export default function UserFileList({
                         size="sm"
                         variant="outline"
                         onClick={() => handlePreviewRawFile(file.path)}
+                        disabled={file.status !== 1}
                       >
                         <Icons.eye className="size-4" />
                         {t("Raw Data")}
@@ -554,6 +559,7 @@ export default function UserFileList({
                         className="h-7 px-1.5 text-xs hover:bg-slate-100 dark:hover:text-primary-foreground"
                         size="sm"
                         variant={"outline"}
+                        disabled={file.status !== 1}
                         onClick={() => {
                           setCurrentSelectFile(file);
                           setShowQrcode(!isShowQrcode);
@@ -567,18 +573,22 @@ export default function UserFileList({
                         title="下载"
                         size="sm"
                         variant={"blue"}
+                        disabled={file.status !== 1}
                       >
                         <Download className="size-4" />
                       </Button>
-                      <Button
-                        onClick={() => handleDeleteSingle(file)}
-                        className="h-7 px-1.5"
-                        title="删除"
-                        size="sm"
-                        variant={"destructive"}
-                      >
-                        <Trash2 className="size-4" />
-                      </Button>
+                      {file.status === 1 && (
+                        <Button
+                          onClick={() => handleDeleteSingle(file)}
+                          className="h-7 px-1.5"
+                          title="删除"
+                          size="sm"
+                          variant={"destructive"}
+                          disabled={file.status !== 1}
+                        >
+                          <Trash2 className="size-4" />
+                        </Button>
+                      )}
                     </div>
                   </TooltipContent>
                 </Tooltip>
@@ -678,11 +688,10 @@ function TableColumnSekleton() {
   );
 }
 
-const getFileIcon = (
-  filename: string,
-  mimeType: string | null,
-  bucketInfo: BucketInfo,
-) => {
+const getFileIcon = (file: UserFileData, bucketInfo: BucketInfo) => {
+  const filename = file.path;
+  const mimeType = file.mimeType;
+  const status = file.status;
   const iconProps = { size: 24, className: "text-gray-600" };
 
   // 如果没有 mimeType，回退到文件夹判断
@@ -693,25 +702,27 @@ const getFileIcon = (
     return <FileText {...iconProps} className="text-gray-500" />;
   }
 
-  // 图片类型 - 直接显示图片
   if (mimeType.startsWith("image/")) {
     if (mimeType === "image/svg+xml") {
-      return <Image {...iconProps} className="text-blue-500" />;
+      return <FileCode {...iconProps} className="text-blue-500" />;
     }
-    // 其他图片格式显示缩略图
-    return (
-      <img
-        className="max-h-12 w-fit max-w-24 rounded shadow"
-        height={60}
-        width={60}
-        src={
-          bucketInfo.custom_domain
-            ? `${bucketInfo.custom_domain}/${filename}`
-            : filename
-        }
-        alt={filename}
-      />
-    );
+    if (status === 1) {
+      return (
+        <img
+          className="max-h-12 w-fit max-w-24 rounded shadow"
+          height={60}
+          width={60}
+          src={
+            bucketInfo.custom_domain
+              ? `${bucketInfo.custom_domain}/${filename}`
+              : filename
+          }
+          alt={filename}
+        />
+      );
+    } else {
+      return <ImageOff {...iconProps} className="text-muted-foreground" />;
+    }
   }
 
   // 压缩文件

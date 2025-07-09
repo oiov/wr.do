@@ -2,14 +2,14 @@
 
 import { useEffect, useMemo, useState, useTransition } from "react";
 import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { CloudCog } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import useSWR from "swr";
 
 import { CloudStorageCredentials } from "@/lib/r2";
-import { cn, fetcher, formatFileSize } from "@/lib/utils";
+import { cn, fetcher } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -22,6 +22,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Icons } from "@/components/shared/icons";
 
 export default function S3Configs({}: {}) {
@@ -47,6 +53,7 @@ export default function S3Configs({}: {}) {
         prefix: "",
         file_types: "",
         region: "auto",
+        public: true,
       },
     ],
   });
@@ -191,7 +198,7 @@ export default function S3Configs({}: {}) {
               </div>
               {r2Credentials.buckets.map((bucket, index) => (
                 <motion.div
-                  className="relative grid grid-cols-1 gap-4 rounded-lg border border-dashed border-muted-foreground px-3 pb-3 pt-10 text-neutral-600 dark:text-neutral-400 sm:grid-cols-4"
+                  className="relative grid grid-cols-1 gap-4 rounded-lg border border-dashed border-muted-foreground px-3 pb-3 pt-10 text-neutral-600 dark:text-neutral-400 sm:grid-cols-3"
                   key={`bucket-${index}`}
                   layout
                   initial={{ opacity: 0, scale: 0.9 }}
@@ -225,7 +232,6 @@ export default function S3Configs({}: {}) {
                         <Icons.arrowUp className="size-4" />{" "}
                       </Button>
                     )}
-
                     {index < r2Credentials.buckets.length - 1 && (
                       <Button
                         className="h-[30px] px-1.5"
@@ -244,7 +250,6 @@ export default function S3Configs({}: {}) {
                         <Icons.arrowDown className="size-4" />{" "}
                       </Button>
                     )}
-
                     <Button
                       className="ml-auto h-[30px] px-1.5"
                       size={"sm"}
@@ -258,6 +263,7 @@ export default function S3Configs({}: {}) {
                           region: "auto",
                           custom_domain: "",
                           file_size: "26214400",
+                          public: true,
                         });
                         setR2Credentials({
                           ...r2Credentials,
@@ -324,32 +330,6 @@ export default function S3Configs({}: {}) {
                       }}
                     />
                   </div>
-                  {/* <div className="space-y-1">
-                    <Label>{t("Max File Size")} (Bytes)</Label>
-                    <div className="relative">
-                      <Input
-                        value={bucket.file_size}
-                        placeholder=""
-                        onChange={(e) => {
-                          const newBuckets = [...r2Credentials.buckets];
-                          newBuckets[index] = {
-                            ...bucket,
-                            file_size: e.target.value,
-                          };
-                          setR2Credentials({
-                            ...r2Credentials,
-                            buckets: newBuckets,
-                          });
-                        }}
-                      />
-                      <span className="absolute right-2 top-[11px] text-xs text-muted-foreground">
-                        =
-                        {formatFileSize(Number(bucket.file_size || "0"), {
-                          precision: 0,
-                        })}
-                      </span>
-                    </div>
-                  </div> */}
                   <div className="space-y-1">
                     <Label>{t("Region")}</Label>
                     <Input
@@ -386,6 +366,40 @@ export default function S3Configs({}: {}) {
                           buckets: newBuckets,
                         });
                       }}
+                    />
+                  </div>
+                  <div className="flex flex-col justify-center space-y-3">
+                    <div className="flex items-center gap-1">
+                      <Label>{t("Public")}</Label>
+                      <TooltipProvider>
+                        <Tooltip delayDuration={0}>
+                          <TooltipTrigger>
+                            <Icons.help className="size-4 text-muted-foreground" />
+                          </TooltipTrigger>
+                          <TooltipContent className="max-w-56 text-wrap">
+                            {t(
+                              "Publicize this storage bucket, all registered users can upload files to this storage bucket; If not public, only administrators can upload files to this storage bucket",
+                            )}
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                    <Switch
+                      checked={bucket.public}
+                      onCheckedChange={(e) =>
+                        setR2Credentials({
+                          ...r2Credentials,
+                          buckets: r2Credentials.buckets.map((b, i) => {
+                            if (i === index) {
+                              return {
+                                ...b,
+                                public: e,
+                              };
+                            }
+                            return b;
+                          }),
+                        })
+                      }
                     />
                   </div>
                   {/* <div className="space-y-1">

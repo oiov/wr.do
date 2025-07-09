@@ -615,6 +615,8 @@
     "Region": "Region",
     "Prefix": "Prefix",
     "Optional": "Optional",
-    "Allowed File Types": "Allowed File Types"
+    "Allowed File Types": "Allowed File Types",
+    "Public": "Public",
+    "Publicize this storage bucket, all registered users can upload files to this storage bucket; If not public, only administrators can upload files to this storage bucket": "Publicize this storage bucket, all registered users can upload files to this storage bucket; If not public, only administrators can upload files to this storage bucket"
   }
 }
