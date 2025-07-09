@@ -11,7 +11,6 @@ import {
   FileText,
   FileType2,
   Folder,
-  Image,
   ImageOff,
   Trash2,
 } from "lucide-react";
@@ -345,15 +344,16 @@ export default function UserFileList({
                       side="right"
                       className="w-72 space-y-1 text-wrap p-3 text-start"
                     >
-                      {file.mimeType.startsWith("image/") && (
-                        <img
-                          className="max-h-[70vh] w-72 rounded shadow"
-                          width={300}
-                          height={300}
-                          src={getFileUrl(file.path)}
-                          alt={`${file.path}`}
-                        />
-                      )}
+                      {file.mimeType.startsWith("image/") &&
+                        file.status === 1 && (
+                          <img
+                            className="max-h-[70vh] w-72 rounded shadow"
+                            width={300}
+                            height={300}
+                            src={getFileUrl(file.path)}
+                            alt={`${file.path}`}
+                          />
+                        )}
                       {renderFileLinks(file, index)}
                     </TooltipContent>
                   </Tooltip>
