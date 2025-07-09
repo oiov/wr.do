@@ -206,31 +206,35 @@ export default function UserFileManager({ user, action }: FileListProps) {
           {isLoading ? (
             <Skeleton className="h-9 w-[120px] rounded border-r-0 shadow-inner" />
           ) : (
-            <Select
-              value={bucketInfo.bucket}
-              onValueChange={handleChangeBucket}
-            >
-              <SelectTrigger className="w-[120px]">
-                <SelectValue placeholder="Select a bucket" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel className="mx-auto text-center">
-                    {r2Configs?.provider_name}
-                  </SelectLabel>
-                  {r2Configs?.buckets?.map((item) => (
-                    <SelectItem
-                      key={item.bucket}
-                      value={item.bucket}
-                      onClick={() => handleChangeBucket(item.bucket)}
-                    >
-                      {item.bucket}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-                {/* <SelectSeparator /> */}
-              </SelectContent>
-            </Select>
+            r2Configs &&
+            r2Configs.buckets &&
+            r2Configs.buckets.length > 0 && (
+              <Select
+                value={bucketInfo.bucket}
+                onValueChange={handleChangeBucket}
+              >
+                <SelectTrigger className="w-[120px]">
+                  <SelectValue placeholder="Select a bucket" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel className="mx-auto text-center">
+                      {r2Configs?.provider_name}
+                    </SelectLabel>
+                    {r2Configs?.buckets?.map((item) => (
+                      <SelectItem
+                        key={item.bucket}
+                        value={item.bucket}
+                        onClick={() => handleChangeBucket(item.bucket)}
+                      >
+                        {item.bucket}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                  {/* <SelectSeparator /> */}
+                </SelectContent>
+              </Select>
+            )
           )}
 
           {!isAdmin && (
