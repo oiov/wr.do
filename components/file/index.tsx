@@ -225,7 +225,7 @@ export default function UserFileManager({ user, action }: FileListProps) {
             </SelectContent>
           </Select>
           <Input
-            className="min-w-48 rounded-l-none border-l-0 sm:w-48 sm:flex-none"
+            className="min-w-28 rounded-l-none border-l-0 sm:w-48 sm:flex-none"
             placeholder={`Search by ${currentSearchType}...`}
             value={searchParams[currentSearchType] || ""}
             onChange={(e) => {
@@ -399,10 +399,6 @@ export default function UserFileManager({ user, action }: FileListProps) {
           bucketInfo={bucketInfo}
           action={action}
           showMutiCheckBox={showMutiCheckBox}
-          currentPage={currentPage}
-          pageSize={pageSize}
-          setCurrentPage={setCurrentPage}
-          setPageSize={setPageSize}
           selectedFiles={selectedFiles}
           setSelectedFiles={setSelectedFiles}
           onRefresh={handleRefresh}

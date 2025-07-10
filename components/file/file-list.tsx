@@ -64,10 +64,6 @@ interface Props {
   action: string;
   view: DisplayType;
   showMutiCheckBox: boolean;
-  currentPage: number;
-  pageSize: number;
-  setCurrentPage: (page: number) => void;
-  setPageSize: (size: number) => void;
   selectedFiles: UserFileData[];
   setSelectedFiles: (files: UserFileData[]) => void;
   onRefresh: () => void;
@@ -83,10 +79,6 @@ export default function UserFileList({
   action,
   view,
   showMutiCheckBox,
-  currentPage,
-  pageSize,
-  setCurrentPage,
-  setPageSize,
   selectedFiles,
   setSelectedFiles,
   onRefresh,
