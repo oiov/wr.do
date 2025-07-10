@@ -237,10 +237,10 @@ export default function UserFileManager({ user, action }: FileListProps) {
             )
           )}
 
-          {!isAdmin && (
+          {!isLoading && r2Configs && r2Configs.buckets?.length > 0 && (
             <Uploader
               bucketInfo={bucketInfo}
-              action={action}
+              action={"/api/storage"}
               onRefresh={handleRefresh}
               plan={plan}
             />

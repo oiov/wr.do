@@ -35,7 +35,7 @@ const UploadPending = ({
           </Badge>
         </div>
       )}
-      {!pendingUpload && (
+      {pendingUpload && (
         <div className="flex items-center gap-1 rounded-md border border-dashed bg-yellow-100 p-2 text-sm text-muted-foreground dark:bg-neutral-600">
           <Icons.info className="size-4" />
           {t("Do not close the window until the upload is complete")}

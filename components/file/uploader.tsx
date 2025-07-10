@@ -8,6 +8,7 @@ import { formatFileSize } from "@/lib/utils";
 import { BucketInfo, StorageUserPlan } from "@/components/file";
 
 import { Icons } from "../shared/icons";
+import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import {
   Drawer,
@@ -282,12 +283,15 @@ export default function Uploader({
                   {bucketInfo.bucket}
                 </div>
               </div>
-              <p>
-                Max:{" "}
+              <Badge className="text-xs">
                 {formatFileSize(Number(plan?.stMaxFileSize || "0"), {
                   precision: 0,
+                })}{" "}
+                /{" "}
+                {formatFileSize(Number(plan?.stMaxTotalSize || "0"), {
+                  precision: 0,
                 })}
-              </p>
+              </Badge>
             </DrawerDescription>
 
             <div className="space-y-4 p-4">
