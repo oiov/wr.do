@@ -93,7 +93,6 @@ export default function UserFileList({
   onSelectAll,
 }: Props) {
   const t = useTranslations("List");
-  const { isMobile } = useMediaQuery();
   const [isShowForm, setShowForm] = useState(false);
   const [shortTarget, setShortTarget] = useState<UserFileData | null>(null);
   const [shortLinks, setShortLinks] = useState<string[]>([]);
@@ -340,7 +339,7 @@ export default function UserFileList({
                       {file.mimeType.startsWith("image/") &&
                         file.status === 1 && (
                           <img
-                            className="max-h-[70vh] w-72 rounded shadow"
+                            className="mb-2 max-h-[70vh] w-72 rounded shadow"
                             width={300}
                             height={300}
                             src={getFileUrl(file.path)}
@@ -596,16 +595,6 @@ export default function UserFileList({
   return (
     <>
       {view === "List" ? renderListView() : renderGridView()}
-      {files && Math.ceil(files.total / pageSize) > 1 && (
-        <PaginationWrapper
-          layout={isMobile ? "right" : "split"}
-          total={files.total}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          pageSize={pageSize}
-          setPageSize={setPageSize}
-        />
-      )}
 
       <Modal
         className="md:max-w-2xl"
