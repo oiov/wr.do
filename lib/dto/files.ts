@@ -51,6 +51,9 @@ export interface QueryUserFileOptions {
   channel?: string;
   platform?: string;
   shortUrlId?: string;
+  name?: string;
+  size?: number;
+  mimeType?: string;
   page?: number;
   limit?: number;
   orderBy?: "createdAt" | "lastModified" | "size";
@@ -68,7 +71,6 @@ export async function createUserFile(data: CreateUserFileInput) {
       include: {
         user: {
           select: {
-            id: true,
             name: true,
             email: true,
           },
@@ -90,7 +92,6 @@ export async function getUserFileById(id: string) {
       include: {
         user: {
           select: {
-            id: true,
             name: true,
             email: true,
           },
@@ -115,6 +116,9 @@ export async function getUserFiles(options: QueryUserFileOptions = {}) {
       channel,
       platform,
       shortUrlId,
+      name,
+      size,
+      mimeType,
       page = 1,
       limit = 20,
       orderBy = "createdAt",
@@ -129,6 +133,11 @@ export async function getUserFiles(options: QueryUserFileOptions = {}) {
       ...(channel && { channel }),
       ...(platform && { platform }),
       ...(shortUrlId && { shortUrlId }),
+      ...(name && { name: { contains: name, mode: "insensitive" } }),
+      ...(size && { size: { gte: size } }),
+      ...(mimeType && {
+        mimeType: { contains: mimeType, mode: "insensitive" },
+      }),
     };
 
     const [files, total, totalSize] = await Promise.all([
@@ -285,7 +294,6 @@ export async function getUserFileByPath(path: string, providerName?: string) {
       include: {
         user: {
           select: {
-            id: true,
             name: true,
             email: true,
           },
@@ -311,7 +319,6 @@ export async function getUserFileByShortUrlId(shortUrlId: string) {
       include: {
         user: {
           select: {
-            id: true,
             name: true,
             email: true,
           },

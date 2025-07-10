@@ -269,7 +269,7 @@ export default function UserFileList({
 
   const renderListView = () => (
     <div className="overflow-hidden rounded-lg border bg-primary-foreground">
-      <div className="text-mute-foreground grid grid-cols-6 gap-4 bg-neutral-100 px-6 py-3 text-sm font-medium dark:bg-neutral-800 sm:grid-cols-10">
+      <div className="text-mute-foreground grid grid-cols-5 gap-4 bg-neutral-100 px-6 py-3 text-sm font-medium dark:bg-neutral-800 sm:grid-cols-10">
         {showMutiCheckBox && (
           <div className="col-span-1 flex">
             <Checkbox
@@ -302,7 +302,7 @@ export default function UserFileList({
           {files?.list.map((file, index) => (
             <div
               key={file.id}
-              className="text-mute-foreground grid grid-cols-6 gap-4 px-6 py-4 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-600 sm:grid-cols-10"
+              className="text-mute-foreground grid grid-cols-5 gap-4 px-6 py-4 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-600 sm:grid-cols-10"
             >
               {showMutiCheckBox && (
                 <div

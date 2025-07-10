@@ -16,7 +16,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import useSWR from "swr";
 
-import { siteConfig } from "@/config/site";
 import { ShortUrlFormData } from "@/lib/dto/short-urls";
 import { EXPIRATION_ENUMS } from "@/lib/enums";
 import { fetcher, generateUrlSuffix } from "@/lib/utils";

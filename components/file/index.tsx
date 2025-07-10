@@ -39,6 +39,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { Input } from "../ui/input";
 import { CircularStorageIndicator, FileSizeDisplay } from "./storage-size";
 
 export interface FileListProps {
@@ -84,7 +85,15 @@ export default function UserFileManager({ user, action }: FileListProps) {
   const [selectedFiles, setSelectedFiles] = useState<UserFileData[]>([]);
   const [isDeleting, startDeleteTransition] = useTransition();
 
-  const isAdmin = action.includes("/admin");
+  const [currentSearchType, setCurrentSearchType] = useState("name");
+  const [currentSearchValue, setCurrentSearchValue] = useState("");
+  const [searchParams, setSearchParams] = useState({
+    name: "",
+    fileSize: "",
+    mimeType: "",
+  });
+
+  // const isAdmin = action.includes("/admin");
 
   const { mutate } = useSWRConfig();
 
@@ -96,7 +105,7 @@ export default function UserFileManager({ user, action }: FileListProps) {
 
   const { data: files, isLoading: isLoadingFiles } = useSWR<FileListData>(
     bucketInfo.bucket
-      ? `${action}/r2/files?bucket=${bucketInfo.bucket}&page=${currentPage}&size=${pageSize}`
+      ? `${action}/r2/files?bucket=${bucketInfo.bucket}&page=${currentPage}&pageSize=${pageSize}&name=${searchParams.name}&fileSize=${searchParams.fileSize}&mimeType=${searchParams.mimeType}`
       : null,
     fetcher,
     {
@@ -123,7 +132,7 @@ export default function UserFileManager({ user, action }: FileListProps) {
 
   const handleRefresh = () => {
     mutate(
-      `${action}/r2/files?bucket=${bucketInfo.bucket}&page=${currentPage}&size=${pageSize}`,
+      `${action}/r2/files?bucket=${bucketInfo.bucket}&page=${currentPage}&pageSize=${pageSize}&name=${searchParams.name}&fileSize=${searchParams.fileSize}&mimeType=${searchParams.mimeType}`,
       undefined,
     );
   };
@@ -176,8 +185,8 @@ export default function UserFileManager({ user, action }: FileListProps) {
   return (
     <div>
       <Tabs value={displayType}>
-        <div className="mb-4 flex items-center justify-between gap-2">
-          <TabsList className="mr-auto">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-2 rounded-md border bg-neutral-50 p-2 dark:bg-neutral-900">
+          <TabsList>
             <TabsTrigger value="List" onClick={() => setDisplayType("List")}>
               <Icons.list className="size-4" />
             </TabsTrigger>
@@ -185,7 +194,49 @@ export default function UserFileManager({ user, action }: FileListProps) {
               <Icons.layoutGrid className="size-4" />
             </TabsTrigger>
           </TabsList>
-
+          {/* Search Input */}
+          <div className="flex flex-1 items-center sm:mr-auto">
+            <Select
+              value={currentSearchType}
+              onValueChange={(value) => {
+                setCurrentSearchType(value);
+                setCurrentSearchValue("");
+                setSearchParams({
+                  name: "",
+                  fileSize: "",
+                  mimeType: "",
+                });
+              }}
+            >
+              <SelectTrigger className="w-[80px] rounded-r-none">
+                <SelectValue placeholder="Select a type" />
+              </SelectTrigger>
+              <SelectContent>
+                {[
+                  { lebal: "Name", value: "name" },
+                  { lebal: "Size", value: "fileSize" },
+                  { lebal: "Type", value: "mimeType" },
+                ].map((item) => (
+                  <SelectItem key={item.value} value={item.value}>
+                    {t(item.lebal)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Input
+              className="min-w-48 rounded-l-none border-l-0 sm:w-48 sm:flex-none"
+              placeholder={`Search by ${currentSearchType}...`}
+              value={searchParams[currentSearchType] || ""}
+              onChange={(e) => {
+                // 根据currentSearchType判断当前搜索的参数类型，然后更新searchParams，并删除其他搜索类型的参数
+                setSearchParams({
+                  ...searchParams,
+                  [currentSearchType]: e.target.value,
+                });
+              }}
+            />
+          </div>
+          {/* Storage */}
           {files && files.totalSize > 0 && plan && (
             <TooltipProvider>
               <Tooltip delayDuration={0}>
@@ -202,7 +253,7 @@ export default function UserFileManager({ user, action }: FileListProps) {
               </Tooltip>
             </TooltipProvider>
           )}
-
+          {/* Bucket Select */}
           {isLoading ? (
             <Skeleton className="h-9 w-[120px] rounded border-r-0 shadow-inner" />
           ) : (
@@ -213,7 +264,7 @@ export default function UserFileManager({ user, action }: FileListProps) {
                 value={bucketInfo.bucket}
                 onValueChange={handleChangeBucket}
               >
-                <SelectTrigger className="w-[120px]">
+                <SelectTrigger className="flex-1 sm:w-[120px] sm:flex-none">
                   <SelectValue placeholder="Select a bucket" />
                 </SelectTrigger>
                 <SelectContent>
@@ -236,7 +287,7 @@ export default function UserFileManager({ user, action }: FileListProps) {
               </Select>
             )
           )}
-
+          {/* Uploader */}
           {!isLoading && r2Configs && r2Configs.buckets?.length > 0 && (
             <Uploader
               bucketInfo={bucketInfo}
@@ -245,7 +296,7 @@ export default function UserFileManager({ user, action }: FileListProps) {
               plan={plan}
             />
           )}
-
+          {/* Muti Checkbox */}
           <div className="flex items-center">
             <Button
               className={cn(
@@ -300,7 +351,7 @@ export default function UserFileManager({ user, action }: FileListProps) {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-
+          {/* Refresh */}
           <Button
             className="h-9"
             size="icon"

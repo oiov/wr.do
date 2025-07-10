@@ -13,8 +13,11 @@ export async function GET(req: NextRequest) {
 
     const url = new URL(req.url);
     const page = url.searchParams.get("page");
-    const size = url.searchParams.get("size");
+    const pageSize = url.searchParams.get("pageSize");
     const bucket = url.searchParams.get("bucket") || "";
+    const name = url.searchParams.get("name") || "";
+    const fileSize = url.searchParams.get("fileSize") || "";
+    const mimeType = url.searchParams.get("mimeType") || "";
 
     const configs = await getMultipleConfigs(["s3_config_01"]);
     if (!configs.s3_config_01.enabled) {
@@ -41,12 +44,15 @@ export async function GET(req: NextRequest) {
 
     const res = await getUserFiles({
       page: Number(page) || 1,
-      limit: Number(size) || 20,
+      limit: Number(pageSize) || 20,
       bucket,
       userId: user.id,
       status: 1,
       channel: configs.s3_config_01.channel,
       platform: configs.s3_config_01.platform,
+      name,
+      size: Number(fileSize || 0),
+      mimeType,
     });
 
     return NextResponse.json(res);
