@@ -213,7 +213,9 @@
     "availableSpace": "Available Space",
     "storageFull": "Storage space is almost full",
     "storageHigh": "Storage space usage is high",
-    "storageGood": "Storage space is sufficient"
+    "storageGood": "Storage space is sufficient",
+    "items": "items",
+    "Total": "Total"
   },
   "Components": {
     "Dashboard": "Dashboard",

@@ -213,7 +213,9 @@
     "availableSpace": "剩余空间",
     "storageFull": "存储空间即将用完",
     "storageHigh": "存储空间使用较多",
-    "storageGood": "存储空间充足"
+    "storageGood": "存储空间充足",
+    "items": "条",
+    "Total": "共"
   },
   "Components": {
     "Dashboard": "用户面板",

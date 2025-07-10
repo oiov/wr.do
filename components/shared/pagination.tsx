@@ -147,6 +147,9 @@ export function PaginationWrapper({
     >
       {setPageSize && (
         <div className="flex items-center gap-2">
+          <span className="text-muted-foreground">
+            {t("Total")} {total} {t("items")},
+          </span>
           <span className="text-muted-foreground">{t("Show")}</span>
           <Select
             value={pageSize.toString()}

@@ -8,6 +8,7 @@ export default function DashboardRecordsLoading() {
         heading="Manage DNS Records"
         text="List and manage records"
       />
+      <Skeleton className="h-[58px] w-full rounded-lg" />
       <Skeleton className="h-[400px] w-full rounded-lg" />
     </>
   );
