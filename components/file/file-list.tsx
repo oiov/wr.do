@@ -176,7 +176,7 @@ export default function UserFileList({
     try {
       const ids = files.list.map((f) => f.shortUrlId || "");
       if (!ids?.some((id) => id !== "")) return;
-      const response = await fetch(`${action}/r2/short`, {
+      const response = await fetch(`${action}/r2/files/short`, {
         method: "POST",
         body: JSON.stringify({ ids }),
       });
