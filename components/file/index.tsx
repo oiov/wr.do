@@ -28,7 +28,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import UserFileList from "@/components/file/file-list";
-import Uploader from "@/components/file/uploader";
 import { Icons } from "@/components/shared/icons";
 
 import { EmptyPlaceholder } from "../shared/empty-placeholder";
@@ -43,6 +42,7 @@ import {
 } from "../ui/dropdown-menu";
 import { Input } from "../ui/input";
 import { CircularStorageIndicator, FileSizeDisplay } from "./storage-size";
+import { FileUploader } from "./upload";
 
 export interface FileListProps {
   user: Pick<User, "id" | "name" | "apiKey" | "email" | "role" | "team">;
@@ -100,7 +100,7 @@ export default function UserFileManager({ user, action }: FileListProps) {
   const { mutate } = useSWRConfig();
 
   const { data: r2Configs, isLoading } = useSWR<ClientStorageCredentials>(
-    `${action}/r2/configs`,
+    `${action}/r2/files/configs`,
     fetcher,
     { revalidateOnFocus: false },
   );
@@ -286,11 +286,12 @@ export default function UserFileManager({ user, action }: FileListProps) {
         )}
         {/* Uploader */}
         {!isLoading && r2Configs && r2Configs.buckets?.length > 0 && (
-          <Uploader
+          <FileUploader
             bucketInfo={bucketInfo}
-            action={"/api/storage"}
-            onRefresh={handleRefresh}
+            action="/api/storage"
             plan={plan}
+            userId={user.id}
+            onRefresh={handleRefresh}
           />
         )}
         {/* Muti Checkbox */}

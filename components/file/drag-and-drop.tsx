@@ -20,7 +20,7 @@ const DragAndDrop = ({
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
-      setSelectedFile((prev) => [...(prev ?? []), ...acceptedFiles]);
+      setSelectedFile((prev) => [...acceptedFiles]);
     },
     [setSelectedFile],
   );
