@@ -154,7 +154,7 @@
     "Monthly limit of short links created": "每月新创建短链数量限制",
     "Monthly limit of subdomains created": "每月新创建子域名数量限制",
     "Monthly limit of emails sent": "每月发送邮件数量限制",
-    "Monthly limit of email addresses created": "每月接收邮件数量限制",
+    "Monthly limit of email addresses created": "每月新创建邮箱地址数量限制",
     "Reject": "拒绝",
     "Rejected": "已拒绝",
     "View Period": "时间范围",
