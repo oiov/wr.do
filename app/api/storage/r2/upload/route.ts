@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
 
     const { files, bucket, prefix } = await request.json();
 
-    if (!bucket || !prefix || !files || !Array.isArray(files)) {
+    if (!bucket || !files || !Array.isArray(files)) {
       return NextResponse.json("Invalid request parameters", { status: 400 });
     }
 
