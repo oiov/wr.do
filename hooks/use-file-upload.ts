@@ -27,7 +27,6 @@ export function useFileUpload({ bucketInfo, userId, api }: Props) {
   const [files, setFiles] = useState<FileUploadItem[]>([]);
   const [isUploading, setIsUploading] = useState(false);
 
-  // 添加文件到上传列表
   const addFiles = useCallback((newFiles: FileList | File[]) => {
     const fileArray = Array.from(newFiles);
     const uploadItems: FileUploadItem[] = fileArray.map((file) => ({
@@ -43,7 +42,6 @@ export function useFileUpload({ bucketInfo, userId, api }: Props) {
     setFiles((prev) => [...prev, ...uploadItems]);
   }, []);
 
-  // 移除文件
   const removeFile = useCallback((id: string) => {
     setFiles((prev) => {
       const file = prev.find((f) => f.id === id);
@@ -54,7 +52,6 @@ export function useFileUpload({ bucketInfo, userId, api }: Props) {
     });
   }, []);
 
-  // 取消上传
   const cancelUpload = useCallback((id: string) => {
     setFiles((prev) =>
       prev.map((file) => {
@@ -67,7 +64,6 @@ export function useFileUpload({ bucketInfo, userId, api }: Props) {
     );
   }, []);
 
-  // 重试上传
   const retryUpload = useCallback((id: string) => {
     setFiles((prev) =>
       prev.map((file) => {
@@ -288,7 +284,6 @@ export function useFileUpload({ bucketInfo, userId, api }: Props) {
     });
   };
 
-  // 开始上传所有文件
   const startUpload = useCallback(async () => {
     const pendingFiles = files.filter((f) => f.status === "pending");
     if (pendingFiles.length === 0) return;
@@ -352,7 +347,6 @@ export function useFileUpload({ bucketInfo, userId, api }: Props) {
     }
   }, [files]);
 
-  // 清空所有文件
   const clearAll = useCallback(() => {
     files.forEach((file) => {
       if (file.abortController) {

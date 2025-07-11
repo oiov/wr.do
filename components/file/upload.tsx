@@ -15,12 +15,8 @@ import { useTranslations } from "next-intl";
 
 import { cn, formatFileSize } from "@/lib/utils";
 import { useFileUpload } from "@/hooks/use-file-upload";
-
-import { BucketInfo, StorageUserPlan } from ".";
-import { CopyButton } from "../shared/copy-button";
-import { Icons } from "../shared/icons";
-import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerClose,
@@ -29,7 +25,11 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-} from "../ui/drawer";
+} from "@/components/ui/drawer";
+import { CopyButton } from "@/components/shared/copy-button";
+import { Icons } from "@/components/shared/icons";
+
+import { BucketInfo, StorageUserPlan } from ".";
 import DragAndDrop from "./drag-and-drop";
 
 export const FileUploader = ({
@@ -38,21 +38,15 @@ export const FileUploader = ({
   plan,
   userId,
   onRefresh,
-  onUploadComplete,
-  onUploadError,
 }: {
   bucketInfo: BucketInfo;
   action: string;
   userId: string;
   plan?: StorageUserPlan;
   onRefresh: () => void;
-  onUploadComplete?: (files: any[]) => void;
-  onUploadError?: (error: string) => void;
 }) => {
   const t = useTranslations("Components");
   const [isOpen, setIsOpen] = useState(false);
-  const [dragActive, setDragActive] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File[] | null>(null);
   const {
     files,
@@ -72,62 +66,6 @@ export const FileUploader = ({
     }
   }, [selectedFile]);
 
-  // useEffect(() => {
-  //   const completedFiles = files.filter((f) => f.status === "completed");
-  //   const errorFiles = files.filter((f) => f.status === "error");
-
-  //   if (completedFiles.length > 0 && stats.uploading === 0 && !isUploading) {
-  //     onUploadComplete?.(completedFiles);
-  //     onRefresh();
-  //   }
-
-  //   if (errorFiles.length > 0 && stats.uploading === 0 && !isUploading) {
-  //     const errors = errorFiles.map((f) => f.error || "未知错误").join(", ");
-  //     onUploadError?.(errors);
-  //   }
-  // }, [files, stats, isUploading, onUploadComplete, onUploadError]);
-
-  const getFileIcon = (type: string) => {
-    if (type.startsWith("image/")) return <Image className="h-4 w-4" />;
-    if (type.startsWith("video/")) return <Video className="h-4 w-4" />;
-    if (type.startsWith("audio/")) return <Music className="h-4 w-4" />;
-    return <FileText className="h-4 w-4" />;
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "pending":
-        return "text-gray-600";
-      case "uploading":
-        return "text-blue-600";
-      case "completed":
-        return "text-green-600";
-      case "error":
-        return "text-red-600";
-      case "cancelled":
-        return "text-orange-600";
-      default:
-        return "text-gray-600";
-    }
-  };
-
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case "pending":
-        return "等待上传";
-      case "uploading":
-        return "上传中";
-      case "completed":
-        return "上传完成";
-      case "error":
-        return "上传失败";
-      case "cancelled":
-        return "已取消";
-      default:
-        return "未知状态";
-    }
-  };
-
   return (
     <>
       {!isOpen && (
@@ -141,7 +79,7 @@ export const FileUploader = ({
       )}
       {isOpen && (
         <Drawer open={isOpen} direction="right" onOpenChange={setIsOpen}>
-          <DrawerContent className="h-screen w-full overflow-y-auto sm:max-w-xl">
+          <DrawerContent className="h-screen w-full overflow-y-auto rounded-none sm:max-w-xl">
             <DrawerHeader className="flex items-center justify-between">
               <DrawerTitle className="flex items-center gap-1">
                 {t("Upload Files")}
@@ -171,7 +109,7 @@ export const FileUploader = ({
               </Badge>
             </DrawerDescription>
 
-            <div className="space-y-4 p-4">
+            <div className="space-y-3 p-4">
               <DragAndDrop
                 setSelectedFile={setSelectedFile}
                 bucketInfo={bucketInfo}
@@ -208,13 +146,13 @@ export const FileUploader = ({
               {/* 文件列表 */}
               {files.length > 0 && (
                 <div className="space-y-2 rounded-lg">
-                  {/* 上传提示 */}
                   {files.some((file) => file.status === "uploading") && (
                     <div className="flex items-center gap-1 rounded-md border border-dashed bg-yellow-100 p-2 text-sm text-muted-foreground dark:bg-neutral-600">
                       <Icons.info className="size-4" />
                       {t(
                         "Do not close the window until the upload is complete",
                       )}
+                      .
                     </div>
                   )}
 
@@ -255,16 +193,13 @@ export const FileUploader = ({
                               : "items-center",
                           )}
                         >
-                          <div className="flex min-w-0 flex-1 items-center gap-3">
-                            {getFileIcon(file.file.type)}
-                            <div className="min-w-0 flex-1">
-                              <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
-                                {file.originalName}
-                              </p>
-                              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                {formatFileSize(file.file.size)}
-                              </p>
-                            </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
+                              {file.originalName}
+                            </p>
+                            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                              {formatFileSize(file.file.size)}
+                            </p>
                           </div>
 
                           {/* 状态指示器和操作按钮 */}
@@ -334,7 +269,6 @@ export const FileUploader = ({
                                     size="icon"
                                     variant="secondary"
                                     onClick={() => retryUpload(file.id)}
-                                    title="重试上传"
                                   >
                                     <RotateCcw className="size-4" />
                                   </Button>
@@ -343,7 +277,6 @@ export const FileUploader = ({
                                     size="icon"
                                     variant="destructive"
                                     onClick={() => removeFile(file.id)}
-                                    title="删除文件"
                                   >
                                     <X className="size-4" />
                                   </Button>
@@ -381,7 +314,7 @@ export const FileUploader = ({
               )}
             </div>
 
-            <DrawerFooter className="flex flex-row items-center justify-between gap-2">
+            <DrawerFooter className="sticky bottom-0 flex flex-row items-center justify-between gap-2 backdrop-blur-md">
               <DrawerClose asChild>
                 <Button variant="outline">{t("Cancel")}</Button>
               </DrawerClose>
