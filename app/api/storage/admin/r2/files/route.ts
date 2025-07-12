@@ -24,6 +24,7 @@ export async function GET(req: NextRequest) {
     const name = url.searchParams.get("name") || "";
     const fileSize = url.searchParams.get("fileSize") || "";
     const mimeType = url.searchParams.get("mimeType") || "";
+    const status = url.searchParams.get("status") || "";
 
     const configs = await getMultipleConfigs(["s3_config_01"]);
     if (!configs.s3_config_01.enabled) {
@@ -56,6 +57,7 @@ export async function GET(req: NextRequest) {
       platform: configs.s3_config_01.platform,
       name,
       size: Number(fileSize || 0),
+      status: Number(status === "0" ? 0 : 1),
       mimeType,
     });
 

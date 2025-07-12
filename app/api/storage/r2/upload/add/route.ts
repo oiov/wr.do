@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createUserFile } from "@/lib/dto/files";
 import { checkUserStatus } from "@/lib/dto/user";
 import { getCurrentUser } from "@/lib/session";
+import { bytesToStorageValue } from "@/lib/utils";
 
 export async function POST(request: NextRequest) {
   try {
@@ -44,7 +45,7 @@ export async function POST(request: NextRequest) {
       channel: body.channel || "",
       platform: body.platform || "",
       providerName: body.providerName || "",
-      size: body.size,
+      size: bytesToStorageValue(body.size),
       bucket: body.bucket,
       lastModified: body.lastModified
         ? new Date(body.lastModified)
