@@ -338,7 +338,7 @@ model UserFile {
   name         String
   originalName String?
   mimeType     String
-  size         Int
+  size         Float
   path         String
   etag         String?
   storageClass String?
