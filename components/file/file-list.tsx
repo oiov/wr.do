@@ -6,10 +6,12 @@ import { User } from "@prisma/client";
 import {
   Archive,
   Download,
+  FileAudio,
   FileCode,
   FileSpreadsheet,
   FileText,
   FileType2,
+  FileVideo,
   Folder,
   ImageOff,
   Trash2,
@@ -25,20 +27,13 @@ import {
   formatFileSize,
   truncateMiddle,
 } from "@/lib/utils";
-import { useMediaQuery } from "@/hooks/use-media-query";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { ClickableTooltip } from "@/components/ui/tooltip";
 import { BucketInfo, DisplayType, FileListData } from "@/components/file";
 
 import { UrlForm } from "../forms/url-form";
 import { CopyButton } from "../shared/copy-button";
 import { EmptyPlaceholder } from "../shared/empty-placeholder";
 import { Icons } from "../shared/icons";
-import { PaginationWrapper } from "../shared/pagination";
 import QRCodeEditor from "../shared/qr";
 import { TimeAgoIntl } from "../shared/time-ago";
 import { Badge } from "../ui/badge";
@@ -52,6 +47,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Modal } from "../ui/modal";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Skeleton } from "../ui/skeleton";
 import { Switch } from "../ui/switch";
 import { TableCell, TableRow } from "../ui/table";
@@ -92,7 +88,7 @@ export default function UserFileList({
   const [currentSelectFile, setCurrentSelectFile] =
     useState<UserFileData | null>();
 
-  const isAdmin = action.includes("/admin");
+  // const isAdmin = action.includes("/admin");
 
   const getFileUrl = (key: string) => {
     return `${bucketInfo.custom_domain}/${key}`;
@@ -155,7 +151,7 @@ export default function UserFileList({
   const handleGenerateShortLink = async (urlId: string) => {
     if (!shortTarget) return;
     try {
-      const response = await fetch(`${action}/r2/short`, {
+      const response = await fetch(`${action}/r2/files/short`, {
         method: "PUT",
         body: JSON.stringify({ urlId, fileId: shortTarget?.id }),
       });
@@ -208,7 +204,14 @@ export default function UserFileList({
 
   const renderFileLinks = (file: UserFileData, index: number) => (
     <>
-      {!isAdmin && file.shortUrlId && (
+      <div className="flex items-center gap-2">
+        <Icons.fileText className="size-3 flex-shrink-0" />
+        <p className="line-clamp-1 truncate rounded-md bg-neutral-100 p-1.5 text-xs dark:bg-neutral-800">
+          {file.path}
+        </p>
+        <CopyButton className="size-6" value={file.path} />
+      </div>
+      {file.shortUrlId && (
         <div className="flex items-center gap-2">
           <Icons.unLink className="size-3 flex-shrink-0 text-blue-500" />
           <Link
@@ -308,30 +311,13 @@ export default function UserFileList({
                 </div>
               )}
               <div className={cn("col-span-3 items-center space-x-3 text-sm")}>
-                <TooltipProvider>
-                  <Tooltip delayDuration={0}>
-                    <TooltipTrigger
-                      className={cn(
-                        "flex items-center justify-start gap-1 break-all text-start",
-                        file.status !== 1 && "text-muted-foreground",
-                      )}
-                    >
-                      {truncateMiddle(file.path)}
-                      {file.status === 1 && (
-                        <CopyButton
-                          className="size-6"
-                          value={getFileUrl(file.path)}
-                        />
-                      )}
-                    </TooltipTrigger>
-                    <TooltipContent
-                      side="right"
-                      className="w-72 space-y-1 text-wrap p-3 text-start"
-                    >
+                <ClickableTooltip
+                  content={
+                    <div className="w-72 space-y-1 text-wrap p-3 text-start">
                       {file.mimeType.startsWith("image/") &&
                         file.status === 1 && (
                           <img
-                            className="mb-2 max-h-[70vh] w-72 rounded shadow"
+                            className="mb-2 max-h-[300px] w-fit rounded shadow"
                             width={300}
                             height={300}
                             src={getFileUrl(file.path)}
@@ -339,9 +325,24 @@ export default function UserFileList({
                           />
                         )}
                       {renderFileLinks(file, index)}
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                    </div>
+                  }
+                >
+                  <div
+                    className={cn(
+                      "flex items-center justify-start gap-1 break-all text-start",
+                      file.status !== 1 && "text-muted-foreground",
+                    )}
+                  >
+                    {truncateMiddle(file.path)}
+                    {file.status === 1 && (
+                      <CopyButton
+                        className="size-6"
+                        value={getFileUrl(file.path)}
+                      />
+                    )}
+                  </div>
+                </ClickableTooltip>
               </div>
               <div className="col-span-2 hidden items-center text-xs sm:flex">
                 <Badge className="truncate" variant="outline">
@@ -352,17 +353,18 @@ export default function UserFileList({
                 {formatFileSize(file.size || 0)}
               </div>
               <div className="col-span-1 hidden items-center text-xs sm:flex">
-                <TooltipProvider>
-                  <Tooltip delayDuration={200}>
-                    <TooltipTrigger className="truncate">
-                      {file.user.name ?? file.user.email}
-                    </TooltipTrigger>
-                    <TooltipContent>
+                <ClickableTooltip
+                  content={
+                    <>
                       <p>{file.user.name}</p>
                       <p>{file.user.email}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                    </>
+                  }
+                >
+                  <div className="truncate">
+                    {file.user.name ?? file.user.email}
+                  </div>
+                </ClickableTooltip>
               </div>
               <div className="col-span-1 hidden items-center text-nowrap text-xs sm:flex">
                 <TimeAgoIntl date={file.updatedAt as Date} />
@@ -492,19 +494,13 @@ export default function UserFileList({
             )}
             {React.cloneElement(getFileIcon(file, bucketInfo), { size: 40 })}
             <div className="w-full text-center">
-              <TooltipProvider>
-                <Tooltip delayDuration={0}>
-                  <TooltipTrigger className="mx-auto line-clamp-2 max-w-[60px] break-all px-2 pb-1 text-left text-xs font-medium text-muted-foreground group-hover:text-blue-500 sm:max-w-[100px]">
-                    {truncateMiddle(file.path || "")}
-                  </TooltipTrigger>
-                  <TooltipContent
-                    side="right"
-                    className="max-w-[300px] space-y-1 p-3 text-start"
-                  >
+              <ClickableTooltip
+                content={
+                  <div className="max-w-[300px] space-y-1 p-3 text-start">
                     {file.mimeType.startsWith("image/") &&
                       file.status === 1 && (
                         <img
-                          className="mb-2 max-h-[70vh] w-fit rounded shadow"
+                          className="mb-2 max-h-[300px] w-fit rounded shadow"
                           width={300}
                           height={300}
                           src={getFileUrl(file.path)}
@@ -574,9 +570,13 @@ export default function UserFileList({
                         </Button>
                       )}
                     </div>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+                  </div>
+                }
+              >
+                <div className="mx-auto line-clamp-2 max-w-[60px] break-all px-2 pb-1 text-left text-xs font-medium text-muted-foreground group-hover:text-blue-500 sm:max-w-[100px]">
+                  {truncateMiddle(file.path || "")}
+                </div>
+              </ClickableTooltip>
             </div>
           </div>
         </div>
@@ -768,12 +768,12 @@ const getFileIcon = (file: UserFileData, bucketInfo: BucketInfo) => {
 
   // 音频文件
   if (mimeType.startsWith("audio/")) {
-    return <FileText {...iconProps} className="text-purple-500" />;
+    return <FileAudio {...iconProps} className="text-purple-500" />;
   }
 
   // 视频文件
   if (mimeType.startsWith("video/")) {
-    return <FileText {...iconProps} className="text-pink-500" />;
+    return <FileVideo {...iconProps} className="text-pink-500" />;
   }
 
   // 默认文件图标

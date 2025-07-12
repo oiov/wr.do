@@ -12,6 +12,7 @@ import {
   X,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
 import { cn, formatFileSize } from "@/lib/utils";
 import { useFileUpload } from "@/hooks/use-file-upload";
@@ -62,7 +63,20 @@ export const FileUploader = ({
 
   useEffect(() => {
     if (selectedFile) {
-      addFiles(selectedFile);
+      const outOfLimitSizeFiles = selectedFile.some(
+        (file) => file.size > Number(plan?.stMaxFileSize ?? 0),
+      );
+      const notOutOfLimitSizeFiles = selectedFile.filter(
+        (file) => file.size <= Number(plan?.stMaxFileSize ?? 0),
+      );
+      addFiles(notOutOfLimitSizeFiles);
+      if (outOfLimitSizeFiles) {
+        toast.warning(
+          `File size exceeds the limit of ${formatFileSize(
+            Number(plan?.stMaxFileSize ?? 0),
+          )}`,
+        );
+      }
     }
   }, [selectedFile]);
 
@@ -99,6 +113,7 @@ export const FileUploader = ({
                 </div>
               </div>
               <Badge className="text-xs">
+                {t("Limit")}:{" "}
                 {formatFileSize(Number(plan?.stMaxFileSize || "0"), {
                   precision: 0,
                 })}{" "}
@@ -327,7 +342,7 @@ export const FileUploader = ({
                     className="flex items-center gap-2 rounded-md bg-green-500 px-4 py-2 text-white transition-colors hover:bg-green-600 disabled:cursor-not-allowed disabled:bg-gray-400"
                   >
                     <Play className="h-4 w-4" />
-                    Start Upload
+                    {t("Start Upload")}
                   </Button>
                   <Button
                     variant="destructive"
