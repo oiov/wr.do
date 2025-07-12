@@ -370,7 +370,9 @@
     "Upload Files": "Upload Files",
     "Uploud channel": "Uploud channel",
     "Do not close the window until the upload is complete": "Do not close the window until the upload is complete",
-    "Pending Upload": "Pending Upload"
+    "Pending Upload": "Pending Upload",
+    "Start Upload": "Start Upload",
+    "Limit": "Limit"
   },
   "Landing": {
     "settings": "Settings",

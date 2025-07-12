@@ -2,10 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
+import { getPlanQuota } from "@/lib/dto/plan";
 import { getMultipleConfigs } from "@/lib/dto/system-config";
 import { checkUserStatus } from "@/lib/dto/user";
 import { createS3Client } from "@/lib/r2";
 import { getCurrentUser } from "@/lib/session";
+import { restrictByTimeRange } from "@/lib/team";
 import { generateFileKey } from "@/lib/utils";
 
 export async function POST(request: NextRequest) {
@@ -41,6 +43,22 @@ export async function POST(request: NextRequest) {
         status: 403,
       });
     }
+
+    const plan = await getPlanQuota(user.team!);
+    for (const file of files) {
+      if (Number(file.size) > Number(plan.stMaxFileSize)) {
+        return Response.json(`File (${file.name}) size limit exceeded`, {
+          status: 403,
+        });
+      }
+    }
+    const limit = await restrictByTimeRange({
+      model: "userFile",
+      userId: user.id,
+      limit: Number(plan.stMaxFileCount),
+      rangeType: "month",
+    });
+    if (limit) return Response.json(limit.statusText, { status: limit.status });
 
     const R2 = createS3Client(
       configs.s3_config_01.endpoint,
