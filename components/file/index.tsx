@@ -93,6 +93,7 @@ export default function UserFileManager({ user, action }: FileListProps) {
     name: "",
     fileSize: "",
     mimeType: "",
+    status: "1",
   });
 
   // const isAdmin = action.includes("/admin");
@@ -107,7 +108,7 @@ export default function UserFileManager({ user, action }: FileListProps) {
 
   const { data: files, isLoading: isLoadingFiles } = useSWR<FileListData>(
     bucketInfo.bucket
-      ? `${action}/r2/files?bucket=${bucketInfo.bucket}&page=${currentPage}&pageSize=${pageSize}&name=${searchParams.name}&fileSize=${searchParams.fileSize}&mimeType=${searchParams.mimeType}`
+      ? `${action}/r2/files?bucket=${bucketInfo.bucket}&page=${currentPage}&pageSize=${pageSize}&name=${searchParams.name}&fileSize=${searchParams.fileSize}&mimeType=${searchParams.mimeType}&status=${searchParams.status}`
       : null,
     fetcher,
     {
@@ -133,8 +134,9 @@ export default function UserFileManager({ user, action }: FileListProps) {
   }, [r2Configs]);
 
   const handleRefresh = () => {
+    setSelectedFiles([]);
     mutate(
-      `${action}/r2/files?bucket=${bucketInfo.bucket}&page=${currentPage}&pageSize=${pageSize}&name=${searchParams.name}&fileSize=${searchParams.fileSize}&mimeType=${searchParams.mimeType}`,
+      `${action}/r2/files?bucket=${bucketInfo.bucket}&page=${currentPage}&pageSize=${pageSize}&name=${searchParams.name}&fileSize=${searchParams.fileSize}&mimeType=${searchParams.mimeType}&status=${searchParams.status}`,
       undefined,
     );
   };
@@ -205,11 +207,12 @@ export default function UserFileManager({ user, action }: FileListProps) {
                 name: "",
                 fileSize: "",
                 mimeType: "",
+                status: "1",
               });
               setCurrentPage(1);
             }}
           >
-            <SelectTrigger className="w-[80px] rounded-r-none">
+            <SelectTrigger className="w-[80px] rounded-r-none text-sm">
               <SelectValue placeholder="Select a type" />
             </SelectTrigger>
             <SelectContent>
@@ -217,6 +220,7 @@ export default function UserFileManager({ user, action }: FileListProps) {
                 { lebal: "Name", value: "name" },
                 { lebal: "Size", value: "fileSize" },
                 { lebal: "Type", value: "mimeType" },
+                { lebal: "Status", value: "status" },
               ].map((item) => (
                 <SelectItem key={item.value} value={item.value}>
                   {t(item.lebal)}
@@ -225,7 +229,7 @@ export default function UserFileManager({ user, action }: FileListProps) {
             </SelectContent>
           </Select>
           <Input
-            className="min-w-28 rounded-l-none border-l-0 sm:w-48 sm:flex-none"
+            className="min-w-28 rounded-l-none border-l-0 placeholder:text-xs sm:w-48 sm:flex-none"
             placeholder={`Search by ${currentSearchType}...`}
             value={searchParams[currentSearchType] || ""}
             onChange={(e) => {

@@ -1,6 +1,7 @@
 import { Prisma, UserFile } from "@prisma/client";
 
 import { prisma } from "../db";
+import { bytesToStorageValue, storageValueToBytes } from "../utils";
 
 export interface UserFileData extends UserFile {
   user: {
@@ -127,14 +128,14 @@ export async function getUserFiles(options: QueryUserFileOptions = {}) {
 
     const where: Prisma.UserFileWhereInput = {
       bucket,
-      ...(status && { status }),
+      ...(status !== undefined && { status }),
       ...(userId && { userId }),
       ...(providerName && { providerName }),
       ...(channel && { channel }),
       ...(platform && { platform }),
       ...(shortUrlId && { shortUrlId }),
       ...(name && { name: { contains: name, mode: "insensitive" } }),
-      ...(size && { size: { gte: size } }),
+      ...(size && { size: { gte: bytesToStorageValue(size) } }),
       ...(mimeType && {
         mimeType: { contains: mimeType, mode: "insensitive" },
       }),
@@ -164,7 +165,7 @@ export async function getUserFiles(options: QueryUserFileOptions = {}) {
 
     return {
       total,
-      totalSize: totalSize._sum.size || 0,
+      totalSize: storageValueToBytes(totalSize._sum.size || 0),
       list: files,
     };
   } catch (error) {

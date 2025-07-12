@@ -41,7 +41,7 @@ export {
   TooltipArrow,
 };
 
-export const ClickableTooltip = ({ children, content }) => {
+export const ClickableTooltip = ({ children, content, className = "" }) => {
   const [open, setOpen] = useState(false);
 
   const handleClick = (e) => {
@@ -65,7 +65,7 @@ export const ClickableTooltip = ({ children, content }) => {
           onFocus={(e) => e.preventDefault()} // 阻止焦点事件
           onBlur={(e) => e.preventDefault()}
         >
-          <div onClick={handleClick} className="cursor-pointer truncate">
+          <div onClick={handleClick} className={className}>
             {children}
           </div>
         </TooltipTrigger>

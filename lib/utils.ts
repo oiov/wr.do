@@ -571,3 +571,23 @@ export function generateFileKey(fileName: string, prefix?: string): string {
 
   return `${year}/${month}/${day}/${fileName}`;
 }
+
+const SIZE_THRESHOLD = 1000;
+export function bytesToStorageValue(bytes: number): number {
+  if (bytes < SIZE_THRESHOLD) {
+    return bytes;
+  } else {
+    return Math.ceil(bytes / SIZE_THRESHOLD);
+  }
+}
+
+export function storageValueToBytes(
+  storageValue: number,
+  originalBytes?: number,
+): number {
+  if (storageValue < SIZE_THRESHOLD) {
+    return storageValue;
+  } else {
+    return storageValue * SIZE_THRESHOLD;
+  }
+}

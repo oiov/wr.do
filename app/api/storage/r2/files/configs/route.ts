@@ -23,6 +23,9 @@ export async function GET(req: NextRequest) {
       channel: configs.s3_config_01.channel,
     });
   } catch (error) {
-    return NextResponse.json({ error: "Error listing files" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Error listing buckets" },
+      { status: 500 },
+    );
   }
 }

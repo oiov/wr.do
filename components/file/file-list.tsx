@@ -25,6 +25,7 @@ import {
   downloadFileFromUrl,
   formatDate,
   formatFileSize,
+  storageValueToBytes,
   truncateMiddle,
 } from "@/lib/utils";
 import { ClickableTooltip } from "@/components/ui/tooltip";
@@ -47,7 +48,6 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Modal } from "../ui/modal";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Skeleton } from "../ui/skeleton";
 import { Switch } from "../ui/switch";
 import { TableCell, TableRow } from "../ui/table";
@@ -312,6 +312,10 @@ export default function UserFileList({
               )}
               <div className={cn("col-span-3 items-center space-x-3 text-sm")}>
                 <ClickableTooltip
+                  className={cn(
+                    "flex cursor-pointer items-center justify-start gap-1 break-all text-start",
+                    file.status !== 1 && "text-muted-foreground",
+                  )}
                   content={
                     <div className="w-72 space-y-1 text-wrap p-3 text-start">
                       {file.mimeType.startsWith("image/") &&
@@ -328,20 +332,13 @@ export default function UserFileList({
                     </div>
                   }
                 >
-                  <div
-                    className={cn(
-                      "flex items-center justify-start gap-1 break-all text-start",
-                      file.status !== 1 && "text-muted-foreground",
-                    )}
-                  >
-                    {truncateMiddle(file.path)}
-                    {file.status === 1 && (
-                      <CopyButton
-                        className="size-6"
-                        value={getFileUrl(file.path)}
-                      />
-                    )}
-                  </div>
+                  {truncateMiddle(file.path)}
+                  {file.status === 1 && (
+                    <CopyButton
+                      className="size-6"
+                      value={getFileUrl(file.path)}
+                    />
+                  )}
                 </ClickableTooltip>
               </div>
               <div className="col-span-2 hidden items-center text-xs sm:flex">
@@ -350,10 +347,11 @@ export default function UserFileList({
                 </Badge>
               </div>
               <div className="col-span-1 flex items-center text-nowrap text-xs">
-                {formatFileSize(file.size || 0)}
+                {formatFileSize(storageValueToBytes(file.size) || 0)}
               </div>
               <div className="col-span-1 hidden items-center text-xs sm:flex">
                 <ClickableTooltip
+                  className="cursor-pointer truncate"
                   content={
                     <>
                       <p>{file.user.name}</p>
@@ -361,9 +359,7 @@ export default function UserFileList({
                     </>
                   }
                 >
-                  <div className="truncate">
-                    {file.user.name ?? file.user.email}
-                  </div>
+                  {file.user.name ?? file.user.email}
                 </ClickableTooltip>
               </div>
               <div className="col-span-1 hidden items-center text-nowrap text-xs sm:flex">
@@ -495,6 +491,7 @@ export default function UserFileList({
             {React.cloneElement(getFileIcon(file, bucketInfo), { size: 40 })}
             <div className="w-full text-center">
               <ClickableTooltip
+                className="mx-auto line-clamp-2 max-w-[60px] cursor-pointer break-all px-2 pb-1 text-left text-xs font-medium text-muted-foreground group-hover:text-blue-500 sm:max-w-[100px]"
                 content={
                   <div className="max-w-[300px] space-y-1 p-3 text-start">
                     {file.mimeType.startsWith("image/") &&
@@ -511,7 +508,8 @@ export default function UserFileList({
                       {file.path}
                     </p>
                     <p className="mt-1 text-xs text-muted-foreground">
-                      <strong>Size:</strong> {formatFileSize(file.size || 0)}
+                      <strong>Size:</strong>{" "}
+                      {formatFileSize(storageValueToBytes(file.size) || 0)}
                     </p>
                     <p className="mt-1 text-xs text-muted-foreground">
                       <strong>Type:</strong> {file.mimeType || "-"}
@@ -573,9 +571,7 @@ export default function UserFileList({
                   </div>
                 }
               >
-                <div className="mx-auto line-clamp-2 max-w-[60px] break-all px-2 pb-1 text-left text-xs font-medium text-muted-foreground group-hover:text-blue-500 sm:max-w-[100px]">
-                  {truncateMiddle(file.path || "")}
-                </div>
+                {truncateMiddle(file.path || "")}
               </ClickableTooltip>
             </div>
           </div>

@@ -97,7 +97,7 @@ export function useFileUpload({ bucketInfo, userId, api }: Props) {
           userId,
           name: extractKey.fileName,
           originalName: extractKey.nameWithoutExtension,
-          mimeType: item.file.type,
+          mimeType: item.file.type || "-",
           path: item.fileName,
           etag,
           storageClass: "",
