@@ -82,15 +82,13 @@ export const FileUploader = ({
 
   return (
     <>
-      {!isOpen && (
-        <Button
-          className="flex h-9 items-center gap-1 text-nowrap"
-          onClick={() => setIsOpen(true)}
-        >
-          <Icons.cloudUpload className="size-5" />
-          {t("Upload Files")}
-        </Button>
-      )}
+      <Button
+        className="flex h-9 items-center gap-1 text-nowrap"
+        onClick={() => setIsOpen(true)}
+      >
+        <Icons.cloudUpload className="size-5" />
+        {t("Upload Files")}
+      </Button>
       {isOpen && (
         <Drawer open={isOpen} direction="right" onOpenChange={setIsOpen}>
           <DrawerContent className="h-screen w-full overflow-y-auto rounded-none sm:max-w-xl">

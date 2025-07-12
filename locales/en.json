@@ -215,7 +215,8 @@
     "storageHigh": "Storage space usage is high",
     "storageGood": "Storage space is sufficient",
     "items": "items",
-    "Total": "Total"
+    "Total": "Total",
+    "Configuration Error": "Configuration Error"
   },
   "Components": {
     "Dashboard": "Dashboard",

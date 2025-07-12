@@ -215,7 +215,8 @@
     "storageHigh": "存储空间使用较多",
     "storageGood": "存储空间充足",
     "items": "条",
-    "Total": "共"
+    "Total": "共",
+    "Configuration Error": "配置错误"
   },
   "Components": {
     "Dashboard": "用户面板",
