@@ -65,7 +65,7 @@ export const ClickableTooltip = ({ children, content, className = "" }) => {
           onFocus={(e) => e.preventDefault()} // 阻止焦点事件
           onBlur={(e) => e.preventDefault()}
         >
-          <div onClick={handleClick} className={className}>
+          <div onClick={handleClick} className={className} title="Details">
             {children}
           </div>
         </TooltipTrigger>

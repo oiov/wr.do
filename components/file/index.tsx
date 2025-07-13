@@ -21,12 +21,7 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { ClickableTooltip } from "@/components/ui/tooltip";
 import UserFileList from "@/components/file/file-list";
 import { Icons } from "@/components/shared/icons";
 
@@ -252,16 +247,15 @@ export default function UserFileManager({ user, action }: FileListProps) {
         </div>
         {/* Storage */}
         {files && files.totalSize > 0 && plan && (
-          <TooltipProvider>
-            <Tooltip delayDuration={0}>
-              <TooltipTrigger className="flex items-center gap-2">
-                <CircularStorageIndicator files={files} plan={plan} size={36} />
-              </TooltipTrigger>
-              <TooltipContent className="w-80">
+          <ClickableTooltip
+            content={
+              <div className="w-80">
                 <FileSizeDisplay files={files} plan={plan} t={t} />
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+              </div>
+            }
+          >
+            <CircularStorageIndicator files={files} plan={plan} size={36} />
+          </ClickableTooltip>
         )}
         {/* Bucket Select */}
         {isLoading ? (

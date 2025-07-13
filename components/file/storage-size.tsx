@@ -62,7 +62,7 @@ export function FileSizeDisplay({ files, plan, t }) {
             {t("usedSpace")}:
           </span>
           <span className="text-sm font-medium">
-            {formatFileSize(totalSize, { precision: 0 })}
+            {formatFileSize(totalSize, { precision: 2 })}
           </span>
         </div>
         <div className="flex items-center justify-between">
@@ -70,7 +70,7 @@ export function FileSizeDisplay({ files, plan, t }) {
             {t("totalCapacity")}:
           </span>
           <span className="text-sm font-medium">
-            {formatFileSize(maxSize, { precision: 0 })}
+            {formatFileSize(maxSize, { precision: 2 })}
           </span>
         </div>
         <div className="flex items-center justify-between">
@@ -78,7 +78,7 @@ export function FileSizeDisplay({ files, plan, t }) {
             {t("availableSpace")}:
           </span>
           <span className="text-sm font-medium">
-            {formatFileSize(maxSize - totalSize, { precision: 0 })}
+            {formatFileSize(maxSize - totalSize, { precision: 2 })}
           </span>
         </div>
       </div>
@@ -121,7 +121,7 @@ export function CircularStorageIndicator({ files, plan, size = 32 }) {
 
   return (
     <div
-      className="relative inline-block"
+      className="relative flex cursor-pointer items-center"
       style={{ width: size, height: size }}
     >
       <svg width={size} height={size} className="-rotate-90 transform">

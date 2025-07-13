@@ -491,7 +491,7 @@ export default function UserFileList({
             {React.cloneElement(getFileIcon(file, bucketInfo), { size: 40 })}
             <div className="w-full text-center">
               <ClickableTooltip
-                className="mx-auto line-clamp-2 max-w-[60px] cursor-pointer break-all px-2 pb-1 text-left text-xs font-medium text-muted-foreground group-hover:text-blue-500 sm:max-w-[100px]"
+                className="mx-auto line-clamp-2 max-w-[60px] break-all px-2 pb-1 text-left text-xs font-medium text-muted-foreground group-hover:text-blue-500 sm:max-w-[100px]"
                 content={
                   <div className="max-w-[300px] space-y-1 p-3 text-start">
                     {file.mimeType.startsWith("image/") &&
