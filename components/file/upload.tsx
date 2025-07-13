@@ -1,16 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  FileText,
-  Image,
-  Music,
-  Pause,
-  Play,
-  RotateCcw,
-  Trash2,
-  Upload,
-  Video,
-  X,
-} from "lucide-react";
+import { Play, RotateCcw, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -22,12 +11,8 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
-  DrawerHeader,
-  DrawerOverlay,
   DrawerPortal,
-  DrawerTitle,
 } from "@/components/ui/drawer";
 import { CopyButton } from "@/components/shared/copy-button";
 import { Icons } from "@/components/shared/icons";
