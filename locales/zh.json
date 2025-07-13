@@ -373,7 +373,8 @@
     "Do not close the window until the upload is complete": "在上传完成之前不要浏览器关闭窗口",
     "Pending Upload": "等待上传",
     "Start Upload": "开始上传",
-    "Limit": "限制"
+    "Limit": "限制",
+    "Files pasted successfully": "文件粘贴成功"
   },
   "Landing": {
     "settings": "设置",
