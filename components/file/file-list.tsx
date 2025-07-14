@@ -336,7 +336,7 @@ export default function UserFileList({
                     </div>
                   }
                 >
-                  {truncateMiddle(file.path)}
+                  {truncateMiddle(file.path, 36)}
                   {file.status === 1 && (
                     <CopyButton
                       className="size-6"
@@ -463,9 +463,9 @@ export default function UserFileList({
 
   const renderGridView = () => (
     <div
-      className="grid justify-items-center gap-4"
+      className="grid justify-center justify-items-center gap-4 sm:justify-start"
       style={{
-        gridTemplateColumns: "repeat(auto-fill, minmax(10px, 100px))",
+        gridTemplateColumns: "repeat(auto-fill, minmax(80px, 100px))",
       }}
     >
       {isLoading &&
@@ -476,13 +476,13 @@ export default function UserFileList({
         <div
           key={file.id}
           className={cn(
-            "group relative flex cursor-pointer items-end rounded-md transition-all hover:bg-blue-50",
+            "group relative flex w-full cursor-pointer items-end rounded-md transition-all hover:bg-blue-50",
             selectedFiles.find((f) => f.id === file.id) !== undefined &&
               "bg-blue-50",
           )}
           onClick={() => handleSelectFile(file)}
         >
-          <div className="flex flex-col items-center justify-center space-y-1 py-1">
+          <div className="flex w-full flex-col items-center justify-center space-y-1 py-1">
             {showMutiCheckBox && (
               <Checkbox
                 checked={
@@ -495,7 +495,7 @@ export default function UserFileList({
             {React.cloneElement(getFileIcon(file, bucketInfo), { size: 40 })}
             <div className="w-full text-center">
               <ClickableTooltip
-                className="mx-auto line-clamp-2 max-w-[60px] break-all px-2 pb-1 text-left text-xs font-medium text-muted-foreground group-hover:text-blue-500 sm:max-w-[100px]"
+                className="mx-auto line-clamp-2 break-all px-2 pb-1 text-left text-xs font-medium text-muted-foreground group-hover:text-blue-500 sm:max-w-[100px]"
                 content={
                   <div className="max-w-[300px] space-y-1 p-3 text-start">
                     {file.mimeType.startsWith("image/") &&
