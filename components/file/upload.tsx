@@ -46,7 +46,7 @@ export const FileUploader = ({
     retryUpload,
     startUpload,
     clearAll,
-  } = useFileUpload({ api: `${action}/r2/upload`, bucketInfo, userId });
+  } = useFileUpload({ api: `${action}/s3/upload`, bucketInfo, userId });
 
   useEffect(() => {
     if (selectedFile) {

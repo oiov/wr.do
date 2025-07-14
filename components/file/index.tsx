@@ -16,17 +16,13 @@ import {
   SelectGroup,
   SelectItem,
   SelectLabel,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { ClickableTooltip } from "@/components/ui/tooltip";
 import UserFileList from "@/components/file/file-list";
 import { Icons } from "@/components/shared/icons";
 
@@ -84,6 +80,8 @@ export default function UserFileManager({ user, action }: FileListProps) {
     provider_name: "",
     public: true,
   });
+  const [currentProvider, setCurrentProvider] =
+    useState<ClientStorageCredentials | null>(null);
 
   const [selectedFiles, setSelectedFiles] = useState<UserFileData[]>([]);
   const [isDeleting, startDeleteTransition] = useTransition();
@@ -100,8 +98,8 @@ export default function UserFileManager({ user, action }: FileListProps) {
 
   const { mutate } = useSWRConfig();
 
-  const { data: r2Configs, isLoading } = useSWR<ClientStorageCredentials>(
-    `${action}/r2/files/configs`,
+  const { data: s3Configs, isLoading } = useSWR<ClientStorageCredentials[]>(
+    `${action}/s3/files/configs`,
     fetcher,
     { revalidateOnFocus: false },
   );
@@ -112,7 +110,7 @@ export default function UserFileManager({ user, action }: FileListProps) {
     error,
   } = useSWR<FileListData>(
     currentBucketInfo.bucket
-      ? `${action}/r2/files?bucket=${currentBucketInfo.bucket}&page=${currentPage}&pageSize=${pageSize}&name=${searchParams.name}&fileSize=${searchParams.fileSize}&mimeType=${searchParams.mimeType}&status=${searchParams.status}`
+      ? `${action}/s3/files?provider=${currentBucketInfo.provider_name}&bucket=${currentBucketInfo.bucket}&page=${currentPage}&pageSize=${pageSize}&name=${searchParams.name}&fileSize=${searchParams.fileSize}&mimeType=${searchParams.mimeType}&status=${searchParams.status}`
       : null,
     fetcher,
     {
@@ -127,36 +125,43 @@ export default function UserFileManager({ user, action }: FileListProps) {
   );
 
   useEffect(() => {
-    if (
-      r2Configs &&
-      r2Configs.buckets &&
-      r2Configs.buckets.length > 0 &&
-      r2Configs.buckets[0].bucket
-    ) {
+    if (s3Configs && s3Configs.length > 0) {
+      setCurrentProvider(s3Configs[0]);
       setCurrentBucketInfo({
-        ...r2Configs.buckets[0],
-        platform: r2Configs.platform,
-        channel: r2Configs.channel,
-        provider_name: r2Configs.provider_name,
+        bucket: s3Configs[0].buckets[0].bucket,
+        custom_domain: s3Configs[0].buckets[0].custom_domain,
+        prefix: s3Configs[0].buckets[0].prefix,
+        platform: s3Configs[0].platform,
+        channel: s3Configs[0].channel,
+        provider_name: s3Configs[0].provider_name,
+        public: s3Configs[0].buckets[0].public,
       });
     }
-  }, [r2Configs]);
+  }, [s3Configs]);
 
   const handleRefresh = () => {
     setSelectedFiles([]);
     mutate(
-      `${action}/r2/files?bucket=${currentBucketInfo.bucket}&page=${currentPage}&pageSize=${pageSize}&name=${searchParams.name}&fileSize=${searchParams.fileSize}&mimeType=${searchParams.mimeType}&status=${searchParams.status}`,
+      `${action}/s3/files?provider=${currentBucketInfo.provider_name}&bucket=${currentBucketInfo.bucket}&page=${currentPage}&pageSize=${pageSize}&name=${searchParams.name}&fileSize=${searchParams.fileSize}&mimeType=${searchParams.mimeType}&status=${searchParams.status}`,
       undefined,
     );
   };
 
-  const handleChangeBucket = (bucket: string) => {
-    const newBucketInfo = r2Configs?.buckets?.find(
-      (item) => item.bucket === bucket,
-    );
+  const handleChangeBucket = (
+    provider: ClientStorageCredentials,
+    bucket: string,
+  ) => {
+    console.log(provider, bucket);
+
     setCurrentBucketInfo({
-      ...currentBucketInfo,
-      ...newBucketInfo,
+      bucket: bucket,
+      custom_domain: provider.buckets.find((b) => b.bucket === bucket)
+        ?.custom_domain,
+      prefix: provider.buckets.find((b) => b.bucket === bucket)?.prefix,
+      platform: provider.platform,
+      channel: provider.channel,
+      provider_name: provider.provider_name,
+      public: true,
     });
   };
 
@@ -172,13 +177,14 @@ export default function UserFileManager({ user, action }: FileListProps) {
     startDeleteTransition(async () => {
       try {
         toast.promise(
-          fetch(`${action}/r2/files`, {
+          fetch(`${action}/s3/files`, {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               keys: selectedFiles.map((file) => file.path),
               ids: selectedFiles.map((file) => file.id),
               bucket: currentBucketInfo.bucket,
+              provider: currentBucketInfo.provider_name,
             }),
           }),
           {
@@ -252,58 +258,59 @@ export default function UserFileManager({ user, action }: FileListProps) {
         </div>
         {/* Storage */}
         {files && files.totalSize > 0 && plan && (
-          <TooltipProvider>
-            <Tooltip delayDuration={0}>
-              <TooltipTrigger className="flex items-center gap-2">
-                <CircularStorageIndicator files={files} plan={plan} size={36} />
-              </TooltipTrigger>
-              <TooltipContent className="w-80">
+          <ClickableTooltip
+            content={
+              <div className="w-80">
                 <FileSizeDisplay files={files} plan={plan} t={t} />
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+              </div>
+            }
+          >
+            <CircularStorageIndicator files={files} plan={plan} size={36} />
+          </ClickableTooltip>
         )}
         {/* Bucket Select */}
         {isLoading ? (
           <Skeleton className="h-9 w-[120px] rounded border-r-0 shadow-inner" />
         ) : (
-          r2Configs &&
-          r2Configs.buckets &&
-          r2Configs.buckets.length > 0 &&
-          r2Configs.buckets[0].bucket && (
+          s3Configs &&
+          s3Configs.length > 0 && (
             <Select
-              value={currentBucketInfo.bucket}
-              onValueChange={handleChangeBucket}
+              value={`${currentBucketInfo.provider_name}|${currentBucketInfo.bucket}`}
+              onValueChange={(value) => {
+                const [providerName, bucketName] = value.split("|");
+                const provider = s3Configs.find(
+                  (p) => p.provider_name === providerName,
+                );
+                provider && handleChangeBucket(provider, bucketName);
+              }}
             >
-              <SelectTrigger className="flex-1 sm:w-[120px] sm:flex-none">
+              <SelectTrigger className="flex-1 break-all text-left sm:w-[120px] sm:flex-none">
                 <SelectValue placeholder="Select a bucket" />
               </SelectTrigger>
               <SelectContent>
-                <SelectGroup>
-                  <SelectLabel className="mx-auto text-center">
-                    {r2Configs?.provider_name}
-                  </SelectLabel>
-                  {r2Configs?.buckets?.map((item) => (
-                    <SelectItem
-                      key={item.bucket}
-                      value={item.bucket}
-                      onClick={() => handleChangeBucket(item.bucket)}
-                    >
-                      {item.bucket}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-                {/* <SelectSeparator /> */}
+                {s3Configs.map((provider) => (
+                  <SelectGroup>
+                    <SelectLabel>{provider.provider_name}</SelectLabel>
+                    {provider.buckets?.map((item) => (
+                      <SelectItem
+                        key={item.bucket}
+                        value={`${provider.provider_name}|${item.bucket}`}
+                      >
+                        {item.bucket}
+                      </SelectItem>
+                    ))}
+                    <SelectSeparator />
+                  </SelectGroup>
+                ))}
               </SelectContent>
             </Select>
           )
         )}
         {/* Uploader */}
         {!isLoading &&
-          r2Configs &&
-          r2Configs.buckets &&
-          r2Configs.buckets.length > 0 &&
-          r2Configs.buckets[0].bucket && (
+          s3Configs &&
+          s3Configs.length > 0 &&
+          currentBucketInfo && (
             <FileUploader
               bucketInfo={currentBucketInfo}
               action="/api/storage"
@@ -408,27 +415,25 @@ export default function UserFileManager({ user, action }: FileListProps) {
         </EmptyPlaceholder>
       )}
 
-      {!isLoading &&
-        !error &&
-        (!r2Configs?.buckets?.length || !r2Configs?.buckets?.[0].bucket) && (
-          <EmptyPlaceholder className="col-span-full mt-8 shadow-none">
-            <EmptyPlaceholder.Icon name="storage" />
-            <EmptyPlaceholder.Title>
-              {t("No buckets found")}
-            </EmptyPlaceholder.Title>
-            <EmptyPlaceholder.Description>
-              {t(
-                "The administrator has not configured the storage bucket, no file can be uploaded",
-              )}
-            </EmptyPlaceholder.Description>
-          </EmptyPlaceholder>
-        )}
+      {!isLoading && !error && !s3Configs && !currentBucketInfo && (
+        <EmptyPlaceholder className="col-span-full mt-8 shadow-none">
+          <EmptyPlaceholder.Icon name="storage" />
+          <EmptyPlaceholder.Title>
+            {t("No buckets found")}
+          </EmptyPlaceholder.Title>
+          <EmptyPlaceholder.Description>
+            {t(
+              "The administrator has not configured the storage bucket, no file can be uploaded",
+            )}
+          </EmptyPlaceholder.Description>
+        </EmptyPlaceholder>
+      )}
 
       {!isLoading &&
         !error &&
-        r2Configs?.buckets &&
-        r2Configs.buckets.length > 0 &&
-        r2Configs?.buckets[0].bucket && (
+        s3Configs &&
+        s3Configs.length > 0 &&
+        currentBucketInfo && (
           <UserFileList
             user={user}
             files={files}

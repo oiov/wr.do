@@ -625,6 +625,13 @@
     "Optional": "可选",
     "Allowed File Types": "允许的文件类型",
     "Public": "公开",
-    "Publicize this storage bucket, all registered users can upload files to this storage bucket; If not public, only administrators can upload files to this storage bucket": "公开此存储桶，所有注册用户都可以上传文件到此存储桶; 若不公开，只有管理员可以上传文件到此存储桶"
+    "Publicize this storage bucket, all registered users can upload files to this storage bucket; If not public, only administrators can upload files to this storage bucket": "公开此存储桶，所有注册用户都可以上传文件到此存储桶; 若不公开，只有管理员可以上传文件到此存储桶",
+    "Provider": "提供渠道",
+    "How to get the S3 credentials?": "如何获取 S3 授权配置？",
+    "Provider Unique Name": "渠道名称",
+    "Unique": "唯一",
+    "Add Provider": "添加渠道",
+    "{length} Buckets": "{length}个存储桶",
+    "Save Modifications": "保存修改"
   }
 }

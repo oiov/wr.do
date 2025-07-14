@@ -625,6 +625,13 @@
     "Optional": "Optional",
     "Allowed File Types": "Allowed File Types",
     "Public": "Public",
-    "Publicize this storage bucket, all registered users can upload files to this storage bucket; If not public, only administrators can upload files to this storage bucket": "Publicize this storage bucket, all registered users can upload files to this storage bucket; If not public, only administrators can upload files to this storage bucket"
+    "Publicize this storage bucket, all registered users can upload files to this storage bucket; If not public, only administrators can upload files to this storage bucket": "Publicize this storage bucket, all registered users can upload files to this storage bucket; If not public, only administrators can upload files to this storage bucket",
+    "Provider": "Provider",
+    "How to get the S3 credentials?": "How to get the S3 credentials?",
+    "Provider Unique Name": "Provider Unique Name",
+    "Unique": "Unique",
+    "Add Provider": "Add Provider",
+    "{length} Buckets": "{length} Buckets",
+    "Save Modifications": "Save Modifications"
   }
 }
