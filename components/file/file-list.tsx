@@ -102,11 +102,7 @@ export default function UserFileList({
     }
   };
 
-  const handleDownload = async (file: UserFileData) => {
-    downloadFileFromUrl(getFileUrl(file.path), file.name);
-  };
-
-  const handlePreviewRawFile = async (key: string) => {
+  const handleDownload = async (key: string, type: "download" | "raw") => {
     try {
       const response = await fetch(`${action}/s3/files`, {
         method: "POST",
@@ -118,7 +114,9 @@ export default function UserFileList({
         }),
       });
       const { signedUrl } = await response.json();
-      window.open(signedUrl, "_blank");
+      type === "download"
+        ? downloadFileFromUrl(signedUrl, key)
+        : window.open(signedUrl, "_blank");
     } catch (error) {
       console.error("Error downloading file:", error);
       alert("Error downloading file");
@@ -421,7 +419,7 @@ export default function UserFileList({
                         className="flex w-full items-center gap-2"
                         size="sm"
                         variant="ghost"
-                        onClick={() => handlePreviewRawFile(file.path)}
+                        onClick={() => handleDownload(file.path, "raw")}
                       >
                         <Icons.eye className="size-4" />
                         {t("Raw Data")}
@@ -433,7 +431,7 @@ export default function UserFileList({
                         className="flex w-full items-center gap-2"
                         size="sm"
                         variant="ghost"
-                        onClick={() => handleDownload(file)}
+                        onClick={() => handleDownload(file.path, "download")}
                       >
                         <Icons.download className="size-4" />
                         {t("Download")}
@@ -531,7 +529,7 @@ export default function UserFileList({
                         className="flex h-7 w-full items-center gap-2 text-xs"
                         size="sm"
                         variant="outline"
-                        onClick={() => handlePreviewRawFile(file.path)}
+                        onClick={() => handleDownload(file.path, "raw")}
                         disabled={file.status !== 1}
                       >
                         <Icons.eye className="size-4" />
@@ -550,7 +548,7 @@ export default function UserFileList({
                         <Icons.qrcode className="size-4" />
                       </Button>
                       <Button
-                        onClick={() => handlePreviewRawFile(file.path)}
+                        onClick={() => handleDownload(file.path, "download")}
                         className="h-7 px-1.5"
                         title="下载"
                         size="sm"
