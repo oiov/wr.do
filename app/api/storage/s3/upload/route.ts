@@ -15,32 +15,32 @@ export async function POST(request: NextRequest) {
     const user = checkUserStatus(await getCurrentUser());
     if (user instanceof Response) return user;
 
-    const { files, bucket, prefix } = await request.json();
+    const { provider, bucket, files, prefix } = await request.json();
 
     if (!bucket || !files || !Array.isArray(files)) {
       return NextResponse.json("Invalid request parameters", { status: 400 });
     }
 
-    const configs = await getMultipleConfigs(["s3_config_01"]);
-    if (!configs.s3_config_01.enabled) {
-      return NextResponse.json("S3 is not enabled", {
-        status: 403,
+    const configs = await getMultipleConfigs(["s3_config_list"]);
+    if (!configs || !configs.s3_config_list) {
+      return NextResponse.json("Invalid S3 configs", {
+        status: 400,
       });
     }
-    if (
-      !configs.s3_config_01 ||
-      !configs.s3_config_01.access_key_id ||
-      !configs.s3_config_01.secret_access_key ||
-      !configs.s3_config_01.endpoint
-    ) {
-      return NextResponse.json("Invalid S3 config", {
-        status: 403,
+
+    const providerChannel = configs.s3_config_list.find(
+      (c) => c.provider_name === provider,
+    );
+    if (!providerChannel) {
+      return NextResponse.json("Provider does not exist", {
+        status: 400,
       });
     }
-    const buckets = configs.s3_config_01.buckets || [];
+
+    const buckets = providerChannel.buckets || [];
     if (!buckets.find((b) => b.bucket === bucket)) {
       return NextResponse.json("Bucket does not exist", {
-        status: 403,
+        status: 400,
       });
     }
 
@@ -61,9 +61,9 @@ export async function POST(request: NextRequest) {
     if (limit) return Response.json(limit.statusText, { status: limit.status });
 
     const R2 = createS3Client(
-      configs.s3_config_01.endpoint,
-      configs.s3_config_01.access_key_id,
-      configs.s3_config_01.secret_access_key,
+      providerChannel.endpoint,
+      providerChannel.access_key_id,
+      providerChannel.secret_access_key,
     );
 
     const signedUrls = await Promise.all(

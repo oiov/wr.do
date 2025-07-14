@@ -108,10 +108,14 @@ export default function UserFileList({
 
   const handlePreviewRawFile = async (key: string) => {
     try {
-      const response = await fetch(`${action}/r2/files`, {
+      const response = await fetch(`${action}/s3/files`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ key, bucket: bucketInfo.bucket }),
+        body: JSON.stringify({
+          key,
+          bucket: bucketInfo.bucket,
+          provider: bucketInfo.provider_name,
+        }),
       });
       const { signedUrl } = await response.json();
       window.open(signedUrl, "_blank");
@@ -126,13 +130,14 @@ export default function UserFileList({
 
     try {
       toast.promise(
-        fetch(`${action}/r2/files`, {
+        fetch(`${action}/s3/files`, {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             keys: [file.path],
             ids: [file.id],
             bucket: bucketInfo.bucket,
+            provider: bucketInfo.provider_name,
           }),
         }),
         {
@@ -151,7 +156,7 @@ export default function UserFileList({
   const handleGenerateShortLink = async (urlId: string) => {
     if (!shortTarget) return;
     try {
-      const response = await fetch(`${action}/r2/files/short`, {
+      const response = await fetch(`${action}/s3/files/short`, {
         method: "PUT",
         body: JSON.stringify({ urlId, fileId: shortTarget?.id }),
       });
@@ -159,7 +164,6 @@ export default function UserFileList({
         toast.error("Error generating short link");
       } else {
         onRefresh();
-        // handleGetFileShortLinkByIds();
       }
     } catch (error) {
       console.error("Error generating short link:", error);
@@ -172,7 +176,7 @@ export default function UserFileList({
     try {
       const ids = files.list.map((f) => f.shortUrlId || "");
       if (!ids?.some((id) => id !== "")) return;
-      const response = await fetch(`${action}/r2/files/short`, {
+      const response = await fetch(`${action}/s3/files/short`, {
         method: "POST",
         body: JSON.stringify({ ids }),
       });
@@ -251,11 +255,11 @@ export default function UserFileList({
       <div className="flex items-center gap-2">
         <Icons.type className="size-3 flex-shrink-0" />
         <p className="line-clamp-1 truncate rounded-md bg-neutral-100 p-1.5 text-xs hover:text-blue-500 dark:bg-neutral-800">
-          {`[${file.name}](${getFileUrl(file.path)})`}
+          {`![${file.name}](${getFileUrl(file.path)})`}
         </p>
         <CopyButton
           className="size-6"
-          value={`[${file.name}](${getFileUrl(file.path)})`}
+          value={`![${file.name}](${getFileUrl(file.path)})`}
         />
       </div>
     </>
@@ -325,7 +329,7 @@ export default function UserFileList({
                             width={300}
                             height={300}
                             src={getFileUrl(file.path)}
-                            alt={`${file.path}`}
+                            alt={`${file.name}`}
                           />
                         )}
                       {renderFileLinks(file, index)}
@@ -501,7 +505,7 @@ export default function UserFileList({
                           width={300}
                           height={300}
                           src={getFileUrl(file.path)}
-                          alt={`${file.path}`}
+                          alt={`${file.name}`}
                         />
                       )}
                     <p className="mt-1 text-sm font-semibold text-muted-foreground">

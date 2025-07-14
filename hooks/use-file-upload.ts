@@ -139,8 +139,9 @@ export function useFileUpload({ bucketInfo, userId, api }: Props) {
       },
       body: JSON.stringify({
         files: filesData,
-        bucket: bucketInfo.bucket,
         prefix: bucketInfo.prefix,
+        bucket: bucketInfo.bucket,
+        provider: bucketInfo.provider_name,
       }),
     });
 

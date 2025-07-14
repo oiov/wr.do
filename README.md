@@ -195,4 +195,3 @@ See [How to Trigger Sync](https://wr.do/docs/developer/sync) for details.
    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=oiov/wr.do&type=Date" />
  </picture>
 </a>
-

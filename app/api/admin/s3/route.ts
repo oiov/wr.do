@@ -15,14 +15,7 @@ export async function GET(req: NextRequest) {
       return Response.json("Unauthorized", { status: 401 });
     }
 
-    const s3ConfigKeys = [
-      "s3_config_01",
-      "s3_config_02",
-      "s3_config_03",
-      "s3_config_04",
-    ];
-
-    const configs = await getMultipleConfigs(s3ConfigKeys);
+    const configs = await getMultipleConfigs(["s3_config_list"]);
 
     return Response.json(configs, { status: 200 });
   } catch (error) {

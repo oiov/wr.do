@@ -9,6 +9,12 @@ export async function POST(request: NextRequest) {
   try {
     const user = checkUserStatus(await getCurrentUser());
     if (user instanceof Response) return user;
+    if (user.role !== "ADMIN") {
+      return Response.json("Unauthorized", {
+        status: 401,
+        statusText: "Unauthorized",
+      });
+    }
 
     const { ids } = await request.json();
     if (!ids) {
@@ -17,7 +23,6 @@ export async function POST(request: NextRequest) {
 
     const data = await getUserShortLinksByIds(ids, user.id);
 
-    // ids:["cmcrqtql10001zbhynvwfuqza", "", "", "", ""]，则返回的短链位置也要一一对应
     const dataMap = new Map(data.map((item) => [item.id, item]));
 
     const orderedResults = ids.map((id) => {
@@ -29,10 +34,7 @@ export async function POST(request: NextRequest) {
       urls: orderedResults,
     });
   } catch (error) {
-    return NextResponse.json(
-      { error: "Error generating download URL" },
-      { status: 500 },
-    );
+    return NextResponse.json("Error generating download URL", { status: 500 });
   }
 }
 

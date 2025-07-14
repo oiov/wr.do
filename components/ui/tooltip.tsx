@@ -5,6 +5,7 @@ import { useState } from "react";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 
 import { cn } from "@/lib/utils";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 const TooltipProvider = TooltipPrimitive.Provider;
 
@@ -43,6 +44,7 @@ export {
 
 export const ClickableTooltip = ({ children, content, className = "" }) => {
   const [open, setOpen] = useState(false);
+  const { isMobile } = useMediaQuery();
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -70,7 +72,9 @@ export const ClickableTooltip = ({ children, content, className = "" }) => {
           </div>
         </TooltipTrigger>
         <TooltipPortal>
-          <TooltipContent className="p-1">{content}</TooltipContent>
+          <TooltipContent className="p-1" side={isMobile ? "bottom" : "right"}>
+            {content}
+          </TooltipContent>
         </TooltipPortal>
       </Tooltip>
     </TooltipProvider>

@@ -34,6 +34,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    console.log(body);
+
     const userFile = await createUserFile({
       userId: body.userId,
       name: body.name,
