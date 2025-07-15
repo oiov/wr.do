@@ -158,9 +158,8 @@ export async function getUserFiles(options: QueryUserFileOptions = {}) {
       }),
       prisma.userFile.count({ where }),
       prisma.userFile.aggregate({
-        // All provider's file size
         where: {
-          userId,
+          ...(userId && { userId }),
           status: 1,
         },
         _sum: { size: true },
