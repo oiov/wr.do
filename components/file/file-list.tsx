@@ -357,10 +357,10 @@ export default function UserFileList({
                 <ClickableTooltip
                   className="cursor-pointer truncate"
                   content={
-                    <>
+                    <div className="p-2">
                       <p>{file.user.name}</p>
                       <p>{file.user.email}</p>
-                    </>
+                    </div>
                   }
                 >
                   {file.user.name ?? file.user.email}

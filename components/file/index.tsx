@@ -288,7 +288,7 @@ export default function UserFileManager({ user, action }: FileListProps) {
                 <SelectValue placeholder="Select a bucket" />
               </SelectTrigger>
               <SelectContent>
-                {s3Configs.map((provider) => (
+                {s3Configs.map((provider, index) => (
                   <SelectGroup>
                     <SelectLabel>{provider.provider_name}</SelectLabel>
                     {provider.buckets?.map((item) => (
@@ -299,7 +299,7 @@ export default function UserFileManager({ user, action }: FileListProps) {
                         {item.bucket}
                       </SelectItem>
                     ))}
-                    <SelectSeparator />
+                    {index !== s3Configs.length - 1 && <SelectSeparator />}
                   </SelectGroup>
                 ))}
               </SelectContent>
@@ -415,25 +415,28 @@ export default function UserFileManager({ user, action }: FileListProps) {
         </EmptyPlaceholder>
       )}
 
-      {!isLoading && !error && !s3Configs && !currentBucketInfo && (
-        <EmptyPlaceholder className="col-span-full mt-8 shadow-none">
-          <EmptyPlaceholder.Icon name="storage" />
-          <EmptyPlaceholder.Title>
-            {t("No buckets found")}
-          </EmptyPlaceholder.Title>
-          <EmptyPlaceholder.Description>
-            {t(
-              "The administrator has not configured the storage bucket, no file can be uploaded",
-            )}
-          </EmptyPlaceholder.Description>
-        </EmptyPlaceholder>
-      )}
+      {!isLoading &&
+        !error &&
+        !s3Configs?.length &&
+        !currentBucketInfo.bucket && (
+          <EmptyPlaceholder className="col-span-full mt-8 shadow-none">
+            <EmptyPlaceholder.Icon name="storage" />
+            <EmptyPlaceholder.Title>
+              {t("No buckets found")}
+            </EmptyPlaceholder.Title>
+            <EmptyPlaceholder.Description>
+              {t(
+                "The administrator has not configured the storage bucket, no file can be uploaded",
+              )}
+            </EmptyPlaceholder.Description>
+          </EmptyPlaceholder>
+        )}
 
       {!isLoading &&
         !error &&
         s3Configs &&
         s3Configs.length > 0 &&
-        currentBucketInfo && (
+        currentBucketInfo.bucket && (
           <UserFileList
             user={user}
             files={files}
