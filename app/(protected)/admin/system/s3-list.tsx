@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { CloudCog } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import useSWR from "swr";
@@ -63,7 +62,12 @@ export default function S3Configs({}: {}) {
       channel: "cos",
     },
     { label: "Ali OSS", value: "Ali OSS", platform: "ali", channel: "oss" },
-    { label: "Minio", value: "Minio", platform: "minio", channel: "s3" },
+    {
+      label: "Custom Provider",
+      value: "Custom Provider",
+      platform: "custom",
+      channel: "cp",
+    },
   ];
 
   useEffect(() => {

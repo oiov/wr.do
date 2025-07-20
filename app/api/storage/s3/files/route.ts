@@ -162,6 +162,7 @@ export async function DELETE(request: NextRequest) {
     await softDeleteUserFiles(ids);
     return NextResponse.json({ message: "File deleted successfully" });
   } catch (error) {
+    console.error("Error deleting file:", error);
     return NextResponse.json("Error deleting file", { status: 500 });
   }
 }

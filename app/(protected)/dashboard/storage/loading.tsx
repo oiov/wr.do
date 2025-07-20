@@ -5,8 +5,8 @@ export default function DashboardRecordsLoading() {
   return (
     <>
       <DashboardHeader
-        heading="Manage DNS Records"
-        text="List and manage records"
+        heading="Cloud Storage"
+        text="List and manage cloud storage"
       />
       <Skeleton className="h-[58px] w-full rounded-lg" />
       <Skeleton className="h-[400px] w-full rounded-lg" />
