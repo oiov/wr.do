@@ -146,7 +146,25 @@ export function useFileUpload({ bucketInfo, userId, api }: Props) {
     });
 
     if (!response.ok) {
-      throw new Error("获取预签名 URL 失败");
+      // 尝试获取后端返回的具体错误信息
+      let errorMessage = "获取预签名 URL 失败";
+      try {
+        const errorText = await response.text();
+        if (errorText) {
+          // 如果返回的是JSON格式的错误信息，尝试解析
+          try {
+            const errorData = JSON.parse(errorText);
+            errorMessage = errorData.message || errorData.error || errorText;
+          } catch {
+            // 如果不是JSON，直接使用文本内容
+            errorMessage = errorText;
+          }
+        }
+      } catch {
+        // 如果无法读取响应内容，使用默认错误信息
+        errorMessage = `上传失败 (${response.status})`;
+      }
+      throw new Error(errorMessage);
     }
 
     const data = await response.json();
@@ -331,14 +349,15 @@ export function useFileUpload({ bucketInfo, userId, api }: Props) {
       await Promise.allSettled(uploadPromises);
     } catch (error) {
       console.error("上传失败:", error);
-      // 将所有 pending 状态的文件设置为错误状态
+      // 将所有 pending 状态的文件设置为错误状态，并显示具体错误信息
+      const errorMessage = error instanceof Error ? error.message : "上传失败";
       setFiles((prev) =>
         prev.map((file) =>
           file.status === "pending"
             ? {
                 ...file,
                 status: "error",
-                error: "上传失败",
+                error: errorMessage,
               }
             : file,
         ),
