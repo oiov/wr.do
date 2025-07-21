@@ -48,17 +48,17 @@ export async function POST(request: NextRequest) {
     for (const file of files) {
       if (Number(file.size) > Number(plan.stMaxFileSize)) {
         return Response.json(`File (${file.name}) size limit exceeded`, {
-          status: 403,
+          status: 400,
         });
       }
     }
-    const limit = await restrictByTimeRange({
-      model: "userFile",
-      userId: user.id,
-      limit: Number(plan.stMaxFileCount),
-      rangeType: "month",
-    });
-    if (limit) return Response.json(limit.statusText, { status: limit.status });
+    // const limit = await restrictByTimeRange({
+    //   model: "userFile",
+    //   userId: user.id,
+    //   limit: Number(plan.stMaxFileCount),
+    //   rangeType: "month",
+    // });
+    // if (limit) return Response.json(limit.statusText, { status: limit.status });
 
     const R2 = createS3Client(
       providerChannel.endpoint,

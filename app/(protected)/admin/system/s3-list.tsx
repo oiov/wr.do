@@ -65,7 +65,7 @@ export default function S3Configs({}: {}) {
     {
       label: "Custom Provider",
       value: "Custom Provider",
-      platform: "custom",
+      platform: "custom provider",
       channel: "cp",
     },
   ];

@@ -28,13 +28,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: `缺少必需字段: ${missingFields.join(", ")}`,
+          error: `Missing required fields: ${missingFields.join(", ")}`,
         },
         { status: 400 },
       );
     }
-
-    console.log(body);
 
     const userFile = await createUserFile({
       userId: body.userId,
