@@ -112,12 +112,6 @@ WR.DO 是一个一站式域名服务平台，集成短链服务、临时邮箱�
 
 ### 使用 Docker Compose 部署
 
-在服务器中创建一个文件夹，进入该文件夹并新建`docker-compose.yml`文件，填写必要的环境变量，然后执行：
-
-```bash
-docker compose up -d
-```
-
 在服务器中创建一个文件夹，进入该文件夹并新建 [docker-compose.yml](https://github.com/oiov/wr.do/blob/main/docker-compose.yml)、[.env](https://github.com/oiov/wr.do/blob/main/.env.example) 文件：
 
 ```yml
