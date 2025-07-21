@@ -118,6 +118,28 @@ WR.DO 是一个一站式域名服务平台，集成短链服务、临时邮箱�
 docker compose up -d
 ```
 
+在服务器中创建一个文件夹，进入该文件夹并新建 [docker-compose.yml](https://github.com/oiov/wr.do/blob/main/docker-compose.yml)、[.env](https://github.com/oiov/wr.do/blob/main/.env.example) 文件：
+
+```yml
+- wrdo
+  | - docker-compose.yml
+  | - .env
+```
+
+在 `.env` 中填写必要的环境变量，然后执行: 
+
+```bash
+docker compose up -d
+```
+
+> 或只创建 docker-compose.yml 文件，环境变量直接填写在yml中，比如将`DATABASE_URL: ${DATABASE_URL}`替换成`DATABASE_URL: your-database-uri`
+
+### 使用 EdgeOne 部署
+
+> 此方法部署目前无法build成功，不建议使用
+
+[![使用 EdgeOne Pages 部署](https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg)](https://edgeone.ai/pages/new?repository-url=https%3A%2F%2Fgithub.com%2Foiov%2Fwr.do)
+
 ## 本地开发
 
 将 `.env.example` 复制为 `.env` 并填写必要的环境变量。
