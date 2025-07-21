@@ -1,6 +1,8 @@
 <div align="center">
   <h1>WR.DO</h1>
-  <p><a href="https://wr.do/docs/developer">Docs</a> · <a href="https://wr.do/feedback">Feedback</a> · English | <a href="/README-zh.md">简体中文</a></p>
+  <p>
+    <a href="https://wr.do/docs/developer">开发文档</a> · <a href="https://wr.do/feedback">Feedback</a> · <a href="/README-en.md">English</a> | 简体中文
+  </p>
   <img alt="GitHub Release" src="https://img.shields.io/github/v/release/oiov/wr.do?style=flat-square">
   <img src="https://img.shields.io/github/stars/oiov/wr.do.svg?logo=github&style=flat-square" alt="star"/>
   <img alt="GitHub forks" src="https://img.shields.io/github/forks/oiov/wr.do?style=flat-square">
@@ -9,68 +11,77 @@
 	<img src="https://img.shields.io/github/license/oiov/wr.do?style=flat-square" alt="MIT"/>
 </div>
 
-## Introduction
+## 简介
 
-WR.DO is a all-in-one web utility platform featuring short links with analytics, temporary email service, subdomain management, file storage, open APIs for screenshots and metadata extraction, and comprehensive admin dashboard.
+WR.DO 是一个一站式域名服务平台，集成短链服务、临时邮箱、子域名管理、文件存储和开放API接口。支持自定义链接、密码保护、访问统计；提供无限制临时邮箱收发；管理多域名DNS记录；支持云存储，对接 S3 API；内置网站截图、元数据提取等实用API。提供完整的管理后台，支持用户权限控制和各项服务配置。
 
-- Official website: [https://wr.do](https://wr.do)
-- Demo: [https://699399.xyz](https://699399.xyz) (Account: `admin@admin.com`, Password: `123456`)
+- 官网: [https://wr.do](https://wr.do)
+- Demo: [https://699399.xyz](https://699399.xyz) (管理员账号: `admin@admin.com`, 密码: `123456`)
 
-## Features
+## 功能列表
 
-- 🔗 **Short Link Service**:
-  - Custom short links
-  - Generate custom QR codes
-  - Password-protected links
-  - Expiration time control
-  - Access analytics (real-time logs, maps, and multi-dimensional data analysis)
-  - API integration for link creation
+- 🔗 **短链服务**：
+  - 支持自定义短链
+  - 支持生成自定义二维码
+  - 支持密码保护链接
+  - 支持设置过期时间
+  - 支持访问统计（实时日志、地图等多维度数据分析）
+  - 支持调用 API 创建短链
 
-- 📮 **Email Service**:
-  - Create custom prefix emails
-  - Filter unread email lists
-  - Unlimited mailbox creation
-  - Receive unlimited emails (powered by Cloudflare Email Worker)
-  - Send emails (powered by Resend)
-  - Support catch-all emails
-  - Support push to telegram groups
-  - API endpoints for mailbox creation
-  - API endpoints for inbox retrieval
-
-- 🌐 **Subdomain Management Service**:
-  - Manage DNS records across multiple Cloudflare accounts and domains
-  - Create various DNS record types (CNAME, A, TXT, etc.)
-  - Support enabling application mode (user submission, admin approval)
-  - Support email notification of administrator and user domain application status
-
-- 💳 **Cloud Storage Service**
-  - Connects to multiple channels (S3 API) cloud storage platforms (Cloudflare R2, AWS S3)
-  - Supports single-channel multi-bucket configuration
-  - Dynamic configuration (user quota settings) for file upload size limits
-  - Supports drag-and-drop, batch, and chunked file uploads
-  - Supports batch file deletion
-  - Quickly generates short links and QR codes for files
-  - Supports online preview of certain file types
-  - Supports file uploads via API calls
-
-- 📡 **Open API Module**:
-  - Website metadata extraction API
-  - Website screenshot capture API
-  - Website QR code generation API
-  - Convert websites to Markdown/Text format
-  - Comprehensive API call logging and statistics
-  - User API key generation for third-party integrations
+- 📮 **临时邮箱服务**：
+  - 支持创建自定义前缀邮箱
+  - 支持过滤未读邮件列表
+  - 可创建无限数量邮箱
+  - 支持接收无限制邮件 （依赖 Cloudflare Email Worker）
+  - 支持发送邮件（依赖 Resend）
+  - 支持 Catch-All 配置
+  - 支持 Telegram 推送（多频道/群组）
+  - 支持调用 API 创建邮箱
+  - 支持调用 API 获取收件箱邮件
   
-- 🔒 **Administrator Module**:
-  - Multi-dimensional dashboard with website analytics
-  - Dynamic service configuration (toggle short links, email, subdomain management)
-  - User management (permissions, quotas, account control)
-  - Dynamically configure login methods (Google, GitHub, Magic Link, Credentials, LinuxDO)
-  - Centralized short link administration
-  - Centralized email management
-  - Centralized subdomain administration
+- 🌐 **子域名管理服务**：
+  - 支持管理多 Cloudflare 账户下的多个域名的 DNS 记录
+  - 支持创建多种 DNS 记录类型（CNAME、A、TXT 等）
+  - 支持开启申请模式（用户提交、管理员审批）
+  - 支持邮件通知管理员、用户域名申请状态
 
-## Screenshots
+- 💳 **云存储服务**
+  - 接入多渠道（S3 API）云存储平台（Cloudflare R2、AWS S3）
+  - 支持单渠道多存储桶配置
+  - 动态配置（用户配额设置）文件上传大小限制
+  - 支持拖拽、批量、分块上传文件
+  - 支持批量删除文件
+  - 快捷生成文件短链、二维码
+  - 支持部分文件在线预览内容
+  - 支持调用 API 上传文件
+
+- 📡 **开放接口模块**：
+  - 获取网站元数据 API
+  - 获取网站截图 API
+  - 生成网站二维码 API
+  - 将网站转换为 Markdown、Text
+  - 支持所有类型 API 调用统计日志
+  - 支持生成用户 API Key，用于第三方调用开放接口
+  
+- 🔒 **管理员模块**：
+  - 多维度图表展示网站状态
+  - 域名服务配置（动态配置各项服务是否启用，包括短链、临时邮箱（收发邮件）、子域名管理）
+  - 用户列表管理（设置权限、分配使用额度、禁用用户等）
+  - 动态配置登录方式 (支持 Google, GitHub, 邮箱验证, 账户密码, LinuxDO)
+  - 短链管理（管理所有用户创建的短链）
+  - 邮箱管理（管理所有用户创建的临时邮箱）
+  - 子域名管理（管理所有用户创建的子域名）
+
+## 技术栈
+
+- Next.js + React + TypeScript
+- Tailwind CSS 用于样式设计
+- Prisma ORM 作为数据库工具
+- Cloudflare 作为主要的云基础设施
+- Vercel 作为推荐的部署平台
+- Resend 作为邮件服务
+
+## 截图预览
 
 <table>
   <tr>
@@ -87,36 +98,29 @@ WR.DO is a all-in-one web utility platform featuring short links with analytics,
   </tr>
 </table>
 
+## 快速开始
 
-## Quick Start
+查看开发者[快速开始](https://wr.do/docs/developer/quick-start)详细文档。
 
-See step by step installation tutorial at [Quick Start for Developer](https://wr.do/docs/developer/quick-start).
+## 自部署教程
 
-## Self-hosted
-
-### Deploy with Vercel
+### 使用 Vercel 部署
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/oiov/wr.do.git&project-name=wrdo)
 
-Remember to fill in the necessary environment variables.
+记得填写必要的环境变量。
 
-### Deploy with Docker Compose
+### 使用 Docker Compose 部署
 
-Create a new folder and copy the [`docker-compose.yml`](https://github.com/oiov/wr.do/blob/main/docker-compose.yml)、[`.env`](https://github.com/oiov/wr.do/blob/main/.env.example) file to the folder.
-
-```yml
-- wrdo
-  | - docker-compose.yml
-  | - .env
-```
-
-Fill in the environment variables in the `.env` file, then: 
+在服务器中创建一个文件夹，进入该文件夹并新建`docker-compose.yml`文件，填写必要的环境变量，然后执行：
 
 ```bash
 docker compose up -d
 ```
 
-## Local development
+## 本地开发
+
+将 `.env.example` 复制为 `.env` 并填写必要的环境变量。
 
 ```bash
 git clone https://github.com/oiov/wr.do
@@ -124,9 +128,7 @@ cd wr.do
 pnpm install
 ```
 
-copy `.env.example` to `.env` and fill in the necessary environment variables.
-
-#### Init database
+#### 初始化数据库
 
 ```bash
 pnpm postinstall
@@ -134,57 +136,42 @@ pnpm db:push
 ```
 
 ```bash
-# run on localhost:3000
+# 在 localhost:3000 上运行
 pnpm dev
 ```
 
-- Default admin account：`admin@admin.com`
-- Default admin password：`123456`
+- 默认账号(管理员)：`admin@admin.com`
+- 默认密码：`123456`
 
-#### Setup Admin Panel
+> 登录后请及时修改密码
 
-> After v1.0.2, this setup guide is not needed anymore
+#### 管理员初始化
 
-Follow https://localhost:3000/setup
+> 此初始化引导在 v1.0.2 版本后, 不再是必要步骤
 
-## Deploy with Edgeone
+访问 https://localhost:3000/setup
 
-[![使用 EdgeOne Pages 部署](https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg)](https://edgeone.ai/pages/new?repository-url=https%3A%2F%2Fgithub.com%2Foiov%2Fwr.do)
+## 环境变量
 
-## Environment Variables
+查看 [开发者文档](https://wr.do/docs/developer).
 
-Via [Installation For Developer](https://wr.do/docs/developer).
+## Fork 仓库同步
 
-## Technology Stack
+本项目配置了与上游仓库 [oiov/wr.do](https://github.com/oiov/wr.do) 的同步工作流，支持：
 
-- Next.js + React + TypeScript
-- Tailwind CSS for styling and design
-- Prisma ORM as the database toolkit
-- Cloudflare as the primary cloud infrastructure
-- Vercel as the recommended deployment platform
-- Resend as the primary email service
+- 🔄 **手动触发同步** - 默认关闭自动同步，完全控制同步时机
+- 💬 **同步后自动评论** - 在相关 commit 上添加详细的同步信息
+- 🚨 **智能错误处理** - 同步失败时自动创建详细的 Issue
+- 🧹 **自动清理通知** - 自动关闭之前的同步失败 Issue
 
-## Fork Repository Sync
+前往[如何手动触发同步](https://wr.do/docs/developer/sync)查看详细文档。
 
-This project is configured with a sync workflow for the upstream repository [oiov/wr.do](https://github.com/oiov/wr.do), featuring:
-
-- 🔄 **Manual Sync Trigger** - Auto-sync disabled by default, full control over sync timing
-- 💬 **Auto Comment After Sync** - Add detailed sync information to related commits
-- 🚨 **Smart Error Handling** - Auto-create detailed Issues when sync fails
-- 🧹 **Auto Cleanup Notifications** - Automatically close previous sync failure Issues
-
-See [How to Trigger Sync](https://wr.do/docs/developer/sync) for details.
-
-## Community Group
+## 社区群组
 
 - Discord: https://discord.gg/AHPQYuZu3m
 - 微信群：
 
 <img width="300" src="https://wr.do/s/group" />
-
-## License
-
-[MIT](/LICENSE.md)
 
 ## Star History
 
@@ -195,3 +182,7 @@ See [How to Trigger Sync](https://wr.do/docs/developer/sync) for details.
    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=oiov/wr.do&type=Date" />
  </picture>
 </a>
+
+## 开源协议
+
+[MIT](/LICENSE.md)
