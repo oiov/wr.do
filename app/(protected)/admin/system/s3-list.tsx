@@ -7,8 +7,8 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import useSWR from "swr";
 
-import { BucketItem, CloudStorageCredentials } from "@/lib/r2";
-import { cn, fetcher } from "@/lib/utils";
+import { BucketItem, CloudStorageCredentials } from "@/lib/s3";
+import { cn, fetcher, formatFileSize } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -365,7 +365,7 @@ export default function S3Configs({}: {}) {
                   {/* buckets */}
                   {config.buckets.map((bucket, index2) => (
                     <motion.div
-                      className="relative grid grid-cols-1 gap-4 rounded-lg border border-dashed border-muted-foreground px-3 pb-3 pt-10 text-neutral-600 dark:text-neutral-400 sm:grid-cols-3"
+                      className="relative grid grid-cols-1 gap-4 rounded-lg border border-dashed border-muted-foreground px-3 pb-3 pt-10 text-neutral-600 dark:text-neutral-400 sm:grid-cols-4"
                       key={`bucket-${index2}`}
                       layout
                       initial={{ opacity: 0, scale: 0.9 }}
@@ -446,6 +446,8 @@ export default function S3Configs({}: {}) {
                               region: "auto",
                               custom_domain: "",
                               file_size: "26214400",
+                              max_storage: "1073741824",
+                              max_files: "1000",
                               public: true,
                             });
                             setS3Configs(
@@ -538,6 +540,81 @@ export default function S3Configs({}: {}) {
                         />
                       </div>
 
+                      <div className="mt-1 space-y-2">
+                        <div className="flex items-center gap-1">
+                          <Label>{t("Max File Size")}</Label>
+                          <TooltipProvider>
+                            <Tooltip delayDuration={0}>
+                              <TooltipTrigger>
+                                <Icons.help className="size-4 text-muted-foreground" />
+                              </TooltipTrigger>
+                              <TooltipContent className="max-w-64 text-wrap">
+                                {t("maxStorageTooltip")}
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        </div>
+                        <div className="relative">
+                          <Input
+                            value={bucket.file_size}
+                            placeholder="26214400"
+                            onChange={(e) =>
+                              updateBucket(index2, {
+                                file_size: e.target.value,
+                              })
+                            }
+                          />
+                          {bucket.file_size && (
+                            <span className="absolute right-2 top-[11px] text-xs text-muted-foreground">
+                              ≈{formatFileSize(Number(bucket.file_size))}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <div className="space-y-1">
+                        <Label>{t("Max File Count")}</Label>
+                        <Input
+                          value={bucket.max_files}
+                          placeholder="1000"
+                          onChange={(e) =>
+                            updateBucket(index2, {
+                              max_files: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                      <div className="mt-1 space-y-2">
+                        <div className="flex items-center gap-1">
+                          <Label>{t("Max Storage")}</Label>
+                          <TooltipProvider>
+                            <Tooltip delayDuration={0}>
+                              <TooltipTrigger>
+                                <Icons.help className="size-4 text-muted-foreground" />
+                              </TooltipTrigger>
+                              <TooltipContent className="max-w-64 text-wrap">
+                                {t("maxStorageTooltip")}
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        </div>
+                        <div className="relative">
+                          <Input
+                            value={bucket.max_storage}
+                            placeholder="10737418240"
+                            onChange={(e) =>
+                              updateBucket(index2, {
+                                max_storage: e.target.value,
+                              })
+                            }
+                          />
+                          {bucket.max_storage && (
+                            <span className="absolute right-2 top-[11px] text-xs text-muted-foreground">
+                              ≈{formatFileSize(Number(bucket.max_storage))}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
                       <div className="flex flex-col justify-center space-y-3">
                         <div className="flex items-center gap-1">
                           <Label>{t("Public")}</Label>
@@ -567,7 +644,7 @@ export default function S3Configs({}: {}) {
                   <div className="flex items-center justify-between gap-3">
                     <Link
                       className="text-sm text-blue-500 hover:underline"
-                      href="/docs/developer/cloud-storage#cloudflare-r2"
+                      href="/docs/developer/cloud-storage"
                       target="_blank"
                     >
                       {t("How to get the S3 credentials?")}
@@ -592,6 +669,7 @@ export default function S3Configs({}: {}) {
                                 region: "auto",
                                 custom_domain: "",
                                 file_size: "26214400",
+                                max_storage: "",
                                 public: true,
                               },
                             ],

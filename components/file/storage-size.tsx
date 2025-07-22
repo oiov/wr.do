@@ -1,13 +1,15 @@
 import React from "react";
 import { AlertTriangle, CheckCircle, HardDrive } from "lucide-react";
 
-import { formatFileSize } from "@/lib/utils";
+import { formatFileSize, nFormatter } from "@/lib/utils";
 
-export function FileSizeDisplay({ files, plan, t }) {
-  const totalSize = files?.totalSize || 0;
-  const maxSize = Number(plan?.stMaxTotalSize || 0);
+export function FileSizeDisplay({ bucketUsage, t }) {
+  // 从统一的 bucketUsage 中获取数据
+  const totalSize = bucketUsage?.usage?.totalSize || 0;
+  const maxSize = bucketUsage?.limits?.maxStorage || 0;
   const usagePercentage =
     maxSize > 0 ? Math.min((totalSize / maxSize) * 100, 100) : 0;
+  const bucketName = bucketUsage?.bucket || "";
 
   const getStatusColor = (percentage) => {
     if (percentage >= 90) return "text-red-600";
@@ -27,6 +29,31 @@ export function FileSizeDisplay({ files, plan, t }) {
     return <CheckCircle className="h-4 w-4" />;
   };
 
+  const getStatusText = (percentage) => {
+    if (percentage >= 90) return t("storageFull");
+    if (percentage >= 70) return t("storageHigh");
+    return t("storageGood");
+  };
+
+  // 处理无数据或异常情况
+  if (!bucketUsage || maxSize <= 0) {
+    return (
+      <div className="mx-auto w-full max-w-md p-4">
+        <div className="mb-3 flex items-center gap-2">
+          <HardDrive className="h-5 w-5 text-neutral-600 dark:text-neutral-200" />
+          <h3 className="text-sm font-medium text-neutral-700 dark:text-neutral-200">
+            {t("storageUsage")}
+          </h3>
+        </div>
+        <div className="rounded-md bg-neutral-50 p-3 dark:bg-neutral-800">
+          <span className="text-xs text-neutral-500 dark:text-neutral-400">
+            {t("storageDataUnavailable")}
+          </span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto w-full max-w-md p-4">
       {/* 标题 */}
@@ -41,7 +68,7 @@ export function FileSizeDisplay({ files, plan, t }) {
       <div className="mb-3">
         <div className="mb-1 flex items-center justify-between">
           <span className="text-xs text-neutral-500 dark:text-neutral-300">
-            {t("used")}
+            {bucketName ? `${bucketName}` : t("storageQuota")}
           </span>
           <span className="text-xs text-neutral-500 dark:text-neutral-300">
             {usagePercentage.toFixed(1)}%
@@ -56,53 +83,58 @@ export function FileSizeDisplay({ files, plan, t }) {
       </div>
 
       {/* 详细信息 */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-neutral-600 dark:text-neutral-300">
+      <div className="mb-3 space-y-1">
+        <div className="flex items-center justify-between text-xs">
+          <span className="text-neutral-600 dark:text-neutral-300">
             {t("usedSpace")}:
           </span>
-          <span className="text-sm font-medium">
+          <span className="font-medium">
             {formatFileSize(totalSize, { precision: 2 })}
           </span>
         </div>
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-neutral-600 dark:text-neutral-300">
+        <div className="flex items-center justify-between text-xs">
+          <span className="text-neutral-600 dark:text-neutral-300">
             {t("totalCapacity")}:
           </span>
-          <span className="text-sm font-medium">
+          <span className="font-medium">
             {formatFileSize(maxSize, { precision: 2 })}
           </span>
         </div>
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-neutral-600 dark:text-neutral-300">
+        <div className="flex items-center justify-between text-xs">
+          <span className="text-neutral-600 dark:text-neutral-300">
             {t("availableSpace")}:
           </span>
-          <span className="text-sm font-medium">
+          <span className="font-medium">
             {formatFileSize(maxSize - totalSize, { precision: 2 })}
           </span>
         </div>
+        {bucketUsage?.usage?.totalFiles !== undefined && (
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-neutral-600 dark:text-neutral-300">
+              {t("totalFiles")}:
+            </span>
+            <span className="font-medium">
+              {bucketUsage.usage.totalFiles.toLocaleString()} /{" "}
+              {nFormatter(bucketUsage.limits.maxFiles)}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* 状态提示 */}
       <div
-        className={`mt-3 flex items-center gap-2 rounded-md bg-neutral-50 p-2 dark:bg-neutral-800 ${getStatusColor(usagePercentage)}`}
+        className={`flex items-center gap-2 rounded-md bg-neutral-50 p-2 dark:bg-neutral-800 ${getStatusColor(usagePercentage)}`}
       >
         {getStatusIcon(usagePercentage)}
-        <span className="text-xs">
-          {usagePercentage >= 90
-            ? t("storageFull")
-            : usagePercentage >= 70
-              ? t("storageHigh")
-              : t("storageGood")}
-        </span>
+        <span className="text-xs">{getStatusText(usagePercentage)}</span>
       </div>
     </div>
   );
 }
 
-export function CircularStorageIndicator({ files, plan, size = 32 }) {
-  const totalSize = files?.totalSize || 0;
-  const maxSize = Number(plan?.stMaxTotalSize || 0);
+export function CircularStorageIndicator({ bucketUsage, size = 32 }) {
+  const totalSize = bucketUsage?.usage?.totalSize || 0;
+  const maxSize = bucketUsage?.limits?.maxStorage || 0;
   const usagePercentage =
     maxSize > 0 ? Math.min((totalSize / maxSize) * 100, 100) : 0;
 
@@ -118,6 +150,20 @@ export function CircularStorageIndicator({ files, plan, size = 32 }) {
     if (percentage >= 70) return "#f59e0b"; // amber-500
     return "#3b82f6"; // blue-500
   };
+
+  // 处理无数据情况
+  if (!bucketUsage || maxSize <= 0) {
+    return (
+      <div
+        className="relative flex items-center justify-center rounded-full bg-neutral-100 dark:bg-neutral-700"
+        style={{ width: size, height: size }}
+      >
+        <span className="text-xs text-neutral-500 dark:text-neutral-400">
+          -
+        </span>
+      </div>
+    );
+  }
 
   return (
     <div

@@ -211,9 +211,17 @@
     "usedSpace": "Used Space",
     "totalCapacity": "Total Capacity",
     "availableSpace": "Available Space",
+    "totalFiles": "Total Files",
+    "storageDataUnavailable": "Storage data is unavailable",
     "storageFull": "Storage space is almost full",
     "storageHigh": "Storage space usage is high",
     "storageGood": "Storage space is sufficient",
+    "planQuota": "Plan Quota",
+    "planUsagePercentage": "Usage Percentage",
+    "bucketQuota": "Bucket Quota",
+    "bucketCapacity": "Bucket Capacity",
+    "bucketStorageFull": "Bucket storage is almost full",
+    "bucketStorageHigh": "Bucket storage usage is high",
     "items": "items",
     "Total": "Total",
     "Configuration Error": "Configuration Error"
@@ -360,6 +368,7 @@
     "Uploading": "Uploading",
     "Completed": "Completed",
     "Aborted": "Aborted",
+    "Failed": "Failed",
     "Drop files to upload them to": "Drop files to upload them to",
     "Drag and drop file(s) here": "Drag and drop file(s) here",
     "or": "or",
@@ -623,6 +632,8 @@
     "Region": "Region",
     "Prefix": "Prefix",
     "Optional": "Optional",
+    "Max Storage": "Max Storage",
+    "maxStorageTooltip": "Set maximum storage capacity for this bucket (in bytes). If not set, uses plan quota global limit.",
     "Allowed File Types": "Allowed File Types",
     "Public": "Public",
     "Publicize this storage bucket, all registered users can upload files to this storage bucket; If not public, only administrators can upload files to this storage bucket": "Publicize this storage bucket, all registered users can upload files to this storage bucket; If not public, only administrators can upload files to this storage bucket",
@@ -632,6 +643,7 @@
     "Unique": "Unique",
     "Add Provider": "Add Provider",
     "{length} Buckets": "{length} Buckets",
-    "Save Modifications": "Save Modifications"
+    "Save Modifications": "Save Modifications",
+    "Max File Count": "Max File Count"
   }
 }

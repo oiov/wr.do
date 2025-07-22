@@ -32,8 +32,10 @@ export interface BucketItem {
   bucket: string;
   custom_domain?: string;
   prefix?: string;
-  file_types?: string;
-  file_size?: string;
+  file_types?: string; // 允许上传的文件类型
+  file_size?: string; // 单个文件限制（字节）
+  max_files?: string; // 存储桶最大文件数量
+  max_storage?: string; // 存储桶最大存储容量（字节）
   region?: string;
   public: boolean;
 }
