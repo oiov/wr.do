@@ -43,7 +43,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
                 disableTransitionOnChange
               >
                 <ModalProvider>{children}</ModalProvider>
-                <Toaster richColors closeButton />
+                <Toaster richColors closeButton position="bottom-right" />
                 <TailwindIndicator />
               </ThemeProvider>
             </SessionProvider>

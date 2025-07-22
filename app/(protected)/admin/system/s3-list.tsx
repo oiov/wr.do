@@ -65,7 +65,7 @@ export default function S3Configs({}: {}) {
     {
       label: "Custom Provider",
       value: "Custom Provider",
-      platform: "custom provider",
+      platform: "custom",
       channel: "cp",
     },
   ];
@@ -446,6 +446,7 @@ export default function S3Configs({}: {}) {
                               region: "auto",
                               custom_domain: "",
                               file_size: "26214400",
+                              max_storage: "",
                               public: true,
                             });
                             setS3Configs(
@@ -538,6 +539,38 @@ export default function S3Configs({}: {}) {
                         />
                       </div>
 
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-1">
+                          <Label>
+                            {t("Max Storage")} ({t("Optional")})
+                          </Label>
+                          <TooltipProvider>
+                            <Tooltip delayDuration={0}>
+                              <TooltipTrigger>
+                                <Icons.help className="size-4 text-muted-foreground" />
+                              </TooltipTrigger>
+                              <TooltipContent className="max-w-64 text-wrap">
+                                {t("maxStorageTooltip")}
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        </div>
+                        <div className="relative">
+                          <Input
+                            value={bucket.max_storage || ""}
+                            placeholder="10737418240"
+                            onChange={(e) =>
+                              updateBucket(index2, { max_storage: e.target.value })
+                            }
+                          />
+                          {bucket.max_storage && (
+                            <span className="absolute right-2 top-[11px] text-xs text-muted-foreground">
+                              ≈{(Number(bucket.max_storage) / (1024 * 1024 * 1024)).toFixed(1)}GB
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
                       <div className="flex flex-col justify-center space-y-3">
                         <div className="flex items-center gap-1">
                           <Label>{t("Public")}</Label>
@@ -592,6 +625,7 @@ export default function S3Configs({}: {}) {
                                 region: "auto",
                                 custom_domain: "",
                                 file_size: "26214400",
+                                max_storage: "",
                                 public: true,
                               },
                             ],

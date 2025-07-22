@@ -124,6 +124,17 @@ export default function UserFileManager({ user, action }: FileListProps) {
     fetcher,
   );
 
+  const { data: bucketUsage } = useSWR(
+    currentBucketInfo.bucket && currentBucketInfo.provider_name
+      ? `/api/storage/bucket-usage?bucket=${currentBucketInfo.bucket}&provider=${currentBucketInfo.provider_name}`
+      : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      refreshInterval: 30000, // 每30秒更新一次
+    },
+  );
+
   useEffect(() => {
     if (s3Configs && s3Configs.length > 0) {
       setCurrentProvider(s3Configs[0]);
@@ -261,11 +272,22 @@ export default function UserFileManager({ user, action }: FileListProps) {
           <ClickableTooltip
             content={
               <div className="w-80">
-                <FileSizeDisplay files={files} plan={plan} t={t} />
+                <FileSizeDisplay 
+                  files={files} 
+                  plan={plan} 
+                  bucketInfo={currentBucketInfo}
+                  bucketUsage={bucketUsage}
+                  t={t} 
+                />
               </div>
             }
           >
-            <CircularStorageIndicator files={files} plan={plan} size={36} />
+            <CircularStorageIndicator 
+              files={files} 
+              plan={plan} 
+              bucketUsage={bucketUsage}
+              size={36} 
+            />
           </ClickableTooltip>
         )}
         {/* Bucket Select */}
