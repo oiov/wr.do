@@ -241,25 +241,27 @@ export default function UserFileList({
         <CopyButton className="size-6" value={getFileUrl(file.path)} />
       </div>
       <div className="flex items-center gap-2">
-        <Icons.code className="size-3 flex-shrink-0" />
-        <p className="line-clamp-1 truncate rounded-md bg-neutral-100 p-1.5 text-xs hover:text-blue-500 dark:bg-neutral-800">
-          {`<img src="${getFileUrl(file.path)}" alt="${file.name}">${getFileUrl(file.path)}</img>`}
-        </p>
-        <CopyButton
-          className="size-6"
-          value={`<img src="${getFileUrl(file.path)}" alt="${file.name}">${getFileUrl(file.path)}</img>`}
-        />
-      </div>
-      <div className="flex items-center gap-2">
         <Icons.type className="size-3 flex-shrink-0" />
         <p className="line-clamp-1 truncate rounded-md bg-neutral-100 p-1.5 text-xs hover:text-blue-500 dark:bg-neutral-800">
-          {`![${file.name}](${getFileUrl(file.path)})`}
+          {`[${file.name}](${getFileUrl(file.path)})`}
         </p>
         <CopyButton
           className="size-6"
-          value={`![${file.name}](${getFileUrl(file.path)})`}
+          value={`[${file.name}](${getFileUrl(file.path)})`}
         />
       </div>
+      {file.mimeType.startsWith("image/") && (
+        <div className="flex items-center gap-2">
+          <Icons.code className="size-3 flex-shrink-0" />
+          <p className="line-clamp-1 truncate rounded-md bg-neutral-100 p-1.5 text-xs hover:text-blue-500 dark:bg-neutral-800">
+            {`<img src="${getFileUrl(file.path)}" alt="${file.name}">${getFileUrl(file.path)}</img>`}
+          </p>
+          <CopyButton
+            className="size-6"
+            value={`<img src="${getFileUrl(file.path)}" alt="${file.name}">${getFileUrl(file.path)}</img>`}
+          />
+        </div>
+      )}
     </>
   );
 
@@ -355,10 +357,10 @@ export default function UserFileList({
                 <ClickableTooltip
                   className="cursor-pointer truncate"
                   content={
-                    <>
+                    <div className="p-2">
                       <p>{file.user.name}</p>
                       <p>{file.user.email}</p>
-                    </>
+                    </div>
                   }
                 >
                   {file.user.name ?? file.user.email}

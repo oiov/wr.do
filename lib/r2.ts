@@ -34,6 +34,7 @@ export interface BucketItem {
   prefix?: string;
   file_types?: string;
   file_size?: string;
+  max_storage?: string; // 存储桶最大存储容量（字节）
   region?: string;
   public: boolean;
 }

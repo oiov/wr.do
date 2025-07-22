@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
+import { getBucketStorageUsage } from "@/lib/dto/files";
 import { getPlanQuota } from "@/lib/dto/plan";
 import { getMultipleConfigs } from "@/lib/dto/system-config";
 import { checkUserStatus } from "@/lib/dto/user";
@@ -59,6 +60,27 @@ export async function POST(request: NextRequest) {
       rangeType: "month",
     });
     if (limit) return Response.json(limit.statusText, { status: limit.status });
+
+    // 检查存储桶容量限制
+    const bucketConfig = buckets.find((b) => b.bucket === bucket);
+    const totalUploadSize = files.reduce((sum, file) => sum + Number(file.size), 0);
+    
+    if (bucketConfig?.max_storage) {
+      const bucketUsage = await getBucketStorageUsage(bucket, provider);
+      if (bucketUsage.success && bucketUsage.data) {
+        const currentUsage = bucketUsage.data.totalSize;
+        const maxStorage = Number(bucketConfig.max_storage);
+        
+        if (currentUsage + totalUploadSize > maxStorage) {
+          const remainingSpace = maxStorage - currentUsage;
+          const remainingSpaceGB = (remainingSpace / (1024 * 1024 * 1024)).toFixed(2);
+          return Response.json(
+            `存储桶容量不足！剩余 ${remainingSpaceGB}GB，请更换存储桶`,
+            { status: 403 }
+          );
+        }
+      }
+    }
 
     const R2 = createS3Client(
       providerChannel.endpoint,

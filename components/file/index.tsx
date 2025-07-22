@@ -124,6 +124,17 @@ export default function UserFileManager({ user, action }: FileListProps) {
     fetcher,
   );
 
+  const { data: bucketUsage } = useSWR(
+    currentBucketInfo.bucket && currentBucketInfo.provider_name
+      ? `/api/storage/bucket-usage?bucket=${currentBucketInfo.bucket}&provider=${currentBucketInfo.provider_name}`
+      : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      refreshInterval: 30000, // 每30秒更新一次
+    },
+  );
+
   useEffect(() => {
     if (s3Configs && s3Configs.length > 0) {
       setCurrentProvider(s3Configs[0]);
@@ -261,11 +272,22 @@ export default function UserFileManager({ user, action }: FileListProps) {
           <ClickableTooltip
             content={
               <div className="w-80">
-                <FileSizeDisplay files={files} plan={plan} t={t} />
+                <FileSizeDisplay 
+                  files={files} 
+                  plan={plan} 
+                  bucketInfo={currentBucketInfo}
+                  bucketUsage={bucketUsage}
+                  t={t} 
+                />
               </div>
             }
           >
-            <CircularStorageIndicator files={files} plan={plan} size={36} />
+            <CircularStorageIndicator 
+              files={files} 
+              plan={plan} 
+              bucketUsage={bucketUsage}
+              size={36} 
+            />
           </ClickableTooltip>
         )}
         {/* Bucket Select */}
@@ -288,7 +310,7 @@ export default function UserFileManager({ user, action }: FileListProps) {
                 <SelectValue placeholder="Select a bucket" />
               </SelectTrigger>
               <SelectContent>
-                {s3Configs.map((provider) => (
+                {s3Configs.map((provider, index) => (
                   <SelectGroup>
                     <SelectLabel>{provider.provider_name}</SelectLabel>
                     {provider.buckets?.map((item) => (
@@ -299,7 +321,7 @@ export default function UserFileManager({ user, action }: FileListProps) {
                         {item.bucket}
                       </SelectItem>
                     ))}
-                    <SelectSeparator />
+                    {index !== s3Configs.length - 1 && <SelectSeparator />}
                   </SelectGroup>
                 ))}
               </SelectContent>
@@ -415,25 +437,28 @@ export default function UserFileManager({ user, action }: FileListProps) {
         </EmptyPlaceholder>
       )}
 
-      {!isLoading && !error && !s3Configs && !currentBucketInfo && (
-        <EmptyPlaceholder className="col-span-full mt-8 shadow-none">
-          <EmptyPlaceholder.Icon name="storage" />
-          <EmptyPlaceholder.Title>
-            {t("No buckets found")}
-          </EmptyPlaceholder.Title>
-          <EmptyPlaceholder.Description>
-            {t(
-              "The administrator has not configured the storage bucket, no file can be uploaded",
-            )}
-          </EmptyPlaceholder.Description>
-        </EmptyPlaceholder>
-      )}
+      {!isLoading &&
+        !error &&
+        !s3Configs?.length &&
+        !currentBucketInfo.bucket && (
+          <EmptyPlaceholder className="col-span-full mt-8 shadow-none">
+            <EmptyPlaceholder.Icon name="storage" />
+            <EmptyPlaceholder.Title>
+              {t("No buckets found")}
+            </EmptyPlaceholder.Title>
+            <EmptyPlaceholder.Description>
+              {t(
+                "The administrator has not configured the storage bucket, no file can be uploaded",
+              )}
+            </EmptyPlaceholder.Description>
+          </EmptyPlaceholder>
+        )}
 
       {!isLoading &&
         !error &&
         s3Configs &&
         s3Configs.length > 0 &&
-        currentBucketInfo && (
+        currentBucketInfo.bucket && (
           <UserFileList
             user={user}
             files={files}

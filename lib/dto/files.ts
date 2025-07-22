@@ -158,9 +158,8 @@ export async function getUserFiles(options: QueryUserFileOptions = {}) {
       }),
       prisma.userFile.count({ where }),
       prisma.userFile.aggregate({
-        // All provider's file size
         where: {
-          userId,
+          ...(userId && { userId }),
           status: 1,
         },
         _sum: { size: true },
@@ -275,7 +274,7 @@ export async function getUserFileStats(userId: string) {
       success: true,
       data: {
         totalFiles,
-        totalSize: totalSize._sum.size || 0,
+        totalSize: storageValueToBytes(totalSize._sum.size || 0),
         filesByProvider,
       },
     };
@@ -356,5 +355,41 @@ export async function cleanupExpiredFiles(days: number = 30) {
   } catch (error) {
     console.error("Failed to clean up expired files:", error);
     return { success: false, error: "Failed to clean up expired files" };
+  }
+}
+
+// 获取特定存储桶的使用量统计
+export async function getBucketStorageUsage(
+  bucket: string,
+  providerName: string,
+): Promise<
+  | { success: true; data: { totalSize: number; totalFiles: number } }
+  | { success: false; error: string }
+> {
+  try {
+    const result = await prisma.userFile.aggregate({
+      where: {
+        bucket,
+        providerName,
+        status: 1,
+      },
+      _sum: {
+        size: true,
+      },
+      _count: {
+        id: true,
+      },
+    });
+
+    return {
+      success: true,
+      data: {
+        totalSize: storageValueToBytes(result._sum.size || 0),
+        totalFiles: result._count.id || 0,
+      },
+    };
+  } catch (error) {
+    console.error("Failed to get bucket storage usage:", error);
+    return { success: false, error: "Failed to get bucket storage usage" };
   }
 }

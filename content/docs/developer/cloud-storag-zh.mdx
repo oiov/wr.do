@@ -1,0 +1,259 @@
+---
+title: 云存储配置
+description: 如何配置多平台云存储
+---
+
+<DocsLang en="/docs/developer/cloud-storage" zh="/docs/developer/cloud-storag-zh" />
+
+## 概览
+
+管理员可以在 `/admin/system` 管理 S3 配置，包括添加、删除和修改云存储的 S3 配置。
+
+WR.DO 目前支持多种云存储提供商：
+
+- Cloudflare R2
+- AWS S3
+- 腾讯云 COS
+- 阿里云 OSS
+- 自定义提供商 (兼容 S3 API)
+
+> 一个提供商可以添加多个存储桶
+
+## Cloudflare R2
+
+### 1. 创建 R2 存储桶
+
+1. 登录您的 [Cloudflare 仪表板](https://dash.cloudflare.com/)
+2. 从左侧边栏导航到 **R2 对象存储**
+3. 点击 **创建存储桶**
+4. 输入您的存储桶名称（例如：`wrdo`）
+5. 选择位置（建议选择自动）
+6. 点击 **创建存储桶**
+
+### 2. 获取 API 凭证
+
+1. 在您的 Cloudflare 仪表板中，前往 **我的个人资料** > **API 令牌**
+2. 点击 **创建令牌**
+3. 使用 **R2 令牌** 模板或创建自定义令牌，包含：
+   - **权限**: `R2:Edit`
+   - **账户资源**: 包含您的账户
+   - **区域资源**: 包含所有区域（如果需要）
+4. 点击 **继续摘要**，然后 **创建令牌**
+5. 复制并保存令牌（这是您的 **访问密钥 ID** 和 **秘密访问密钥**）
+
+### 3. 获取账户 ID
+
+1. 在您的 Cloudflare 仪表板中，前往右侧边栏
+2. 复制您的 **账户 ID**
+
+### 4. 获取公共 URL
+
+1. 在您的 Cloudflare 仪表板中，前往 **R2 对象存储** > **存储桶详情** > **公共开发 URL**
+
+如果您已配置自定义域名，请使用该域名。
+
+### 5. 配置 CORS
+
+1. 在您的 Cloudflare 仪表板中，前往 **R2 对象存储** > **存储桶设置** -> **CORS 策略**
+
+填入以下内容：
+
+```json
+[
+  {
+    "AllowedOrigins": [
+      "http://localhost:3000",
+      "https://wr.do" // 替换为您的域名
+    ],
+    "AllowedMethods": [
+      "GET",
+      "PUT",
+      "POST",
+      "DELETE",
+      "HEAD"
+    ],
+    "AllowedHeaders": [
+      "*"
+    ],
+    "ExposeHeaders": [
+      "ETag"
+    ],
+    "MaxAgeSeconds": 3600
+  }
+]
+```
+
+### 6. 在 WR.DO 中配置
+
+访问 `localhost:3000/admin/system`，填写配置表单：
+
+- **提供渠道**: cloudflare (r2)
+- **渠道名称**: Cloudflare R2（或任何自定义名称）
+- **S3 端点**: `https://<账户ID>.r2.cloudflarestorage.com`（替换为您的账户端点）
+- **访问密钥 ID**: 第 2 步中的 API 令牌
+- **机密访问密钥**: 第 2 步中的 API 令牌
+- **启用**: 开启
+- **存储桶名称**: 您的存储桶名称
+- **公开域名或自定义域名**: 参考第 4 步
+- **存储桶区域**: auto
+- **前缀**: 可选
+- **公开**: 如果您想要公共访问，请启用
+
+## 腾讯云 COS
+
+### 1. 创建 COS 存储桶
+
+1. 登录 [腾讯云控制台](https://console.cloud.tencent.com/cos)
+2. 点击 **存储桶列表** > **创建存储桶**
+3. 输入存储桶名称（例如：`wrdo-1303456836`）
+4. 选择地域（例如：`ap-chengdu`）
+5. 配置访问权限
+6. 点击 **创建**
+
+### 2. 获取 API 密钥
+
+1. 前往 [CAM 控制台](https://console.cloud.tencent.com/cam/capi)
+2. 点击 **新建密钥** 或使用现有密钥
+3. 保存您的 **SecretId** 和 **SecretKey**
+
+### 3. CORS 设置
+
+1. 前往 [COS 控制台](https://console.cloud.tencent.com/cos)
+2. 点击 **存储桶列表** > **选择存储桶** -> 安全管理 -> 跨域访问 CORS 设置
+3. 填入下列规则:
+
+![](/_static/docs/cos-cors.png)
+
+### 4. 在 WR.DO 中配置
+
+填写配置表单：
+
+- **提供渠道**: tencent (cos)
+- **渠道名称**: 腾讯云 COS（或任何自定义名称）
+- **S3 端点**: `https://cos.ap-chengdu.myqcloud.com`（替换为您的地域）
+- **访问密钥 ID**: 您的 SecretId
+- **机密访问密钥**: 您的 SecretKey
+- **启用**: 开启
+- **存储桶名称**: 您的存储桶名称（例如：`wrdo-1303456836`）
+- **公开域名或自定义域名**: `https://wrdo-1303456836.cos.ap-chengdu.myqcloud.com`（您的存储桶公共 URL）
+- **存储桶区域**: 您的 COS 地域（例如：`ap-chengdu`）
+- **前缀**: 可选日期前缀
+- **公开**: 如果您想要公共访问，请启用
+
+## 阿里云 OSS
+
+### 1. 创建 OSS 存储桶
+
+1. 登录 [阿里云控制台](https://oss.console.aliyun.com/)
+2. 点击 **创建 Bucket**
+3. 输入存储桶名称
+4. 选择地域（例如：`oss-cn-hangzhou`）
+5. 配置 ACL 和其他设置
+6. 点击 **确定**
+
+### 2. 获取 AccessKey
+
+1. 前往 [RAM 控制台](https://ram.console.aliyun.com/manage/ak)
+2. 点击 **创建 AccessKey** 或使用现有密钥
+3. 保存您的 **AccessKeyId** 和 **AccessKeySecret**
+
+### 3. 在 WR.DO 中配置
+
+填写配置表单：
+
+- **提供渠道**: ali (oss)
+- **渠道名称**: 阿里云 OSS（或任何自定义名称）
+- **S3 端点**: `https://oss-cn-hangzhou.aliyuncs.com`（替换为您的地域）
+- **访问密钥 ID**: 您的 AccessKeyId
+- **机密访问密钥**: 您的 AccessKeySecret
+- **启用**: 开启
+- **存储桶名称**: 您的存储桶名称
+- **公开域名或自定义域名**: `https://your-bucket.oss-cn-hangzhou.aliyuncs.com`（您的存储桶公共 URL）
+- **存储桶区域**: 您的 OSS 地域（例如：`oss-cn-hangzhou`）
+- **前缀**: 可选日期前缀
+- **公开**: 如果您想要公共访问，请启用
+
+## AWS S3
+
+### 1. 创建 S3 存储桶
+
+1. 登录 [AWS 控制台](https://console.aws.amazon.com/s3/)
+2. 点击 **创建存储桶**
+3. 输入存储桶名称（全球唯一）
+4. 选择 AWS 区域
+5. 根据需要配置存储桶设置
+6. 点击 **创建存储桶**
+
+### 2. 创建 IAM 用户
+
+1. 前往 [IAM 控制台](https://console.aws.amazon.com/iam/)
+2. 点击 **用户** > **添加用户**
+3. 输入用户名并选择 **编程访问**
+4. 附加现有策略或创建具有 S3 权限的自定义策略：
+   ```json
+   {
+     "Version": "2012-10-17",
+     "Statement": [
+       {
+         "Effect": "Allow",
+         "Action": [
+           "s3:GetObject",
+           "s3:PutObject",
+           "s3:DeleteObject",
+           "s3:ListBucket"
+         ],
+         "Resource": [
+           "arn:aws:s3:::your-bucket-name",
+           "arn:aws:s3:::your-bucket-name/*"
+         ]
+       }
+     ]
+   }
+   ```
+5. 完成用户创建并保存 **访问密钥 ID** 和 **秘密访问密钥**
+
+### 3. 在 WR.DO 中配置
+
+填写配置表单：
+
+- **提供渠道**: aws (s3)
+- **渠道名称**: AWS S3（或任何自定义名称）
+- **S3 端点**: `https://s3.amazonaws.com`（或特定区域端点）
+- **访问密钥 ID**: 您的 IAM 用户访问密钥 ID
+- **机密访问密钥**: 您的 IAM 用户秘密访问密钥
+- **启用**: 开启
+- **存储桶名称**: 您的 S3 存储桶名称
+- **公开域名或自定义域名**: 您的存储桶公共 URL 或 CloudFront 分发
+- **存储桶区域**: 您的 S3 区域（例如：`us-east-1`）
+- **前缀**: 可选日期前缀
+- **公开**: 如果您想要公共访问，请启用
+
+## 通用配置选项
+
+### 前缀设置
+- 使用基于日期的前缀（例如：`2025/08/08`）按日期组织文件
+- 如果您喜欢扁平文件结构，请留空
+
+### 公共访问
+- 如果您希望文件可以通过直接 URL 访问，请启用 **公开**
+- 对于私有文件存储，请禁用
+
+### 自定义域名
+- 配置自定义域名以获得更好的品牌体验
+- 确保为您的域名进行正确的 DNS 配置
+
+## 故障排除
+
+### 常见问题
+
+1. **访问被拒绝**: 检查您的 API 凭证和权限
+2. **存储桶未找到**: 验证存储桶名称和区域设置
+3. **CORS 问题**: 如果需要，在您的存储桶中配置 CORS 设置
+4. **端点错误**: 确保您的提供商端点格式正确
+
+### 测试配置
+
+保存配置后，您可以通过以下方式测试：
+1. 通过管理界面上传测试文件
+2. 检查文件是否出现在您的云存储桶中
+3. 验证公共访问（如果启用）是否可以通过文件 URL 访问

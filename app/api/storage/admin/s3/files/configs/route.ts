@@ -33,12 +33,6 @@ export async function GET(req: NextRequest) {
       }))
       .filter((c) => c.buckets.length > 0);
 
-    if (processedList.length === 0) {
-      return NextResponse.json("No buckets found", {
-        status: 404,
-      });
-    }
-
     return NextResponse.json(processedList);
   } catch (error) {
     console.error("[Error]", error);
