@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import useSWR, { useSWRConfig } from "swr";
 
 import { UserFileData } from "@/lib/dto/files";
-import { BucketItem, ClientStorageCredentials } from "@/lib/r2";
+import { BucketItem, ClientStorageCredentials } from "@/lib/s3";
 import { cn, fetcher } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import {
@@ -56,12 +56,28 @@ export type DisplayType = "List" | "Grid";
 export interface FileListData {
   total: number;
   totalSize: number;
+  totalFiles: number;
   list: UserFileData[];
+}
+
+export interface BucketUsage {
+  bucket: string;
+  provider: string;
+  usage: {
+    totalSize: number;
+    totalFiles: number;
+  };
+  limits: {
+    maxStorage: number;
+    maxFiles: number;
+    maxSingleFileSize: number;
+  };
 }
 
 export interface StorageUserPlan {
   stMaxTotalSize: string;
   stMaxFileSize: string;
+  stMaxFileCount: number;
 }
 
 export default function UserFileManager({ user, action }: FileListProps) {
@@ -94,6 +110,8 @@ export default function UserFileManager({ user, action }: FileListProps) {
     status: "1",
   });
 
+  const [bucketUsage, setBucketUsage] = useState<BucketUsage | null>(null);
+
   // const isAdmin = action.includes("/admin");
 
   const { mutate } = useSWRConfig();
@@ -124,17 +142,6 @@ export default function UserFileManager({ user, action }: FileListProps) {
     fetcher,
   );
 
-  const { data: bucketUsage } = useSWR(
-    currentBucketInfo.bucket && currentBucketInfo.provider_name
-      ? `/api/storage/bucket-usage?bucket=${currentBucketInfo.bucket}&provider=${currentBucketInfo.provider_name}`
-      : null,
-    fetcher,
-    {
-      revalidateOnFocus: false,
-      refreshInterval: 30000, // 每30秒更新一次
-    },
-  );
-
   useEffect(() => {
     if (s3Configs && s3Configs.length > 0) {
       setCurrentProvider(s3Configs[0]);
@@ -146,9 +153,41 @@ export default function UserFileManager({ user, action }: FileListProps) {
         channel: s3Configs[0].channel,
         provider_name: s3Configs[0].provider_name,
         public: s3Configs[0].buckets[0].public,
+        file_size: s3Configs[0].buckets[0].file_size,
+        max_files: s3Configs[0].buckets[0].max_files,
+        max_storage: s3Configs[0].buckets[0].max_storage,
       });
     }
   }, [s3Configs]);
+
+  useEffect(() => {
+    if (
+      files &&
+      currentBucketInfo.bucket &&
+      currentBucketInfo.provider_name &&
+      plan
+    ) {
+      setBucketUsage({
+        bucket: currentBucketInfo.bucket,
+        provider: currentBucketInfo.provider_name,
+        usage: {
+          totalSize: files.totalSize,
+          totalFiles: files.totalFiles,
+        },
+        limits: {
+          maxStorage: currentBucketInfo.max_storage
+            ? Number(currentBucketInfo.max_storage)
+            : Number(plan.stMaxTotalSize),
+          maxFiles: currentBucketInfo.max_files
+            ? Number(currentBucketInfo.max_files)
+            : Number(plan.stMaxFileCount),
+          maxSingleFileSize: currentBucketInfo.file_size
+            ? Number(currentBucketInfo.file_size)
+            : Number(plan.stMaxFileSize),
+        },
+      });
+    }
+  }, [files, currentBucketInfo, plan]);
 
   const handleRefresh = () => {
     setSelectedFiles([]);
@@ -162,18 +201,21 @@ export default function UserFileManager({ user, action }: FileListProps) {
     provider: ClientStorageCredentials,
     bucket: string,
   ) => {
-    console.log(provider, bucket);
-
-    setCurrentBucketInfo({
-      bucket: bucket,
-      custom_domain: provider.buckets.find((b) => b.bucket === bucket)
-        ?.custom_domain,
-      prefix: provider.buckets.find((b) => b.bucket === bucket)?.prefix,
-      platform: provider.platform,
-      channel: provider.channel,
-      provider_name: provider.provider_name,
-      public: true,
-    });
+    const new_bucket = provider.buckets.find((b) => b.bucket === bucket);
+    if (new_bucket) {
+      setCurrentBucketInfo({
+        bucket: bucket,
+        custom_domain: new_bucket.custom_domain,
+        prefix: new_bucket.prefix,
+        platform: provider.platform,
+        channel: provider.channel,
+        provider_name: provider.provider_name,
+        public: true,
+        file_size: new_bucket.file_size,
+        max_files: new_bucket.max_files,
+        max_storage: new_bucket.max_storage,
+      });
+    }
   };
 
   const handleSelectAllFiles = () => {
@@ -268,26 +310,15 @@ export default function UserFileManager({ user, action }: FileListProps) {
           />
         </div>
         {/* Storage */}
-        {files && files.totalSize > 0 && plan && (
+        {bucketUsage?.bucket && (
           <ClickableTooltip
             content={
               <div className="w-80">
-                <FileSizeDisplay 
-                  files={files} 
-                  plan={plan} 
-                  bucketInfo={currentBucketInfo}
-                  bucketUsage={bucketUsage}
-                  t={t} 
-                />
+                <FileSizeDisplay bucketUsage={bucketUsage} t={t} />
               </div>
             }
           >
-            <CircularStorageIndicator 
-              files={files} 
-              plan={plan} 
-              bucketUsage={bucketUsage}
-              size={36} 
-            />
+            <CircularStorageIndicator bucketUsage={bucketUsage} size={36} />
           </ClickableTooltip>
         )}
         {/* Bucket Select */}
@@ -332,9 +363,11 @@ export default function UserFileManager({ user, action }: FileListProps) {
         {!isLoading &&
           s3Configs &&
           s3Configs.length > 0 &&
-          currentBucketInfo && (
+          currentBucketInfo &&
+          bucketUsage && (
             <FileUploader
               bucketInfo={currentBucketInfo}
+              bucketUsage={bucketUsage}
               action="/api/storage"
               plan={plan}
               userId={user.id}

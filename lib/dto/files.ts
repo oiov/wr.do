@@ -159,18 +159,22 @@ export async function getUserFiles(options: QueryUserFileOptions = {}) {
       prisma.userFile.count({ where }),
       prisma.userFile.aggregate({
         where: {
-          // bucket,
-          // providerName,
+          bucket,
+          providerName,
           status: 1,
           ...(userId && { userId }),
         },
         _sum: { size: true },
+        _count: {
+          id: true,
+        },
       }),
     ]);
 
     return {
       total,
       totalSize: storageValueToBytes(totalSize._sum.size || 0),
+      totalFiles: totalSize._count.id || 0,
       list: files,
     };
   } catch (error) {
@@ -364,6 +368,7 @@ export async function cleanupExpiredFiles(days: number = 30) {
 export async function getBucketStorageUsage(
   bucket: string,
   providerName: string,
+  userId?: string,
 ): Promise<
   | { success: true; data: { totalSize: number; totalFiles: number } }
   | { success: false; error: string }
@@ -371,6 +376,7 @@ export async function getBucketStorageUsage(
   try {
     const result = await prisma.userFile.aggregate({
       where: {
+        ...(userId && { userId }),
         bucket,
         providerName,
         status: 1,

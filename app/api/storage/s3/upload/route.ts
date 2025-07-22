@@ -3,12 +3,10 @@ import { GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 import { getBucketStorageUsage } from "@/lib/dto/files";
-import { getPlanQuota } from "@/lib/dto/plan";
 import { getMultipleConfigs } from "@/lib/dto/system-config";
 import { checkUserStatus } from "@/lib/dto/user";
-import { createS3Client } from "@/lib/r2";
+import { createS3Client } from "@/lib/s3";
 import { getCurrentUser } from "@/lib/session";
-import { restrictByTimeRange } from "@/lib/team";
 import { generateFileKey } from "@/lib/utils";
 
 export async function POST(request: NextRequest) {
@@ -45,38 +43,52 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const plan = await getPlanQuota(user.team!);
-    for (const file of files) {
-      if (Number(file.size) > Number(plan.stMaxFileSize)) {
-        return Response.json(`File (${file.name}) size limit exceeded`, {
-          status: 400,
-        });
+    const bucketConfig = buckets.find((b) => b.bucket === bucket);
+    if (bucketConfig?.file_size) {
+      for (const file of files) {
+        if (Number(file.size) > Number(bucketConfig?.file_size)) {
+          return Response.json(`File size limit exceeded`, {
+            status: 400,
+          });
+        }
       }
     }
-    // const limit = await restrictByTimeRange({
-    //   model: "userFile",
-    //   userId: user.id,
-    //   limit: Number(plan.stMaxFileCount),
-    //   rangeType: "month",
-    // });
-    // if (limit) return Response.json(limit.statusText, { status: limit.status });
+    // else {
+    //   const plan = await getPlanQuota(user.team!);
+    //   for (const file of files) {
+    //     if (Number(file.size) > Number(plan.stMaxFileSize)) {
+    //       return Response.json(`File (${file.name}) size limit exceeded`, {
+    //         status: 400,
+    //       });
+    //     }
+    //   }
+    // }
 
     // 检查存储桶容量限制
-    const bucketConfig = buckets.find((b) => b.bucket === bucket);
-    const totalUploadSize = files.reduce((sum, file) => sum + Number(file.size), 0);
-    
+    const totalUploadSize = files.reduce(
+      (sum, file) => sum + Number(file.size),
+      0,
+    );
+
     if (bucketConfig?.max_storage) {
-      const bucketUsage = await getBucketStorageUsage(bucket, provider);
+      const bucketUsage = await getBucketStorageUsage(
+        bucket,
+        provider,
+        user.id,
+      );
       if (bucketUsage.success && bucketUsage.data) {
         const currentUsage = bucketUsage.data.totalSize;
         const maxStorage = Number(bucketConfig.max_storage);
-        
+
         if (currentUsage + totalUploadSize > maxStorage) {
           const remainingSpace = maxStorage - currentUsage;
-          const remainingSpaceGB = (remainingSpace / (1024 * 1024 * 1024)).toFixed(2);
+          const remainingSpaceGB = (
+            remainingSpace /
+            (1024 * 1024 * 1024)
+          ).toFixed(2);
           return Response.json(
-            `存储桶容量不足！剩余 ${remainingSpaceGB}GB，请更换存储桶`,
-            { status: 403 }
+            `Bucket storage limit exceeded. Remaining space: ${remainingSpaceGB} GB.`,
+            { status: 403 },
           );
         }
       }

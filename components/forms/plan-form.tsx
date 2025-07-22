@@ -407,11 +407,10 @@ export function PlanForm({
           </FormSectionColumns>
         </div>
 
-        <div className="relative grid-cols-1 gap-2 rounded-md border bg-neutral-50 px-3 pb-3 pt-8 dark:bg-neutral-900 md:grid md:grid-cols-2">
+        {/* <div className="relative grid-cols-1 gap-2 rounded-md border bg-neutral-50 px-3 pb-3 pt-8 dark:bg-neutral-900 md:grid md:grid-cols-2">
           <h2 className="absolute left-2 top-2 text-xs font-semibold text-neutral-400">
             {t("Storage Service")}
           </h2>
-          {/* Max File Size - stMaxFileSize */}
           <FormSectionColumns title={t("Max File Size")} required>
             <div className="flex w-full items-center gap-2">
               <Label className="sr-only" htmlFor="Record-Limit">
@@ -445,7 +444,6 @@ export function PlanForm({
               )}
             </div>
           </FormSectionColumns>
-          {/* Max File Size - stMaxTotalSize */}
           <FormSectionColumns title={t("Max Total Size")} required>
             <div className="flex w-full items-center gap-2">
               <Label className="sr-only" htmlFor="Record-Limit">
@@ -480,7 +478,7 @@ export function PlanForm({
               )}
             </div>
           </FormSectionColumns>
-        </div>
+        </div> */}
 
         {/* Action buttons */}
         <div className="mt-3 flex justify-end gap-3">

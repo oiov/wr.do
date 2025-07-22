@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Play, RotateCcw, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
@@ -17,7 +17,7 @@ import {
 import { CopyButton } from "@/components/shared/copy-button";
 import { Icons } from "@/components/shared/icons";
 
-import { BucketInfo, StorageUserPlan } from ".";
+import { BucketInfo, BucketUsage, StorageUserPlan } from ".";
 import DragAndDrop from "./drag-and-drop";
 
 export const FileUploader = ({
@@ -25,12 +25,13 @@ export const FileUploader = ({
   action,
   plan,
   userId,
-  onRefresh,
+  bucketUsage,
 }: {
   bucketInfo: BucketInfo;
   action: string;
   userId: string;
   plan?: StorageUserPlan;
+  bucketUsage: BucketUsage;
   onRefresh: () => void;
 }) => {
   const t = useTranslations("Components");
@@ -98,11 +99,11 @@ export const FileUploader = ({
                 </div>
                 <Badge className="text-xs">
                   {t("Limit")}:{" "}
-                  {formatFileSize(Number(plan?.stMaxFileSize || "0"), {
-                    precision: 0,
+                  {formatFileSize(bucketUsage.limits.maxSingleFileSize, {
+                    precision: 1,
                   })}{" "}
                   /{" "}
-                  {formatFileSize(Number(plan?.stMaxTotalSize || "0"), {
+                  {formatFileSize(bucketUsage.limits.maxStorage, {
                     precision: 0,
                   })}
                 </Badge>
@@ -261,7 +262,9 @@ export const FileUploader = ({
                                     <div className="flex items-center justify-end gap-2">
                                       <div className="flex items-center gap-1 rounded-full bg-red-600 px-3 py-1 text-xs text-white dark:bg-red-700">
                                         <div className="h-2 w-2 rounded-full bg-red-300 dark:bg-red-400"></div>
-                                        {file.status === "cancelled" ? t("Aborted") : t("Failed")}
+                                        {file.status === "cancelled"
+                                          ? t("Aborted")
+                                          : t("Failed")}
                                       </div>
                                       <Button
                                         className="size-6"
@@ -281,7 +284,7 @@ export const FileUploader = ({
                                       </Button>
                                     </div>
                                     {file.status === "error" && file.error && (
-                                      <div className="text-xs text-red-600 dark:text-red-400 text-right">
+                                      <div className="text-right text-xs text-red-600 dark:text-red-400">
                                         {file.error}
                                       </div>
                                     )}

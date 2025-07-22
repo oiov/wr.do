@@ -211,10 +211,13 @@
     "usedSpace": "Used Space",
     "totalCapacity": "Total Capacity",
     "availableSpace": "Available Space",
+    "totalFiles": "Total Files",
+    "storageDataUnavailable": "Storage data is unavailable",
     "storageFull": "Storage space is almost full",
     "storageHigh": "Storage space usage is high",
     "storageGood": "Storage space is sufficient",
     "planQuota": "Plan Quota",
+    "planUsagePercentage": "Usage Percentage",
     "bucketQuota": "Bucket Quota",
     "bucketCapacity": "Bucket Capacity",
     "bucketStorageFull": "Bucket storage is almost full",
@@ -640,6 +643,7 @@
     "Unique": "Unique",
     "Add Provider": "Add Provider",
     "{length} Buckets": "{length} Buckets",
-    "Save Modifications": "Save Modifications"
+    "Save Modifications": "Save Modifications",
+    "Max File Count": "Max File Count"
   }
 }

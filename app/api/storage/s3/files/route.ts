@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getUserFiles, softDeleteUserFiles } from "@/lib/dto/files";
 import { getMultipleConfigs } from "@/lib/dto/system-config";
 import { checkUserStatus } from "@/lib/dto/user";
-import { createS3Client, deleteFile, getSignedUrlForDownload } from "@/lib/r2";
+import { createS3Client, deleteFile, getSignedUrlForDownload } from "@/lib/s3";
 import { getCurrentUser } from "@/lib/session";
 
 export async function GET(req: NextRequest) {
