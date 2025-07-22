@@ -63,18 +63,19 @@ export async function POST(request: NextRequest) {
 
     // 检查存储桶容量限制
     const bucketConfig = buckets.find((b) => b.bucket === bucket);
+    const totalUploadSize = files.reduce((sum, file) => sum + Number(file.size), 0);
+    
     if (bucketConfig?.max_storage) {
       const bucketUsage = await getBucketStorageUsage(bucket, provider);
       if (bucketUsage.success && bucketUsage.data) {
         const currentUsage = bucketUsage.data.totalSize;
         const maxStorage = Number(bucketConfig.max_storage);
-        const totalUploadSize = files.reduce((sum, file) => sum + Number(file.size), 0);
         
         if (currentUsage + totalUploadSize > maxStorage) {
-          const remainingSpace = Math.max(0, maxStorage - currentUsage);
+          const remainingSpace = maxStorage - currentUsage;
           const remainingSpaceGB = (remainingSpace / (1024 * 1024 * 1024)).toFixed(2);
           return Response.json(
-            `上传容量超限，剩余空间：${remainingSpaceGB}GB，请更换存储桶或联系管理员`,
+            `存储桶容量不足！剩余 ${remainingSpaceGB}GB，请更换存储桶`,
             { status: 403 }
           );
         }

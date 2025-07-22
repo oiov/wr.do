@@ -540,9 +540,21 @@ export default function S3Configs({}: {}) {
                       </div>
 
                       <div className="space-y-1">
-                        <Label>
-                          {t("Max Storage")} ({t("Optional")})
-                        </Label>
+                        <div className="flex items-center gap-1">
+                          <Label>
+                            {t("Max Storage")} ({t("Optional")})
+                          </Label>
+                          <TooltipProvider>
+                            <Tooltip delayDuration={0}>
+                              <TooltipTrigger>
+                                <Icons.help className="size-4 text-muted-foreground" />
+                              </TooltipTrigger>
+                              <TooltipContent className="max-w-64 text-wrap">
+                                {t("maxStorageTooltip")}
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        </div>
                         <div className="relative">
                           <Input
                             value={bucket.max_storage || ""}

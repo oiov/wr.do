@@ -258,7 +258,7 @@ export const FileUploader = ({
                                 (file.status === "error" ||
                                   file.status === "cancelled") && (
                                   <div className="flex flex-col gap-2">
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex items-center justify-end gap-2">
                                       <div className="flex items-center gap-1 rounded-full bg-red-600 px-3 py-1 text-xs text-white dark:bg-red-700">
                                         <div className="h-2 w-2 rounded-full bg-red-300 dark:bg-red-400"></div>
                                         {file.status === "cancelled" ? t("Aborted") : t("Failed")}
@@ -281,7 +281,7 @@ export const FileUploader = ({
                                       </Button>
                                     </div>
                                     {file.status === "error" && file.error && (
-                                      <div className="text-xs text-red-600 dark:text-red-400">
+                                      <div className="text-xs text-red-600 dark:text-red-400 text-right">
                                         {file.error}
                                       </div>
                                     )}
