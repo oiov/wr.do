@@ -177,7 +177,7 @@ export default function UserFileManager({ user, action }: FileListProps) {
         limits: {
           maxStorage: currentBucketInfo.max_storage
             ? Number(currentBucketInfo.max_storage)
-            : Number(plan.stMaxTotalSize),
+            : Number(plan.stMaxTotalSize), // TODO
           maxFiles: currentBucketInfo.max_files
             ? Number(currentBucketInfo.max_files)
             : Number(plan.stMaxFileCount),

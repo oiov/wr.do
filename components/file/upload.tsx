@@ -52,16 +52,16 @@ export const FileUploader = ({
   useEffect(() => {
     if (selectedFile) {
       const outOfLimitSizeFiles = selectedFile.some(
-        (file) => file.size > Number(plan?.stMaxFileSize ?? 0),
+        (file) => file.size > bucketUsage.limits.maxSingleFileSize,
       );
       const notOutOfLimitSizeFiles = selectedFile.filter(
-        (file) => file.size <= Number(plan?.stMaxFileSize ?? 0),
+        (file) => file.size <= bucketUsage.limits.maxSingleFileSize,
       );
       addFiles(notOutOfLimitSizeFiles);
       if (outOfLimitSizeFiles) {
         toast.warning(
           `File size exceeds the limit of ${formatFileSize(
-            Number(plan?.stMaxFileSize ?? 0),
+            bucketUsage.limits.maxSingleFileSize,
           )}`,
         );
       }
