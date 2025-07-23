@@ -33,12 +33,8 @@ export const createUserRecordSchema = z.object({
     .string()
     .regex(/^[a-zA-Z0-9-_.]+$/, "Invalid characters")
     .min(1)
-    .max(32),
-  content: z
-    .string()
-    // .regex(/^[a-zA-Z0-9-.]+$/, "Invalid characters")
-    .min(1)
-    .max(32),
+    .max(64),
+  content: z.string().min(1).max(1024),
   ttl: z.number().min(1).max(36000).default(1),
   proxied: z.boolean().default(false),
   proxiable: z.boolean().default(true),

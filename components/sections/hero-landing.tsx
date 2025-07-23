@@ -57,7 +57,7 @@ export default function HeroLanding({
             className="shadow-sm"
           /> */}
           <Link
-            href="/docs"
+            href="/docs/developer"
             prefetch={true}
             className={cn(
               buttonVariants({ rounded: "xl", size: "lg", variant: "outline" }),
