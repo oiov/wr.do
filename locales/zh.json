@@ -644,6 +644,7 @@
     "Unique": "唯一",
     "Add Provider": "添加渠道",
     "{length} Buckets": "{length}个存储桶",
-    "Save Modifications": "保存修改"
+    "Save Modifications": "保存修改",
+    "Password": "账户密码"
   }
 }

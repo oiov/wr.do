@@ -256,8 +256,8 @@
     "Quickly extract website screenshots": "Quickly extract website screenshots",
     "extracting url as screenshot": "extracting url as screenshot",
     "Url to QR Code": "Url to QR Code",
-    "Quickly extract website QR codes": "Quickly extract website QR codes",
-    "extracting url as qrcode": "extracting url as qrcode",
+    "Generate QR Code from URL": "Generate QR Code from URL",
+    "extracting url as QR code": "extracting url as QR code",
     "Url to Meta Info": "Url to Meta Info",
     "extracting url as meta info": "extracting url as meta info",
     "Url to Markdown": "Url to Markdown",
@@ -485,7 +485,7 @@
     "Log out": "Log out",
     "System Settings": "System Settings",
     "Cloud Storage": "Cloud Storage",
-    "Cloud Storage Manager": "Cloud Storage"
+    "Cloud Storage Manage": "Cloud Storage"
   },
   "Email": {
     "Search emails": "Search emails",
@@ -644,6 +644,7 @@
     "Add Provider": "Add Provider",
     "{length} Buckets": "{length} Buckets",
     "Save Modifications": "Save Modifications",
-    "Max File Count": "Max File Count"
+    "Max File Count": "Max File Count",
+    "Password": "Password"
   }
 }
