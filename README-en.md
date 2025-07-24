@@ -1,7 +1,13 @@
 <div align="center">
+  <img src="https://wr.do/_static/images/x-preview.png" alt="WR.DO" >
   <h1>WR.DO</h1>
-  <p><a href="https://wr.do/docs/developer">Docs</a> · <a href="https://wr.do/feedback">Feedback</a> · English | <a href="/README.md">简体中文</a></p>
-  <img alt="GitHub Release" src="https://img.shields.io/github/v/release/oiov/wr.do?style=flat-square">
+  <p>All-in-one domain service platform with integrated short link services, temporary email, subdomain management, file storage, and open API</p>
+  <p><a href="https://wr.do">Official Site</a><a href="https://wr.do/docs/developer">Docs</a> · <a href="https://wr.do/feedback">Feedback</a> · English | <a href="/README.md">简体中文</a></p>
+  <img alt="Vercel" src="https://img.shields.io/badge/vercel-online-55b467?labelColor=black&logo=vercel&style=flat-square">
+  <img alt="Release" src="https://img.shields.io/github/actions/workflow/status/oiov/wr.do/docker-build-push.yml?label=release&labelColor=black&logo=githubactions&logoColor=white&style=flat-square">
+  <img alt="Release" src="https://img.shields.io/github/release-date/oiov/wr.do?labelColor=black&style=flat-square">
+  <img alt="GitHub Release" src="https://img.shields.io/github/v/release/oiov/wr.do?style=flat-square&label=latest"><br>
+  <img src="https://img.shields.io/github/contributors/oiov/wr.do?color=c4f042&labelColor=black&style=flat-square" alt="contributors"/>
   <img src="https://img.shields.io/github/stars/oiov/wr.do.svg?logo=github&style=flat-square" alt="star"/>
   <img alt="GitHub forks" src="https://img.shields.io/github/forks/oiov/wr.do?style=flat-square">
   <img alt="GitHub Issues or Pull Requests" src="https://img.shields.io/github/issues/oiov/wr.do?style=flat-square"> <br>
@@ -9,14 +15,26 @@
 	<img src="https://img.shields.io/github/license/oiov/wr.do?style=flat-square" alt="MIT"/>
 </div>
 
-## Introduction
+## Screenshots
 
-WR.DO is a all-in-one web utility platform featuring short links with analytics, temporary email service, subdomain management, file storage, open APIs for screenshots and metadata extraction, and comprehensive admin dashboard.
-
-- Official website: [https://wr.do](https://wr.do)
-- Demo: [https://699399.xyz](https://699399.xyz) (Account: `admin@admin.com`, Password: `123456`)
+<table>
+  <tr>
+    <td><img src="https://wr.do/_static/images/light-preview.png" /></td>
+    <td><img src="https://wr.do/_static/images/example_02.png" /></td>
+  </tr>
+  <tr>
+    <td><img src="https://wr.do/_static/images/example_01.png" /></td>
+    <td><img src="https://wr.do/_static/images/realtime-globe.png" /></td>
+  </tr>
+  <tr>
+    <td><img src="https://wr.do/_static/images/example_03.png" /></td>
+    <td><img src="https://wr.do/_static/images/domains.png" /></td>
+  </tr>
+</table>
 
 ## Features
+
+- Demo: [https://699399.xyz](https://699399.xyz) (Account: `admin@admin.com`, Password: `123456`)
 
 - 🔗 **Short Link Service**:
   - Custom short links
@@ -69,24 +87,6 @@ WR.DO is a all-in-one web utility platform featuring short links with analytics,
   - Centralized short link administration
   - Centralized email management
   - Centralized subdomain administration
-
-## Screenshots
-
-<table>
-  <tr>
-    <td><img src="https://wr.do/_static/images/light-preview.png" /></td>
-    <td><img src="https://wr.do/_static/images/example_02.png" /></td>
-  </tr>
-  <tr>
-    <td><img src="https://wr.do/_static/images/example_01.png" /></td>
-    <td><img src="https://wr.do/_static/images/realtime-globe.png" /></td>
-  </tr>
-  <tr>
-    <td><img src="https://wr.do/_static/images/example_03.png" /></td>
-    <td><img src="https://wr.do/_static/images/domains.png" /></td>
-  </tr>
-</table>
-
 
 ## Quick Start
 
@@ -147,9 +147,6 @@ pnpm dev
 
 Follow https://localhost:3000/setup
 
-## Deploy with Edgeone
-
-[![使用 EdgeOne Pages 部署](https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg)](https://edgeone.ai/pages/new?repository-url=https%3A%2F%2Fgithub.com%2Foiov%2Fwr.do)
 
 ## Environment Variables
 
@@ -182,10 +179,6 @@ See [How to Trigger Sync](https://wr.do/docs/developer/sync) for details.
 
 <img width="300" src="https://wr.do/s/group" />
 
-## License
-
-[MIT](/LICENSE.md)
-
 ## Star History
 
 <a href="https://star-history.com/#oiov/wr.do&Date">
@@ -195,3 +188,7 @@ See [How to Trigger Sync](https://wr.do/docs/developer/sync) for details.
    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=oiov/wr.do&type=Date" />
  </picture>
 </a>
+
+## License
+
+[MIT](/LICENSE.md)

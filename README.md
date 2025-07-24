@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://wr.do/_static/images/x-preview.png" alt="WR.DO Logo" >
+  <img src="https://wr.do/_static/images/x-preview.png" alt="WR.DO" >
   <h1>WR.DO</h1>
   <p>一站式域名服务平台，集成短链服务、临时邮箱、子域名管理、文件存储和开放API接口。</p>
   <p>
@@ -82,11 +82,10 @@
 <li>支持多渠道（S3 API）云存储平台（Cloudflare R2、AWS S3、OSS等）
 <li>支持单渠道多存储桶配置
 <li>动态配置文件上传大小限制
-<li>支持拖拽、批量、分块上传文件
+<li>支持拖拽、批量、粘贴上传文件
 <li>支持批量删除文件
 <li>快捷生成文件短链、二维码
 <li>支持部分文件在线预览内容
-<li>支持调用 API 上传文件
 </ul>
 </details>
 

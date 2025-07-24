@@ -336,11 +336,11 @@ export default function UserFileList({
                     </div>
                   }
                 >
-                  {truncateMiddle(file.path, 36)}
+                  {truncateMiddle(file.name, 36)}
                   {file.status === 1 && (
                     <CopyButton
                       className="size-6"
-                      value={getFileUrl(file.path)}
+                      value={getFileUrl(file.name)}
                     />
                   )}
                 </ClickableTooltip>
@@ -495,7 +495,7 @@ export default function UserFileList({
             {React.cloneElement(getFileIcon(file, bucketInfo), { size: 40 })}
             <div className="w-full text-center">
               <ClickableTooltip
-                className="mx-auto line-clamp-2 break-all px-2 pb-1 text-left text-xs font-medium text-muted-foreground group-hover:text-blue-500 sm:max-w-[100px]"
+                className="mx-auto line-clamp-2 break-all px-2 pb-1 text-center text-xs font-medium text-muted-foreground group-hover:text-blue-500 sm:max-w-[100px]"
                 content={
                   <div className="max-w-[300px] space-y-1 p-3 text-start">
                     {file.mimeType.startsWith("image/") &&
@@ -575,7 +575,7 @@ export default function UserFileList({
                   </div>
                 }
               >
-                {truncateMiddle(file.path || "")}
+                {truncateMiddle(file.name || "")}
               </ClickableTooltip>
             </div>
           </div>
