@@ -128,8 +128,9 @@ async function handleExternalForward(data: OriginalEmail, configs: any) {
     subject: data.subject ?? "No subject",
     html: data.html ?? data.text ?? "-",
   });
-
-  console.log("[Resend Error]", error);
+  if (error) {
+    console.log("[Resend Error]", error);
+  }
 }
 
 async function handleNormalEmail(data: OriginalEmail) {

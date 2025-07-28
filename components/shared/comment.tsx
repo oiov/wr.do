@@ -21,10 +21,10 @@ export default function TwikooComment() {
         twikoo.init({
           envId: "https://comment.oiov.dev",
           el: '#twikoo-comment',
-          pageSize: 10,
+          pageSize: 30,
           includeReply: true,
           lang: "${locale === "zh" ? "zh-CN" : "en"}",
-          path: location.pathname,
+          path: location.host,
           onCommentLoaded: function() {
             // 评论加载完成后隐藏 loading
             window.dispatchEvent(new CustomEvent('twikoo-loaded'));
