@@ -1,3 +1,4 @@
+import { getConfiguredResendDomains } from "@/lib/dto/domains";
 import { OriginalEmail, saveForwardEmail } from "@/lib/dto/email";
 import { getMultipleConfigs } from "@/lib/dto/system-config";
 import { resend } from "@/lib/email";
@@ -116,8 +117,13 @@ async function handleExternalForward(data: OriginalEmail, configs: any) {
     throw new Error("No valid forward emails configured");
   }
 
+  const sender = await getConfiguredResendDomains();
+  if (sender.length === 0) {
+    throw new Error("No configured resend domains");
+  }
+
   const { error } = await resend.emails.send({
-    from: data.from,
+    from: `forward@${sender[0].domain_name}`,
     to: validEmails,
     subject: data.subject ?? "No subject",
     html: data.html ?? data.text ?? "-",

@@ -132,6 +132,20 @@ export async function checkDomainIsConfiguratedResend(domain_name: string) {
   }
 }
 
+export async function getConfiguredResendDomains() {
+  try {
+    const domains = await prisma.domain.findMany({
+      where: { resend_api_key: { not: null } },
+      select: {
+        domain_name: true,
+      },
+    });
+    return domains;
+  } catch (error) {
+    return [];
+  }
+}
+
 export async function createDomain(data: DomainConfig) {
   try {
     const createdDomain = await prisma.domain.create({ data });
