@@ -116,6 +116,8 @@ async function handleExternalForward(data: OriginalEmail, configs: any) {
     throw new Error("No valid forward emails configured");
   }
 
+  console.log("validEmails", validEmails, data.from);
+
   await resend.emails.send({
     from: data.from,
     to: validEmails,
