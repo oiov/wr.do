@@ -139,6 +139,9 @@ export async function getConfiguredResendDomains() {
       select: {
         domain_name: true,
       },
+      orderBy: {
+        updatedAt: "desc",
+      },
     });
     return domains;
   } catch (error) {
