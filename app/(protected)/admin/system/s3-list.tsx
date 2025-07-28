@@ -157,10 +157,13 @@ export default function S3Configs({}: {}) {
                   buckets: [
                     {
                       bucket: "",
-                      custom_domain: "",
                       prefix: "",
                       file_types: "",
                       region: "auto",
+                      custom_domain: "",
+                      file_size: "26214400",
+                      max_storage: "1073741824",
+                      max_files: "1000",
                       public: true,
                     },
                   ],

@@ -645,6 +645,10 @@
     "{length} Buckets": "{length} Buckets",
     "Save Modifications": "Save Modifications",
     "Max File Count": "Max File Count",
-    "Password": "Password"
+    "Password": "Password",
+    "Email Forwarding": "Email Forwarding",
+    "If enabled, forward all received emails to other platform email addresses (Send with Resend)": "If enabled, forward all received emails to other platform email addresses (Send with Resend)",
+    "Forward Email Targets": "Forward Email Targets",
+    "Set forward email address targets, split by comma if more than one, such as: 1@a-com,2@b-com, Only works when email forwarding is enabled": "Set forward email address targets, split by comma if more than one, such as: 1@a.com,2@b.com, Only works when email forwarding is enabled"
   }
 }

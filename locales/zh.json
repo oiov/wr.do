@@ -645,6 +645,10 @@
     "Add Provider": "添加渠道",
     "{length} Buckets": "{length}个存储桶",
     "Save Modifications": "保存修改",
-    "Password": "账户密码"
+    "Password": "账户密码",
+    "Email Forwarding": "邮件转发",
+    "If enabled, forward all received emails to other platform email addresses (Send with Resend)": "如果启用，则将所有收到的电子邮件转发到其他平台邮箱 (使用 Resend 发送)",
+    "Forward Email Targets": "目标收件箱",
+    "Set forward email address targets, split by comma if more than one, such as: 1@a-com,2@b-com, Only works when email forwarding is enabled": "设置转发目标邮箱，多个邮件地址请用逗号分隔，例如：1@a.com,2@b.com，仅在启用邮件转发时生效"
   }
 }

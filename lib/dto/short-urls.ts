@@ -124,12 +124,12 @@ export async function getUserShortUrlCount(
   }
 }
 
-export async function getUserShortLinksByIds(ids: string[], userId: string) {
+export async function getUserShortLinksByIds(ids: string[], userId?: string) {
   try {
     return await prisma.userUrl.findMany({
       where: {
         id: { in: ids },
-        userId,
+        ...(userId && { userId }),
       },
     });
   } catch (error) {

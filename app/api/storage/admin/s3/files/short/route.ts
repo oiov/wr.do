@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Ids are required" }, { status: 400 });
     }
 
-    const data = await getUserShortLinksByIds(ids, user.id);
+    const data = await getUserShortLinksByIds(ids);
 
     const dataMap = new Map(data.map((item) => [item.id, item]));
 

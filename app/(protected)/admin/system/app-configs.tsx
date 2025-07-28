@@ -35,6 +35,7 @@ export default function AppConfigs({}: {}) {
   } = useSWR<Record<string, any>>("/api/admin/configs", fetcher);
   const [notification, setNotification] = useState("");
   const [catchAllEmails, setCatchAllEmails] = useState("");
+  const [forwardEmailTargets, setForwardEmailTargets] = useState("");
   const [emailSuffix, setEmailSuffix] = useState("");
   const [tgBotToken, setTgBotToken] = useState("");
   const [tgChatId, setTgChatId] = useState("");
@@ -52,8 +53,9 @@ export default function AppConfigs({}: {}) {
       setTgChatId(configs?.tg_email_chat_id);
       setTgTemplate(configs?.tg_email_template);
       setTgWhiteList(configs?.tg_email_target_white_list);
+      setForwardEmailTargets(configs?.email_forward_targets);
     }
-    // 计算登录方式数量
+
     if (!isLoading) {
       let count = 0;
       if (configs?.enable_google_oauth) count++;
@@ -365,7 +367,7 @@ export default function AppConfigs({}: {}) {
         </CollapsibleTrigger>
         <CollapsibleContent className="space-y-3 bg-neutral-100 p-4 dark:bg-neutral-800">
           <div className="space-y-6">
-            {/* Catch-All */}
+            {/* Catch-All*/}
             <Collapsible>
               <CollapsibleTrigger className="flex w-full items-center justify-between space-x-2">
                 <div className="space-y-1 leading-none">
@@ -434,6 +436,82 @@ export default function AppConfigs({}: {}) {
                           handleChange(
                             catchAllEmails,
                             "catch_all_emails",
+                            "STRING",
+                          )
+                        }
+                      >
+                        {t("Save")}
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+            {/* Forward Email to other email address */}
+            <Collapsible>
+              <CollapsibleTrigger className="flex w-full items-center justify-between space-x-2">
+                <div className="space-y-1 leading-none">
+                  <p className="flex items-center gap-2 font-medium">
+                    {t("Email Forwarding")}
+                  </p>
+                  <p className="text-start text-xs text-muted-foreground">
+                    {t(
+                      "If enabled, forward all received emails to other platform email addresses (Send with Resend)",
+                    )}
+                  </p>
+                </div>
+                {configs && (
+                  <div
+                    className="ml-auto flex items-center gap-3"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {configs.enable_email_forward &&
+                      !configs.email_forward_targets && (
+                        <Badge variant="yellow">
+                          <Icons.warning className="mr-1 size-3" />{" "}
+                          {t("Need to configure")}
+                        </Badge>
+                      )}
+                    <Switch
+                      defaultChecked={configs.enable_email_forward}
+                      onCheckedChange={(v) =>
+                        handleChange(v, "enable_email_forward", "BOOLEAN")
+                      }
+                    />
+                    <Icons.chevronDown className="size-4" />
+                  </div>
+                )}
+              </CollapsibleTrigger>
+              <CollapsibleContent className="mt-4 space-y-4 rounded-md border p-4 shadow-md">
+                <div className="flex flex-col items-start justify-start gap-3">
+                  <div className="space-y-1 leading-none">
+                    <p className="font-medium">{t("Forward Email Targets")}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {t(
+                        "Set forward email address targets, split by comma if more than one, such as: 1@a-com,2@b-com, Only works when email forwarding is enabled",
+                      )}
+                    </p>
+                  </div>
+                  {configs && (
+                    <div className="flex w-full items-start gap-2">
+                      <Textarea
+                        className="h-16 max-h-32 min-h-9 resize-y bg-white dark:bg-neutral-700"
+                        placeholder="example1@wr.do,example2@wr.do"
+                        rows={5}
+                        value={forwardEmailTargets}
+                        disabled={!configs.enable_email_forward}
+                        onChange={(e) => setForwardEmailTargets(e.target.value)}
+                      />
+                      <Button
+                        className="h-9 text-nowrap"
+                        disabled={
+                          isPending ||
+                          forwardEmailTargets === configs.email_forward_targets
+                        }
+                        onClick={() =>
+                          handleChange(
+                            forwardEmailTargets,
+                            "email_forward_targets",
                             "STRING",
                           )
                         }
