@@ -195,10 +195,10 @@ export function DailyPVUVChart({
   const latestEntry = data[data.length - 1];
   const latestFrom = [
     latestEntry.city ? decodeURIComponent(latestEntry.city) : "",
-    latestEntry.country ? `(${getCountryName(latestEntry.country)})` : "",
+    latestEntry.country ? `${getCountryName(latestEntry.country)}` : "",
   ]
     .filter(Boolean)
-    .join(" ");
+    .join(",");
 
   // const pointData = data.map((item) => ({
   //   id: item.id,

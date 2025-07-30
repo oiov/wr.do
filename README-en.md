@@ -179,6 +179,12 @@ See [How to Trigger Sync](https://wr.do/docs/developer/sync) for details.
 
 <img width="300" src="https://wr.do/s/group" />
 
+## Contributors
+
+<a href="https://github.com/oiov/wr.do/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=oiov/wr.do" />
+</a>
+
 ## Star History
 
 <a href="https://star-history.com/#oiov/wr.do&Date">

@@ -216,6 +216,12 @@ pnpm dev
 
 <img width="300" src="https://wr.do/s/group" />
 
+## 贡献者
+
+<a href="https://github.com/oiov/wr.do/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=oiov/wr.do" />
+</a>
+
 ## Star History
 
 <a href="https://star-history.com/#oiov/wr.do&Date">
