@@ -224,7 +224,11 @@
     "bucketStorageHigh": "存储桶空间使用较多",
     "items": "条",
     "Total": "共",
-    "Configuration Error": "配置错误"
+    "Configuration Error": "配置错误",
+    "Export": "导出",
+    "Export All": "导出所有链接",
+    "Export Active": "导出有效链接",
+    "Export Basic Info": "导出基本信息"
   },
   "Components": {
     "Dashboard": "用户面板",

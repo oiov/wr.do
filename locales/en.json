@@ -224,7 +224,11 @@
     "bucketStorageHigh": "Bucket storage usage is high",
     "items": "items",
     "Total": "Total",
-    "Configuration Error": "Configuration Error"
+    "Configuration Error": "Configuration Error",
+    "Export": "Export",
+    "Export All": "Export All",
+    "Export Active": "Export Active",
+    "Export Basic Info": "Export Basic Info"
   },
   "Components": {
     "Dashboard": "Dashboard",

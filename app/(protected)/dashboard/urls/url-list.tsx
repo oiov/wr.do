@@ -60,6 +60,7 @@ import { PaginationWrapper } from "@/components/shared/pagination";
 import QRCodeEditor from "@/components/shared/qr";
 import { TimeAgoIntl } from "@/components/shared/time-ago";
 
+import { UrlExporter } from "./export";
 import Globe from "./globe";
 import LiveLog from "./live-logs";
 import UserUrlMetaInfo from "./meta";
@@ -696,6 +697,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
           </TabsList>
           {/* <p>Total: {data?.total || 0}</p> */}
           <div className="ml-auto flex items-center justify-end gap-3">
+            <UrlExporter data={data?.list || []} />
             <Button
               variant={"outline"}
               onClick={() => handleRefresh()}
