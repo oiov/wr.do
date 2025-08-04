@@ -3,7 +3,7 @@
   "short_name": "WR.DO",
   "description": "Shorten links with analytics, manage emails and control subdomains—all on one platform.",
   "appid": "com.wr.do",
-  "versionName": "1.1.3",
+  "versionName": "1.1.4",
   "versionCode": "1",
   "start_url": "/",
   "orientation": "portrait",
