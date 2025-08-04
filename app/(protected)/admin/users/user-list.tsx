@@ -263,7 +263,7 @@ export default function UsersList({ user }: UrlListProps) {
                       </Badge>
                     </TableCell>
                     <TableCell className="col-span-1 hidden justify-center sm:flex">
-                      <Switch defaultChecked={user.active === 1} />
+                      <Switch defaultChecked={user.active === 1} disabled />
                     </TableCell>
                     <TableCell className="col-span-1 hidden justify-center sm:flex">
                       <TimeAgoIntl date={user.updatedAt as Date} />

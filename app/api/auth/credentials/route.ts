@@ -36,6 +36,9 @@ export async function POST(req: NextRequest) {
       });
       return Response.json(newUser, { status: 200 });
     } else {
+      if (user.active === 0) {
+        return Response.json(null, { status: 403 });
+      }
       const passwordCorrect = verifyPassword(password, user.password || "");
       if (passwordCorrect) {
         return Response.json(user, { status: 200 });

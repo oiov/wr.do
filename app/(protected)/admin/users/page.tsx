@@ -7,7 +7,7 @@ import { DashboardHeader } from "@/components/dashboard/header";
 import UsersList from "./user-list";
 
 export const metadata = constructMetadata({
-  title: "User Management – WR.DO",
+  title: "User Management",
   description: "List and manage all users.",
 });
 
