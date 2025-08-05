@@ -20,7 +20,7 @@ export default async function DashboardPage() {
       <DashboardHeader
         heading="Cloud Storage"
         text="List and manage cloud storage"
-        link="/docs/cloud-storage"
+        link="/docs/developer/cloud-storage"
         linkText="Cloud Storage"
       />
       <UserFileList
