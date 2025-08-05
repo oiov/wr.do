@@ -20,6 +20,7 @@ export async function POST(req: Request) {
       "tg_email_target_white_list",
       "enable_email_forward",
       "email_forward_targets",
+      "email_forward_white_list",
     ]);
 
     // 处理邮件转发和保存
@@ -44,7 +45,7 @@ export async function POST(req: Request) {
 }
 
 async function handleEmailForwarding(data: OriginalEmail, configs: any) {
-  const actions = determineEmailActions(configs);
+  const actions = determineEmailActions(data, configs);
 
   const promises: Promise<void>[] = [];
 
@@ -72,18 +73,27 @@ async function handleEmailForwarding(data: OriginalEmail, configs: any) {
   }
 }
 
-function determineEmailActions(configs: any): string[] {
+function determineEmailActions(data: OriginalEmail, configs: any): string[] {
   const actions: string[] = [];
 
-  // 检查是否配置了任何转发功能
-  const hasAnyForward =
-    configs.enable_email_catch_all || configs.enable_email_forward;
+  // 检查转发白名单
+  const isInForwardWhiteList = checkForwardWhiteList(
+    data.to,
+    configs.email_forward_white_list,
+  );
 
-  if (configs.enable_email_catch_all) {
+  // 检查是否配置了任何转发功能并且在白名单中
+  const hasCatchAllForward =
+    configs.enable_email_catch_all && isInForwardWhiteList;
+  const hasExternalForward =
+    configs.enable_email_forward && isInForwardWhiteList;
+  const hasAnyForward = hasCatchAllForward || hasExternalForward;
+
+  if (hasCatchAllForward) {
     actions.push("CATCH_ALL");
   }
 
-  if (configs.enable_email_forward) {
+  if (hasExternalForward) {
     actions.push("EXTERNAL_FORWARD");
   }
 
@@ -93,6 +103,20 @@ function determineEmailActions(configs: any): string[] {
   }
 
   return actions;
+}
+
+// 新增：检查邮箱是否在转发白名单中
+function checkForwardWhiteList(
+  toEmail: string,
+  whiteListString: string,
+): boolean {
+  // 如果没有配置白名单，则允许所有邮箱（保持向后兼容）
+  if (!whiteListString || whiteListString.trim() === "") {
+    return true;
+  }
+
+  const whiteList = parseAndValidateEmails(whiteListString);
+  return whiteList.includes(toEmail);
 }
 
 async function handleCatchAllEmail(data: OriginalEmail, configs: any) {

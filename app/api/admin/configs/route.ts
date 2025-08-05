@@ -36,6 +36,7 @@ export async function GET(req: NextRequest) {
       "enable_subdomain_status_email_pusher",
       "enable_email_forward",
       "email_forward_targets",
+      "email_forward_white_list",
     ]);
 
     return Response.json(configs, { status: 200 });

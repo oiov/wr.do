@@ -36,6 +36,7 @@ export default function AppConfigs({}: {}) {
   const [notification, setNotification] = useState("");
   const [catchAllEmails, setCatchAllEmails] = useState("");
   const [forwardEmailTargets, setForwardEmailTargets] = useState("");
+  const [forwardEmailWhiteList, setForwardEmailWhiteList] = useState("");
   const [emailSuffix, setEmailSuffix] = useState("");
   const [tgBotToken, setTgBotToken] = useState("");
   const [tgChatId, setTgChatId] = useState("");
@@ -54,6 +55,7 @@ export default function AppConfigs({}: {}) {
       setTgTemplate(configs?.tg_email_template);
       setTgWhiteList(configs?.tg_email_target_white_list);
       setForwardEmailTargets(configs?.email_forward_targets);
+      setForwardEmailWhiteList(configs?.email_forward_white_list);
     }
 
     if (!isLoading) {
@@ -407,6 +409,48 @@ export default function AppConfigs({}: {}) {
                 <div className="flex flex-col items-start justify-start gap-3">
                   <div className="space-y-1 leading-none">
                     <p className="font-medium">
+                      {t("Email Forward White List")}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {t(
+                        "Set email forward white list, split by comma, such as: a-wrdo,b-wrdo",
+                      )}
+                    </p>
+                  </div>
+                  {configs && (
+                    <div className="flex w-full items-start gap-2">
+                      <Textarea
+                        className="h-16 max-h-32 min-h-9 resize-y bg-white dark:bg-neutral-700"
+                        placeholder="example1@wr.do,example2@wr.do"
+                        rows={5}
+                        value={forwardEmailWhiteList}
+                        onChange={(e) =>
+                          setForwardEmailWhiteList(e.target.value)
+                        }
+                      />
+                      <Button
+                        className="h-9 text-nowrap"
+                        disabled={
+                          isPending ||
+                          forwardEmailWhiteList ===
+                            configs.email_forward_white_list
+                        }
+                        onClick={() =>
+                          handleChange(
+                            forwardEmailWhiteList,
+                            "email_forward_white_list",
+                            "STRING",
+                          )
+                        }
+                      >
+                        {t("Save")}
+                      </Button>
+                    </div>
+                  )}
+                </div>
+                <div className="flex flex-col items-start justify-start gap-3">
+                  <div className="space-y-1 leading-none">
+                    <p className="font-medium">
                       {t("Catch-All Email Address")}
                     </p>
                     <p className="text-xs text-muted-foreground">
@@ -421,7 +465,6 @@ export default function AppConfigs({}: {}) {
                         className="h-16 max-h-32 min-h-9 resize-y bg-white dark:bg-neutral-700"
                         placeholder="example1@wr.do,example2@wr.do"
                         rows={5}
-                        // defaultValue={configs.catch_all_emails}
                         value={catchAllEmails}
                         disabled={!configs.enable_email_catch_all}
                         onChange={(e) => setCatchAllEmails(e.target.value)}
@@ -483,6 +526,48 @@ export default function AppConfigs({}: {}) {
                 )}
               </CollapsibleTrigger>
               <CollapsibleContent className="mt-4 space-y-4 rounded-md border p-4 shadow-md">
+                <div className="flex flex-col items-start justify-start gap-3">
+                  <div className="space-y-1 leading-none">
+                    <p className="font-medium">
+                      {t("Email Forward White List")}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {t(
+                        "Set email forward white list, split by comma, such as: a-wrdo,b-wrdo",
+                      )}
+                    </p>
+                  </div>
+                  {configs && (
+                    <div className="flex w-full items-start gap-2">
+                      <Textarea
+                        className="h-16 max-h-32 min-h-9 resize-y bg-white dark:bg-neutral-700"
+                        placeholder="example1@wr.do,example2@wr.do"
+                        rows={5}
+                        value={forwardEmailWhiteList}
+                        onChange={(e) =>
+                          setForwardEmailWhiteList(e.target.value)
+                        }
+                      />
+                      <Button
+                        className="h-9 text-nowrap"
+                        disabled={
+                          isPending ||
+                          forwardEmailWhiteList ===
+                            configs.email_forward_white_list
+                        }
+                        onClick={() =>
+                          handleChange(
+                            forwardEmailWhiteList,
+                            "email_forward_white_list",
+                            "STRING",
+                          )
+                        }
+                      >
+                        {t("Save")}
+                      </Button>
+                    </div>
+                  )}
+                </div>
                 <div className="flex flex-col items-start justify-start gap-3">
                   <div className="space-y-1 leading-none">
                     <p className="font-medium">{t("Forward Email Targets")}</p>
