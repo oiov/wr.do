@@ -357,13 +357,13 @@ export default function UserFileList({
                 <ClickableTooltip
                   className="cursor-pointer truncate"
                   content={
-                    <div className="p-2">
+                    <div className="px-2 py-1">
                       <p>{file.user.name}</p>
                       <p>{file.user.email}</p>
                     </div>
                   }
                 >
-                  {file.user.name ?? file.user.email}
+                  {file.user.name || file.user.email}
                 </ClickableTooltip>
               </div>
               <div className="col-span-1 hidden items-center text-nowrap text-xs sm:flex">
