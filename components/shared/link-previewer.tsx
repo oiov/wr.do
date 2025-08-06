@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Link from "next/link";
 
+import { cn } from "@/lib/utils";
 import { MetaScrapingProps } from "@/app/(protected)/dashboard/scrape/scrapes";
 
 import { Skeleton } from "../ui/skeleton";
@@ -147,11 +148,11 @@ export function LinkInfoPreviewer({
 
     if (isImageUrl(url)) {
       setMetaInfo({
-        title: formatUrl || url,
+        title: formatUrl,
         description: "",
         image: url,
         icon: "",
-        url: url,
+        url,
         lang: "",
         author: "",
         timestamp: "",
@@ -222,10 +223,14 @@ export function LinkInfoPreviewer({
           {metaInfo.title ? (
             <>
               <BlurImg
-                className="rounded-md bg-primary-foreground group-hover:scale-95 group-hover:opacity-95"
+                className={cn(
+                  "rounded-md bg-primary-foreground group-hover:scale-95 group-hover:opacity-95",
+                  (metaInfo.image === placeholdImage || !metaInfo.image) &&
+                    "h-full w-full",
+                )}
                 src={metaInfo.image || placeholdImage}
                 alt={`Preview of ${url}`}
-                fit
+                fill
               />
               <div className="absolute bottom-0 w-full rounded-b-md p-2 backdrop-blur">
                 <p className="line-clamp-1 text-sm font-semibold text-neutral-600 dark:text-neutral-300">
