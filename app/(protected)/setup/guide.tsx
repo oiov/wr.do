@@ -7,7 +7,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { cn, removeUrlSuffix } from "@/lib/utils";
+import { cn, removeUrlPrefix } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -272,7 +272,7 @@ function AddDomain({ onNextStep }: { onNextStep: () => void }) {
         method: "POST",
         body: JSON.stringify({
           data: {
-            domain_name: removeUrlSuffix(domain),
+            domain_name: removeUrlPrefix(domain),
             enable_short_link: true,
             enable_email: true,
             enable_dns: true,

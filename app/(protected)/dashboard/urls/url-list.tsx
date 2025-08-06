@@ -11,12 +11,13 @@ import useSWR, { useSWRConfig } from "swr";
 
 import { ShortUrlFormData } from "@/lib/dto/short-urls";
 import {
+  addUrlPrefix,
   cn,
   expirationTime,
   extractHostname,
   fetcher,
   nFormatter,
-  removeUrlSuffix,
+  removeUrlPrefix,
 } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "@/components/ui/button";
@@ -365,8 +366,8 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                 <TableCell className="col-span-1 flex items-center justify-start sm:col-span-2">
                   <LinkInfoPreviewer
                     apiKey={user.apiKey ?? ""}
-                    url={short.target}
-                    formatUrl={removeUrlSuffix(short.target)}
+                    url={addUrlPrefix(short.target)}
+                    formatUrl={removeUrlPrefix(short.target)}
                   />
                 </TableCell>
                 <TableCell className="col-span-1 hidden truncate sm:flex">
@@ -530,7 +531,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                       <LinkInfoPreviewer
                         apiKey={user.apiKey ?? ""}
                         url={short.target}
-                        formatUrl={removeUrlSuffix(short.target)}
+                        formatUrl={removeUrlPrefix(short.target)}
                       />
                     </div>
                   </div>

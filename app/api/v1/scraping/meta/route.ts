@@ -3,7 +3,7 @@ import cheerio from "cheerio";
 import { checkApiKey } from "@/lib/dto/api-key";
 import { createScrapeMeta } from "@/lib/dto/scrape";
 import { getIpInfo } from "@/lib/geo";
-import { isLink, removeUrlSuffix } from "@/lib/utils";
+import { isLink, removeUrlPrefix } from "@/lib/utils";
 
 export const revalidate = 600;
 export const dynamic = "force-dynamic";
@@ -75,7 +75,7 @@ export async function GET(req: Request) {
     const icon =
       $("link[rel='icon']").attr("href") ||
       $("link[rel='apple-touch-icon']").attr("href") ||
-      `https://icon.wr.do/${removeUrlSuffix(link)}.ico`;
+      `https://icon.wr.do/${removeUrlPrefix(link)}.ico`;
     const lang =
       $("html").attr("lang") ||
       $("html").attr("xml:lang") ||

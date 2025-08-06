@@ -11,7 +11,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
-import BlurImage from "./blur-image";
+import BlurImage, { BlurImg } from "./blur-image";
 import { Icons } from "./icons";
 
 export function LinkPreviewer({
@@ -112,8 +112,55 @@ export function LinkInfoPreviewer({
     payload: "",
   });
 
+  const isImageUrl = (url: string): boolean => {
+    const imageExtensions = [
+      ".jpg",
+      ".jpeg",
+      ".png",
+      ".gif",
+      ".webp",
+      ".svg",
+      ".bmp",
+      ".ico",
+    ];
+    const urlLower = url.toLowerCase();
+
+    const hasImageExtension = imageExtensions.some((ext) =>
+      urlLower.includes(ext),
+    );
+
+    const imagePatterns = [
+      /\.(jpg|jpeg|png|gif|webp|svg|bmp|ico)(\?|#|$)/i,
+      /\/image\//i,
+      /\/img\//i,
+      /\/photos?\//i,
+      /\/pictures?\//i,
+    ];
+
+    const matchesPattern = imagePatterns.some((pattern) => pattern.test(url));
+
+    return hasImageExtension || matchesPattern;
+  };
+
   const handleScrapingInfo = async () => {
-    if (url) {
+    if (!url) return;
+
+    if (isImageUrl(url)) {
+      setMetaInfo({
+        title: formatUrl || url,
+        description: "",
+        image: url,
+        icon: "",
+        url: url,
+        lang: "",
+        author: "",
+        timestamp: "",
+        payload: "",
+      });
+      return;
+    }
+
+    try {
       const res = await fetch(`/api/v1/scraping/meta?url=${url}&key=${apiKey}`);
       if (!res.ok || res.status !== 200) {
         setMetaInfo({
@@ -131,6 +178,19 @@ export function LinkInfoPreviewer({
         const data = await res.json();
         setMetaInfo({ ...data, title: data.title || url });
       }
+    } catch (error) {
+      console.error("Error fetching meta info:", error);
+      setMetaInfo({
+        title: url,
+        description: "",
+        image: placeholdImage,
+        icon: "",
+        url: "",
+        lang: "",
+        author: "",
+        timestamp: "",
+        payload: "",
+      });
     }
   };
 
@@ -161,11 +221,11 @@ export function LinkInfoPreviewer({
           <TooltipArrow className="fill-gray-400" />
           {metaInfo.title ? (
             <>
-              <BlurImage
+              <BlurImg
                 className="rounded-md bg-primary-foreground group-hover:scale-95 group-hover:opacity-95"
                 src={metaInfo.image || placeholdImage}
                 alt={`Preview of ${url}`}
-                fill
+                fit
               />
               <div className="absolute bottom-0 w-full rounded-b-md p-2 backdrop-blur">
                 <p className="line-clamp-1 text-sm font-semibold text-neutral-600 dark:text-neutral-300">

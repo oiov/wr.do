@@ -290,8 +290,11 @@ export function isLink(str: string): boolean {
   }
 }
 
-export function removeUrlSuffix(url: string): string {
+export function removeUrlPrefix(url: string): string {
   return url.startsWith("http") ? url.split("//")[1] : url;
+}
+export function addUrlPrefix(url: string): string {
+  return url.startsWith("http") ? url : `https://${url}`;
 }
 
 export function extractHostname(url: string): string {

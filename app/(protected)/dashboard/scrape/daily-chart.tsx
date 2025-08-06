@@ -6,7 +6,7 @@ import { ScrapeMeta } from "@prisma/client";
 import { useTranslations } from "next-intl";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
-import { isLink, nFormatter, removeUrlSuffix } from "@/lib/utils";
+import { isLink, nFormatter, removeUrlPrefix } from "@/lib/utils";
 import {
   Card,
   CardContent,
@@ -268,7 +268,7 @@ export function StatsList({ data, title }: { data: Stat[]; title: string }) {
                 className="truncate font-medium hover:opacity-70 hover:after:content-['↗']"
                 href={ref.dimension}
               >
-                {removeUrlSuffix(ref.dimension)}
+                {removeUrlPrefix(ref.dimension)}
               </Link>
             ) : (
               <p className="font-medium">{decodeURIComponent(ref.dimension)}</p>
