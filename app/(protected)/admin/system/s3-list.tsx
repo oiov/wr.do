@@ -552,7 +552,7 @@ export default function S3Configs({}: {}) {
                                 <Icons.help className="size-4 text-muted-foreground" />
                               </TooltipTrigger>
                               <TooltipContent className="max-w-64 text-wrap">
-                                {t("maxStorageTooltip")}
+                                {t("maxFileSizeTooltip")}
                               </TooltipContent>
                             </Tooltip>
                           </TooltipProvider>

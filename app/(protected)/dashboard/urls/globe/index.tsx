@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { differenceInMinutes, format } from "date-fns";
+import { useTranslations } from "next-intl";
 
 import { DAILY_DIMENSION_ENUMS } from "@/lib/enums";
 import {
@@ -437,6 +438,7 @@ export function RealtimeTimePicker({
   timeRange: string;
   setTimeRange: (value: string) => void;
 }) {
+  const t = useTranslations("Components");
   return (
     <Select onValueChange={setTimeRange} name="time range" value={timeRange}>
       <SelectTrigger className="left-0 top-0 z-10 h-9 rounded-b-none border-b-0 bg-transparent text-left backdrop-blur-2xl sm:absolute sm:w-[326px]">
@@ -446,7 +448,7 @@ export function RealtimeTimePicker({
         {DAILY_DIMENSION_ENUMS.map((e, i) => (
           <div key={e.value}>
             <SelectItem value={e.value}>
-              <span className="flex items-center gap-1">{e.label}</span>
+              <span className="flex items-center gap-1">{t(e.label)}</span>
             </SelectItem>
             {i % 2 === 0 && i !== DAILY_DIMENSION_ENUMS.length - 1 && (
               <SelectSeparator />

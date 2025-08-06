@@ -217,31 +217,32 @@ export function LinkInfoPreviewer({
         </TooltipTrigger>
         <TooltipContent
           align="start"
-          className="group flex h-[187px] w-[300px] flex-col items-center justify-center rounded-lg bg-gradient-to-br from-gray-500 to-gray-300 p-0 shadow-inner transition-all duration-200"
+          className="group flex h-[187px] w-[300px] flex-col items-center justify-center rounded-lg bg-gradient-to-br from-gray-300 to-gray-100 p-0 shadow-inner transition-all duration-200"
         >
-          <TooltipArrow className="fill-gray-400" />
+          <TooltipArrow className="fill-gray-300" />
           {metaInfo.title ? (
             <>
               <BlurImg
                 className={cn(
-                  "rounded-md bg-primary-foreground group-hover:scale-95 group-hover:opacity-95",
+                  "h-full rounded-md bg-primary-foreground group-hover:scale-95 group-hover:opacity-95",
                   (metaInfo.image === placeholdImage || !metaInfo.image) &&
-                    "h-full w-full",
+                    "w-full",
                 )}
                 src={metaInfo.image || placeholdImage}
                 alt={`Preview of ${url}`}
-                fill
               />
-              <div className="absolute bottom-0 w-full rounded-b-md p-2 backdrop-blur">
-                <p className="line-clamp-1 text-sm font-semibold text-neutral-600 dark:text-neutral-300">
-                  {metaInfo.title}
-                </p>
-                {metaInfo.description && (
-                  <p className="mt-1 line-clamp-1 text-xs text-neutral-500 dark:text-neutral-400">
-                    {metaInfo.description}
+              {!isImageUrl(url) && (
+                <div className="absolute bottom-0 w-full rounded-b-md p-2 backdrop-blur">
+                  <p className="line-clamp-1 text-sm font-semibold text-neutral-600 dark:text-neutral-300">
+                    {metaInfo.title}
                   </p>
-                )}
-              </div>
+                  {metaInfo.description && (
+                    <p className="mt-1 line-clamp-1 text-xs text-neutral-500 dark:text-neutral-400">
+                      {metaInfo.description}
+                    </p>
+                  )}
+                </div>
+              )}
             </>
           ) : (
             <Skeleton className="h-[187px] w-[300px]" />
