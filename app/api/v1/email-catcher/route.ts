@@ -147,10 +147,10 @@ async function handleExternalForward(data: OriginalEmail, configs: any) {
   }
 
   const { error } = await resend.emails.send({
-    from: `forward@${sender[0].domain_name}`,
+    from: `Forwarding@${sender[0].domain_name}`,
     to: validEmails,
     subject: data.subject ?? "No subject",
-    html: data.html ?? data.text ?? "-",
+    html: `${data.html ?? data.text} <br><hr><br><p style="font-size: '0.8em'; color: '#888'; font-family: 'monospace';text-align: 'center'">This email was forwarded from ${data.from}. Powered by <a href="https://wr.do">WR.DO</a>.</p>`,
   });
   if (error) {
     console.log("[Resend Error]", error);
