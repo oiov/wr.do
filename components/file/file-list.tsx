@@ -340,7 +340,7 @@ export default function UserFileList({
                   {file.status === 1 && (
                     <CopyButton
                       className="size-6"
-                      value={getFileUrl(file.name)}
+                      value={getFileUrl(file.path)}
                     />
                   )}
                 </ClickableTooltip>
