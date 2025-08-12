@@ -45,6 +45,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "wr.do",
       },
+      {
+        protocol: "https",
+        hostname: "api.dicebear.com",
+      },
     ],
   },
   experimental: {

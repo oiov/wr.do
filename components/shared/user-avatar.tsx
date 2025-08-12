@@ -14,7 +14,7 @@ export function UserAvatar({ user, ...props }: UserAvatarProps) {
         alt="Picture"
         src={
           user.image ??
-          `https://unavatar.io/${user.email}?ttl=1h&fallback=https://wr.do/_static/avatar.png`
+          `https://api.dicebear.com/9.x/initials/svg?seed=${user.name || user.email}`
         }
         referrerPolicy="no-referrer"
       />
