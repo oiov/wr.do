@@ -177,7 +177,7 @@ See [How to Trigger Sync](https://wr.do/docs/developer/sync) for details.
 - Discord: https://discord.gg/AHPQYuZu3m
 - 微信群：
 
-<img width="300" src="https://wr.do/s/group" />
+<img width="300" src="https://wr.do/group" />
 
 ## Contributors
 

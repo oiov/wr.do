@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
 
     const orderedResults = ids.map((id) => {
       const item = dataMap.get(id);
-      return item ? `${item.prefix}/s/${item.url}` : "";
+      return item ? `${item.prefix}/${item.url}` : "";
     });
 
     return NextResponse.json({

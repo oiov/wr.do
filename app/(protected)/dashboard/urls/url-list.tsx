@@ -345,7 +345,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                 <TableCell className="col-span-1 flex items-center gap-1 sm:col-span-2">
                   <Link
                     className="overflow-hidden text-ellipsis whitespace-normal text-slate-600 hover:text-blue-400 hover:underline dark:text-slate-400"
-                    href={`https://${short.prefix}/s/${short.url}${short.password ? `?password=${short.password}` : ""}`}
+                    href={`https://${short.prefix}/${short.url}${short.password ? `?password=${short.password}` : ""}`}
                     target="_blank"
                     prefetch={false}
                     title={short.url}
@@ -353,7 +353,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                     {short.url}
                   </Link>
                   <CopyButton
-                    value={`${short.prefix}/s/${short.url}${short.password ? `?password=${short.password}` : ""}`}
+                    value={`${short.prefix}/${short.url}${short.password ? `?password=${short.password}` : ""}`}
                     className={cn(
                       "size-[25px]",
                       "duration-250 transition-all group-hover:opacity-100",
@@ -495,7 +495,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                     <div className="flex items-center">
                       <Link
                         className="overflow-hidden text-ellipsis whitespace-normal text-sm font-semibold text-slate-600 hover:text-blue-400 hover:underline dark:text-slate-300"
-                        href={`https://${short.prefix}/s/${short.url}${short.password ? `?password=${short.password}` : ""}`}
+                        href={`https://${short.prefix}/${short.url}${short.password ? `?password=${short.password}` : ""}`}
                         target="_blank"
                         prefetch={false}
                         title={short.url}
@@ -503,7 +503,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                         {short.url}
                       </Link>
                       <CopyButton
-                        value={`${short.prefix}/s/${short.url}${short.password ? `?password=${short.password}` : ""}`}
+                        value={`https://${short.prefix}/${short.url}${short.password ? `?password=${short.password}` : ""}`}
                         className={cn(
                           "size-[25px]",
                           "duration-250 transition-all group-hover:opacity-100",
@@ -759,7 +759,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
         {selectedUrl && (
           <QRCodeEditor
             user={{ id: user.id, apiKey: user.apiKey || "", team: user.team! }}
-            url={`https://${selectedUrl.prefix}/s/${selectedUrl.url}`}
+            url={`https://${selectedUrl.prefix}/${selectedUrl.url}`}
           />
         )}
       </Modal>

@@ -21,20 +21,70 @@ const redirectMap = {
   "IncorrectPassword[0005]": "/password-prompt?error=1&slug=",
 };
 
+const systemRoutes = [
+  "/docs",
+  "/dashboard",
+  "/admin",
+  "/pricing",
+  "/plan",
+  "/privacy",
+  "/terms",
+  "/auth",
+  "/login",
+  "/register",
+  "/emails",
+  "/link-status",
+  "/password-prompt",
+  "/chat",
+  "/manifest.json",
+  "/robots.txt",
+  "/opengraph-image.jpg",
+  "/favicon.ico",
+];
+
 async function handleShortUrl(req: NextAuthRequest) {
-  if (!req.url.includes("/s/")) return NextResponse.next();
+  const url = new URL(req.url);
+  const pathname = url.pathname;
 
-  const slug = extractSlug(req.url);
-  if (!slug)
-    return NextResponse.redirect(`${siteConfig.url}/docs/short-urls`, 302);
+  const isSystemRoute = systemRoutes.some(
+    (route) => pathname === route || pathname.startsWith(route + "/"),
+  );
 
+  if (isSystemRoute || pathname === "/") {
+    return NextResponse.next();
+  }
+
+  // 兼容旧版 /s
+  if (pathname.startsWith("/s/")) {
+    const slug = extractSlug(req.url);
+    const newUrl = new URL(`/${slug}`, siteConfig.url);
+    url.searchParams.forEach((value, key) => {
+      newUrl.searchParams.set(key, value);
+    });
+    return NextResponse.redirect(newUrl.toString(), 302);
+  }
+
+  const slug = pathname.substring(1);
+
+  if (!slug || slug.includes("/")) {
+    return NextResponse.next();
+  }
+
+  const slugRegex = /^[a-zA-Z0-9_-]+$/;
+  if (!slugRegex.test(slug)) {
+    return NextResponse.next();
+  }
+
+  return await processShortUrl(req, slug, url);
+}
+
+async function processShortUrl(req: NextAuthRequest, slug: string, url: URL) {
   const headers = req.headers;
   const ip = isVercel ? ipAddress(req) : extractRealIP(headers);
   const ua = getUserAgent(req);
 
   const geo = await getGeolocation(req, ip || "::1");
 
-  const url = new URL(req.url);
   const password = url.searchParams.get("password") || "";
 
   const trackingData = {
@@ -100,7 +150,7 @@ async function handleShortUrl(req: NextAuthRequest) {
 }
 
 function extractSlug(url: string): string | null {
-  const match = url.match(/([^/?]+)(?:\?.*)?$/);
+  const match = url.match(/\/s\/([^/?]+)(?:\?.*)?$/);
   return match ? match[1] : null;
 }
 

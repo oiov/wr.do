@@ -214,7 +214,7 @@ pnpm dev
 - Discord: https://discord.gg/AHPQYuZu3m
 - 微信群：
 
-<img width="300" src="https://wr.do/s/group" />
+<img width="300" src="https://wr.do/group" />
 
 ## 贡献者
 

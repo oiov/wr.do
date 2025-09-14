@@ -61,7 +61,7 @@ export default function PasswordPrompt() {
       e.preventDefault();
       const fullPassword = password.join("");
       if (slug && !isPending && fullPassword.length === 6) {
-        router.push(`/s/${slug}?password=${encodeURIComponent(fullPassword)}`);
+        router.push(`/${slug}?password=${encodeURIComponent(fullPassword)}`);
       }
     });
   };

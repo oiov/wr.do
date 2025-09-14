@@ -98,7 +98,7 @@ const RealtimeLogs = ({
                 <div className="flex items-center gap-1">
                   <Link
                     className="text-sm font-semibold"
-                    href={`https://${loc.userUrl?.prefix}/s/${loc.userUrl?.url}`}
+                    href={`https://${loc.userUrl?.prefix}/${loc.userUrl?.url}`}
                     target="_blank"
                   >
                     {loc.userUrl?.url}
