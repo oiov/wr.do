@@ -25,6 +25,7 @@ const systemRoutes = [
   "/docs",
   "/dashboard",
   "/admin",
+  "/feedback",
   "/pricing",
   "/plan",
   "/privacy",

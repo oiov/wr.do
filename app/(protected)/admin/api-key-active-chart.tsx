@@ -31,9 +31,7 @@ export function RadialShapeChart({
   totalUser: number;
 }) {
   const t = useTranslations("Components");
-  const chartData = [
-    { browser: "safari", actived: total, fill: "var(--color-safari)" },
-  ];
+  const chartData = [{ actived: total, fill: "var(--color-safari)" }];
 
   return (
     <Card className="flex flex-col">
@@ -44,7 +42,7 @@ export function RadialShapeChart({
         >
           <RadialBarChart
             data={chartData}
-            endAngle={total}
+            endAngle={(total / totalUser) * 100}
             innerRadius={80}
             outerRadius={140}
           >
@@ -79,7 +77,7 @@ export function RadialShapeChart({
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Users
+                          {t("Users")}
                         </tspan>
                       </text>
                     );

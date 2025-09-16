@@ -7,8 +7,8 @@ import { DashboardHeader } from "@/components/dashboard/header";
 import UserUrlsList from "../../dashboard/urls/url-list";
 
 export const metadata = constructMetadata({
-  title: "Short URLs",
-  description: "List and manage records.",
+  title: "Links",
+  description: "List and manage short links.",
 });
 
 export default async function DashboardPage() {
