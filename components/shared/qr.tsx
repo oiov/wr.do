@@ -81,36 +81,50 @@ export default function QRCodeEditor({
   };
 
   useEffect(() => {
+    setParams((prev) => ({
+      ...prev,
+      logo: localStorage.getItem("qr-logo") || "",
+      fgColor: localStorage.getItem("qr-color-fgColor") || "#d1ffb5",
+      bgColor: localStorage.getItem("qr-color-bgColor") || "#000000",
+      hideLogo: localStorage.getItem("qr-hide-logo") === "true",
+    }));
+  }, []);
+
+  useEffect(() => {
     setQrCodeUrl(generateQrCodeUrl());
   }, [params]);
 
   const handleColorChange = useCallback(
     debounce((color: string, type: "fgColor" | "bgColor") => {
       setParams((prev) => ({ ...prev, [type]: color }));
+      localStorage.setItem(`qr-color-${type}`, color);
     }, 300),
     [],
   );
 
   const handleToggleLogo = (v: boolean) => {
     setParams((prev) => ({ ...prev, hideLogo: !v }));
+    localStorage.setItem("qr-hide-logo", (!v).toString());
   };
 
   function download(url: string, extension: string) {
     if (!anchorRef.current) return;
     anchorRef.current.href = url;
-    anchorRef.current.download = `${extractHost(params.url)}-qrcode.${extension}`;
+    anchorRef.current.download = `${extractHost(params.url).replace(".", "-")}-qrcode.${extension}`;
     anchorRef.current.click();
   }
 
   const handleChangeUrl = useCallback(
     debounce((value) => {
       setParams((prev) => ({ ...prev, url: value }));
+      // localStorage.setItem("qr-url", value);
     }, 300),
     [],
   );
   const handleChangeLogo = useCallback(
     debounce((value) => {
       setParams((prev) => ({ ...prev, logo: value }));
+      localStorage.setItem("qr-logo", value);
     }, 300),
     [],
   );
@@ -271,7 +285,7 @@ export default function QRCodeEditor({
           </TooltipProvider>
           <Switch
             className="ml-auto"
-            defaultChecked={!params.hideLogo}
+            checked={!params.hideLogo}
             onCheckedChange={(v) => handleToggleLogo(v)}
           />
         </div>
@@ -310,8 +324,8 @@ export default function QRCodeEditor({
             className="mt-2"
             type="text"
             placeholder="https://example.com/logo.png"
-            disabled={user.team === "free" || params.hideLogo}
-            defaultValue={WRDO_QR_LOGO}
+            disabled={params.hideLogo}
+            defaultValue={params.logo || WRDO_QR_LOGO}
             onChange={(e) => handleChangeLogo(e.target.value)}
           />
         </details>
