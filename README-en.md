@@ -34,8 +34,6 @@
 
 ## Features
 
-- Demo: [https://699399.xyz](https://699399.xyz) (Account: `admin@admin.com`, Password: `123456`)
-
 - 🔗 **Short Link Service**:
   - Custom short links
   - Generate custom QR codes

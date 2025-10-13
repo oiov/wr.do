@@ -37,8 +37,6 @@
 
 ## 功能列表
 
-> Demo: [https://699399.xyz](https://699399.xyz) (管理员账号: `admin@admin.com`, 密码: `123456`)
-
 <details>
 <summary><strong> 🔗 短链服务</strong> - <a href="javascript:;">[功能列表]</a></summary>
 <ul>
