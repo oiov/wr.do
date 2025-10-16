@@ -4,7 +4,7 @@ import { Icons } from "../shared/icons";
 
 export default function UrlShotenerExp() {
   return (
-    <main className="mx-auto mt-10 flex w-full max-w-[561.5px] flex-col items-center justify-center rounded-xl border border-neutral-900/[0.05] bg-neutral-500/5 px-4 py-5 backdrop-blur dark:border-neutral-700/50">
+    <main className="mx-auto mt-10 flex w-full max-w-[561.5px] scale-[0.8] flex-col items-center justify-center rounded-xl border border-neutral-900/[0.05] bg-neutral-500/5 px-4 py-5 backdrop-blur dark:border-neutral-700/50">
       <div className="absolute left-1/2 top-0 flex -translate-x-1/2 -translate-y-1/2 items-center gap-1.5 rounded-full border border-neutral-300 bg-[#eff9fa] px-2 py-0.5 text-xs text-neutral-600 dark:border-neutral-700/50 dark:bg-neutral-900 dark:text-neutral-300">
         <svg
           xmlns="http://www.w3.org/2000/svg"

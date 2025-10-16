@@ -120,6 +120,7 @@
     "react-hook-form": "^7.52.1",
     "react-quill": "^2.0.0",
     "react-textarea-autosize": "^8.5.3",
+    "react-use-measure": "^2.1.7",
     "recharts": "^2.12.7",
     "resend": "^3.4.0",
     "semver": "^7.5.4",

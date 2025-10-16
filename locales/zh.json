@@ -437,17 +437,25 @@
     "enterpriseTier": "企业计划",
     "enterprisePrice": "联系我们",
     "enterpriseBestFor": "适合有定制需求的大型组织",
-    "contactUs": "联系我们"
+    "contactUs": "联系我们",
+    "Try the cloud version": "立即登录体验云版本",
+    "Features": "功能特性",
+    "All in one means": "All in one means",
+    "Stats": "数据统计",
+    "Happy Customers": "累计注册用户",
+    "Short Links": "创建短链数量",
+    "Email Addresses": "用户邮箱数量",
+    "Inbox Emails": "接收邮件数量"
   },
   "Auth": {
     "Back": "返回",
-    "Welcome to": "欢迎使用",
-    "Choose your login method to continue": "选择登录方式以继续",
+    "Welcome to": "欢迎回来",
+    "Choose your login method to continue": "登录您的账户以继续",
     "By clicking continue, you agree to our": "点击继续即表示您同意我们的",
     "Terms of Service": "服务条款",
     "and": "和",
     "Privacy Policy": "隐私政策",
-    "Or continue with": "或",
+    "Or continue with": "或继续使用",
     "Email": "邮箱",
     "Sign Up with Email": "使用邮箱注册",
     "Sign In with Email": "使用邮箱登录",
@@ -464,7 +472,8 @@
     "Administrator has disabled new user registration": "管理员已关闭新用户注册",
     "Email domain not supported, Please use one of the following:": "暂不支持此邮箱后缀，请使用以下邮箱:",
     "Auth configuration error": "权限校验配置错误",
-    "Unknown error": "未知错误"
+    "Unknown error": "未知错误",
+    "description": "欢迎来到 WR.DO 一站式域名服务平台。登录以体验我们的云工具。"
   },
   "System": {
     "MENU": "菜单",

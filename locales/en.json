@@ -437,11 +437,19 @@
     "enterpriseTier": "Enterprise",
     "enterprisePrice": "Contact us",
     "enterpriseBestFor": "For large organizations with custom needs",
-    "contactUs": "Contact us"
+    "contactUs": "Contact us",
+    "Try the cloud version": "Try the cloud version",
+    "Features": "Features",
+    "All in one means": "All in one means",
+    "Stats": "Stats",
+    "Happy Customers": "Happy Customers",
+    "Short Links": "Short Links",
+    "Email Addresses": "Email Addresses",
+    "Inbox Emails": "Inbox Emails"
   },
   "Auth": {
     "Back": "Back",
-    "Welcome to": "Welcome to",
+    "Welcome to": "Welcome back",
     "Choose your login method to continue": "Choose your login method to continue",
     "By clicking continue, you agree to our": "By clicking continue, you agree to our",
     "Terms of Service": "Terms of Service",
@@ -464,7 +472,8 @@
     "Administrator has disabled new user registration": "Administrator has disabled new user registration",
     "Email domain not supported, Please use one of the following:": "Email domain not supported. Please use one of the following:",
     "Auth configuration error": "Auth configuration error",
-    "Unknown error": "Unknown error"
+    "Unknown error": "Unknown error",
+    "description": "Welcome to WR.DO, your all-in-one domain services platform. Sign in to experience our cloud tools."
   },
   "System": {
     "MENU": "Menu",

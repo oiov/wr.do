@@ -210,7 +210,7 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
   const rendeCredentials = () =>
     loginMethod["credentials"] && (
       <form onSubmit={handleSubmit2(onSubmitPwd)}>
-        <div className="grid gap-2">
+        <div className="grid gap-3">
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="email">
               Email
@@ -276,6 +276,14 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
           📢 {t("Administrator has disabled new user registration")}.
         </p>
       )}
+
+      {loginMethod["credentials"] && <>{rendeCredentials()}</>}
+
+      {(loginMethod["google"] ||
+        loginMethod["github"] ||
+        loginMethod["linuxdo"]) &&
+        (loginMethod["resend"] || loginMethod["credentials"]) &&
+        rendeSeparator()}
 
       {loginMethod["google"] && (
         <Button
@@ -354,12 +362,6 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
         </Button>
       )}
 
-      {(loginMethod["google"] ||
-        loginMethod["github"] ||
-        loginMethod["linuxdo"]) &&
-        (loginMethod["resend"] || loginMethod["credentials"]) &&
-        rendeSeparator()}
-
       {/* {loginMethod["resend"] && loginMethod["credentials"] ? (
         <Tabs defaultValue="resend">
           <TabsList className="mb-2 w-full justify-center">
@@ -375,8 +377,6 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
           {rendeCredentials()}
         </>
       )} */}
-
-      {loginMethod["credentials"] && <>{rendeCredentials()}</>}
     </div>
   );
 }

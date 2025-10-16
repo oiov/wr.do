@@ -9,7 +9,7 @@ export default function EmailManagerInnovate() {
   const [viewMode, setViewMode] = useState("inbox"); // Toggle between inbox and sent
 
   return (
-    <main className="mx-auto my-8 flex w-full max-w-[561.5px] flex-col items-center justify-center rounded-2xl border border-neutral-800/[0.08] bg-gradient-to-br from-white to-blue-50/30 p-6 shadow-lg backdrop-blur-lg dark:border-neutral-700/50 dark:bg-gradient-to-br dark:from-gray-800 dark:to-black dark:shadow-xl">
+    <main className="mx-auto my-8 hidden w-full max-w-[561.5px] scale-[0.8] flex-col items-center justify-center rounded-2xl border border-neutral-800/[0.08] bg-gradient-to-br from-white to-blue-50/30 p-6 shadow-lg backdrop-blur-lg dark:border-neutral-700/50 dark:bg-gradient-to-br dark:from-gray-800 dark:to-black dark:shadow-xl md:flex">
       <div className="absolute left-1/2 top-0 flex -translate-x-1/2 -translate-y-1/2 items-center gap-1.5 rounded-full border border-neutral-300 bg-[#eff9fa] px-2 py-0.5 text-xs text-neutral-600 dark:border-neutral-700/50 dark:bg-neutral-900 dark:text-neutral-300">
         <svg
           xmlns="http://www.w3.org/2000/svg"
