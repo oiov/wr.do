@@ -86,7 +86,7 @@ export default function HeroLanding({
 
         <PreviewLanding />
 
-        <div className="group relative m-auto max-w-5xl">
+        <div className="group relative m-auto hidden max-w-5xl md:block">
           <div className="flex flex-col items-center md:flex-row">
             <div className="mb-4 hidden md:mb-0 md:block md:max-w-44 md:border-r md:border-gray-600 md:pr-6">
               <p className="text-end text-sm text-black dark:text-gray-400">

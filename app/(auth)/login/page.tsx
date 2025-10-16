@@ -18,21 +18,21 @@ export default function LoginPage() {
   const t = useTranslations("Auth");
   return (
     <div className="flex h-full flex-col items-center justify-center">
-      {/* <Link
+      <Link
         href="/"
         className={cn(
           buttonVariants({ variant: "outline", size: "sm" }),
-          "absolute left-4 top-4 md:left-8 md:top-8",
+          "absolute left-4 top-4 md:left-8 md:top-8 lg:hidden",
         )}
       >
         <>
           <Icons.chevronLeft className="mr-2 size-4" />
           {t("Back")}
         </>
-      </Link> */}
+      </Link>
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
         <div className="flex flex-col space-y-2 text-center">
-          <Icons.logo className="mx-auto block size-12 lg:hidden" />
+          {/* <Icons.logo className="mx-auto size-12 lg:hidden" /> */}
           <div className="text-2xl font-semibold tracking-tight">
             <span>{t("Welcome to")}</span>{" "}
           </div>
