@@ -1,9 +1,3 @@
-import { Resend } from "resend";
-
-import { env } from "@/env.mjs";
-
-export const resend = new Resend(env.RESEND_API_KEY || "re_key");
-
 export function getVerificationEmailHtml({
   url,
   appName,
@@ -151,6 +145,7 @@ export function applyRecordEmailHtml({
   type,
   name,
   content,
+  comment,
 }: {
   appUrl: string;
   appName: string;
@@ -158,6 +153,7 @@ export function applyRecordEmailHtml({
   type: string;
   name: string;
   content: string;
+  comment: string;
 }) {
   return `
     <html>
@@ -232,6 +228,10 @@ export function applyRecordEmailHtml({
             <tr>
               <th>Content</th>
               <td>${content}</td>
+            </tr>
+            <tr>
+              <th>Comment</th>
+              <td>${comment}</td>
             </tr>
           </table>
           

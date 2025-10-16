@@ -138,6 +138,7 @@
     "API Key": "API Key",
     "send email service": "send email service",
     "How to get resend api key?": "How to get resend api key?",
+    "How to get brevo api key?": "How to get brevo api key?",
     "Analytics": "Analytics",
     "Edit URL": "Edit URL",
     "Plan Name": "Plan",
@@ -228,7 +229,11 @@
     "Export": "Export",
     "Export All": "Export All",
     "Export Active": "Export Active",
-    "Export Basic Info": "Export Basic Info"
+    "Export Basic Info": "Export Basic Info",
+    "Email Service Configs": "Email Service Configs",
+    "Email Provider": "Email Provider",
+    "Resend API Key": "Resend API Key",
+    "Brevo API Key": "Brevo API Key"
   },
   "Components": {
     "Dashboard": "Dashboard",
@@ -658,7 +663,7 @@
     "Max File Count": "Max File Count",
     "Password": "Password",
     "Email Forwarding": "Email Forwarding",
-    "If enabled, forward all received emails to other platform email addresses (Send with Resend)": "If enabled, forward all received emails to other platform email addresses (Send with Resend)",
+    "If enabled, forward all received emails to other platform email addresses (Send with Resend or Brevo)": "If enabled, forward all received emails to other platform email addresses (Send with Resend or Brevo)",
     "Forward Email Targets": "Forward Email Targets",
     "Set forward email address targets, split by comma if more than one, such as: 1@a-com,2@b-com, Only works when email forwarding is enabled": "Set forward email address targets, split by comma if more than one, such as: 1@a.com,2@b.com, Only works when email forwarding is enabled",
     "Email Forward White List": "Email Forward White List",

@@ -5,45 +5,63 @@ description: 如何配置项目中的邮件服务
 
 <DocsLang en="/docs/developer/email" zh="/docs/developer/email-zh" />
 
-在 WR.DO 项目中，有两个功能依赖于 Resend：  
-
-- 邮箱验证登录（魔法链接）
-- 邮件发送功能（如果你需要接收邮件功能，请参考 [cloudflare-email-worker](/docs/developer/cloudflare-email-worker)）。
-
-`.env` 文件中配置的 `RESEND_API_KEY` 和 `RESEND_FROM_EMAIL` 用于登录功能，  
-而邮件发送功能所需的 Resend 密钥需要你在登录后台管理面板（`/admin/domains`）后，在域名配置中自行添加。
-
-<Callout type="note">
-  这两个功能可以使用同一个密钥，因为它们本质上都是通过 Resend 发送邮件。
+<Callout type="warning" twClass="mt-4">
+  此模块配置在 v1.1.5 版本之后经历了较大改变，注意修改对应配置。
+  - 移除了 `RESEND_API_KEY`，替换为 `BREVO_API_KEY` (在较早版本仅默认使用 Resend 服务，由于官方账号被Resend封禁，不得不切换服务商所以做出此次变动)
+  - 默认使用 Resend 发送系统通知邮件替换为了 Brevo
+  - `RESEND_FROM_EMAIL` 替换为 `EMAIL_FROM`, 新增 `EMAIL_FROM_NAME` 环境变量
 </Callout>
 
-以下将演示如何配置登录所需的 Resend 密钥。
+本项目的邮件服务模块具备接收和发送邮件的能力，本篇将介绍如何配置项目中的邮件**发送**服务。
 
-## 步骤
+> 如果你需要配置接收邮件功能，请参考文档 [cloudflare-email-worker](/docs/developer/cloudflare-email-worker)
 
-<Callout type="note">
-  邮件部分配置类似于 [resend](https://resend.com/) 的文档。  
-  如果你想查阅官方文档，可以参考  
-  [这里](https://authjs.dev/getting-started/installation#setup-environment)。
-</Callout>
+目前支持的发件服务商：
 
-<Steps>
+- [Resend](https://resend.com) (免费额度：每天最多发送 100 封，支持绑定 1 个域名)
+- [Brevo](https://www.brevo.com) (免费额度：每天最多发送 300 封，支持绑定多个域名)
 
-### 创建账号
+后续会根据需求接入其他发件方式。
 
-如果你还没有 Resend 账号，请按照 [这里](https://resend.com/signup) 的注册流程操作。
+## 环境变量
 
-> Resend 免费账号提供每天发送 100 个邮件额度，绑定 1 个域名，足够一般用户使用。
+```js
+BREVO_API_KEY=your-brevo-api-key
+EMAIL_FROM=support@your-domain.com
+EMAIL_FROM_NAME=WR.DO
+```
 
-### 创建 API 密钥
+注册并登录 Brevo 控制台 [app.brevo.com/settings/keys/api](https://app.brevo.com/settings/keys/api) 页面创建一个密钥，将其复制并粘贴到环境变量中。
+
+注意，在此处配置的 `BREVO_API_KEY` 默认用于`子域名申请通知`功能，不会用于发送邮件。也可将此key填入下方的域名配置中作为邮件服务模块的发件者。
+
+## Brevo
+
+在本项目中，有以下几处会使用到 Brevo 发送邮件：
+
+- 邮件服务模块（`/email`）
+- 子域名申请通知（在系统设置中，默认关闭此功能）
+- 邮箱验证功能（开发中 `/dashboard/settings`）
+
+同样在Brevo 控制台创建 API 密钥，然后回到系统的 localhost:3000/admin/system 页面, 在**域名管理**项中点击**添加域名**，并在子项**邮件服务商**中填写对应的 API 密钥保存即可：
+
+![](/_static/docs/domain-form-email.png)
+
+之后，你可以在 Brevo 控制台的 [Domain](https://app.brevo.com/senders/domain/list) 页面绑定域名，根据提示添加解析记录完成配置即可：
+
+![](/_static/docs/brevo-domain.png)
+
+最后在本系统依次添加域名，配置完成如下所示:
+
+![](/_static/docs/domain-list.png)
+
+## Resend
+
+在本项目中，仅在邮件服务模块会使用 Resend 发送邮件。
+
+#### 创建 API 密钥
 
 登录 Resend 后，它会提示你创建第一个 API 密钥。
 
-将其复制并粘贴到你的 `.env` 文件中：
+将其复制并粘贴，后续步骤与 Brevo 类似，需要先绑定域名并配置解析记录。
 
-```js
-RESEND_API_KEY = re_your_resend_api_key;
-RESEND_FROM_EMAIL="you <support@your-domain.com>"
-````
-
-</Steps>

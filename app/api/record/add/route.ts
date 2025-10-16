@@ -10,7 +10,9 @@ import { getDomainsByFeature } from "@/lib/dto/domains";
 import { getPlanQuota } from "@/lib/dto/plan";
 import { getMultipleConfigs } from "@/lib/dto/system-config";
 import { checkUserStatus, getFirstAdminUser } from "@/lib/dto/user";
-import { applyRecordEmailHtml, resend } from "@/lib/email";
+import { brevoSendEmail } from "@/lib/email/brevo";
+import { resend } from "@/lib/email/resend";
+import { applyRecordEmailHtml } from "@/lib/email/templates";
 import { reservedDomains } from "@/lib/enums";
 import { getCurrentUser } from "@/lib/session";
 import { generateSecret } from "@/lib/utils";
@@ -117,8 +119,10 @@ export async function POST(req: Request) {
       }
       const admin_user = await getFirstAdminUser();
       if (configs.enable_subdomain_status_email_pusher && admin_user) {
-        await resend.emails.send({
-          from: env.RESEND_FROM_EMAIL,
+        await brevoSendEmail({
+          key: "", // env
+          from: env.EMAIL_FROM,
+          fromName: env.EMAIL_FROM_NAME,
           to: admin_user.email || "",
           subject: "New record pending approval",
           html: applyRecordEmailHtml({
@@ -128,6 +132,7 @@ export async function POST(req: Request) {
             type: record.type,
             name: record.name,
             content: record.content,
+            comment: record.comment,
           }),
         });
       }

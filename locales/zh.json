@@ -138,6 +138,7 @@
     "API Key": "API 密钥",
     "send email service": "用于发送邮件服务",
     "How to get resend api key?": "如何获取 Resend API 密钥?",
+    "How to get brevo api key?": "如何获取 Brevo API 密钥?",
     "Analytics": "访客分析",
     "Edit URL": "编辑短链",
     "Plan Name": "计划名称",
@@ -228,7 +229,11 @@
     "Export": "导出",
     "Export All": "导出所有链接",
     "Export Active": "导出有效链接",
-    "Export Basic Info": "导出基本信息"
+    "Export Basic Info": "导出基本信息",
+    "Email Service Configs": "邮件服务商",
+    "Email Provider": "邮件提供商",
+    "Resend API Key": "Resend 密钥",
+    "Brevo API Key": "Brevo 密钥"
   },
   "Components": {
     "Dashboard": "用户面板",
@@ -658,7 +663,7 @@
     "Save Modifications": "保存修改",
     "Password": "账户密码",
     "Email Forwarding": "邮件转发",
-    "If enabled, forward all received emails to other platform email addresses (Send with Resend)": "如果启用，则将所有收到的电子邮件转发到其他平台邮箱 (使用 Resend 发送)",
+    "If enabled, forward all received emails to other platform email addresses (Send with Resend or Brevo)": "如果启用，则将所有收到的电子邮件转发到其他平台邮箱 (使用 Resend 或 Brevo 发送)",
     "Forward Email Targets": "目标收件箱",
     "Set forward email address targets, split by comma if more than one, such as: 1@a-com,2@b-com, Only works when email forwarding is enabled": "设置转发目标邮箱，多个邮件地址请用逗号分隔，例如：1@a.com,2@b.com，仅在启用邮件转发时生效",
     "Email Forward White List": "转发邮箱白名单",

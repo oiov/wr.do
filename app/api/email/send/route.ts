@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 
-import { checkDomainIsConfiguratedResend } from "@/lib/dto/domains";
+import { checkDomainIsConfiguratedEmailProvider } from "@/lib/dto/domains";
 import { getUserSendEmailCount, saveUserSendEmail } from "@/lib/dto/email";
 import { getPlanQuota } from "@/lib/dto/plan";
 import { checkUserStatus } from "@/lib/dto/user";
+import { brevoSendEmail } from "@/lib/email/brevo";
 import { getCurrentUser } from "@/lib/session";
 import { restrictByTimeRange } from "@/lib/team";
 import { isValidEmail } from "@/lib/utils";
@@ -36,30 +37,26 @@ export async function POST(req: NextRequest) {
       return NextResponse.json("Invalid email address", { status: 403 });
     }
 
-    const resend_key = await checkDomainIsConfiguratedResend(
-      from.split("@")[1],
-    );
+    const { email_key, provider } =
+      await checkDomainIsConfiguratedEmailProvider(from.split("@")[1]);
 
-    if (!resend_key) {
+    if (!email_key) {
       return NextResponse.json(
         "This domain is not configured for sending emails",
         { status: 400 },
       );
     }
 
-    const resend = new Resend(resend_key);
-    const { error } = await resend.emails.send({
-      from,
-      to,
-      subject,
-      html,
-    });
-
-    if (error) {
-      console.log("Resend error:", error); // ？？？如果删掉这句log，下面一行读取error的message会返回undefined
-      return NextResponse.json(`${error.message}`, {
-        status: 400,
-      });
+    switch (provider) {
+      case "Resend":
+        const resend = new Resend(email_key);
+        await resend.emails.send({ from, to, subject, html });
+        break;
+      case "Brevo":
+        await brevoSendEmail({ from, to, subject, html });
+        break;
+      default:
+        break;
     }
 
     await saveUserSendEmail(user.id, from, to, subject, html);

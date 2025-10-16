@@ -1,6 +1,6 @@
 {
   "name": "wr.do",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "author": {
     "name": "oiov",
     "url": "https://github.com/oiov"
@@ -27,6 +27,7 @@
     "@auth/prisma-adapter": "^2.4.1",
     "@aws-sdk/client-s3": "^3.840.0",
     "@aws-sdk/s3-request-presigner": "^3.840.0",
+    "@getbrevo/brevo": "^3.0.1",
     "@hookform/resolvers": "^3.9.0",
     "@mantine/hooks": "^8.0.1",
     "@prisma/client": "^5.17.0",
@@ -68,6 +69,7 @@
     "@types/lodash-es": "^4.17.12",
     "@types/ms": "^2.1.0",
     "@types/next-pwa": "^5.6.9",
+    "@types/nodemailer": "^7.0.2",
     "@types/three": "^0.176.0",
     "@typescript-eslint/parser": "^7.16.1",
     "@uiw/react-json-view": "2.0.0-alpha.26",
@@ -103,7 +105,6 @@
     "next-pwa": "^5.6.0",
     "next-themes": "^0.3.0",
     "next-view-transitions": "^0.3.0",
-    "nodemailer": "^6.9.14",
     "npm-run-all": "^4.1.5",
     "peerjs": "^1.5.4",
     "prop-types": "^15.8.1",

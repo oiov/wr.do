@@ -5,7 +5,9 @@ import { updateUserRecordReview } from "@/lib/dto/cloudflare-dns-record";
 import { getDomainsByFeature } from "@/lib/dto/domains";
 import { getMultipleConfigs } from "@/lib/dto/system-config";
 import { checkUserStatus, getUserById } from "@/lib/dto/user";
-import { applyRecordToUserEmailHtml, resend } from "@/lib/email";
+import { brevoSendEmail } from "@/lib/email/brevo";
+import { resend } from "@/lib/email/resend";
+import { applyRecordToUserEmailHtml } from "@/lib/email/templates";
 import { getCurrentUser } from "@/lib/session";
 
 export async function POST(req: Request) {
@@ -72,8 +74,10 @@ export async function POST(req: Request) {
       ]);
       const userInfo = await getUserById(userId);
       if (configs.enable_subdomain_status_email_pusher && userInfo) {
-        await resend.emails.send({
-          from: env.RESEND_FROM_EMAIL,
+        await brevoSendEmail({
+          key: "",
+          from: env.EMAIL_FROM,
+          fromName: env.EMAIL_FROM_NAME,
           to: userInfo.email || "",
           subject: "Your subdomain has been applied",
           html: applyRecordToUserEmailHtml({

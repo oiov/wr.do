@@ -288,9 +288,14 @@ export default function DomainList({ user, action }: DomainListProps) {
                             handleChangeStatus(value, "enable_email", domain)
                           }
                         />
-                        {domain.resend_api_key && (
-                          <Icons.resend className="mx-0.5 size-4" />
-                        )}
+                        {domain.email_provider === "Resend" &&
+                          domain.resend_api_key && (
+                            <Icons.resend className="mx-0.5 size-4" />
+                          )}
+                        {domain.email_provider === "Brevo" &&
+                          domain.brevo_api_key && (
+                            <Icons.brevo className="mx-0.5 size-4" />
+                          )}
                       </TableCell>
                       <TableCell className="col-span-1 hidden items-center gap-1 sm:flex">
                         <Switch

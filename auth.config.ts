@@ -2,12 +2,10 @@ import type { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Github from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
-import Resend from "next-auth/providers/resend";
+
+// import Resend from "next-auth/providers/resend";
 
 import { env } from "@/env.mjs";
-
-import { siteConfig } from "./config/site";
-import { getVerificationEmailHtml, resend } from "./lib/email";
 
 const linuxDoProvider: any = {
   id: "linuxdo",
@@ -46,27 +44,27 @@ export default {
       clientId: env.GITHUB_ID,
       clientSecret: env.GITHUB_SECRET,
     }),
-    Resend({
-      apiKey: env.RESEND_API_KEY,
-      from: env.RESEND_FROM_EMAIL || "wrdo <support@wr.do>",
-      async sendVerificationRequest({ identifier: email, url, provider }) {
-        try {
-          const { error } = await resend.emails.send({
-            from: provider.from || "no-reply@wr.do",
-            to: [email],
-            subject: "Verify your email address",
-            html: getVerificationEmailHtml({ url, appName: siteConfig.name }),
-          });
+    // Resend({
+    //   apiKey: env.RESEND_API_KEY,
+    //   from: env.EMAIL_FROM || "wrdo <support@wr.do>",
+    //   async sendVerificationRequest({ identifier: email, url, provider }) {
+    //     try {
+    //       const { error } = await resend.emails.send({
+    //         from: provider.from || "no-reply@wr.do",
+    //         to: [email],
+    //         subject: "Verify your email address",
+    //         html: getVerificationEmailHtml({ url, appName: siteConfig.name }),
+    //       });
 
-          if (error) {
-            throw new Error(`Resend error: ${JSON.stringify(error)}`);
-          }
-        } catch (error) {
-          console.error("Error sending verification email", error);
-          throw new Error("Error sending verification email");
-        }
-      },
-    }),
+    //       if (error) {
+    //         throw new Error(`Resend error: ${JSON.stringify(error)}`);
+    //       }
+    //     } catch (error) {
+    //       console.error("Error sending verification email", error);
+    //       throw new Error("Error sending verification email");
+    //     }
+    //   },
+    // }),
     linuxDoProvider,
     Credentials({
       name: "Credentials",

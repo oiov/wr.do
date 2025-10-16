@@ -38,7 +38,7 @@ export function Notification() {
           className="relative flex max-h-24 w-full items-center justify-center bg-muted text-sm text-primary"
         >
           <div
-            className="max-w-3xl flex-1 px-8 py-2.5 text-center"
+            className="flex-1 px-8 py-2.5 text-center"
             dangerouslySetInnerHTML={{ __html: data.system_notification }}
           />
 

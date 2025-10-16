@@ -1,50 +1,68 @@
 ---
-title: Email
-description: How to manage emails in this project.
+title: Email Configuration
+description: How to configure email services in your project
 ---
 
 <DocsLang en="/docs/developer/email" zh="/docs/developer/email-zh" />
 
-In the WR.DO project, there are two features that rely on Resend, 
-one is email login (magic link), and the other is email sending feature (if you need to receive email feature, 
-please refer to /docs/developer/cloudflare-email-worker). 
+<Callout type="warning" twClass="mt-4">
+The configuration of this module underwent significant changes after version v1.1.5. Please update your configuration accordingly:
 
-The `RESEND_API_KEY` and `RESEND_SROM_SMAIL` configured in the `.env` file are used for login feature, 
-while the Resend key required for email sending feature needs to be added by 
-yourself in the domain configuration after logging into the admin panel (`/admin/domains`).
-
-<Callout type="note">
-  Two features can use the same key, as both essentially use Resend to send emails.
+- Removed `RESEND_API_KEY`, replaced with `BREVO_API_KEY` (earlier versions used Resend service by default. Due to the official account being banned by Resend, we had to switch service providers)
+- Changed default email service for system notifications from Resend to Brevo
+- `RESEND_FROM_EMAIL` replaced with `EMAIL_FROM`
+- New environment variable added: `EMAIL_FROM_NAME`
 </Callout>
 
-The following will demonstrate how to configure the Resend key required for login.
+The WR.DO project's email service module has the capability to receive and send emails. This guide will introduce how to configure the email **sending** service in your project.
 
-## Steps
+> If you need to configure email receiving functionality, please refer to the [cloudflare-email-worker](/docs/developer/cloudflare-email-worker) documentation.
 
-<Callout type="note">
-  The email part is similar at the [resend](https://resend.com/) documentation.
-  You can find the official documentation
-  [here](https://authjs.dev/getting-started/installation#setup-environment) if
-  you want.
-</Callout>
+Currently supported email service providers:
 
-<Steps>
+- [Resend](https://resend.com) (Free tier: up to 100 emails per day, supports binding 1 domain)
+- [Brevo](https://www.brevo.com) (Free tier: up to 300 emails per day, supports binding multiple domains)
 
-### Create an account
+Additional email service providers will be integrated based on requirements.
 
-If don't have an account on Resend, just follow their steps after signup [here](https://resend.com/signup).
-
-> Resend's free account offers a daily email limit of 100 emails, bound to 1 domain name, which is sufficient for ordinary users. 
-
-### Create an API key
-
-After signin on Resend, he propurse you to create your first API key.
-
-Copy/paste in your `.env` file.
+## Environment Variables
 
 ```js
-RESEND_API_KEY = re_your_resend_api_key;
-RESEND_FROM_EMAIL="you <support@your-domain.com>"
+BREVO_API_KEY=your-brevo-api-key
+EMAIL_FROM=support@your-domain.com
+EMAIL_FROM_NAME=WR.DO
 ```
 
-</Steps>
+Register and log in to the Brevo console at [app.brevo.com/settings/keys/api](https://app.brevo.com/settings/keys/api) to create an API key. Copy and paste it into your environment variables.
+
+Note: The `BREVO_API_KEY` configured here is used by default for the `subdomain application notification` feature and is not used for sending emails directly. You can also fill this key in the domain configuration below as the sender for the email service module.
+
+## Brevo
+
+In this project, Brevo is used to send emails in the following scenarios:
+
+- Email service module (`/email`)
+- Subdomain application notification (in system settings, this feature is disabled by default)
+- Email verification functionality (under development `/dashboard/settings`)
+
+Similarly, create an API key in the Brevo console, then go to the localhost:3000/admin/system page in your system. In the **Domain Management** section, click **Add Domain**, and fill in the corresponding API key in the **Email Service Provider** field and save:
+
+![](/_static/docs/domain-form-email.png)
+
+After that, you can bind your domain on the [Domain](https://app.brevo.com/senders/domain/list) page in the Brevo console. Follow the prompts to add DNS records to complete the configuration:
+
+![](/_static/docs/brevo-domain.png)
+
+Finally, add the domain in this system sequentially. The completed configuration will look like this:
+
+![](/_static/docs/domain-list.png)
+
+## Resend
+
+In this project, Resend is only used for sending emails through the email service module.
+
+#### Creating an API Key
+
+After logging in to Resend, it will prompt you to create your first API key.
+
+Copy and paste it. The subsequent steps are similar to Brevo - you need to bind your domain first and configure DNS records.

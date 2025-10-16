@@ -265,7 +265,9 @@ model Domain {
   cf_email             String?
   cf_record_types      String  @default("CNAME,A,TXT")
   cf_api_key_encrypted Boolean
+  email_provider       String  @default("resend")
   resend_api_key       String?
+  brevo_api_key        String?
   max_short_links      Int?
   max_email_forwards   Int?
   max_dns_records      Int?

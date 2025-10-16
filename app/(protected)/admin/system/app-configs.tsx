@@ -63,7 +63,7 @@ export default function AppConfigs({}: {}) {
       if (configs?.enable_google_oauth) count++;
       if (configs?.enable_github_oauth) count++;
       if (configs?.enable_liunxdo_oauth) count++;
-      if (configs?.enable_resend_email_login) count++;
+      // if (configs?.enable_resend_email_login) count++;
       if (configs?.enable_email_password_login) count++;
       setLoginMethodCount(count);
     }
@@ -133,62 +133,7 @@ export default function AppConfigs({}: {}) {
               <CollapsibleContent className="mt-2 space-y-3 rounded-md bg-neutral-100 p-3 dark:bg-neutral-800">
                 {configs && (
                   <>
-                    <div className="flex items-center justify-between gap-3">
-                      <p className="flex items-center gap-2 text-sm">
-                        <Icons.github className="size-4" /> GitHub OAuth
-                      </p>
-                      <Switch
-                        defaultChecked={configs.enable_github_oauth}
-                        onCheckedChange={(v) =>
-                          handleChange(v, "enable_github_oauth", "BOOLEAN")
-                        }
-                      />
-                    </div>
-                    <div className="flex items-center justify-between gap-3">
-                      <p className="flex items-center gap-2 text-sm">
-                        <Icons.google className="size-4" />
-                        Google OAuth
-                      </p>
-                      <Switch
-                        defaultChecked={configs.enable_google_oauth}
-                        onCheckedChange={(v) =>
-                          handleChange(v, "enable_google_oauth", "BOOLEAN")
-                        }
-                      />
-                    </div>
-                    <div className="flex items-center justify-between gap-3">
-                      <p className="flex items-center gap-2 text-sm">
-                        <img
-                          src="/_static/images/linuxdo.webp"
-                          alt="linuxdo"
-                          className="size-4"
-                        />
-                        LinuxDo OAuth
-                      </p>
-                      <Switch
-                        defaultChecked={configs.enable_liunxdo_oauth}
-                        onCheckedChange={(v) =>
-                          handleChange(v, "enable_liunxdo_oauth", "BOOLEAN")
-                        }
-                      />
-                    </div>
-                    <div className="flex items-center justify-between gap-3">
-                      <p className="flex items-center gap-2 text-sm">
-                        <Icons.resend className="size-4" />
-                        {t("Resend Email")}
-                      </p>
-                      <Switch
-                        defaultChecked={configs.enable_resend_email_login}
-                        onCheckedChange={(v) =>
-                          handleChange(
-                            v,
-                            "enable_resend_email_login",
-                            "BOOLEAN",
-                          )
-                        }
-                      />
-                    </div>
-                    <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center justify-between gap-3 transition-all duration-100 hover:cursor-pointer hover:shadow-sm">
                       <p className="flex items-center gap-2 text-sm">
                         <Icons.pwdKey className="size-4" />
                         {t("Email Password")}
@@ -204,6 +149,61 @@ export default function AppConfigs({}: {}) {
                         }
                       />
                     </div>
+                    <div className="flex items-center justify-between gap-3 transition-all duration-100 hover:cursor-pointer hover:shadow-sm">
+                      <p className="flex items-center gap-2 text-sm">
+                        <Icons.github className="size-4" /> GitHub OAuth
+                      </p>
+                      <Switch
+                        defaultChecked={configs.enable_github_oauth}
+                        onCheckedChange={(v) =>
+                          handleChange(v, "enable_github_oauth", "BOOLEAN")
+                        }
+                      />
+                    </div>
+                    <div className="flex items-center justify-between gap-3 transition-all duration-100 hover:cursor-pointer hover:shadow-sm">
+                      <p className="flex items-center gap-2 text-sm">
+                        <Icons.google className="size-4" />
+                        Google OAuth
+                      </p>
+                      <Switch
+                        defaultChecked={configs.enable_google_oauth}
+                        onCheckedChange={(v) =>
+                          handleChange(v, "enable_google_oauth", "BOOLEAN")
+                        }
+                      />
+                    </div>
+                    <div className="flex items-center justify-between gap-3 transition-all duration-100 hover:cursor-pointer hover:shadow-sm">
+                      <p className="flex items-center gap-2 text-sm">
+                        <img
+                          src="/_static/images/linuxdo.webp"
+                          alt="linuxdo"
+                          className="size-4"
+                        />
+                        LinuxDo OAuth
+                      </p>
+                      <Switch
+                        defaultChecked={configs.enable_liunxdo_oauth}
+                        onCheckedChange={(v) =>
+                          handleChange(v, "enable_liunxdo_oauth", "BOOLEAN")
+                        }
+                      />
+                    </div>
+                    {/* <div className="flex items-center justify-between gap-3">
+                      <p className="flex items-center gap-2 text-sm">
+                        <Icons.resend className="size-4" />
+                        {t("Resend Email")}
+                      </p>
+                      <Switch
+                        defaultChecked={configs.enable_resend_email_login}
+                        onCheckedChange={(v) =>
+                          handleChange(
+                            v,
+                            "enable_resend_email_login",
+                            "BOOLEAN",
+                          )
+                        }
+                      />
+                    </div> */}
                   </>
                 )}
               </CollapsibleContent>
@@ -499,7 +499,7 @@ export default function AppConfigs({}: {}) {
                   </p>
                   <p className="text-start text-xs text-muted-foreground">
                     {t(
-                      "If enabled, forward all received emails to other platform email addresses (Send with Resend)",
+                      "If enabled, forward all received emails to other platform email addresses (Send with Resend or Brevo)",
                     )}
                   </p>
                 </div>
@@ -840,6 +840,7 @@ export default function AppConfigs({}: {}) {
                   {t(
                     "Send email notifications for subdomain application status updates; Notifies administrators when users submit applications and notifies users of approval results; Only available when subdomain application mode is enabled",
                   )}
+                  . (Brevo)
                 </p>
               </div>
               {configs && (

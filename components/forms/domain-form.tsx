@@ -23,6 +23,13 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "../ui/collapsible";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 import { Switch } from "../ui/switch";
 
 export type FormData = DomainFormData;
@@ -79,7 +86,9 @@ export function DomainForm({
       cf_email: initData?.cf_email || "",
       cf_record_types: initData?.cf_record_types || "CNAME,A,TXT",
       cf_api_key_encrypted: initData?.cf_api_key_encrypted || false,
+      email_provider: initData?.email_provider || "",
       resend_api_key: initData?.resend_api_key || "",
+      brevo_api_key: initData?.brevo_api_key || "",
       min_url_length: initData?.min_url_length,
       min_email_length: initData?.min_email_length,
       min_record_length: initData?.min_record_length,
@@ -497,17 +506,16 @@ export function DomainForm({
 
         <Collapsible className="relative mt-2 rounded-md bg-neutral-100 p-4 dark:bg-neutral-800">
           <CollapsibleTrigger className="flex w-full items-center justify-between">
-            <h2 className="absolute left-2 top-5 flex gap-2 text-xs font-semibold text-neutral-400">
-              {t("Resend Configs")} ({t("Optional")})
-              <Icons.resend className="mx-0.5 size-4" />
+            <h2 className="absolute left-2 top-4 flex gap-2 text-xs font-semibold text-neutral-400">
+              {t("Email Service Configs")} ({t("Optional")})
             </h2>
-            {ReadyBadge(
+            {/* {ReadyBadge(
               currentEmailStatus,
               isCheckedResendConfig,
               isCheckingResend,
               "resend",
-            )}
-            <Icons.chevronDown className="ml-2 size-4" />
+            )} */}
+            <Icons.chevronDown className="ml-auto size-4" />
           </CollapsibleTrigger>
           <CollapsibleContent>
             {!currentEmailStatus && (
@@ -516,10 +524,45 @@ export function DomainForm({
                 {t("Associate with 'Email Service' status")}
               </div>
             )}
+            {/* 邮件服务商选择框 */}
             <FormSectionColumns title="">
               <div className="flex w-full items-start justify-between gap-2">
                 <Label className="mt-2.5 text-nowrap" htmlFor="zone_id">
-                  {t("API Key")} ({t("send email service")}):
+                  {t("Email Provider")}:
+                </Label>
+                <div className="w-full sm:w-3/5">
+                  <Select
+                    defaultValue={initData?.email_provider || "Resend"}
+                    onValueChange={(value) => {
+                      setValue("email_provider", value);
+                    }}
+                  >
+                    <SelectTrigger className="flex-1 bg-neutral-50 shadow-inner">
+                      <SelectValue placeholder="Select a email provider" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Resend">
+                        <span className="flex items-center gap-1">
+                          <Icons.resend className="size-4" />
+                          <span>Resend</span>
+                        </span>
+                      </SelectItem>
+                      <SelectItem value="Brevo">
+                        <span className="flex items-center gap-1">
+                          <Icons.brevo className="size-4" />
+                          <span>Brevo</span>
+                        </span>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </FormSectionColumns>
+
+            <FormSectionColumns title="">
+              <div className="flex w-full items-start justify-between gap-2">
+                <Label className="mt-2.5 text-nowrap" htmlFor="zone_id">
+                  {t("Resend API Key")}:
                 </Label>
                 <div className="w-full sm:w-3/5">
                   <Input
@@ -543,6 +586,40 @@ export function DomainForm({
                           target="_blank"
                         >
                           {t("How to get resend api key?")}
+                        </Link>
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </FormSectionColumns>
+            <FormSectionColumns title="">
+              <div className="flex w-full items-start justify-between gap-2">
+                <Label className="mt-2.5 text-nowrap" htmlFor="zone_id">
+                  {t("Brevo API Key")}:
+                </Label>
+                <div className="w-full sm:w-3/5">
+                  <Input
+                    id="target"
+                    className="flex-1 bg-neutral-50 shadow-inner"
+                    size={32}
+                    {...register("brevo_api_key")}
+                    disabled={!currentEmailStatus}
+                  />
+                  <div className="flex flex-col justify-between p-1">
+                    {errors?.brevo_api_key ? (
+                      <p className="pb-0.5 text-[13px] text-red-600">
+                        {errors.brevo_api_key.message}
+                      </p>
+                    ) : (
+                      <p className="pb-0.5 text-[13px] text-muted-foreground">
+                        {t("Optional")}.{" "}
+                        <Link
+                          className="text-blue-500"
+                          href="/docs/developer/email"
+                          target="_blank"
+                        >
+                          {t("How to get brevo api key?")}
                         </Link>
                       </p>
                     )}

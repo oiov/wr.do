@@ -1,7 +1,8 @@
-import { getConfiguredResendDomains } from "@/lib/dto/domains";
+import { getConfiguredEmailDomains } from "@/lib/dto/domains";
 import { OriginalEmail, saveForwardEmail } from "@/lib/dto/email";
 import { getMultipleConfigs } from "@/lib/dto/system-config";
-import { resend } from "@/lib/email";
+import { brevoSendEmail } from "@/lib/email/brevo";
+import { resend } from "@/lib/email/resend";
 
 export async function POST(req: Request) {
   try {
@@ -141,20 +142,19 @@ async function handleExternalForward(data: OriginalEmail, configs: any) {
     throw new Error("No valid forward emails configured");
   }
 
-  const sender = await getConfiguredResendDomains();
-  if (sender.length === 0) {
+  const senders = await getConfiguredEmailDomains();
+  if (senders.length === 0) {
     throw new Error("No configured resend domains");
   }
 
-  const { error } = await resend.emails.send({
-    from: `Forwarding@${sender[0].domain_name}`,
+  const options = {
+    from: `Forwarding@${senders[0].domain_name}`,
     to: validEmails,
     subject: data.subject ?? "No subject",
     html: `${data.html ?? data.text} <br><hr><p style="font-size: '12px'; color: '#888'; font-family: 'monospace';text-align: 'center'">This email was forwarded from ${data.to}. Powered by <a href="https://wr.do">WR.DO</a>.</p>`,
-  });
-  if (error) {
-    console.log("[Resend Error]", error);
-  }
+  };
+
+  await brevoSendEmail(options);
 }
 
 async function handleNormalEmail(data: OriginalEmail) {
