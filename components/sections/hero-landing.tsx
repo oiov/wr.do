@@ -808,27 +808,19 @@ export function DynamicData() {
         </div>
         <div className="grid grid-cols-2 gap-12 divide-y-0 text-center md:grid-cols-4 md:gap-2 md:divide-x">
           <div className="space-y-4">
-            <div className="text-5xl font-bold text-blue-600">
-              <CountUpFn count={2500} />+
-            </div>
+            <div className="text-5xl font-bold text-blue-600">2.5K+</div>
             <p>{t("Happy Customers")}</p>
           </div>
           <div className="space-y-4">
-            <div className="text-5xl font-bold text-blue-600">
-              <CountUpFn count={6100} />+
-            </div>
+            <div className="text-5xl font-bold text-blue-600">6.2K+</div>
             <p>{t("Short Links")}</p>
           </div>
           <div className="space-y-4">
-            <div className="text-5xl font-bold text-blue-600">
-              <CountUpFn count={19000} />+
-            </div>
+            <div className="text-5xl font-bold text-blue-600">19K+</div>
             <p>{t("Email Addresses")}</p>
           </div>
           <div className="space-y-4">
-            <div className="text-5xl font-bold text-blue-600">
-              <CountUpFn count={40000} />+
-            </div>
+            <div className="text-5xl font-bold text-blue-600">40K+</div>
             <p>{t("Inbox Emails")}</p>
           </div>
         </div>

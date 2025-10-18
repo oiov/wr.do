@@ -53,7 +53,13 @@ export async function POST(req: NextRequest) {
         await resend.emails.send({ from, to, subject, html });
         break;
       case "Brevo":
-        await brevoSendEmail({ from, to, subject, html });
+        await brevoSendEmail({
+          from,
+          fromName: from.split("@")[0],
+          to,
+          subject,
+          html,
+        });
         break;
       default:
         break;
