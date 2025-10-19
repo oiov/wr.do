@@ -3,7 +3,7 @@
   <h1>WR.DO</h1>
   <p>一站式域名服务平台，集成短链服务、临时邮箱、子域名管理、文件存储和开放API接口。</p>
   <p>
-    <a href="https://wr.do">官网</a> · <a href="https://wr.do/docs/developer">部署文档</a> · <a href="https://wr.do/feedback">反馈讨论</a> · <a href="/README-en.md">English</a> | 简体中文
+    <a href="https://wr.do">官方云部署站点</a> · <a href="https://wr.do/docs/developer">部署文档</a> · <a href="https://wr.do/feedback">反馈讨论</a> · <a href="/README-en.md">English</a> | 简体中文
   </p>
   <img alt="Vercel" src="https://img.shields.io/badge/vercel-online-55b467?labelColor=black&logo=vercel&style=flat-square">
   <img alt="Release" src="https://img.shields.io/github/actions/workflow/status/oiov/wr.do/docker-build-push.yml?label=release&labelColor=black&logo=githubactions&logoColor=white&style=flat-square">
@@ -220,6 +220,13 @@ pnpm dev
   <img src="https://contrib.rocks/image?repo=oiov/wr.do" />
 </a>
 
+## 请作者喝咖啡
+  
+[爱发电主页打赏](wr.do/afdhome)
+
+<img width="100" src="https://wr.do/bbpt9z" />
+
+
 ## Star History
 
 <a href="https://star-history.com/#oiov/wr.do&Date">
@@ -233,3 +240,4 @@ pnpm dev
 ## 开源协议
 
 [MIT](/LICENSE.md)
+
