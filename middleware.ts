@@ -5,12 +5,18 @@ import { NextAuthRequest } from "next-auth/lib";
 
 import { siteConfig } from "./config/site";
 import { extractRealIP, getGeolocation, getUserAgent } from "./lib/geo";
+import { extractHost } from "./lib/utils";
 
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
 
 const isVercel = process.env.VERCEL;
+
+// 门户域名配置(只保留主机名，不包含端口、协议)
+const PORTAL_DOMAIN = extractHost(
+  process.env.NEXT_PUBLIC_APP_URL || "localhost",
+);
 
 const redirectMap = {
   "Missing[0000]": "/link-status?error=missing&slug=",
@@ -42,6 +48,27 @@ const systemRoutes = [
   "/opengraph-image.jpg",
   "/favicon.ico",
 ];
+
+// 获取主机名（不含端口）
+function getHostname(hostname: string): string {
+  return hostname.split(":")[0].toLowerCase();
+}
+
+// 判断是否为门户域名
+function isPortalDomain(hostname: string): boolean {
+  return getHostname(hostname) === PORTAL_DOMAIN;
+}
+
+// 判断是否为业务域名（即非门户域名）
+function isBusinessDomain(hostname: string): boolean {
+  return !isPortalDomain(hostname);
+}
+
+// 处理业务域名的根路径请求 - 重定向到门户域名
+function handleBusinessDomainRedirect(hostname: string): NextResponse {
+  const portalUrl = `https://${PORTAL_DOMAIN}?redirect=${hostname}`;
+  return NextResponse.redirect(portalUrl, 302);
+}
 
 async function handleShortUrl(req: NextAuthRequest) {
   const url = new URL(req.url);
@@ -157,6 +184,11 @@ function extractSlug(url: string): string | null {
 
 export default auth(async (req) => {
   try {
+    const { hostname, pathname } = new URL(req.url);
+    // 如果是业务域名的根路径或非短链路径，重定向到门户域名
+    if (isBusinessDomain(hostname) && pathname === "/") {
+      return handleBusinessDomainRedirect(hostname);
+    }
     return await handleShortUrl(req);
   } catch (error) {
     console.error("Middleware error:", error);
