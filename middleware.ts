@@ -184,13 +184,15 @@ function extractSlug(url: string): string | null {
 
 export default auth(async (req) => {
   try {
-    const { hostname, pathname } = new URL(req.nextUrl);
+    const { pathname } = new URL(req.nextUrl);
+    const hostname = req.headers.get("host") || "";
     console.log(
       "hostname",
       hostname,
       getHostname(hostname),
       req.headers.get("host"),
     );
+
     console.log("pathname", pathname);
     console.log("isPortalDomain", isPortalDomain(hostname));
     console.log("isBusinessDomain", isBusinessDomain(hostname));
