@@ -185,6 +185,11 @@ function extractSlug(url: string): string | null {
 export default auth(async (req) => {
   try {
     const { hostname, pathname } = new URL(req.url);
+    console.log("hostname", hostname, getHostname(hostname));
+    console.log("pathname", pathname);
+    console.log("isPortalDomain", isPortalDomain(hostname));
+    console.log("isBusinessDomain", isBusinessDomain(hostname));
+
     // 如果是业务域名的根路径或非短链路径，重定向到门户域名
     if (isBusinessDomain(hostname) && pathname === "/") {
       return handleBusinessDomainRedirect(hostname);
