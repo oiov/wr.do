@@ -304,7 +304,7 @@ export function LandingImages() {
               </Collapsible>
             </div>
           </div>
-          <div className="overflow-clip rounded-xl border py-4 md:p-3.5 lg:col-span-7">
+          <div className="text-clip rounded-xl border py-4 md:p-3.5 lg:col-span-7">
             <div className="flex size-full items-center justify-center rounded-lg border p-3 md:bg-muted/50">
               <Image
                 className="size-[350px] rounded-lg transition-all hover:border hover:opacity-90 hover:shadow-xl"
@@ -403,7 +403,7 @@ export function LandingImages() {
               </Collapsible>
             </div>
           </div>
-          <div className="overflow-clip rounded-xl border py-4 md:p-3.5 lg:col-span-7">
+          <div className="text-clip rounded-xl border py-4 md:p-3.5 lg:col-span-7">
             <div className="flex size-full items-center justify-center rounded-lg border p-3 md:bg-muted/50">
               <Image
                 className="size-[350px] rounded-lg transition-all hover:border hover:opacity-90 hover:shadow-xl"
@@ -477,7 +477,7 @@ export function LandingImages() {
               </Collapsible>
             </div>
           </div>
-          <div className="overflow-clip rounded-xl border py-4 md:p-3.5 lg:col-span-7">
+          <div className="text-clip rounded-xl border py-4 md:p-3.5 lg:col-span-7">
             <div className="flex size-full items-center justify-center rounded-lg border p-3 md:bg-muted/50">
               <Image
                 className="size-[350px] rounded-lg transition-all hover:border hover:opacity-90 hover:shadow-xl"
@@ -585,7 +585,7 @@ export function LandingImages() {
               </Collapsible>
             </div>
           </div>
-          <div className="overflow-clip rounded-xl border py-4 md:p-3.5 lg:col-span-7">
+          <div className="text-clip rounded-xl border py-4 md:p-3.5 lg:col-span-7">
             <div className="flex size-full items-center justify-center rounded-lg border p-3 md:bg-muted/50">
               <Image
                 className="size-[350px] rounded-lg transition-all hover:border hover:opacity-90 hover:shadow-xl"
@@ -679,7 +679,7 @@ export function LandingImages() {
               </Collapsible>
             </div>
           </div>
-          <div className="overflow-clip rounded-xl border py-4 md:p-3.5 lg:col-span-7">
+          <div className="text-clip rounded-xl border py-4 md:p-3.5 lg:col-span-7">
             <div className="flex size-full items-center justify-center rounded-lg border p-3 md:bg-muted/50">
               <Image
                 className="size-[350px] rounded-lg transition-all hover:border hover:opacity-90 hover:shadow-xl"
@@ -764,7 +764,7 @@ export function LandingImages() {
               </Collapsible>
             </div>
           </div>
-          <div className="overflow-clip rounded-xl border py-4 md:p-3.5 lg:col-span-7">
+          <div className="text-clip rounded-xl border py-4 md:p-3.5 lg:col-span-7">
             <div className="flex size-full items-center justify-center rounded-lg border p-3 md:bg-muted/50">
               <Image
                 className="size-[350px] rounded-lg transition-all hover:border hover:opacity-90 hover:shadow-xl"

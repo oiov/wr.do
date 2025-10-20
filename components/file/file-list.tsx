@@ -207,7 +207,7 @@ export default function UserFileList({
   const renderFileLinks = (file: UserFileData, index: number) => (
     <>
       <div className="flex items-center gap-2">
-        <Icons.fileText className="size-3 flex-shrink-0" />
+        <Icons.fileText className="size-3 shrink-0" />
         <p className="line-clamp-1 truncate rounded-md bg-neutral-100 p-1.5 text-xs dark:bg-neutral-800">
           {file.path}
         </p>
@@ -215,7 +215,7 @@ export default function UserFileList({
       </div>
       {file.shortUrlId && (
         <div className="flex items-center gap-2">
-          <Icons.unLink className="size-3 flex-shrink-0 text-blue-500" />
+          <Icons.unLink className="size-3 shrink-0 text-blue-500" />
           <Link
             href={"https://" + shortLinks[index]}
             className="line-clamp-1 truncate rounded-md bg-neutral-100 p-1.5 text-xs hover:text-blue-500 dark:bg-neutral-800"
@@ -230,7 +230,7 @@ export default function UserFileList({
         </div>
       )}
       <div className="flex items-center gap-2">
-        <Icons.link className="size-3 flex-shrink-0" />
+        <Icons.link className="size-3 shrink-0" />
         <Link
           href={getFileUrl(file.path)}
           className="line-clamp-1 truncate rounded-md bg-neutral-100 p-1.5 text-xs hover:text-blue-500 dark:bg-neutral-800"
@@ -241,7 +241,7 @@ export default function UserFileList({
         <CopyButton className="size-6" value={getFileUrl(file.path)} />
       </div>
       <div className="flex items-center gap-2">
-        <Icons.type className="size-3 flex-shrink-0" />
+        <Icons.type className="size-3 shrink-0" />
         <p className="line-clamp-1 truncate rounded-md bg-neutral-100 p-1.5 text-xs hover:text-blue-500 dark:bg-neutral-800">
           {`[${file.name}](${getFileUrl(file.path)})`}
         </p>
@@ -252,7 +252,7 @@ export default function UserFileList({
       </div>
       {file.mimeType.startsWith("image/") && (
         <div className="flex items-center gap-2">
-          <Icons.code className="size-3 flex-shrink-0" />
+          <Icons.code className="size-3 shrink-0" />
           <p className="line-clamp-1 truncate rounded-md bg-neutral-100 p-1.5 text-xs hover:text-blue-500 dark:bg-neutral-800">
             {`<img src="${getFileUrl(file.path)}" alt="${file.name}">${getFileUrl(file.path)}</img>`}
           </p>

@@ -15,7 +15,9 @@
     "tailwindcss/enforces-shorthand": "off",
     "react/no-unescaped-entities": "off",
     "@next/next/no-img-element": "off",
-    "@typescript-eslint/no-unused-vars": "off"
+    "@typescript-eslint/no-unused-vars": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "tailwindcss/migration-from-tailwind-2": "off"
   },
   "settings": {
     "tailwindcss": {

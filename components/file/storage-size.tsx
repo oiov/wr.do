@@ -170,7 +170,7 @@ export function CircularStorageIndicator({ bucketUsage, size = 32 }) {
       className="relative flex cursor-pointer items-center"
       style={{ width: size, height: size }}
     >
-      <svg width={size} height={size} className="-rotate-90 transform">
+      <svg width={size} height={size} className="-rotate-90">
         {/* 背景圆圈 */}
         <circle
           cx={size / 2}
