@@ -7,7 +7,7 @@ import { DocsPageHeader } from "@/components/docs/page-header";
 import { DocsPager } from "@/components/docs/pager";
 import { DashboardTableOfContents } from "@/components/shared/toc";
 
-import "@/styles/mdx.css";
+import "@/styles/mdx.scss";
 
 import { Metadata } from "next";
 
