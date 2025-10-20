@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Icons } from "../shared/icons";
@@ -10,17 +10,11 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
 } from "../ui/drawer";
 import { Input } from "../ui/input";
-
-import "react-quill/dist/quill.snow.css";
-
-import { useTranslations } from "next-intl";
-
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+import { EmailEditor } from "./EmailEditor";
 
 interface SendEmailModalProps {
   className?: string;
@@ -36,7 +30,12 @@ export function SendEmailModal({
   onSuccess,
 }: SendEmailModalProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [sendForm, setSendForm] = useState({ to: "", subject: "", html: "" });
+  const [sendForm, setSendForm] = useState({
+    to: "",
+    subject: "",
+    html: "",
+    text: "",
+  });
   const [isPending, startTransition] = useTransition();
 
   const t = useTranslations("Email");
@@ -46,8 +45,10 @@ export function SendEmailModal({
       toast.error("No email address selected");
       return;
     }
+    console.log("sendForm", sendForm);
+    // return;
     if (!sendForm.to || !sendForm.subject || !sendForm.html) {
-      toast.error("Please fill in all fields");
+      toast.error("Please fill in all required fields");
       return;
     }
 
@@ -60,13 +61,14 @@ export function SendEmailModal({
             to: sendForm.to,
             subject: sendForm.subject,
             html: sendForm.html,
+            text: sendForm.text,
           }),
         });
 
         if (response.ok) {
           toast.success("Email sent successfully");
           setIsOpen(false);
-          setSendForm({ to: "", subject: "", html: "" });
+          setSendForm({ to: "", subject: "", html: "", text: "" });
           onSuccess?.();
         } else {
           toast.error("Failed to send email", {
@@ -94,28 +96,62 @@ export function SendEmailModal({
         </Button>
       )}
 
-      <Drawer open={isOpen} direction="right" onOpenChange={setIsOpen}>
-        <DrawerContent className="fixed bottom-0 right-0 top-0 w-full rounded-none sm:max-w-xl">
+      <Drawer
+        handleOnly
+        open={isOpen}
+        direction="right"
+        onOpenChange={setIsOpen}
+      >
+        <DrawerContent className="fixed bottom-0 right-0 top-0 w-full rounded-none sm:max-w-5xl">
           <DrawerHeader>
             <DrawerTitle className="flex items-center gap-1">
               {t("Send Email")}{" "}
-              <Icons.help className="size-5 text-neutral-600 hover:text-neutral-400" />
-            </DrawerTitle>
-            <DrawerClose asChild>
-              <Button variant="ghost" className="absolute right-4 top-4">
-                <Icons.close className="h-4 w-4" />
+              {/* <Icons.help className="size-5 text-neutral-600 hover:text-neutral-400" /> */}
+              <Button
+                className="ml-auto"
+                onClick={handleSendEmail}
+                disabled={isPending}
+                variant="ghost"
+              >
+                {isPending ? (
+                  <Icons.spinner className="size-4 animate-spin" />
+                ) : (
+                  <Icons.send className="size-4 text-blue-600" />
+                )}
               </Button>
-            </DrawerClose>
+              <DrawerClose asChild>
+                <Button variant="ghost">
+                  <Icons.close className="size-5" />
+                </Button>
+              </DrawerClose>
+            </DrawerTitle>
           </DrawerHeader>
-          <div className="scrollbar-hidden h-[calc(100vh)] space-y-4 overflow-y-auto p-6">
-            <div>
-              <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+          <div className="scrollbar-hidden h-[calc(100vh)] space-y-1 overflow-y-auto px-4 pb-4">
+            <div className="flex items-center justify-between border-b">
+              <label className="text-nowrap text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                {t("Subject")}
+              </label>
+              <Input
+                value={sendForm.subject}
+                onChange={(e) =>
+                  setSendForm({ ...sendForm, subject: e.target.value })
+                }
+                placeholder="Your subject"
+                className="border-none"
+              />
+            </div>
+            <div className="flex items-center justify-between border-b">
+              <label className="text-nowrap text-sm font-medium text-neutral-700 dark:text-neutral-300">
                 {t("From")}
               </label>
-              <Input value={emailAddress || ""} disabled className="mt-1" />
+              <Input
+                value={emailAddress || ""}
+                disabled
+                className="border-none"
+              />
             </div>
-            <div>
-              <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+            <div className="flex items-center justify-between border-b">
+              <label className="text-nowrap text-sm font-medium text-neutral-700 dark:text-neutral-300">
                 {t("To")}
               </label>
               <Input
@@ -124,49 +160,17 @@ export function SendEmailModal({
                   setSendForm({ ...sendForm, to: e.target.value })
                 }
                 placeholder="recipient@example.com"
-                className="mt-1"
+                className="border-none"
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                {t("Subject")}
-              </label>
-              <Input
-                value={sendForm.subject}
-                onChange={(e) =>
-                  setSendForm({ ...sendForm, subject: e.target.value })
+              <EmailEditor
+                onGetEditorValue={(e, t) =>
+                  setSendForm({ ...sendForm, html: e, text: t })
                 }
-                placeholder="Enter subject"
-                className="mt-1"
-              />
-            </div>
-            <div>
-              <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                {t("Content")}
-              </label>
-              <ReactQuill
-                value={sendForm.html}
-                onChange={(value) => setSendForm({ ...sendForm, html: value })}
-                className="mt-1 h-40 rounded-lg"
-                theme="snow"
-                placeholder="Enter your message"
               />
             </div>
           </div>
-          <DrawerFooter>
-            <DrawerClose asChild>
-              <Button variant="outline" disabled={isPending}>
-                {t("Cancel")}
-              </Button>
-            </DrawerClose>
-            <Button
-              onClick={handleSendEmail}
-              disabled={isPending}
-              variant="default"
-            >
-              {isPending ? t("Sending") : t("Send")}
-            </Button>
-          </DrawerFooter>
         </DrawerContent>
       </Drawer>
     </>
