@@ -525,7 +525,9 @@
     "TECH STACK": "TECH STACK",
     "Build with your favorite tech stack": "Build with your favorite tech stack",
     "STATS": "STATS",
-    "FEATURES": "FEATURES"
+    "FEATURES": "FEATURES",
+    "Unique Clicks": "Unique Clicks",
+    "Tracked Clicks": "Tracked Clicks"
   },
   "Auth": {
     "Back": "Back",

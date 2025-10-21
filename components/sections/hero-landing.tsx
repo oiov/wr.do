@@ -816,8 +816,8 @@ export function DynamicData() {
             <p>{t("Short Links")}</p>
           </div>
           <div className="space-y-4">
-            <div className="text-5xl font-bold text-blue-600">19K+</div>
-            <p>{t("Email Addresses")}</p>
+            <div className="text-5xl font-bold text-blue-600">2M+</div>
+            <p>{t("Tracked Clicks")}</p>
           </div>
           <div className="space-y-4">
             <div className="text-5xl font-bold text-blue-600">40K+</div>

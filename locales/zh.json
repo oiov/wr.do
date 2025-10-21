@@ -525,7 +525,8 @@
     "TECH STACK": "技术栈",
     "Build with your favorite tech stack": "使用你最喜欢的技术栈构建",
     "STATS": "STATS",
-    "FEATURES": "功能特性"
+    "FEATURES": "功能特性",
+    "Tracked Clicks": "跟踪点击量"
   },
   "Auth": {
     "Back": "返回",

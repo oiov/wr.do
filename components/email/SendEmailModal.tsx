@@ -102,11 +102,10 @@ export function SendEmailModal({
         direction="right"
         onOpenChange={setIsOpen}
       >
-        <DrawerContent className="fixed bottom-0 right-0 top-0 w-full rounded-none sm:max-w-5xl">
+        <DrawerContent className="fixed bottom-0 right-0 top-0 h-[calc(100vh)] w-full rounded-none sm:max-w-5xl">
           <DrawerHeader>
             <DrawerTitle className="flex items-center gap-1">
               {t("Send Email")}{" "}
-              {/* <Icons.help className="size-5 text-neutral-600 hover:text-neutral-400" /> */}
               <Button
                 className="ml-auto"
                 onClick={handleSendEmail}
@@ -126,7 +125,7 @@ export function SendEmailModal({
               </DrawerClose>
             </DrawerTitle>
           </DrawerHeader>
-          <div className="scrollbar-hidden h-[calc(100vh)] space-y-1 overflow-y-auto px-4 pb-4">
+          <div className="scrollbar-hidden space-y-1 overflow-y-auto px-4 pb-4">
             <div className="flex items-center justify-between border-b">
               <label className="text-nowrap text-sm font-medium text-neutral-700 dark:text-neutral-300">
                 {t("Subject")}
