@@ -35,7 +35,7 @@ export function Notification() {
             duration: 0.3,
             ease: "easeInOut",
           }}
-          className="relative flex max-h-24 w-full items-center justify-center bg-muted text-sm text-primary"
+          className="relative flex max-h-48 w-full items-center justify-center bg-muted text-sm text-primary"
         >
           <div
             className="flex-1 px-8 py-2.5 text-center"
