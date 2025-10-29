@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import Icon from "lucide-static";
+import * as Icons from "lucide-static";
 
 import { toCamelCase } from "@/lib/utils";
 
@@ -39,9 +39,10 @@ export async function GET(req: Request) {
     let svgString = "";
     let svgClipString = "";
     if (iconInfo.type === "svg") {
-      const iconD = (Icon as { [key: string]: any })[
-        toCamelCase(iconInfo.value)
-      ];
+      const iconMap = Icons as Record<string, string>;
+      const iconKey = toCamelCase(iconInfo.value);
+      const iconD =
+        iconMap[iconKey] ?? iconMap[toCamelCase("sparkles")] ?? "";
 
       const regex = /<svg.*?>(.*?)<\/svg>/;
       const match = iconD.match(regex);

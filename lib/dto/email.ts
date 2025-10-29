@@ -78,26 +78,50 @@ export async function getAllUserEmails(
   admin: boolean,
   onlyUnread: boolean = false,
 ) {
-  let whereOptions: any = {};
+  const keyword = search?.trim() ?? "";
 
-  if (admin) {
-    whereOptions = {
-      emailAddress: { contains: search, mode: "insensitive" },
+  const whereOptions: Prisma.UserEmailWhereInput = {
+    deletedAt: null,
+    ...(admin ? {} : { userId }),
+  };
+
+  if (keyword) {
+    const emailMatch: Prisma.UserEmailWhereInput = {
+      emailAddress: { contains: keyword, mode: "insensitive" },
     };
-  } else {
-    whereOptions = {
-      userId,
-      deletedAt: null,
-      emailAddress: { contains: search, mode: "insensitive" },
-    };
+
+    if (keyword.length >= 2) {
+      whereOptions.OR = [
+        emailMatch,
+        {
+          forwardEmails: {
+            some: {
+              OR: [
+                { subject: { contains: keyword, mode: "insensitive" } },
+                { from: { contains: keyword, mode: "insensitive" } },
+                { fromName: { contains: keyword, mode: "insensitive" } },
+                { to: { contains: keyword, mode: "insensitive" } },
+              ],
+            },
+          },
+        },
+      ];
+    } else {
+      whereOptions.OR = [emailMatch];
+    }
   }
 
   if (onlyUnread) {
-    whereOptions.forwardEmails = {
-      some: {
-        readAt: null,
+    whereOptions.AND = [
+      ...(whereOptions.AND ?? []),
+      {
+        forwardEmails: {
+          some: {
+            readAt: null,
+          },
+        },
       },
-    };
+    ];
   }
 
   // Fetch paginated UserEmail records
@@ -185,23 +209,50 @@ export async function getUserEmailIds(
   admin: boolean,
   onlyUnread: boolean = false,
 ): Promise<string[]> {
-  const whereOptions: Prisma.UserEmailWhereInput = admin
-    ? {
-        deletedAt: null,
-        emailAddress: { contains: search, mode: "insensitive" },
-      }
-    : {
-        userId,
-        deletedAt: null,
-        emailAddress: { contains: search, mode: "insensitive" },
-      };
+  const keyword = search?.trim() ?? "";
+
+  const whereOptions: Prisma.UserEmailWhereInput = {
+    deletedAt: null,
+    ...(admin ? {} : { userId }),
+  };
+
+  if (keyword) {
+    const emailMatch: Prisma.UserEmailWhereInput = {
+      emailAddress: { contains: keyword, mode: "insensitive" },
+    };
+
+    if (keyword.length >= 2) {
+      whereOptions.OR = [
+        emailMatch,
+        {
+          forwardEmails: {
+            some: {
+              OR: [
+                { subject: { contains: keyword, mode: "insensitive" } },
+                { from: { contains: keyword, mode: "insensitive" } },
+                { fromName: { contains: keyword, mode: "insensitive" } },
+                { to: { contains: keyword, mode: "insensitive" } },
+              ],
+            },
+          },
+        },
+      ];
+    } else {
+      whereOptions.OR = [emailMatch];
+    }
+  }
 
   if (onlyUnread) {
-    whereOptions.forwardEmails = {
-      some: {
-        readAt: null,
+    whereOptions.AND = [
+      ...(whereOptions.AND ?? []),
+      {
+        forwardEmails: {
+          some: {
+            readAt: null,
+          },
+        },
       },
-    };
+    ];
   }
 
   const userEmails = await prisma.userEmail.findMany({
@@ -323,16 +374,39 @@ export async function deleteUserEmails(ids: string[]) {
   if (!ids.length) {
     return 0;
   }
-
-  const result = await prisma.userEmail.updateMany({
+  const activeEmails = await prisma.userEmail.findMany({
     where: {
       id: { in: ids },
       deletedAt: null,
     },
-    data: { deletedAt: new Date() },
+    select: {
+      id: true,
+      emailAddress: true,
+    },
   });
 
-  return result.count;
+  if (!activeEmails.length) {
+    return 0;
+  }
+
+  const emailIds = activeEmails.map((item) => item.id);
+  const emailAddresses = activeEmails.map((item) => item.emailAddress);
+
+  await prisma.$transaction([
+    prisma.userEmail.updateMany({
+      where: {
+        id: { in: emailIds },
+      },
+      data: { deletedAt: new Date() },
+    }),
+    prisma.forwardEmail.deleteMany({
+      where: {
+        to: { in: emailAddresses },
+      },
+    }),
+  ]);
+
+  return activeEmails.length;
 }
 // 删除 UserEmail (软删除)
 export async function deleteUserEmailByAddress(email: string) {
@@ -362,12 +436,12 @@ export async function getEmailsByEmailAddress(
   });
 
   if (!userEmail) {
-    throw new Error("Email address not found");
+    throw new Error("Email address not found or has been deleted");
   }
 
   const where: Prisma.ForwardEmailWhereInput = { to: emailAddress };
   const keyword = search?.trim();
-  if (keyword) {
+  if (keyword && keyword.length >= 2) {
     // 根据搜索词匹配发件人或邮件标题
     where.AND = [
       {
@@ -375,6 +449,7 @@ export async function getEmailsByEmailAddress(
           { subject: { contains: keyword, mode: "insensitive" } },
           { from: { contains: keyword, mode: "insensitive" } },
           { fromName: { contains: keyword, mode: "insensitive" } },
+          { to: { contains: keyword, mode: "insensitive" } },
         ],
       },
     ];

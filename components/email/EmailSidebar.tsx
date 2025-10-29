@@ -250,9 +250,9 @@ export default function EmailSidebar({
           setShowDeleteModal(false);
           setDeleteInput("");
           setEmailToDelete(null);
-          toast.success("Email deleted successfully");
+          toast.success(t("Bulk.singleDeleteSuccess"));
         } else {
-          toast.error("Failed to delete email");
+          toast.error(t("Bulk.singleDeleteError"));
         }
       } catch (error) {
         console.log("Error deleting email:", error);
@@ -272,7 +272,7 @@ export default function EmailSidebar({
     if (deleteInput === expectedInput) {
       handleDeleteEmail(emailToDelete);
     } else {
-      toast.error(t("Input does not match. Please type correctly."));
+      toast.error(t("Bulk.mismatch"));
     }
   };
 
@@ -319,7 +319,7 @@ export default function EmailSidebar({
       });
       const res = await fetch(`/api/email/ids?${params.toString()}`);
       if (!res.ok) {
-        toast.error(t("Failed to fetch email ids"));
+        toast.error(t("Bulk.fetchError"));
         return;
       }
       const data = await res.json();
@@ -327,7 +327,7 @@ export default function EmailSidebar({
         setSelectedEmailIds(Array.from(new Set(data.ids)));
       }
     } catch (error) {
-      toast.error(t("Failed to fetch email ids"));
+      toast.error(t("Bulk.fetchError"));
     } finally {
       setIsFetchingIds(false);
     }
@@ -341,7 +341,7 @@ export default function EmailSidebar({
   const handleBulkDelete = async () => {
     if (selectedEmailIds.length === 0) return;
     if (bulkDeleteInput.toLowerCase() !== "delete") {
-      toast.error(t("Please type delete to confirm."));
+      toast.error(t("Bulk.modalHint"));
       return;
     }
     setIsBulkDeleting(true);
@@ -359,14 +359,14 @@ export default function EmailSidebar({
         setShowBulkDeleteModal(false);
         setBulkDeleteInput("");
         onSelectEmail(null);
-        toast.success(t("Emails deleted successfully"));
+        toast.success(t("Bulk.deleteSuccess"));
       } else {
-        toast.error(t("Failed to delete emails"), {
+        toast.error(t("Bulk.deleteError"), {
           description: await res.text(),
         });
       }
     } catch (error) {
-      toast.error(t("Failed to delete emails"));
+      toast.error(t("Bulk.deleteError"));
     } finally {
       setIsBulkDeleting(false);
     }
@@ -453,7 +453,7 @@ export default function EmailSidebar({
               size="sm"
               onClick={toggleBulkSelector}
             >
-              {showBulkSelector ? t("Exit bulk mode") : t("Bulk manage")}
+              {showBulkSelector ? t("Bulk.exit") : t("Bulk.enter")}
             </Button>
             {showBulkSelector && (
               <>
@@ -462,7 +462,7 @@ export default function EmailSidebar({
                   size="sm"
                   onClick={handleSelectCurrentPage}
                 >
-                  {t("Select current page")}
+                  {t("Bulk.selectPage")}
                 </Button>
                 <Button
                   variant="outline"
@@ -470,7 +470,7 @@ export default function EmailSidebar({
                   onClick={handleSelectAllFiltered}
                   disabled={isFetchingIds}
                 >
-                  {isFetchingIds ? t("Selecting...") : t("Select all results")}
+                  {isFetchingIds ? t("Bulk.selecting") : t("Bulk.selectAll")}
                 </Button>
                 <Button
                   variant="outline"
@@ -478,10 +478,10 @@ export default function EmailSidebar({
                   onClick={handleClearSelection}
                   disabled={selectedEmailIds.length === 0}
                 >
-                  {t("Clear selection")}
+                  {t("Bulk.clear")}
                 </Button>
                 <Badge variant="outline">
-                  {t("Selected {count}", { count: selectedEmailIds.length })}
+                  {t("Bulk.selectedCount", { count: selectedEmailIds.length })}
                 </Badge>
                 <Button
                   variant="destructive"
@@ -489,7 +489,7 @@ export default function EmailSidebar({
                   disabled={selectedEmailIds.length === 0}
                   onClick={() => setShowBulkDeleteModal(true)}
                 >
-                  {t("Delete selected")}
+                  {t("Bulk.button")}
                 </Button>
               </>
             )}
@@ -660,8 +660,8 @@ export default function EmailSidebar({
                   ? "bg-gray-100 dark:bg-neutral-900"
                   : "",
                 showBulkSelector && isSelectedForBulk
-                  ? "ring-1 ring-primary/60 dark:ring-neutral-300/60"
-                  : "",
+                  ? "border border-neutral-300 bg-neutral-100 text-neutral-900 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100"
+                  : "border border-transparent",
                 isCollapsed ? "flex items-center justify-center" : "",
               )}
             >
@@ -918,7 +918,7 @@ export default function EmailSidebar({
             <Input
               value={deleteInput}
               onChange={(e) => setDeleteInput(e.target.value)}
-              placeholder={`please input`}
+              placeholder={t("Bulk.keyword")}
               className="mb-4"
             />
             <div className="flex justify-end gap-2">
@@ -958,22 +958,18 @@ export default function EmailSidebar({
         >
           <div className="p-6">
             <h2 className="mb-4 text-lg font-semibold">
-              {t("Delete selected emails")}
+              {t("Bulk.modalTitle")}
             </h2>
             <p className="mb-2 text-sm text-neutral-600">
-              {t(
-                "You are about to delete {count} email addresses. Once deleted, the related inbox data will be removed together.",
-                { count: selectedEmailIds.length },
-              )}
+              {t("Bulk.modalDescription", { count: selectedEmailIds.length })}
             </p>
             <p className="mb-4 text-sm text-neutral-600">
-              {t("Please type delete to confirm.")}{" "}
-              <strong>{t("delete")}</strong>
+              {t("Bulk.modalHint")} <strong>{t("Bulk.keyword")}</strong>
             </p>
             <Input
               value={bulkDeleteInput}
               onChange={(e) => setBulkDeleteInput(e.target.value)}
-              placeholder={t("delete")}
+              placeholder={t("Bulk.keyword")}
               className="mb-4"
             />
             <div className="flex justify-end gap-2">
@@ -998,7 +994,7 @@ export default function EmailSidebar({
                 {isBulkDeleting && (
                   <Icons.spinner className="mr-1 size-4 animate-spin" />
                 )}
-                {t("Delete {count}", { count: selectedEmailIds.length })}
+                {t("Bulk.deleteButton", { count: selectedEmailIds.length })}
               </Button>
             </div>
           </div>
