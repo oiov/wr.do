@@ -484,7 +484,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
               <div className="flex h-full flex-col rounded-lg border border-dotted bg-white px-3 py-1.5 backdrop-blur-lg dark:bg-black">
                 <div className="flex items-center justify-between gap-1">
                   <BlurImage
-                    src={`https://unavatar.io/${extractHostname(short.target)}?fallback=https://wr.do/logo-192.png`}
+                    src={`https://unavatar.io/${extractHostname(short.target)}?fallback=https://wr.do/logo.png`}
                     alt="logo"
                     width={30}
                     height={30}
