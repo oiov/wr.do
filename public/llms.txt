@@ -2,7 +2,7 @@
 
 > Wr.do is a platform designed for developers, offering various tools and documentation aimed at simplifying web application development. The website provides resources on authentication, cloud integration, email handling, and more, establishing a comprehensive guide for users to effectively utilize its services. With examples and quick-start guides, it supports developers in implementing features quickly and efficiently.
 
-- [WR.DO](https://wr.do/): Shorten links with analytics, manage emails and control subdomains—all on one platform.
+- [WR.DO](https://wr.do/): All-in-one domain platform with short links, temp email, subdomain management, file storage, and open APIs.
 - [Introduction – WR.DO](https://wr.do/docs): Welcome to the WR.DO documentation.
 
 ## Documentation

@@ -224,7 +224,7 @@ pnpm dev
   
 [爱发电主页打赏](wr.do/afdhome)
 
-<img width="100" src="https://wr.do/bbpt9z" />
+<img width="100" src="https://wr.do/bbpt9z?ref=https://github.com/oiov/wr.do" />
 
 
 ## Star History

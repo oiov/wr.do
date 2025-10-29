@@ -9,7 +9,7 @@ const app_name = env.NEXT_PUBLIC_APP_NAME || "WR.DO";
 export const siteConfig: SiteConfig = {
   name: app_name,
   description:
-    "Shorten links with analytics, manage emails and control subdomains—all on one platform.",
+    "All-in-one domain platform with short links, temp email, subdomain management, file storage, and open APIs.",
   url: site_url,
   ogImage: `${site_url}/_static/og.jpg`,
   links: {

@@ -6,36 +6,26 @@ export default function LogoIcon({
 }) {
   return (
     <svg
+      viewBox="0 0 1024 1024"
+      version="1.1"
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="3"
-      strokeLinecap="round"
-      strokeLinejoin="round"
       className={className}
       {...props}
     >
-      <path color="#0070f3" strokeWidth="3" d="m12 14 4-4" />
-      <defs>
-        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop
-            offset="0%"
-            style={{ stopColor: "rgb(35, 35, 35)", stopOpacity: "1" }}
-          />
-          <stop
-            offset="100%"
-            style={{ stopColor: "rgb(100, 100, 100)", stopOpacity: "1" }}
-          />
-        </linearGradient>
-      </defs>
-      <path
-        d="M3.34 19a10 10 0 1 1 17.32 0"
-        stroke="url(#gradient)"
-        strokeWidth="3"
-      />
+      <circle cx="512" cy="512" r="512" className="fill-black" />
+
+      <g transform="translate(512, 512) scale(0.7) translate(-512, -512)">
+        <path
+          d="M655.36 89.813333L216.533333 309.12c-52.053333 26.026667-63.36 95.573333-22.186666 136.746667L413.866667 665.173333c41.173333 41.173333 110.72 29.866667 136.746666-22.186666L769.92 204.16c36.693333-73.386667-41.173333-151.04-114.56-114.346667z"
+          fill="#FFFFFF"
+        />
+        <path
+          d="M368.64 934.186667l438.826667-219.306667c52.053333-26.026667 63.36-95.573333 22.186666-136.746667L610.133333 358.826667c-41.173333-41.173333-110.72-29.866667-136.746666 22.186666L254.08 819.84c-36.693333 73.386667 41.173333 151.04 114.56 114.346667z"
+          fill="#cdeeff"
+        />
+      </g>
     </svg>
   );
 }

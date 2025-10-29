@@ -60,8 +60,8 @@ const nextConfig = {
   rewrites() {
     return [
       {
-        source: "/logo.png",
-        destination: "/_static/logo.png",
+        source: "/logo-192.png",
+        destination: "/_static/logo-192.png",
       },
     ];
   },

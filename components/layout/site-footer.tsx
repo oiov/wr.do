@@ -27,10 +27,9 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
             </Link>
           </div>
           <div className="mt-4 text-sm">
-            Shorten links with analytics, manage emails, <br />
-            create private chats, and control subdomains
+            All-in-one domain platform with short links, temp email,
             <br />
-            —all on one platform.
+            subdomain management, file storage, and open APIs.
           </div>
           <GitHubStarsWithSuspense className="mt-4" owner="oiov" repo="wr.do" />
         </div>
