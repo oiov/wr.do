@@ -31,6 +31,7 @@ export async function GET(req: NextRequest) {
   const emailAddress = searchParams.get("emailAddress");
   const page = parseInt(searchParams.get("page") || "1", 10);
   const pageSize = parseInt(searchParams.get("size") || "10", 10);
+  const search = searchParams.get("search") || "";
 
   if (!emailAddress) {
     return NextResponse.json(
@@ -40,7 +41,12 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const emails = await getEmailsByEmailAddress(emailAddress, page, pageSize);
+    const emails = await getEmailsByEmailAddress(
+      emailAddress,
+      page,
+      pageSize,
+      search,
+    );
     return NextResponse.json(emails, { status: 200 });
   } catch (error) {
     console.error("Error fetching emails:", error);

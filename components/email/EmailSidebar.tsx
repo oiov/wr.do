@@ -28,6 +28,7 @@ import { TimeAgoIntl } from "../shared/time-ago";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { Checkbox } from "../ui/checkbox";
 import { Modal } from "../ui/modal";
 import {
   Select,
@@ -82,6 +83,42 @@ export default function EmailSidebar({
   const [deleteInput, setDeleteInput] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [onlyUnread, setOnlyUnread] = useState(false);
+  const [showBulkSelector, setShowBulkSelector] = useState(false);
+  const [selectedEmailIds, setSelectedEmailIds] = useState<string[]>([]);
+  const [isBulkDeleting, setIsBulkDeleting] = useState(false);
+  const [isFetchingIds, setIsFetchingIds] = useState(false);
+  const [showBulkDeleteModal, setShowBulkDeleteModal] = useState(false);
+  const [bulkDeleteInput, setBulkDeleteInput] = useState("");
+
+  useEffect(() => {
+    if (!isAdminModel) {
+      setShowBulkSelector(false);
+      setSelectedEmailIds([]);
+    }
+  }, [isAdminModel]);
+
+  useEffect(() => {
+    if (isCollapsed) {
+      setShowBulkSelector(false);
+    }
+  }, [isCollapsed]);
+
+  useEffect(() => {
+    setSelectedEmailIds([]);
+    setBulkDeleteInput("");
+  }, [searchQuery, onlyUnread]);
+
+  useEffect(() => {
+    if (selectedEmailIds.length === 0) {
+      setShowBulkDeleteModal(false);
+      setBulkDeleteInput("");
+    }
+  }, [selectedEmailIds.length]);
+
+  const selectedSet = useMemo(
+    () => new Set(selectedEmailIds),
+    [selectedEmailIds],
+  );
 
   const [showSendsModal, setShowSendsModal] = useState(false);
 
@@ -235,7 +272,103 @@ export default function EmailSidebar({
     if (deleteInput === expectedInput) {
       handleDeleteEmail(emailToDelete);
     } else {
-      toast.error("Input does not match. Please type correctly.");
+      toast.error(t("Input does not match. Please type correctly."));
+    }
+  };
+
+  const toggleBulkSelector = () => {
+    if (showBulkSelector) {
+      setSelectedEmailIds([]);
+      setBulkDeleteInput("");
+    }
+    setShowBulkSelector((prev) => !prev);
+  };
+
+  const handleToggleEmailSelection = (id: string, checked?: boolean) => {
+    const shouldSelect = checked ?? !selectedSet.has(id);
+    setSelectedEmailIds((prev) => {
+      const next = new Set(prev);
+      if (shouldSelect) {
+        next.add(id);
+      } else {
+        next.delete(id);
+      }
+      return Array.from(next);
+    });
+  };
+
+  const handleSelectCurrentPage = () => {
+    if (!userEmails.length) return;
+    setSelectedEmailIds((prev) => {
+      const next = new Set(prev);
+      userEmails
+        .filter((email) => !email.deletedAt)
+        .forEach((email) => next.add(email.id));
+      return Array.from(next);
+    });
+  };
+
+  const handleSelectAllFiltered = async () => {
+    if (!isAdminModel) return;
+    setIsFetchingIds(true);
+    try {
+      const params = new URLSearchParams({
+        search: searchQuery,
+        all: String(isAdminModel),
+        unread: String(onlyUnread),
+      });
+      const res = await fetch(`/api/email/ids?${params.toString()}`);
+      if (!res.ok) {
+        toast.error(t("Failed to fetch email ids"));
+        return;
+      }
+      const data = await res.json();
+      if (Array.isArray(data.ids)) {
+        setSelectedEmailIds(Array.from(new Set(data.ids)));
+      }
+    } catch (error) {
+      toast.error(t("Failed to fetch email ids"));
+    } finally {
+      setIsFetchingIds(false);
+    }
+  };
+
+  const handleClearSelection = () => {
+    setSelectedEmailIds([]);
+    setBulkDeleteInput("");
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedEmailIds.length === 0) return;
+    if (bulkDeleteInput.toLowerCase() !== "delete") {
+      toast.error(t("Please type delete to confirm."));
+      return;
+    }
+    setIsBulkDeleting(true);
+    try {
+      const res = await fetch("/api/email", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ids: selectedEmailIds }),
+      });
+      if (res.ok) {
+        await mutate();
+        setSelectedEmailIds([]);
+        setShowBulkDeleteModal(false);
+        setBulkDeleteInput("");
+        onSelectEmail(null);
+        toast.success(t("Emails deleted successfully"));
+      } else {
+        toast.error(t("Failed to delete emails"), {
+          description: await res.text(),
+        });
+      }
+    } catch (error) {
+      toast.error(t("Failed to delete emails"));
+    } finally {
+      setIsBulkDeleting(false);
     }
   };
 
@@ -312,6 +445,56 @@ export default function EmailSidebar({
             <span className="text-xs">{t("Create New Email")}</span>
           )}
         </Button>
+
+        {isAdminModel && !isCollapsed && (
+          <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
+            <Button
+              variant={showBulkSelector ? "secondary" : "outline"}
+              size="sm"
+              onClick={toggleBulkSelector}
+            >
+              {showBulkSelector ? t("Exit bulk mode") : t("Bulk manage")}
+            </Button>
+            {showBulkSelector && (
+              <>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleSelectCurrentPage}
+                >
+                  {t("Select current page")}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleSelectAllFiltered}
+                  disabled={isFetchingIds}
+                >
+                  {isFetchingIds ? t("Selecting...") : t("Select all results")}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleClearSelection}
+                  disabled={selectedEmailIds.length === 0}
+                >
+                  {t("Clear selection")}
+                </Button>
+                <Badge variant="outline">
+                  {t("Selected {count}", { count: selectedEmailIds.length })}
+                </Badge>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  disabled={selectedEmailIds.length === 0}
+                  onClick={() => setShowBulkDeleteModal(true)}
+                >
+                  {t("Delete selected")}
+                </Button>
+              </>
+            )}
+          </div>
+        )}
 
         {!isCollapsed && (
           <div className="mt-4 grid grid-cols-2 gap-2 rounded-lg text-xs text-neutral-700 dark:bg-neutral-900 dark:text-neutral-400">
@@ -458,103 +641,137 @@ export default function EmailSidebar({
           </>
         )}
 
-        {userEmails.map((email) => (
-          <div
-            key={email.id}
-            onClick={() => onSelectEmail(email.emailAddress)}
-            className={cn(
-              `border-gray-5 group m-1 cursor-pointer bg-neutral-50 p-2 transition-colors hover:bg-neutral-100 dark:border-zinc-700 dark:bg-neutral-800 dark:hover:bg-neutral-900`,
-              selectedEmailAddress === email.emailAddress
-                ? "bg-gray-100 dark:bg-neutral-900"
-                : "",
-              isCollapsed ? "flex items-center justify-center" : "",
-            )}
-          >
+        {userEmails.map((email) => {
+          const isDisabled = !!email.deletedAt;
+          const isSelectedForBulk = selectedSet.has(email.id);
+          return (
             <div
+              key={email.id}
+              onClick={() => {
+                if (showBulkSelector && !isDisabled) {
+                  handleToggleEmailSelection(email.id);
+                } else {
+                  onSelectEmail(email.emailAddress);
+                }
+              }}
               className={cn(
-                "flex items-center justify-between gap-1 text-sm font-bold text-neutral-500 dark:text-zinc-400",
-                isCollapsed
-                  ? "size-10 justify-center rounded-xl bg-neutral-400 text-center text-white dark:text-neutral-100"
+                `border-gray-5 group m-1 cursor-pointer bg-neutral-50 p-2 transition-colors hover:bg-neutral-100 dark:border-zinc-700 dark:bg-neutral-800 dark:hover:bg-neutral-900`,
+                selectedEmailAddress === email.emailAddress && !showBulkSelector
+                  ? "bg-gray-100 dark:bg-neutral-900"
                   : "",
-                selectedEmailAddress === email.emailAddress && isCollapsed
-                  ? "bg-neutral-600"
+                showBulkSelector && isSelectedForBulk
+                  ? "ring-1 ring-primary/60 dark:ring-neutral-300/60"
                   : "",
+                isCollapsed ? "flex items-center justify-center" : "",
               )}
             >
-              <span className="w-2/3 truncate" title={email.emailAddress}>
-                {isCollapsed
-                  ? email.emailAddress.slice(0, 1).toLocaleUpperCase()
-                  : email.emailAddress}
-              </span>
-              {!isCollapsed && (
-                <>
-                  <SendEmailModal
-                    emailAddress={selectedEmailAddress}
-                    onSuccess={mutate}
-                    triggerButton={
-                      <Icons.send
-                        className={cn(
-                          "size-5 rounded border p-1 text-primary",
-                          !isMobile
-                            ? "hidden hover:bg-neutral-200 group-hover:ml-auto group-hover:inline"
-                            : "",
-                        )}
-                      />
+              <div
+                className={cn(
+                  "flex w-full items-start gap-2",
+                  isCollapsed ? "justify-center" : "",
+                )}
+              >
+                {showBulkSelector && !isCollapsed && (
+                  <Checkbox
+                    className="mt-1"
+                    checked={isSelectedForBulk}
+                    disabled={isDisabled}
+                    onCheckedChange={(value) =>
+                      handleToggleEmailSelection(email.id, Boolean(value))
                     }
+                    onClick={(event) => event.stopPropagation()}
                   />
-                  <PenLine
+                )}
+                <div className="flex-1">
+                  <div
                     className={cn(
-                      "size-5 rounded border p-1 text-primary",
-                      !isMobile
-                        ? "hidden hover:bg-neutral-200 group-hover:inline"
+                      "flex items-center justify-between gap-1 text-sm font-bold text-neutral-500 dark:text-zinc-400",
+                      isCollapsed
+                        ? "size-10 justify-center rounded-xl bg-neutral-400 text-center text-white dark:text-neutral-100"
+                        : "",
+                      selectedEmailAddress === email.emailAddress && isCollapsed
+                        ? "bg-neutral-600"
                         : "",
                     )}
-                    onClick={() => handleOpenEditEmail(email)}
-                  />
-                  <Icons.trash
-                    className={cn(
-                      "size-5 rounded border p-1 text-primary",
-                      !isMobile
-                        ? "hidden hover:bg-neutral-200 group-hover:inline"
-                        : "",
-                      email.deletedAt ? "bg-gray-400" : "",
+                  >
+                    <span className="w-2/3 truncate" title={email.emailAddress}>
+                      {isCollapsed
+                        ? email.emailAddress.slice(0, 1).toLocaleUpperCase()
+                        : email.emailAddress}
+                    </span>
+                    {!isCollapsed && !showBulkSelector && (
+                      <>
+                        <SendEmailModal
+                          emailAddress={selectedEmailAddress}
+                          onSuccess={mutate}
+                          triggerButton={
+                            <Icons.send
+                              className={cn(
+                                "size-5 rounded border p-1 text-primary",
+                                !isMobile
+                                  ? "hidden hover:bg-neutral-200 group-hover:ml-auto group-hover:inline"
+                                  : "",
+                              )}
+                            />
+                          }
+                        />
+                        <PenLine
+                          className={cn(
+                            "size-5 rounded border p-1 text-primary",
+                            !isMobile
+                              ? "hidden hover:bg-neutral-200 group-hover:inline"
+                              : "",
+                          )}
+                          onClick={() => handleOpenEditEmail(email)}
+                        />
+                        <Icons.trash
+                          className={cn(
+                            "size-5 rounded border p-1 text-primary",
+                            !isMobile
+                              ? "hidden hover:bg-neutral-200 group-hover:inline"
+                              : "",
+                            email.deletedAt ? "bg-gray-400" : "",
+                          )}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            if (!email.deletedAt) {
+                              setEmailToDelete(email.id);
+                              setShowDeleteModal(true);
+                            }
+                          }}
+                        />
+                        <CopyButton
+                          value={`${email.emailAddress}`}
+                          className={cn(
+                            "size-5 rounded border p-1",
+                            "duration-250 transition-all hover:bg-neutral-200",
+                          )}
+                          title="Copy email address"
+                        />
+                      </>
                     )}
-                    onClick={() => {
-                      if (!email.deletedAt) {
-                        setEmailToDelete(email.id);
-                        setShowDeleteModal(true);
-                      }
-                    }}
-                  />
-                  <CopyButton
-                    value={`${email.emailAddress}`}
-                    className={cn(
-                      "size-5 rounded border p-1",
-                      "duration-250 transition-all hover:bg-neutral-200",
-                    )}
-                    title="Copy email address"
-                  />
-                </>
-              )}
-            </div>
-            {!isCollapsed && (
-              <div className="mt-2 flex items-center justify-between gap-2 text-xs text-gray-500">
-                <div className="flex items-center gap-1 text-nowrap">
-                  {email.unreadCount > 0 && (
-                    <Badge variant="default">{email.unreadCount}</Badge>
+                  </div>
+                  {!isCollapsed && (
+                    <div className="mt-2 flex items-center justify-between gap-2 text-xs text-gray-500">
+                      <div className="flex items-center gap-1 text-nowrap">
+                        {email.unreadCount > 0 && (
+                          <Badge variant="default">{email.unreadCount}</Badge>
+                        )}
+                        {t("{email} recived", { email: email.count })}
+                      </div>
+                      <span className="line-clamp-1 hover:line-clamp-none">
+                        {isAdminModel
+                          ? `${email.user || email.email.slice(0, 5)} · `
+                          : ""}
+                        <TimeAgoIntl date={email.createdAt} />
+                      </span>
+                    </div>
                   )}
-                  {t("{email} recived", { email: email.count })}
                 </div>
-                <span className="line-clamp-1 hover:line-clamp-none">
-                  {isAdminModel
-                    ? `${email.user || email.email.slice(0, 5)} · `
-                    : ""}
-                  <TimeAgoIntl date={email.createdAt} />
-                </span>
               </div>
-            )}
-          </div>
-        ))}
+            </div>
+          );
+        })}
       </div>
 
       {/* Pagination */}
@@ -728,6 +945,60 @@ export default function EmailSidebar({
                 }
               >
                 {t("Confirm Delete")}
+              </Button>
+            </div>
+          </div>
+        </Modal>
+      )}
+
+      {showBulkDeleteModal && (
+        <Modal
+          showModal={showBulkDeleteModal}
+          setShowModal={setShowBulkDeleteModal}
+        >
+          <div className="p-6">
+            <h2 className="mb-4 text-lg font-semibold">
+              {t("Delete selected emails")}
+            </h2>
+            <p className="mb-2 text-sm text-neutral-600">
+              {t(
+                "You are about to delete {count} email addresses. Once deleted, the related inbox data will be removed together.",
+                { count: selectedEmailIds.length },
+              )}
+            </p>
+            <p className="mb-4 text-sm text-neutral-600">
+              {t("Please type delete to confirm.")}{" "}
+              <strong>{t("delete")}</strong>
+            </p>
+            <Input
+              value={bulkDeleteInput}
+              onChange={(e) => setBulkDeleteInput(e.target.value)}
+              placeholder={t("delete")}
+              className="mb-4"
+            />
+            <div className="flex justify-end gap-2">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setShowBulkDeleteModal(false);
+                  setBulkDeleteInput("");
+                }}
+              >
+                {t("Cancel")}
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={handleBulkDelete}
+                disabled={
+                  isBulkDeleting ||
+                  selectedEmailIds.length === 0 ||
+                  bulkDeleteInput.toLowerCase() !== "delete"
+                }
+              >
+                {isBulkDeleting && (
+                  <Icons.spinner className="mr-1 size-4 animate-spin" />
+                )}
+                {t("Delete {count}", { count: selectedEmailIds.length })}
               </Button>
             </div>
           </div>

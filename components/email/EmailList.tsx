@@ -25,6 +25,7 @@ import {
 } from "../ui/dropdown-menu";
 import { Skeleton } from "../ui/skeleton";
 import { Switch } from "../ui/switch";
+import { Input } from "../ui/input";
 import {
   Tooltip,
   TooltipContent,
@@ -57,22 +58,46 @@ export default function EmailList({
   const [pageSize, setPageSize] = useState(10);
   const [selectedEmails, setSelectedEmails] = useState<string[]>([]);
   const [showMutiCheckBox, setShowMutiCheckBox] = useState(false);
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
 
   const [isDeleting, startDeleteTransition] = useTransition();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search.trim());
+    }, 300);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [search]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearch]);
+
+  useEffect(() => {
+    setSearch("");
+    setDebouncedSearch("");
+    setCurrentPage(1);
+  }, [emailAddress]);
+
+  const inboxKey = emailAddress
+    ? `/api/email/inbox?emailAddress=${encodeURIComponent(
+        emailAddress,
+      )}&page=${currentPage}&size=${pageSize}&search=${encodeURIComponent(
+        debouncedSearch,
+      )}`
+    : null;
 
   const { data, error, isLoading, mutate } = useSWR<{
     total: number;
     list: ForwardEmail[];
-  }>(
-    emailAddress
-      ? `/api/email/inbox?emailAddress=${emailAddress}&page=${currentPage}&size=${pageSize}`
-      : null,
-    fetcher,
-    {
-      refreshInterval: isAutoRefresh ? 5000 : 0,
-      dedupingInterval: 2000,
-    },
-  );
+  }>(inboxKey, fetcher, {
+    refreshInterval: isAutoRefresh ? 5000 : 0,
+    dedupingInterval: 2000,
+  });
 
   useEffect(() => {
     if (emailAddress && selectedEmailId) {
@@ -173,6 +198,16 @@ export default function EmailList({
         <Icons.inbox size={20} />
         <span>{t("INBOX")}</span>
         <div className="ml-auto flex items-center justify-center gap-2">
+          <div className="relative">
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={t("Search emails")}
+              className="h-8 w-48 border-neutral-200 pl-8 text-xs dark:border-neutral-700"
+              disabled={!emailAddress}
+            />
+            <Icons.search className="absolute left-2 top-1/2 size-4 -translate-y-1/2 text-neutral-400" />
+          </div>
           <SendEmailModal emailAddress={emailAddress} onSuccess={mutate} />
           <TooltipProvider>
             <Tooltip delayDuration={200}>

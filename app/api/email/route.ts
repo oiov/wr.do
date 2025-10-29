@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { createUserEmail, getAllUserEmails } from "@/lib/dto/email";
+import {
+  createUserEmail,
+  deleteUserEmails,
+  getAllUserEmails,
+} from "@/lib/dto/email";
 import { getPlanQuota } from "@/lib/dto/plan";
 import { checkUserStatus } from "@/lib/dto/user";
 import { reservedAddressSuffix } from "@/lib/enums";
@@ -80,6 +84,28 @@ export async function POST(req: NextRequest) {
       });
     }
 
+    return NextResponse.json("Internal Server Error", { status: 500 });
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  const user = checkUserStatus(await getCurrentUser());
+  if (user instanceof Response) return user;
+
+  if (user.role !== "ADMIN") {
+    return NextResponse.json("Forbidden", { status: 403 });
+  }
+
+  const { ids } = await req.json();
+  if (!Array.isArray(ids) || ids.length === 0) {
+    return NextResponse.json("ids is required", { status: 400 });
+  }
+
+  try {
+    const deleted = await deleteUserEmails(Array.from(new Set(ids)));
+    return NextResponse.json({ deleted }, { status: 200 });
+  } catch (error) {
+    console.error("Error deleting user emails:", error);
     return NextResponse.json("Internal Server Error", { status: 500 });
   }
 }

@@ -1,4 +1,4 @@
-import { ForwardEmail, UserEmail, UserRole } from "@prisma/client";
+import { ForwardEmail, Prisma, UserEmail, UserRole } from "@prisma/client";
 
 import { prisma } from "@/lib/db";
 
@@ -179,6 +179,39 @@ export async function getAllUserEmails(
   };
 }
 
+export async function getUserEmailIds(
+  userId: string,
+  search: string,
+  admin: boolean,
+  onlyUnread: boolean = false,
+): Promise<string[]> {
+  const whereOptions: Prisma.UserEmailWhereInput = admin
+    ? {
+        deletedAt: null,
+        emailAddress: { contains: search, mode: "insensitive" },
+      }
+    : {
+        userId,
+        deletedAt: null,
+        emailAddress: { contains: search, mode: "insensitive" },
+      };
+
+  if (onlyUnread) {
+    whereOptions.forwardEmails = {
+      some: {
+        readAt: null,
+      },
+    };
+  }
+
+  const userEmails = await prisma.userEmail.findMany({
+    where: whereOptions,
+    select: { id: true },
+  });
+
+  return userEmails.map((item) => item.id);
+}
+
 // 查询所有 UserEmail 数量
 export async function getAllUserEmailsCount(
   userId: string,
@@ -285,6 +318,22 @@ export async function deleteUserEmail(id: string) {
     });
   }
 }
+
+export async function deleteUserEmails(ids: string[]) {
+  if (!ids.length) {
+    return 0;
+  }
+
+  const result = await prisma.userEmail.updateMany({
+    where: {
+      id: { in: ids },
+      deletedAt: null,
+    },
+    data: { deletedAt: new Date() },
+  });
+
+  return result.count;
+}
 // 删除 UserEmail (软删除)
 export async function deleteUserEmailByAddress(email: string) {
   const userEmail = await prisma.userEmail.findFirst({
@@ -306,6 +355,7 @@ export async function getEmailsByEmailAddress(
   emailAddress: string,
   page: number,
   pageSize: number,
+  search?: string,
 ): Promise<{ list: ForwardEmail[]; total: number }> {
   const userEmail = await prisma.userEmail.findUnique({
     where: { emailAddress, deletedAt: null },
@@ -315,15 +365,30 @@ export async function getEmailsByEmailAddress(
     throw new Error("Email address not found");
   }
 
+  const where: Prisma.ForwardEmailWhereInput = { to: emailAddress };
+  const keyword = search?.trim();
+  if (keyword) {
+    // 根据搜索词匹配发件人或邮件标题
+    where.AND = [
+      {
+        OR: [
+          { subject: { contains: keyword, mode: "insensitive" } },
+          { from: { contains: keyword, mode: "insensitive" } },
+          { fromName: { contains: keyword, mode: "insensitive" } },
+        ],
+      },
+    ];
+  }
+
   const list = await prisma.forwardEmail.findMany({
-    where: { to: emailAddress },
+    where,
     orderBy: { createdAt: "desc" },
     skip: (page - 1) * pageSize, // 从第 (page-1)*pageSize 条开始
     take: pageSize, // 取 pageSize 条
   });
 
   const total = await prisma.forwardEmail.count({
-    where: { to: emailAddress },
+    where,
   });
 
   return {
