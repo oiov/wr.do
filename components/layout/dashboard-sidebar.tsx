@@ -81,7 +81,7 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
   }, [path, links]);
 
   const renderNavItem = (item: NavItem, isNested = false) => {
-    const Icon = item.icon ? Icons[item.icon] : () => null;
+    const Icon = Icons[item.icon ?? "arrowLeft"];
     const hasSubItems = item.items && item.items.length > 0;
     const isOpen = openCollapsibles.has(item.title);
 
@@ -96,13 +96,14 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
             >
               <CollapsibleTrigger
                 className={cn(
-                  "flex w-full items-center gap-3 rounded-md p-2 text-sm font-medium hover:bg-muted",
+                  "flex w-full items-center rounded-md p-2 text-sm font-medium hover:bg-muted",
                   "text-muted-foreground hover:text-accent-foreground",
                   item.disabled &&
                     "cursor-not-allowed opacity-80 hover:bg-transparent hover:text-muted-foreground",
+                  item.icon ? "gap-3" : "pl-6",
                 )}
               >
-                <Icon className="size-5" />
+                <Icon className={item.icon ? "size-5" : "hidden"} />
                 {t(item.title)}
                 <Icons.chevronDown
                   className={cn(
@@ -167,16 +168,16 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
               key={`link-${item.title}`}
               href={item.disabled ? "#" : item.href}
               className={cn(
-                "flex items-center gap-3 rounded-md p-2 text-sm font-medium hover:bg-muted",
+                "flex items-center rounded-md text-sm hover:bg-muted",
                 path === item.href
                   ? "bg-muted"
                   : "text-muted-foreground hover:text-accent-foreground",
                 item.disabled &&
                   "cursor-not-allowed opacity-80 hover:bg-transparent hover:text-muted-foreground",
-                isNested && "pl-6",
+                isNested ? "py-1" : "gap-3 p-2 font-medium",
               )}
             >
-              <Icon className="size-5" />
+              <Icon className={item.icon ? "size-5" : "opacity-0"} />
               {t(item.title)}
               {item.badge && (
                 <Badge className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full">
@@ -350,7 +351,7 @@ export function MobileSheetSidebar({ links }: DashboardSidebarProps) {
   }, [path, links]);
 
   const renderMobileNavItem = (item: NavItem, isNested = false) => {
-    const Icon = item.icon ? Icons[item.icon] : () => null;
+    const Icon = Icons[item.icon ?? "arrowLeft"];
     const hasSubItems = item.items && item.items.length > 0;
     const isOpen = openCollapsibles.has(item.title);
 
@@ -364,13 +365,14 @@ export function MobileSheetSidebar({ links }: DashboardSidebarProps) {
         >
           <CollapsibleTrigger
             className={cn(
-              "flex w-full items-center gap-3 rounded-md p-2 text-sm font-medium hover:bg-muted",
+              "flex w-full items-center rounded-md p-2 text-sm font-medium hover:bg-muted",
               "text-muted-foreground hover:text-accent-foreground",
               item.disabled &&
                 "cursor-not-allowed opacity-80 hover:bg-transparent hover:text-muted-foreground",
+              item.icon ? "gap-3" : "pl-6",
             )}
           >
-            <Icon className="size-5" />
+            <Icon className={item.icon ? "size-5" : "hidden"} />
             {t(item.title)}
             <Icons.chevronDown
               className={cn(
@@ -399,16 +401,16 @@ export function MobileSheetSidebar({ links }: DashboardSidebarProps) {
             }}
             href={item.disabled ? "#" : item.href}
             className={cn(
-              "flex items-center gap-3 rounded-md p-2 text-sm font-medium hover:bg-muted",
+              "flex items-center rounded-md text-sm hover:bg-muted",
               path === item.href
                 ? "bg-muted"
                 : "text-muted-foreground hover:text-accent-foreground",
               item.disabled &&
                 "cursor-not-allowed opacity-80 hover:bg-transparent hover:text-muted-foreground",
-              isNested && "pl-6",
+              isNested ? "py-1.5" : "gap-3 p-2 font-medium",
             )}
           >
-            <Icon className="size-5" />
+            <Icon className={item.icon ? "size-5" : "opacity-0"} />
             {t(item.title)}
             {item.badge && (
               <Badge className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full">

@@ -605,7 +605,8 @@
     "Storage": "Storage",
     "Resources": "Resources",
     "App Configs": "App Settings",
-    "Plans": "Plan Settings"
+    "Plans": "Plan Settings",
+    "List": "List"
   },
   "Email": {
     "Search emails": "Search emails",
@@ -660,7 +661,8 @@
     "Sending": "Sending",
     "Reply-To": "Reply-To",
     "Attachments": "Attachments",
-    "Date": "Date"
+    "Date": "Date",
+    "Search by from email": "Search by from email"
   },
   "Scrape": {
     "Playground": "Playground",

@@ -27,7 +27,7 @@ export const sidebarLinks: SidebarNavItem[] = [
         title: "Emails",
         items: [
           { href: "/emails", title: "Inbox" },
-          { href: "/emails/sent", title: "Sent", disabled: true },
+          { href: "/emails/sent", title: "Sent" },
           { href: "/emails/trash", title: "Trash", disabled: true },
           { href: "/emails/api", title: "API", disabled: true },
         ],
@@ -90,7 +90,12 @@ export const sidebarLinks: SidebarNavItem[] = [
         title: "Admin Panel",
         authorizeOnly: UserRole.ADMIN,
       },
-
+      {
+        href: "/admin/users",
+        icon: "users",
+        title: "Users",
+        authorizeOnly: UserRole.ADMIN,
+      },
       {
         href: "/admin/resources",
         icon: "boxes",
@@ -98,16 +103,46 @@ export const sidebarLinks: SidebarNavItem[] = [
         authorizeOnly: UserRole.ADMIN,
         items: [
           {
-            href: "/admin/users",
-            title: "Users",
-            authorizeOnly: UserRole.ADMIN,
-          },
-          {
-            href: "/admin/urls",
-            // icon: "link",
+            href: "",
             title: "URLs",
             authorizeOnly: UserRole.ADMIN,
+            items: [
+              {
+                href: "/admin/urls",
+                title: "List",
+                authorizeOnly: UserRole.ADMIN,
+              },
+              {
+                href: "/admin/urls/analytics",
+                title: "Analytics",
+                authorizeOnly: UserRole.ADMIN,
+              },
+              {
+                href: "/admin/urls/logs",
+                title: "Ip Logs",
+                authorizeOnly: UserRole.ADMIN,
+              },
+            ],
           },
+          // {
+          //   href: "/admin/emails",
+          //   // icon: "globe",
+          //   title: "Emails",
+          //   authorizeOnly: UserRole.ADMIN,
+          //   items: [
+          //     {
+          //       href: "/admin/emails/sent",
+          //       title: "Sent",
+          //       authorizeOnly: UserRole.ADMIN,
+          //     },
+          //     {
+          //       href: "/admin/emails/trash",
+          //       title: "Trash",
+          //       authorizeOnly: UserRole.ADMIN,
+          //       disabled: true,
+          //     },
+          //   ],
+          // },
           {
             href: "/admin/records",
             // icon: "globe",
@@ -118,16 +153,6 @@ export const sidebarLinks: SidebarNavItem[] = [
             href: "/admin/storage",
             // icon: "storage",
             title: "Cloud Storage Manage",
-            authorizeOnly: UserRole.ADMIN,
-          },
-          {
-            href: "/admin/urls/analytics",
-            title: "Analytics",
-            authorizeOnly: UserRole.ADMIN,
-          },
-          {
-            href: "/admin/urls/logs",
-            title: "Ip Logs",
             authorizeOnly: UserRole.ADMIN,
           },
         ],
