@@ -27,6 +27,7 @@ export type NavItem = {
   external?: boolean;
   authorizeOnly?: UserRole;
   icon?: keyof typeof Icons;
+  items?: NavItem[];
 };
 
 export type MainNavItem = NavItem;

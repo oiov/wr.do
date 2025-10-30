@@ -591,7 +591,21 @@
     "Log out": "Log out",
     "System Settings": "System Settings",
     "Cloud Storage": "Cloud Storage",
-    "Cloud Storage Manage": "Cloud Storage"
+    "Cloud Storage Manage": "Cloud Storage",
+    "Inbox": "Inbox",
+    "Sent": "Sent",
+    "Spam": "Spam",
+    "Trash": "Trash",
+    "API": "API",
+    "Links": "Links",
+    "Analytics": "Analytics",
+    "Ip Logs": "Ip Logs",
+    "APIs": "APIs",
+    "File Analytics": "File Analytics",
+    "Storage": "Storage",
+    "Resources": "Resources",
+    "App Configs": "App Settings",
+    "Plans": "Plan Settings"
   },
   "Email": {
     "Search emails": "Search emails",

@@ -3,7 +3,7 @@
 import { Fragment, useEffect, useState } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { SidebarNavItem } from "@/types";
+import { NavItem, SidebarNavItem } from "@/types";
 import { Menu, PanelLeftClose, PanelRightClose } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "next-view-transitions";
@@ -24,6 +24,12 @@ import {
 } from "@/components/ui/tooltip";
 import { Icons } from "@/components/shared/icons";
 
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "../ui/collapsible";
+
 interface DashboardSidebarProps {
   links: SidebarNavItem[];
 }
@@ -34,18 +40,183 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
 
   const { isTablet } = useMediaQuery();
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(!isTablet);
+  const [openCollapsibles, setOpenCollapsibles] = useState<Set<string>>(
+    new Set(),
+  );
 
   const toggleSidebar = () => {
     setIsSidebarExpanded(!isSidebarExpanded);
+  };
+
+  const toggleCollapsible = (itemTitle: string) => {
+    setOpenCollapsibles((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(itemTitle)) {
+        newSet.delete(itemTitle);
+      } else {
+        newSet.add(itemTitle);
+      }
+      return newSet;
+    });
   };
 
   useEffect(() => {
     setIsSidebarExpanded(!isTablet);
   }, [isTablet]);
 
+  // Auto-open collapsibles that contain the current path
+  useEffect(() => {
+    links.forEach((section) => {
+      section.items.forEach((item) => {
+        if (item.items) {
+          const hasActivePath = item.items.some(
+            (subItem) => subItem.href === path,
+          );
+          if (hasActivePath) {
+            setOpenCollapsibles((prev) => new Set(prev).add(item.title));
+          }
+        }
+      });
+    });
+  }, [path, links]);
+
+  const renderNavItem = (item: NavItem, isNested = false) => {
+    const Icon = item.icon ? Icons[item.icon] : () => null;
+    const hasSubItems = item.items && item.items.length > 0;
+    const isOpen = openCollapsibles.has(item.title);
+
+    // Item with sub-items (collapsible)
+    if (hasSubItems) {
+      return (
+        <Fragment key={`nav-item-${item.title}`}>
+          {isSidebarExpanded ? (
+            <Collapsible
+              open={isOpen}
+              onOpenChange={() => toggleCollapsible(item.title)}
+            >
+              <CollapsibleTrigger
+                className={cn(
+                  "flex w-full items-center gap-3 rounded-md p-2 text-sm font-medium hover:bg-muted",
+                  "text-muted-foreground hover:text-accent-foreground",
+                  item.disabled &&
+                    "cursor-not-allowed opacity-80 hover:bg-transparent hover:text-muted-foreground",
+                )}
+              >
+                <Icon className="size-5" />
+                {t(item.title)}
+                <Icons.chevronDown
+                  className={cn(
+                    "ml-auto size-4 transition-transform",
+                    isOpen && "rotate-180",
+                  )}
+                />
+              </CollapsibleTrigger>
+              <CollapsibleContent className="pl-4 pt-1">
+                <div className="flex flex-col gap-0.5">
+                  {item.items!.map((subItem) => renderNavItem(subItem, true))}
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+          ) : (
+            <Tooltip key={`tooltip-${item.title}`}>
+              <TooltipTrigger asChild>
+                <div
+                  className={cn(
+                    "flex items-center gap-3 rounded-md py-2 text-sm font-medium hover:bg-muted",
+                    "text-muted-foreground hover:text-accent-foreground",
+                    item.disabled &&
+                      "cursor-not-allowed opacity-80 hover:bg-transparent hover:text-muted-foreground",
+                  )}
+                >
+                  <span className="flex size-full items-center justify-center">
+                    <Icon className="size-5" />
+                  </span>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent side="right">
+                <div className="flex flex-col gap-2">
+                  {item.items!.map((subItem) =>
+                    subItem.disabled ? (
+                      <span className="cursor-pointer text-muted-foreground">
+                        {t(subItem.title)}
+                      </span>
+                    ) : (
+                      <Link
+                        key={subItem.title}
+                        href={subItem.href || "#"}
+                        className="hover:underline"
+                      >
+                        {t(subItem.title)}
+                      </Link>
+                    ),
+                  )}
+                </div>
+              </TooltipContent>
+            </Tooltip>
+          )}
+        </Fragment>
+      );
+    }
+
+    // Regular link item
+    if (item.href) {
+      return (
+        <Fragment key={`link-fragment-${item.title}`}>
+          {isSidebarExpanded ? (
+            <Link
+              key={`link-${item.title}`}
+              href={item.disabled ? "#" : item.href}
+              className={cn(
+                "flex items-center gap-3 rounded-md p-2 text-sm font-medium hover:bg-muted",
+                path === item.href
+                  ? "bg-muted"
+                  : "text-muted-foreground hover:text-accent-foreground",
+                item.disabled &&
+                  "cursor-not-allowed opacity-80 hover:bg-transparent hover:text-muted-foreground",
+                isNested && "pl-6",
+              )}
+            >
+              <Icon className="size-5" />
+              {t(item.title)}
+              {item.badge && (
+                <Badge className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full">
+                  {item.badge}
+                </Badge>
+              )}
+            </Link>
+          ) : (
+            <Tooltip key={`tooltip-${item.title}`}>
+              <TooltipTrigger asChild>
+                <Link
+                  key={`link-tooltip-${item.title}`}
+                  href={item.disabled ? "#" : item.href}
+                  className={cn(
+                    "flex items-center gap-3 rounded-md py-2 text-sm font-medium hover:bg-muted",
+                    path === item.href
+                      ? "bg-muted"
+                      : "text-muted-foreground hover:text-accent-foreground",
+                    item.disabled &&
+                      "cursor-not-allowed opacity-80 hover:bg-transparent hover:text-muted-foreground",
+                  )}
+                >
+                  <span className="flex size-full items-center justify-center">
+                    <Icon className="size-5" />
+                  </span>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="right">{t(item.title)}</TooltipContent>
+            </Tooltip>
+          )}
+        </Fragment>
+      );
+    }
+
+    return null;
+  };
+
   return (
     <TooltipProvider delayDuration={0}>
-      <div className="sticky top-0 h-full">
+      <div className="sticky top-0 z-[40] h-full">
         <ScrollArea className="h-full overflow-y-auto border-r">
           <aside
             className={cn(
@@ -55,8 +226,6 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
           >
             <div className="flex h-full max-h-screen flex-1 flex-col gap-2">
               <div className="flex h-14 items-center gap-2 p-4 lg:h-[60px]">
-                {/* {isSidebarExpanded ? <ProjectSwitcher /> : null} */}
-
                 {isSidebarExpanded && (
                   <>
                     <Icons.logo />
@@ -105,61 +274,7 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
                         ) : (
                           <div className="h-4" />
                         )}
-                        {section.items.map((item) => {
-                          const Icon = Icons[item.icon || "arrowRight"];
-                          return (
-                            item.href && (
-                              <Fragment key={`link-fragment-${item.title}`}>
-                                {isSidebarExpanded ? (
-                                  <Link
-                                    key={`link-${item.title}`}
-                                    href={item.disabled ? "#" : item.href}
-                                    className={cn(
-                                      "flex items-center gap-3 rounded-md p-2 text-sm font-medium hover:bg-muted",
-                                      path === item.href
-                                        ? "bg-muted"
-                                        : "text-muted-foreground hover:text-accent-foreground",
-                                      item.disabled &&
-                                        "cursor-not-allowed opacity-80 hover:bg-transparent hover:text-muted-foreground",
-                                    )}
-                                  >
-                                    <Icon className="size-5" />
-                                    {t(item.title)}
-                                    {item.badge && (
-                                      <Badge className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full">
-                                        {item.badge}
-                                      </Badge>
-                                    )}
-                                  </Link>
-                                ) : (
-                                  <Tooltip key={`tooltip-${item.title}`}>
-                                    <TooltipTrigger asChild>
-                                      <Link
-                                        key={`link-tooltip-${item.title}`}
-                                        href={item.disabled ? "#" : item.href}
-                                        className={cn(
-                                          "flex items-center gap-3 rounded-md py-2 text-sm font-medium hover:bg-muted",
-                                          path === item.href
-                                            ? "bg-muted"
-                                            : "text-muted-foreground hover:text-accent-foreground",
-                                          item.disabled &&
-                                            "cursor-not-allowed opacity-80 hover:bg-transparent hover:text-muted-foreground",
-                                        )}
-                                      >
-                                        <span className="flex size-full items-center justify-center">
-                                          <Icon className="size-5" />
-                                        </span>
-                                      </Link>
-                                    </TooltipTrigger>
-                                    <TooltipContent side="right">
-                                      {t(item.title)}
-                                    </TooltipContent>
-                                  </Tooltip>
-                                )}
-                              </Fragment>
-                            )
-                          );
-                        })}
+                        {section.items.map((item) => renderNavItem(item))}
                       </section>
                     ),
                 )}
@@ -200,8 +315,113 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
 export function MobileSheetSidebar({ links }: DashboardSidebarProps) {
   const path = usePathname();
   const [open, setOpen] = useState(false);
+  const [openCollapsibles, setOpenCollapsibles] = useState<Set<string>>(
+    new Set(),
+  );
   const { isSm, isMobile } = useMediaQuery();
   const t = useTranslations("System");
+
+  const toggleCollapsible = (itemTitle: string) => {
+    setOpenCollapsibles((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(itemTitle)) {
+        newSet.delete(itemTitle);
+      } else {
+        newSet.add(itemTitle);
+      }
+      return newSet;
+    });
+  };
+
+  // Auto-open collapsibles that contain the current path
+  useEffect(() => {
+    links.forEach((section) => {
+      section.items.forEach((item) => {
+        if (item.items) {
+          const hasActivePath = item.items.some(
+            (subItem) => subItem.href === path,
+          );
+          if (hasActivePath) {
+            setOpenCollapsibles((prev) => new Set(prev).add(item.title));
+          }
+        }
+      });
+    });
+  }, [path, links]);
+
+  const renderMobileNavItem = (item: NavItem, isNested = false) => {
+    const Icon = item.icon ? Icons[item.icon] : () => null;
+    const hasSubItems = item.items && item.items.length > 0;
+    const isOpen = openCollapsibles.has(item.title);
+
+    // Item with sub-items (collapsible)
+    if (hasSubItems) {
+      return (
+        <Collapsible
+          key={`nav-item-${item.title}`}
+          open={isOpen}
+          onOpenChange={() => toggleCollapsible(item.title)}
+        >
+          <CollapsibleTrigger
+            className={cn(
+              "flex w-full items-center gap-3 rounded-md p-2 text-sm font-medium hover:bg-muted",
+              "text-muted-foreground hover:text-accent-foreground",
+              item.disabled &&
+                "cursor-not-allowed opacity-80 hover:bg-transparent hover:text-muted-foreground",
+            )}
+          >
+            <Icon className="size-5" />
+            {t(item.title)}
+            <Icons.chevronDown
+              className={cn(
+                "ml-auto size-4 transition-transform",
+                isOpen && "rotate-180",
+              )}
+            />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="pl-4 pt-1">
+            <div className="flex flex-col gap-0.5">
+              {item.items!.map((subItem) => renderMobileNavItem(subItem, true))}
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+      );
+    }
+
+    // Regular link item
+    if (item.href) {
+      return (
+        <Fragment key={`link-fragment-${item.title}`}>
+          <Link
+            key={`link-${item.title}`}
+            onClick={() => {
+              if (!item.disabled) setOpen(false);
+            }}
+            href={item.disabled ? "#" : item.href}
+            className={cn(
+              "flex items-center gap-3 rounded-md p-2 text-sm font-medium hover:bg-muted",
+              path === item.href
+                ? "bg-muted"
+                : "text-muted-foreground hover:text-accent-foreground",
+              item.disabled &&
+                "cursor-not-allowed opacity-80 hover:bg-transparent hover:text-muted-foreground",
+              isNested && "pl-6",
+            )}
+          >
+            <Icon className="size-5" />
+            {t(item.title)}
+            {item.badge && (
+              <Badge className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full">
+                {item.badge}
+              </Badge>
+            )}
+          </Link>
+        </Fragment>
+      );
+    }
+
+    return null;
+  };
 
   if (isSm || isMobile) {
     return (
@@ -224,7 +444,6 @@ export function MobileSheetSidebar({ links }: DashboardSidebarProps) {
                   href="/"
                   className="flex items-center gap-2 text-lg font-semibold"
                 >
-                  {/* <Icons.logo /> */}
                   <Image src="/favicon.ico" alt="logo" width={20} height={20} />
                   <span
                     style={{ fontFamily: "Bahamas Bold" }}
@@ -245,38 +464,7 @@ export function MobileSheetSidebar({ links }: DashboardSidebarProps) {
                           {t(section.title)}
                         </p>
 
-                        {section.items.map((item) => {
-                          const Icon = Icons[item.icon || "arrowRight"];
-                          return (
-                            item.href && (
-                              <Fragment key={`link-fragment-${item.title}`}>
-                                <Link
-                                  key={`link-${item.title}`}
-                                  onClick={() => {
-                                    if (!item.disabled) setOpen(false);
-                                  }}
-                                  href={item.disabled ? "#" : item.href}
-                                  className={cn(
-                                    "flex items-center gap-3 rounded-md p-2 text-sm font-medium hover:bg-muted",
-                                    path === item.href
-                                      ? "bg-muted"
-                                      : "text-muted-foreground hover:text-accent-foreground",
-                                    item.disabled &&
-                                      "cursor-not-allowed opacity-80 hover:bg-transparent hover:text-muted-foreground",
-                                  )}
-                                >
-                                  <Icon className="size-5" />
-                                  {t(item.title)}
-                                  {item.badge && (
-                                    <Badge className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full">
-                                      {item.badge}
-                                    </Badge>
-                                  )}
-                                </Link>
-                              </Fragment>
-                            )
-                          );
-                        })}
+                        {section.items.map((item) => renderMobileNavItem(item))}
                       </section>
                     ),
                 )}
@@ -303,10 +491,6 @@ export function MobileSheetSidebar({ links }: DashboardSidebarProps) {
                     v{pkg.version}
                   </Link>
                 </div>
-
-                {/* <div className="mt-auto">
-                  <UpgradeCard />
-                </div> */}
               </nav>
             </div>
           </ScrollArea>

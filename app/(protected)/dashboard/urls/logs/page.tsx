@@ -4,14 +4,11 @@ import { getCurrentUser } from "@/lib/session";
 import { constructMetadata } from "@/lib/utils";
 import { DashboardHeader } from "@/components/dashboard/header";
 
-import AppConfigs from "./app-configs";
-import DomainList from "./domain-list";
-import PlanList from "./plan-list";
-import S3Configs from "./s3-list";
+import LiveLog from "../live-logs";
 
 export const metadata = constructMetadata({
-  title: "System Settings",
-  description: "",
+  title: "Live Logs",
+  description: "Display link's real-time live logs.",
 });
 
 export default async function DashboardPage() {
@@ -21,9 +18,8 @@ export default async function DashboardPage() {
 
   return (
     <>
-      <DashboardHeader heading="System Settings" text="" />
-      <AppConfigs />
-      <S3Configs />
+      <DashboardHeader heading="Live Logs" text="" />
+      <LiveLog live={true} />
     </>
   );
 }

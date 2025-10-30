@@ -3,7 +3,7 @@
   "short_name": "WR.DO",
   "description": "All-in-one domain platform with short links, temp email, subdomain management, file storage, and open APIs.",
   "appid": "com.wr.do",
-  "versionName": "1.1.6",
+  "versionName": "1.1.7",
   "versionCode": "1",
   "start_url": "/",
   "orientation": "portrait",

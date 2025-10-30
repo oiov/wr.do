@@ -579,21 +579,7 @@ export const CodeLight = ({ content }: { content: string }) => {
                 {i + 1}
               </span>
               {/* Code content */}
-              <span className="text-blue-400">
-                {line
-                  .replace(
-                    /function/,
-                    (match) => `<span class="text-purple-400">${match}</span>`,
-                  )
-                  .replace(
-                    /"[^"]*"/,
-                    (match) => `<span class="text-green-400">${match}</span>`,
-                  )
-                  .replace(
-                    /console/,
-                    (match) => `<span class="text-yellow-400">${match}</span>`,
-                  )}
-              </span>
+              <span className="text-blue-400">{line}</span>
             </div>
           ))}
         </code>

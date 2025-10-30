@@ -7,6 +7,7 @@ import {
   ArrowUpRight,
   BookOpen,
   BotMessageSquare,
+  Boxes,
   Braces,
   Bug,
   Calendar,
@@ -39,6 +40,7 @@ import {
   Inbox,
   Info,
   Laptop,
+  Layers,
   LayoutGrid,
   LayoutPanelLeft,
   Link,
@@ -115,7 +117,9 @@ export const Icons = {
   scanQrCode: ScanQrCode,
   monitorDown: MonitorDown,
   shieldCheck: ShieldCheck,
+  layers: Layers,
   databaseZap: DatabaseZap,
+  boxes: Boxes,
   cloudUpload: ({ ...props }: LucideProps) => (
     <svg
       role="presentation"

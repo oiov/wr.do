@@ -647,17 +647,6 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
     </>
   );
 
-  const rendLogs = () => (
-    <div className="mt-6 space-y-3">
-      {action.indexOf("admin") > -1 ? <LiveLog admin={true} /> : <LiveLog />}
-      <ApiReference
-        badge="POST /api/v1/short"
-        target="creating short urls"
-        link="/docs/short-urls#api-reference"
-      />
-    </div>
-  );
-
   return (
     <>
       <Tabs
@@ -677,13 +666,6 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
             <TabsTrigger onClick={() => setCurrentView("Grid")} value="Grid">
               <Icons.layoutGrid className="size-4" />
               {/* Grid */}
-            </TabsTrigger>
-            <TabsTrigger
-              onClick={() => setCurrentView("Realtime")}
-              value="Realtime"
-            >
-              <Icons.globe className="size-4 text-blue-500" />
-              {/* Realtime */}
             </TabsTrigger>
             {selectedUrl?.id && (
               <TabsTrigger
@@ -732,16 +714,11 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
           {pathname !== "/dashboard" && <UrlStatus action={action} />}
           {rendeSeachInputs()}
           {rendeList()}
-          {rendLogs()}
         </TabsContent>
         <TabsContent className="space-y-3" value="Grid">
           {pathname !== "/dashboard" && <UrlStatus action={action} />}
           {rendeSeachInputs()}
           {rendeGrid()}
-          {rendLogs()}
-        </TabsContent>
-        <TabsContent value="Realtime">
-          {action.indexOf("admin") > -1 ? <Globe isAdmin={true} /> : <Globe />}
         </TabsContent>
         {selectedUrl?.id && (
           <TabsContent value={selectedUrl.id}>

@@ -47,10 +47,16 @@ export interface LogEntry {
   isNew?: boolean; // New property to track newly added logs
 }
 
-export default function LiveLog({ admin = false }: { admin?: boolean }) {
+export default function LiveLog({
+  admin = false,
+  live = false,
+}: {
+  admin?: boolean;
+  live?: boolean;
+}) {
   const { theme } = useTheme();
   const { mutate } = useSWRConfig();
-  const [isLive, setIsLive] = useState(false);
+  const [isLive, setIsLive] = useState(live);
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [limitDiplay, setLimitDisplay] = useState(100);
   const newLogsRef = useRef<Set<string>>(new Set()); // Track new log keys
