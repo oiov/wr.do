@@ -120,6 +120,16 @@ export const sidebarLinks: SidebarNavItem[] = [
             title: "Cloud Storage Manage",
             authorizeOnly: UserRole.ADMIN,
           },
+          {
+            href: "/admin/urls/analytics",
+            title: "Analytics",
+            authorizeOnly: UserRole.ADMIN,
+          },
+          {
+            href: "/admin/urls/logs",
+            title: "Ip Logs",
+            authorizeOnly: UserRole.ADMIN,
+          },
         ],
       },
       {
