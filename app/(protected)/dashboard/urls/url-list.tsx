@@ -134,6 +134,10 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
     Record<string, number>
   >({});
 
+  const [searchType, setSearchType] = useState<"slug" | "target" | "userName">(
+    "slug",
+  );
+
   const { mutate } = useSWRConfig();
   const { data, isLoading } = useSWR<{
     total: number;
@@ -205,10 +209,6 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
   );
 
   const renderSearchInputs = () => {
-    const [searchType, setSearchType] = useState<
-      "slug" | "target" | "userName"
-    >("slug");
-
     const getCurrentSearchValue = () => {
       switch (searchType) {
         case "slug":
