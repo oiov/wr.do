@@ -233,7 +233,10 @@
     "Email Service Configs": "邮件服务商",
     "Email Provider": "邮件提供商",
     "Resend API Key": "Resend 密钥",
-    "Brevo API Key": "Brevo 密钥"
+    "Brevo API Key": "Brevo 密钥",
+    "Link Slug": "后缀",
+    "Link Target": "目标链接",
+    "Username": "用户名"
   },
   "Components": {
     "Dashboard": "用户面板",

@@ -81,7 +81,7 @@ export default function DomainList({ user, action }: DomainListProps) {
   const [currentEditDomain, setCurrentEditDomain] =
     useState<DomainFormData | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(15);
   const [searchParams, setSearchParams] = useState({
     slug: "",
     target: "",

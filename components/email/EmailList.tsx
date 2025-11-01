@@ -54,7 +54,7 @@ export default function EmailList({
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isAutoRefresh, setIsAutoRefresh] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(15);
   const [selectedEmails, setSelectedEmails] = useState<string[]>([]);
   const [showMutiCheckBox, setShowMutiCheckBox] = useState(false);
 

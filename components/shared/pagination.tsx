@@ -40,7 +40,7 @@ export function PaginationWrapper({
   size?: "small" | "medium" | "large";
 }) {
   // Page size options
-  const pageSizeOptions = [10, 20, 50, 100];
+  const pageSizeOptions = [10, 15, 20, 50, 100];
 
   // Calculate total pages based on pageSize
   const totalPages = Math.ceil(total / pageSize);

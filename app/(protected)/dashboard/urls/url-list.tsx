@@ -30,6 +30,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
@@ -113,7 +120,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
     null,
   );
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(15);
   const [isShowStats, setShowStats] = useState(false);
   const [isShowQrcode, setShowQrcode] = useState(false);
   const [selectedUrl, setSelectedUrl] = useState<ShortUrlFormData | null>(null);
@@ -197,80 +204,101 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
     </EmptyPlaceholder>
   );
 
-  const rendeSeachInputs = () => (
-    <div className="mb-2 flex-row items-center gap-2 space-y-2 sm:flex sm:space-y-0">
-      <div className="relative w-full">
-        <Input
-          className="h-8 text-xs md:text-xs"
-          placeholder={t("Search by slug") + "..."}
-          value={searchParams.slug}
-          onChange={(e) => {
-            setSearchParams({
-              ...searchParams,
-              slug: e.target.value,
-            });
-          }}
-        />
-        {searchParams.slug && (
-          <Button
-            className="absolute right-2 top-1/2 h-6 -translate-y-1/2 rounded-full px-1 text-gray-500 hover:text-gray-700"
-            onClick={() => setSearchParams({ ...searchParams, slug: "" })}
-            variant={"ghost"}
-          >
-            <Icons.close className="size-3" />
-          </Button>
-        )}
-      </div>
+  const renderSearchInputs = () => {
+    const [searchType, setSearchType] = useState<
+      "slug" | "target" | "userName"
+    >("slug");
 
-      <div className="relative w-full">
-        <Input
-          className="h-8 text-xs md:text-xs"
-          placeholder={t("Search by target") + "..."}
-          value={searchParams.target}
-          onChange={(e) => {
-            setSearchParams({
-              ...searchParams,
-              target: e.target.value,
-            });
-          }}
-        />
-        {searchParams.target && (
-          <Button
-            className="absolute right-2 top-1/2 h-6 -translate-y-1/2 rounded-full px-1 text-gray-500 hover:text-gray-700"
-            onClick={() => setSearchParams({ ...searchParams, target: "" })}
-            variant={"ghost"}
-          >
-            <Icons.close className="size-3" />
-          </Button>
-        )}
-      </div>
+    const getCurrentSearchValue = () => {
+      switch (searchType) {
+        case "slug":
+          return searchParams.slug;
+        case "target":
+          return searchParams.target;
+        case "userName":
+          return searchParams.userName;
+        default:
+          return "";
+      }
+    };
 
-      {user.role === "ADMIN" && (
-        <div className="relative w-full">
+    const handleSearchChange = (value: string) => {
+      setSearchParams({
+        ...searchParams,
+        slug: searchType === "slug" ? value : "",
+        target: searchType === "target" ? value : "",
+        userName: searchType === "userName" ? value : "",
+      });
+    };
+
+    const handleClearSearch = () => {
+      handleSearchChange("");
+    };
+
+    const getPlaceholder = () => {
+      switch (searchType) {
+        case "slug":
+          return t("Search by slug") + "...";
+        case "target":
+          return t("Search by target") + "...";
+        case "userName":
+          return t("Search by username") + "...";
+        default:
+          return t("Search") + "...";
+      }
+    };
+
+    const searchOptions = [
+      { value: "slug", label: t("Link Slug") },
+      { value: "target", label: t("Link Target") },
+      ...(user.role === "ADMIN"
+        ? [{ value: "userName", label: t("Username") }]
+        : []),
+    ];
+
+    const currentSearchValue = getCurrentSearchValue();
+
+    return (
+      <div className="ml-auto flex items-center">
+        <Select
+          value={searchType}
+          onValueChange={(value: typeof searchType) => setSearchType(value)}
+        >
+          <SelectTrigger className="h-10 w-[85px] rounded-r-none bg-muted text-sm">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {searchOptions.map((option) => (
+              <SelectItem
+                key={option.value}
+                value={option.value}
+                className="text-sm"
+              >
+                {option.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <div className="relative flex-1">
           <Input
-            className="h-8 text-xs md:text-xs"
-            placeholder={t("Search by username") + "..."}
-            value={searchParams.userName}
-            onChange={(e) => {
-              setSearchParams({
-                ...searchParams,
-                userName: e.target.value,
-              });
-            }}
+            className="h-10 rounded-l-none border-l-0 pr-8 text-sm"
+            placeholder={getPlaceholder()}
+            value={currentSearchValue}
+            onChange={(e) => handleSearchChange(e.target.value)}
           />
-          {searchParams.userName && (
+          {currentSearchValue && (
             <Button
               className="absolute right-2 top-1/2 h-6 -translate-y-1/2 rounded-full px-1 text-gray-500 hover:text-gray-700"
-              onClick={() => setSearchParams({ ...searchParams, userName: "" })}
-              variant={"ghost"}
+              onClick={handleClearSearch}
+              variant="ghost"
             >
               <Icons.close className="size-3" />
             </Button>
           )}
         </div>
-      )}
-    </div>
-  );
+      </div>
+    );
+  };
 
   const rendeClicks = (short: ShortUrlFormData) => (
     <>
@@ -650,13 +678,16 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
   return (
     <>
       <Tabs
-        className={cn("rounded-lg", pathname === "/dashboard" && "border p-6")}
+        className={cn(
+          "space-y-3 rounded-lg",
+          pathname === "/dashboard" && "border p-6",
+        )}
         value={currentView}
       >
         {/* Tabs */}
-        <div className="mb-4 flex items-center justify-between gap-2">
+        <div className="flex flex-wrap items-center justify-between gap-2">
           {pathname === "/dashboard" && (
-            <h2 className="mr-3 text-lg font-semibold">{t("Short URLs")}</h2>
+            <h2 className="mr-auto text-lg font-semibold">{t("Short URLs")}</h2>
           )}
           <TabsList>
             <TabsTrigger onClick={() => setCurrentView("List")} value="List">
@@ -678,8 +709,8 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
               </TabsTrigger>
             )}
           </TabsList>
-          {/* <p>Total: {data?.total || 0}</p> */}
-          <div className="ml-auto flex items-center justify-end gap-3">
+          <div className="flex items-center justify-end gap-3">
+            {renderSearchInputs()}
             <UrlExporter data={data?.list || []} />
             <Button
               variant={"outline"}
@@ -710,14 +741,12 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
           </div>
         </div>
 
-        <TabsContent className="space-y-3" value="List">
-          {pathname !== "/dashboard" && <UrlStatus action={action} />}
-          {rendeSeachInputs()}
+        {pathname !== "/dashboard" && <UrlStatus action={action} />}
+
+        <TabsContent className="mt-0 space-y-3" value="List">
           {rendeList()}
         </TabsContent>
-        <TabsContent className="space-y-3" value="Grid">
-          {pathname !== "/dashboard" && <UrlStatus action={action} />}
-          {rendeSeachInputs()}
+        <TabsContent className="mt-0 space-y-3" value="Grid">
           {rendeGrid()}
         </TabsContent>
         {selectedUrl?.id && (

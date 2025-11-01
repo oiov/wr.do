@@ -157,7 +157,10 @@ export const UrlExporter: React.FC<{
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className="flex items-center gap-2" variant={"outline"}>
+        <Button
+          className="flex items-center gap-2 text-nowrap"
+          variant={"outline"}
+        >
           {t("Export")}
           <Icons.chevronDown className="size-4" />
         </Button>

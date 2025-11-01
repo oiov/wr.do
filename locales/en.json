@@ -233,7 +233,10 @@
     "Email Service Configs": "Email Service Configs",
     "Email Provider": "Email Provider",
     "Resend API Key": "Resend API Key",
-    "Brevo API Key": "Brevo API Key"
+    "Brevo API Key": "Brevo API Key",
+    "Link Slug": "Slug",
+    "Link Target": "Target",
+    "Username": "Username"
   },
   "Components": {
     "Dashboard": "Dashboard",

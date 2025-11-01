@@ -1,12 +1,11 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { UserSendEmail } from "@prisma/client";
+import { User, UserSendEmail } from "@prisma/client";
 import { useTranslations } from "next-intl";
 import useSWR from "swr";
 
 import { cn, fetcher, formatDate, htmlToText, nFormatter } from "@/lib/utils";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -19,9 +18,9 @@ import {
 } from "../ui/collapsible";
 import { Switch } from "../ui/switch";
 
-export default function SendsEmailList({}: {}) {
+export default function SendsEmailList({ user }: { user: User }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(15);
   const [isAdminModel, setAdminModel] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -72,28 +71,30 @@ export default function SendsEmailList({}: {}) {
         </div>
 
         {/* Admin Mode */}
-        <div
-          onClick={() => setAdminModel(!isAdminModel)}
-          className={cn(
-            "flex cursor-pointer flex-col items-center gap-1 rounded-md bg-neutral-100 px-1 pb-1 pt-2 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-gray-700",
-            {
-              "bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-gray-700":
-                isAdminModel,
-            },
-          )}
-        >
-          <div className="flex items-center gap-1">
-            <Icons.lock className="size-3" />
-            <p className="line-clamp-1 text-start font-medium">
-              {t("Admin Mode")}
-            </p>
+        {user.role === "ADMIN" && (
+          <div
+            onClick={() => setAdminModel(!isAdminModel)}
+            className={cn(
+              "flex cursor-pointer flex-col items-center gap-1 rounded-md bg-neutral-100 px-1 pb-1 pt-2 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-gray-700",
+              {
+                "bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-gray-700":
+                  isAdminModel,
+              },
+            )}
+          >
+            <div className="flex items-center gap-1">
+              <Icons.lock className="size-3" />
+              <p className="line-clamp-1 text-start font-medium">
+                {t("Admin Mode")}
+              </p>
+            </div>
+            <Switch
+              className="scale-90"
+              checked={isAdminModel}
+              onCheckedChange={(v) => setAdminModel(v)}
+            />
           </div>
-          <Switch
-            className="scale-90"
-            checked={isAdminModel}
-            onCheckedChange={(v) => setAdminModel(v)}
-          />
-        </div>
+        )}
       </div>
       <div className="mb-4 flex items-center justify-between gap-4">
         <Input

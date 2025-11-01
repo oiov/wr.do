@@ -78,7 +78,7 @@ export default function UsersList({ user }: UrlListProps) {
   const [isShowForm, setShowForm] = useState(false);
   const [currentEditUser, setcurrentEditUser] = useState<User | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(15);
   const [searchParams, setSearchParams] = useState({
     email: "",
     userName: "",

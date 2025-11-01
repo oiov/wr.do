@@ -73,7 +73,7 @@ export default function PlanList({ user, action }: PlanListProps) {
   const [currentEditPlan, setCurrentEditPlan] =
     useState<PlanQuotaFormData | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(15);
   const [searchParams, setSearchParams] = useState({
     slug: "",
     target: "",

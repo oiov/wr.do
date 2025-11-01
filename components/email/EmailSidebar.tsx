@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { User, UserEmail } from "@prisma/client";
 import randomName from "@scaleway/random-name";
 import {
@@ -45,7 +45,6 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import { SendEmailModal } from "./SendEmailModal";
-import SendsEmailList from "./SendsEmailList";
 
 interface EmailSidebarProps {
   user: User;
@@ -83,7 +82,7 @@ export default function EmailSidebar({
   const [currentPage, setCurrentPage] = useState(1);
   const [onlyUnread, setOnlyUnread] = useState(false);
 
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(15);
 
   const { data, isLoading, error, mutate } = useSWR<{
     list: UserEmailList[];
@@ -338,6 +337,7 @@ export default function EmailSidebar({
                   "bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-gray-700":
                     onlyUnread,
                 },
+                { "col-span-2": user.role !== "ADMIN" },
               )}
               onClick={() => {
                 setOnlyUnread(!onlyUnread);
@@ -363,28 +363,30 @@ export default function EmailSidebar({
             </div>
 
             {/* Admin Mode */}
-            <div
-              onClick={() => setAdminModel(!isAdminModel)}
-              className={cn(
-                "flex cursor-pointer flex-col items-center gap-1 rounded-md bg-neutral-100 px-1 pb-1 pt-2 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-gray-700",
-                {
-                  "bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-gray-700":
-                    isAdminModel,
-                },
-              )}
-            >
-              <div className="flex items-center gap-1">
-                <Icons.lock className="size-3" />
-                <p className="line-clamp-1 text-start font-medium">
-                  {t("Admin Mode")}
-                </p>
+            {user.role === "ADMIN" && (
+              <div
+                onClick={() => setAdminModel(!isAdminModel)}
+                className={cn(
+                  "flex cursor-pointer flex-col items-center gap-1 rounded-md bg-neutral-100 px-1 pb-1 pt-2 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-gray-700",
+                  {
+                    "bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-gray-700":
+                      isAdminModel,
+                  },
+                )}
+              >
+                <div className="flex items-center gap-1">
+                  <Icons.lock className="size-3" />
+                  <p className="line-clamp-1 text-start font-medium">
+                    {t("Admin Mode")}
+                  </p>
+                </div>
+                <Switch
+                  className="scale-90"
+                  checked={isAdminModel}
+                  onCheckedChange={(v) => setAdminModel(v)}
+                />
               </div>
-              <Switch
-                className="scale-90"
-                checked={isAdminModel}
-                onCheckedChange={(v) => setAdminModel(v)}
-              />
-            </div>
+            )}
           </div>
         )}
       </div>

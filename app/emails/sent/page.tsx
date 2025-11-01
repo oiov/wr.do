@@ -14,5 +14,5 @@ export default async function SentEmailPage() {
 
   if (!user?.id) redirect("/login");
 
-  return <SendsEmailList />;
+  return <SendsEmailList user={user as any} />;
 }
