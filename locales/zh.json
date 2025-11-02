@@ -529,7 +529,8 @@
     "Build with your favorite tech stack": "使用你最喜欢的技术栈构建",
     "STATS": "STATS",
     "FEATURES": "功能特性",
-    "Tracked Clicks": "跟踪点击量"
+    "Tracked Clicks": "跟踪点击量",
+    "Activated Domains": "已激活的域名"
   },
   "Auth": {
     "Back": "返回",

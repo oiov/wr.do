@@ -1,16 +1,16 @@
-"user client";
+"use client";
 
 import { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import useSWR from "swr";
 
 import { siteConfig } from "@/config/site";
-import { cn } from "@/lib/utils";
+import { cn, fetcher } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/shared/icons";
 
-import CountUpFn from "../dashboard/count-up";
 import {
   Collapsible,
   CollapsibleContent,
@@ -29,6 +29,16 @@ export default function HeroLanding({
   userId: string | undefined;
 }) {
   const t = useTranslations("Landing");
+
+  const { data: shortDomains, isLoading } = useSWR<{ domain_name: string }[]>(
+    "/api/domain?feature=short",
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      dedupingInterval: 10000,
+    },
+  );
+
   return (
     <section className="relative space-y-6 py-12 sm:py-16">
       <div className="container flex max-w-screen-lg flex-col items-center gap-5 text-center">
@@ -95,86 +105,29 @@ export default function HeroLanding({
         <div className="group relative m-auto hidden max-w-4xl md:block">
           <div className="flex flex-col items-center md:flex-row">
             <div className="mb-4 hidden md:mb-0 md:block md:max-w-44 md:border-r md:border-gray-600 md:pr-6">
-              <p className="text-end text-sm text-black dark:text-gray-400">
-                Powering the best teams
+              <p className="text-end text-sm text-blue-600">
+                {t("Activated Domains")}
               </p>
             </div>
             <div className="relative py-6 md:w-[calc(100%-11rem)]">
               <InfiniteSlider durationOnHover={20} duration={40} gap={112}>
-                <div className="flex">
-                  <img
-                    className="mx-auto h-5 w-fit opacity-80 dark:opacity-60 dark:invert"
-                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/nvidia-TAN2JNiFDeluYk9hlkv4qXwWtfx5Cy.svg"
-                    alt="Nvidia Logo"
-                    height="20"
-                    width="auto"
-                  />
-                </div>
-
-                <div className="flex">
-                  <img
-                    className="mx-auto h-4 w-fit opacity-80 dark:opacity-60 dark:invert"
-                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/column-qYeLfzzj1ni9E7PhooLL6Mzip5Zeb4.svg"
-                    alt="Column Logo"
-                    height="16"
-                    width="auto"
-                  />
-                </div>
-                <div className="flex">
-                  <img
-                    className="mx-auto h-4 w-fit opacity-80 dark:opacity-60 dark:invert"
-                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/github-twQNbc5nAy2jUs7yh5xic8hsEfBYpQ.svg"
-                    alt="GitHub Logo"
-                    height="16"
-                    width="auto"
-                  />
-                </div>
-                <div className="flex">
-                  <img
-                    className="mx-auto h-5 w-fit opacity-80 dark:opacity-60 dark:invert"
-                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/nike-H0OCso4JdUtllUTdAverMAjJmcKVXU.svg"
-                    alt="Nike Logo"
-                    height="20"
-                    width="auto"
-                  />
-                </div>
-                <div className="flex">
-                  <img
-                    className="mx-auto h-5 w-fit opacity-80 dark:opacity-60 dark:invert"
-                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/lemonsqueezy-ZL7mmIzqR10hWcodoO19ajha8AS9VK.svg"
-                    alt="Lemon Squeezy Logo"
-                    height="20"
-                    width="auto"
-                  />
-                </div>
-                <div className="flex">
-                  <img
-                    className="mx-auto h-4 w-fit opacity-80 dark:opacity-60 dark:invert"
-                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/laravel-sDCMR3A82V8F6ycZymrDlmiFpxyUd4.svg"
-                    alt="Laravel Logo"
-                    height="16"
-                    width="auto"
-                  />
-                </div>
-                <div className="flex">
-                  <img
-                    className="mx-auto h-7 w-fit opacity-80 dark:opacity-60 dark:invert"
-                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/lilly-Jhslk9VPUVAVK2SCJmCGTEbqKMef5v.svg"
-                    alt="Lilly Logo"
-                    height="28"
-                    width="auto"
-                  />
-                </div>
-
-                <div className="flex">
-                  <img
-                    className="mx-auto h-6 w-fit opacity-80 dark:opacity-60 dark:invert"
-                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/openai-5TPubXl1hnLxeIs4ygVSLjJcUoBOCB.svg"
-                    alt="OpenAI Logo"
-                    height="24"
-                    width="auto"
-                  />
-                </div>
+                {isLoading
+                  ? [1, 2, 3, 4].map(() => (
+                      <span
+                        className="text-lg"
+                        style={{ fontFamily: "Bahamas Bold" }}
+                      >
+                        wr.do
+                      </span>
+                    ))
+                  : shortDomains?.map((domain) => (
+                      <span
+                        className="text-lg"
+                        style={{ fontFamily: "Bahamas Bold" }}
+                      >
+                        {domain.domain_name}
+                      </span>
+                    ))}
               </InfiniteSlider>
 
               <ProgressiveBlur

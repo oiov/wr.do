@@ -530,7 +530,8 @@
     "STATS": "STATS",
     "FEATURES": "FEATURES",
     "Unique Clicks": "Unique Clicks",
-    "Tracked Clicks": "Tracked Clicks"
+    "Tracked Clicks": "Tracked Clicks",
+    "Activated Domains": "Activated Domains"
   },
   "Auth": {
     "Back": "Back",
