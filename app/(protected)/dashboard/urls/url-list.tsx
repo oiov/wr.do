@@ -49,12 +49,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { ClickableTooltip } from "@/components/ui/tooltip";
 import { UrlStatus } from "@/components/dashboard/status-card";
 import { FormType } from "@/components/forms/record-form";
 import { UrlForm } from "@/components/forms/url-form";
@@ -69,8 +64,6 @@ import QRCodeEditor from "@/components/shared/qr";
 import { TimeAgoIntl } from "@/components/shared/time-ago";
 
 import { UrlExporter } from "./export";
-import Globe from "./globe";
-import LiveLog from "./live-logs";
 import UserUrlMetaInfo from "./meta";
 
 export interface UrlListProps {
@@ -244,7 +237,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
         case "userName":
           return t("Search by username") + "...";
         default:
-          return t("Search") + "...";
+          return "Filter...";
       }
     };
 
@@ -399,16 +392,17 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                   />
                 </TableCell>
                 <TableCell className="col-span-1 hidden truncate sm:flex">
-                  <TooltipProvider>
-                    <Tooltip delayDuration={200}>
-                      <TooltipTrigger className="truncate">
-                        {short.userName ?? "Anonymous"}
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        {short.userName ?? "Anonymous"}
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
+                  <ClickableTooltip
+                    className="cursor-pointer truncate"
+                    content={
+                      <div className="px-2 py-1">
+                        <p>{short.user?.name}</p>
+                        <p>{short.user?.email}</p>
+                      </div>
+                    }
+                  >
+                    {short.user?.name || short.user?.email}
+                  </ClickableTooltip>
                 </TableCell>
                 <TableCell className="col-span-1 hidden sm:flex">
                   <Switch
@@ -619,16 +613,17 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                 </div>
 
                 <div className="mt-auto flex items-center justify-end gap-1.5 text-xs text-muted-foreground">
-                  <TooltipProvider>
-                    <Tooltip delayDuration={200}>
-                      <TooltipTrigger className="truncate">
-                        {short.userName ?? "Anonymous"}
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        {short.userName ?? "Anonymous"}
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
+                  <ClickableTooltip
+                    className="cursor-pointer truncate"
+                    content={
+                      <div className="px-2 py-1">
+                        <p>{short.user?.name}</p>
+                        <p>{short.user?.email}</p>
+                      </div>
+                    }
+                  >
+                    {short.user?.name || short.user?.email}
+                  </ClickableTooltip>
                   <Separator
                     className="h-4/5"
                     orientation="vertical"

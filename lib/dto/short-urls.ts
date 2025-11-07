@@ -18,6 +18,10 @@ export interface ShortUrlFormData {
   password: string;
   createdAt?: Date;
   updatedAt?: Date;
+  user?: {
+    name: string;
+    email: string;
+  };
 }
 
 export interface UserShortUrlInfo extends ShortUrlFormData {
@@ -66,6 +70,14 @@ export async function getUserShortUrls(
       where: option,
       skip: (page - 1) * size,
       take: size,
+      include: {
+        user: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+      },
       orderBy: {
         updatedAt: "desc",
       },

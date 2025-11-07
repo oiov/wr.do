@@ -33,6 +33,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
+  ClickableTooltip,
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -347,17 +348,17 @@ export default function UserRecordsList({ user, action }: RecordListProps) {
                       )}
                     </TableCell>
                     <TableCell className="col-span-1 hidden truncate sm:flex">
-                      <TooltipProvider>
-                        <Tooltip delayDuration={200}>
-                          <TooltipTrigger className="truncate">
-                            {record.user.name ?? record.user.email}
-                          </TooltipTrigger>
-                          <TooltipContent>
+                      <ClickableTooltip
+                        className="cursor-pointer truncate"
+                        content={
+                          <div className="px-2 py-1">
                             <p>{record.user.name}</p>
-                            <p>{record.user.email}</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
+                            <p>{record.user?.email}</p>
+                          </div>
+                        }
+                      >
+                        {record.user.name || record.user.email}
+                      </ClickableTooltip>
                     </TableCell>
                     <TableCell className="col-span-1 hidden justify-center sm:flex">
                       <TimeAgoIntl
