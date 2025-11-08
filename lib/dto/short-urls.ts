@@ -313,6 +313,34 @@ export async function updateUserShortUrl(data: ShortUrlFormData) {
   }
 }
 
+export async function updateUserShortUrlAdmin(
+  data: ShortUrlFormData,
+  newUserId,
+) {
+  try {
+    const res = await prisma.userUrl.update({
+      where: {
+        id: data.id,
+        userId: data.userId,
+      },
+      data: {
+        userId: newUserId,
+        target: data.target,
+        url: data.url,
+        visible: data.visible,
+        prefix: data.prefix,
+        // active: data.active,
+        expiration: data.expiration,
+        password: data.password,
+        updatedAt: new Date().toISOString(),
+      },
+    });
+    return { status: "success", data: res };
+  } catch (error) {
+    return { status: error };
+  }
+}
+
 export async function updateUserShortUrlActive(
   userId: string,
   id: string,

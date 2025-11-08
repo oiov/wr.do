@@ -61,6 +61,8 @@ export function UrlForm({
   const [currentPrefix, setCurrentPrefix] = useState(initData?.prefix || "");
   const [limitLen, setLimitLen] = useState(3);
   const t = useTranslations("List");
+  const isAdmin = action.indexOf("admin") > -1;
+  const [email, setEmail] = useState(initData?.user?.email);
 
   const {
     handleSubmit,
@@ -157,7 +159,7 @@ export function UrlForm({
       if (type === "edit") {
         const response = await fetch(`${action}/update`, {
           method: "POST",
-          body: JSON.stringify({ data, userId: initData?.userId }),
+          body: JSON.stringify({ data, userId: initData?.userId, email }),
         });
         if (!response.ok || response.status !== 200) {
           toast.error("Update Failed", {
@@ -203,6 +205,25 @@ export function UrlForm({
         {type === "add" ? t("Create short link") : t("Edit short link")}
       </div>
       <form className="p-4" onSubmit={onSubmit}>
+        {isAdmin && (
+          <div className="items-center justify-start gap-4 md:flex">
+            <FormSectionColumns required title={t("User email")}>
+              <div className="flex w-full items-center gap-2">
+                <Label className="sr-only" htmlFor="content">
+                  {t("User email")}
+                </Label>
+                <Input
+                  id="email"
+                  className="flex-1 shadow-inner"
+                  size={32}
+                  value={email || ""}
+                  onChange={(e) => setEmail(e.target.value)}
+                  // disabled={type === "edit"}
+                />
+              </div>
+            </FormSectionColumns>
+          </div>
+        )}
         <div className="items-center justify-start gap-4 md:flex">
           <FormSectionColumns title={t("Target URL")} required>
             <div className="flex w-full items-center gap-2">
