@@ -20,6 +20,7 @@ import {
   removeUrlPrefix,
 } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -371,7 +372,9 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                     prefetch={false}
                     title={short.url}
                   >
-                    {short.url}
+                    <Badge variant="outline">
+                      {short.prefix}/{short.url}
+                    </Badge>
                   </Link>
                   <CopyButton
                     value={`${short.prefix}/${short.url}${short.password ? `?password=${short.password}` : ""}`}
@@ -522,7 +525,7 @@ export default function UserUrlsList({ user, action }: UrlListProps) {
                         prefetch={false}
                         title={short.url}
                       >
-                        {short.url}
+                        {short.prefix}/{short.url}
                       </Link>
                       <CopyButton
                         value={`https://${short.prefix}/${short.url}${short.password ? `?password=${short.password}` : ""}`}
