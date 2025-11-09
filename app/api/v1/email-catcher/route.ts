@@ -2,7 +2,6 @@ import { getConfiguredEmailDomains } from "@/lib/dto/domains";
 import { OriginalEmail, saveForwardEmail } from "@/lib/dto/email";
 import { getMultipleConfigs } from "@/lib/dto/system-config";
 import { brevoSendEmail } from "@/lib/email/brevo";
-import { resend } from "@/lib/email/resend";
 
 export async function POST(req: Request) {
   try {
@@ -289,15 +288,15 @@ function formatEmailForTelegram(
       .replace("{{from}}", fromInfo)
       .replace("{{to}}", email.to)
       .replace("{{subject}}", email.subject || "No Subject")
-      .replace("{{text}}", email.text || "No content")
-      .replace("{{date}}", email.date || "--");
+      .replace("{{text}}", email.html || email.text || "No Content")
+      .replace("{{date}}", new Date(email.date || "").toLocaleString() || "--");
   }
 
   const subject = email.subject || "No Subject";
   const content =
-    email.text || email.html?.replace(/<[^>]*>/g, "") || "No content";
+    email.text || email.html?.replace(/<[^>]*>/g, "") || "No Content";
 
-  const date = email.date || "Unknown date";
+  const date = new Date(email.date || "").toLocaleString() || "--";
 
   // 限制内容长度
   const maxContentLength = 2000;
@@ -306,12 +305,12 @@ function formatEmailForTelegram(
       ? content.substring(0, maxContentLength) + "..."
       : content;
 
-  let message = `📧 *New Email*\n\n`;
+  let message = `📮 *New Email*\n\n`;
   message += `*From:* \`${fromInfo}\`\n`;
   message += `*To:* \`${email.to}\`\n`;
   message += `*Subject:* ${subject}\n`;
-  message += `*Date:* ${date}\n`;
-  message += `\n\`\`\`Content\n${truncatedContent}\n\`\`\``;
+  message += `*Date:* ${new Date(date).toLocaleString()}\n`;
+  message += `*Content:* \n${content}`;
 
   return message;
 }
