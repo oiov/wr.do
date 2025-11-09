@@ -299,7 +299,7 @@ function formatEmailForTelegram(
   const date = new Date(email.date || "").toLocaleString() || "--";
 
   // 限制内容长度
-  const maxContentLength = 2000;
+  const maxContentLength = 3800; // Maximum Telegram message length is 4096
   const truncatedContent =
     content.length > maxContentLength
       ? content.substring(0, maxContentLength) + "..."
@@ -310,7 +310,7 @@ function formatEmailForTelegram(
   message += `*To:* \`${email.to}\`\n`;
   message += `*Subject:* ${subject}\n`;
   message += `*Date:* ${new Date(date).toLocaleString()}\n`;
-  message += `*Content:* \n${content}`;
+  message += `*Content:* \n${truncatedContent}`;
 
   return message;
 }
