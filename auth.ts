@@ -14,6 +14,7 @@ declare module "next-auth" {
       team: string;
       active: number;
       apiKey: string;
+      emailVerified: Date;
     } & DefaultSession["user"];
   }
 }
@@ -49,6 +50,7 @@ export const {
         session.user.active = token.active as number;
         session.user.team = token.team as string;
         session.user.apiKey = token.apiKey as string;
+        session.user.emailVerified = token.emailVerified as Date;
       }
 
       return session;
@@ -67,6 +69,7 @@ export const {
       token.active = dbUser.active;
       token.team = dbUser.team || "free";
       token.apiKey = dbUser.apiKey;
+      token.emailVerified = dbUser.emailVerified;
 
       return token;
     },

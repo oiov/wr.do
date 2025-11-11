@@ -308,8 +308,8 @@ export default function AppConfigs({}: {}) {
               {configs && (
                 <div className="flex w-full items-start gap-2">
                   <Textarea
-                    className="h-16 max-h-32 min-h-9 resize-y bg-white"
-                    placeholder="Support HTML format, such as <div>info</div>"
+                    className="h-16 max-h-32 min-h-9 resize-y bg-white dark:bg-neutral-700"
+                    placeholder="Support HTML format, such as <div class='text-red-500'>Info</div>"
                     rows={5}
                     // defaultValue={configs.system_notification}
                     value={notification}

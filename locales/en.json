@@ -778,6 +778,11 @@
     "Forward Email Targets": "Forward Email Targets",
     "Set forward email address targets, split by comma if more than one, such as: 1@a-com,2@b-com, Only works when email forwarding is enabled": "Set forward email address targets, split by comma if more than one, such as: 1@a.com,2@b.com, Only works when email forwarding is enabled",
     "Email Forward White List": "Email Forward White List",
-    "Set email forward white list, split by comma, such as: a-wrdo,b-wrdo": "Set email forward white list (Catch-All and Email Forwarding are both enabled), split by comma, such as: a@wr.do,b@wr.do; If not set, will forward all emails"
+    "Set email forward white list, split by comma, such as: a-wrdo,b-wrdo": "Set email forward white list (Catch-All and Email Forwarding are both enabled), split by comma, such as: a@wr.do,b@wr.do; If not set, will forward all emails",
+    "Your Account Email": "Your Account Email",
+    "Bind your account to an email address": "Bind your account to an email address",
+    "Email": "Email",
+    "Unverified": "Unverified",
+    "Verified at {date}": "Verified at {date}"
   }
 }

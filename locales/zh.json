@@ -777,6 +777,11 @@
     "Forward Email Targets": "目标收件箱",
     "Set forward email address targets, split by comma if more than one, such as: 1@a-com,2@b-com, Only works when email forwarding is enabled": "设置转发目标邮箱，多个邮件地址请用逗号分隔，例如：1@a.com,2@b.com，仅在启用邮件转发时生效",
     "Email Forward White List": "转发邮箱白名单",
-    "Set email forward white list, split by comma, such as: a-wrdo,b-wrdo": "设置转发邮箱白名单(Catch-All 和 Email Forwarding 同时生效)，多个邮箱地址请用逗号分隔，例如：a@wr.do,b@wr.do; 若不设置，则转发所有邮件"
+    "Set email forward white list, split by comma, such as: a-wrdo,b-wrdo": "设置转发邮箱白名单(Catch-All 和 Email Forwarding 同时生效)，多个邮箱地址请用逗号分隔，例如：a@wr.do,b@wr.do; 若不设置，则转发所有邮件",
+    "Your Account Email": "账户邮箱",
+    "Bind your account to an email address": "为你的账户绑定一个邮箱",
+    "Unverified": "未验证邮箱",
+    "Email": "邮箱",
+    "Verified at {date}": "已于 {date} 验证"
   }
 }
