@@ -45,10 +45,14 @@ export function SendEmailModal({
       toast.error("No email address selected");
       return;
     }
-    console.log("sendForm", sendForm);
-    // return;
+
     if (!sendForm.to || !sendForm.subject || !sendForm.html) {
       toast.error("Please fill in all required fields");
+      return;
+    }
+
+    if (sendForm.text.trim().length < 10) {
+      toast.error("Email content must be at least 10 characters");
       return;
     }
 
