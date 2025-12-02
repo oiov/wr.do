@@ -3,7 +3,7 @@
   <h1>WR.DO</h1>
   <p>一站式域名服务平台，集成短链服务、临时邮箱、子域名管理、文件存储和开放API接口。</p>
   <p>
-    <a href="https://wr.do">官方云部署站点</a> · <a href="https://wr.do/docs/developer">部署文档</a> · <a href="https://wr.do/feedback">反馈讨论</a> · <a href="/README-en.md">English</a> | 简体中文
+    <a href="https://like.do">官方站点</a> · <a href="https://wr.do/docs/developer">部署文档</a> · <a href="https://wr.do/feedback">反馈讨论</a> · <a href="/README-en.md">English</a> | 简体中文
   </p>
   <img alt="Vercel" src="https://img.shields.io/badge/vercel-online-55b467?labelColor=black&logo=vercel&style=flat-square">
   <img alt="Release" src="https://img.shields.io/github/actions/workflow/status/oiov/wr.do/docker-build-push.yml?label=release&labelColor=black&logo=githubactions&logoColor=white&style=flat-square">
@@ -17,6 +17,8 @@
 	<img src="https://img.shields.io/github/license/oiov/wr.do?style=flat-square" alt="MIT"/><br><br>
   <img width="15" src="https://storage.wr.do/2025/11/20/561763627504_.pic.jpg" /> 免费体验 Sora AI 视频生成 👉 <a href="https://sora.hk/i/5KY5N1FL">点击注册</a>
 </div>
+
+> **注意**：开源版域名 wr.do 正在迁移至 like.do，本次迁移仅迁移用户短链以及用户邮箱数据（不包括收件箱数据），若您在 wr.do 创建了相关资源，请在 https://like.do 注册账户后，前往 https://like.do/dashboard/migrate-wrdo 填写您的历史数据信息自动迁移，本站点将在 2025 年 12 月 31 日完全迁移至 like.do，域名 wr.do 将作为 like.do 的业务域名继续运营，开源版将仅提供demo预览域名(https://likedo.vercel.app)。目前已迁移的域名：ig.do、uv.do
 
 ## 截图预览
 
