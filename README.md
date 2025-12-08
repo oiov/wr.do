@@ -19,7 +19,12 @@
 </div>
 
 <br/>
-> **注意**：开源版域名 wr.do 已至官方运营版 like.do，本次迁移仅迁移用户短链以及用户邮箱数据（不包括收件箱数据），若您在 wr.do 创建了相关资源，请在 like.do 注册账户后，前往 [migrate-wrdo](https://like.do/dashboard/migrate-wrdo) 填写您的历史数据信息自动迁移，后续开源版演示域名变更为 https://likedo.vercel.app
+
+> 注意：开源版域名 wr.do 已至官方运营版 like.do，本次迁移仅迁移用户短链以及用户邮箱数据（不包括收件箱数据），若您在 wr.do 创建了相关资源，请在 like.do 注册账户后，前往 [migrate-wrdo](https://like.do/dashboard/migrate-wrdo) 填写您的历史数据信息自动迁移，后续开源版演示域名变更为 https://likedo.vercel.app
+> 
+> 🎉 官方运营版主要功能与开源版保持一致，新增 AI 补全短链信息，支持创建专属私有子域名作为短链域名；AI 回复邮件、自动生成邮件模板、用户可单独设置邮箱转发地址等新特性，前往体验 👉 [like.do](https://like.do)
+
+
 
 ## 截图预览
 
@@ -244,5 +249,6 @@ pnpm dev
 ## 开源协议
 
 [MIT](/LICENSE.md)
+
 
 
