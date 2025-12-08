@@ -18,7 +18,8 @@
   <img width="15" src="https://storage.wr.do/2025/11/20/561763627504_.pic.jpg" /> 免费体验 Sora AI 视频生成 👉 <a href="https://sora.hk/i/5KY5N1FL">点击注册</a>
 </div>
 
-> **注意**：开源版域名 wr.do 正在迁移至 like.do，本次迁移仅迁移用户短链以及用户邮箱数据（不包括收件箱数据），若您在 wr.do 创建了相关资源，请在 https://like.do 注册账户后，前往 https://like.do/dashboard/migrate-wrdo 填写您的历史数据信息自动迁移，本站点将在 2025 年 12 月 31 日完全迁移至 like.do，域名 wr.do 将作为 like.do 的业务域名继续运营，开源版将仅提供demo预览域名(https://likedo.vercel.app)。目前已迁移的域名：ig.do、uv.do
+<br/>
+> **注意**：开源版域名 wr.do 已至官方运营版 like.do，本次迁移仅迁移用户短链以及用户邮箱数据（不包括收件箱数据），若您在 wr.do 创建了相关资源，请在 like.do 注册账户后，前往 [migrate-wrdo](https://like.do/dashboard/migrate-wrdo) 填写您的历史数据信息自动迁移，后续开源版演示域名变更为 https://likedo.vercel.app
 
 ## 截图预览
 
@@ -243,4 +244,5 @@ pnpm dev
 ## 开源协议
 
 [MIT](/LICENSE.md)
+
 
