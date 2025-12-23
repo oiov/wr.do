@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://likedo.vercel.app/_static/images/x-preview.png" alt="WR.DO" >
+  <!-- <img src="https://likedo.vercel.app/_static/images/x-preview.png" alt="WR.DO" > -->
   <h1>WR.DO</h1>
   <p>一站式域名服务平台，集成短链服务、临时邮箱、子域名管理、文件存储和开放API接口。</p>
   <p>
@@ -17,11 +17,10 @@
 	<img src="https://img.shields.io/github/license/oiov/wr.do?style=flat-square" alt="MIT"/><br><br>
   <img width="15" src="https://storage.wr.do/2025/11/20/561763627504_.pic.jpg" /> 免费体验 Sora AI 视频生成 👉 <a href="https://sora.hk/i/5KY5N1FL">点击注册</a>
 </div>
-
-
+
 ### 🔄 版本说明
 
-经过一年的开源运营，WR.DO 已积累了稳定的用户基础和成熟的技术条件。**为了持续维护和提供更好的服务**，我们正式推出官方运营版 **LikeDo**。
+经过一年的开源运营，WR.DO 已积累了稳定的用户基础和成熟的技术条件。**为了持续维护和提供更好的服务**，我们正式推出官方运营版 **LikeDo**。
 
 - **开源版 WR.DO**：将继续维护，Demo 地址变更为 https://likedo.vercel.app
 - **官方运营版 LikeDo**：独立数据库运营，域名为 https://like.do
@@ -41,9 +40,6 @@
 2. 前往 [数据迁移页面](https://like.do/dashboard/migrate-wrdo) 填写历史数据信息
 3. 系统将自动迁移您的短链和邮箱账户（不包括收件箱历史数据）
 4. 请及时迁移您的历史数据，部分域名在停止迁移后将仅支持付费订阅用户使用，在此之前可免费迁移。
-
-立即体验官方运营版 👉 [like.do](https://like.do)
-
 
 
 ## 截图预览
@@ -238,7 +234,7 @@ pnpm dev
 
 ## 社区群组
 
-- Discord: https://discord.gg/AHPQYuZu3m
+- Discord: https://uv.do/disc
 - 微信群：
 
 <img width="300" src="https://wr.do/group" />
@@ -269,6 +265,7 @@ pnpm dev
 ## 开源协议
 
 [MIT](/LICENSE.md)
+
 
 
 
