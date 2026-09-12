@@ -20,7 +20,7 @@
 
 <img align="center" width="50%" alt="og-banner" src="https://github.com/user-attachments/assets/b338bfca-71ed-447a-bde5-18e5677cb8dc" />
 
-> 🌟 推荐 **Claude Code** 稳定 API 渠道：[nbility.dev](https://nbility.dev/register?aff=Dptp) ，支持 claude-opus-4-6 等主流 AI Coding 大模型🥳
+> 🌟 推荐 **Claude**、**OpenAI** 稳定 API 网关：[nbility.ai](https://nbility.ai//auth/register?aff=Dptp) ，支持 claude-fable-5、gpt-5.6-sol 等主流 AI Coding 大模型🥳
 
 ## 版本说明
 
