@@ -68,7 +68,7 @@ function date2unix(date: Date): number {
 export default function Realtime({ isAdmin = false }: { isAdmin?: boolean }) {
   const mountedRef = useRef(true);
   const locationDataRef = useRef<Map<string, Location>>(new Map());
-  const lastUpdateRef = useRef<string>();
+  const lastUpdateRef = useRef<string | undefined>(undefined);
   const realtimeIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const [timeRange, setTimeRange] = useState<string>("30min");
   const [time, setTime] = useState(() => {

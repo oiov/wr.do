@@ -9,8 +9,8 @@ import("./env.mjs");
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
   output: "standalone",
+  serverExternalPackages: ["@prisma/client"],
   images: {
     remotePatterns: [
       {
@@ -50,12 +50,6 @@ const nextConfig = {
         hostname: "api.dicebear.com",
       },
     ],
-  },
-  experimental: {
-    serverComponentsExternalPackages: ["@prisma/client"],
-    // serverActions: {
-    //   allowedOrigins: ["localhost:3000", process.env.NEXT_PUBLIC_APP_URL],
-    // },
   },
   rewrites() {
     return [

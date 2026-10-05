@@ -11,12 +11,12 @@ import { getCurrentUser } from "@/lib/session";
 // 查询单个 UserEmail
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const user = checkUserStatus(await getCurrentUser());
   if (user instanceof Response) return user;
 
-  const { id } = params;
+  const { id } = await params;
 
   try {
     const userEmail = await getUserEmailById(id);
@@ -39,12 +39,12 @@ export async function GET(
 // 更新 UserEmail 的 emailAddress
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const user = checkUserStatus(await getCurrentUser());
   if (user instanceof Response) return user;
 
-  const { id } = params;
+  const { id } = await params;
   const { emailAddress } = await req.json();
 
   if (!emailAddress) {
@@ -69,12 +69,12 @@ export async function PUT(
 // 删除 UserEmail
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const user = checkUserStatus(await getCurrentUser());
   if (user instanceof Response) return user;
 
-  const { id } = params;
+  const { id } = await params;
 
   try {
     await deleteUserEmail(id);

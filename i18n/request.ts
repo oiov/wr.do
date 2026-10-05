@@ -5,7 +5,7 @@ export default getRequestConfig(async () => {
   const locales = ["en", "zh"];
   const defaultLocale = "en";
 
-  const headersList = headers();
+  const headersList = await headers();
   // 获取 cookie 中的语言设置
   const cookieLanguage = headersList
     .get("cookie")

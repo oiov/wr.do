@@ -167,7 +167,7 @@ export function QRCodeSVG(props: QRPropsSVG) {
     imageSettings,
   );
 
-  let image: null | JSX.Element = null;
+  let image: null | React.ReactElement = null;
   if (imageSettings != null && calculatedImageSettings != null) {
     if (calculatedImageSettings.excavation != null) {
       cells = excavateModules(cells, calculatedImageSettings.excavation);

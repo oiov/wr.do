@@ -13,7 +13,7 @@ interface UseElementSizeOptions {
 export function useElementSize<T extends HTMLDivElement>(
   initialSize: ElementSize = { width: 0, height: 0 },
   options: UseElementSizeOptions = {},
-): { ref: React.RefObject<T>; width: number; height: number } {
+): { ref: React.RefObject<T | null>; width: number; height: number } {
   const { box = "content-box" } = options;
   const [size, setSize] = useState<ElementSize>(initialSize);
   const ref = useRef<T>(null);

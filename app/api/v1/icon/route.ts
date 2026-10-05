@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import Icon from "lucide-static";
+import * as Icon from "lucide-static";
 
 import { toCamelCase } from "@/lib/utils";
 

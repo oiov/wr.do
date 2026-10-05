@@ -126,7 +126,7 @@ export function QRCodeCanvas(props: QRPropsCanvas) {
   }, [imgSrc]);
 
   const canvasStyle = { height: size, width: size, ...style };
-  let img: JSX.Element | null = null;
+  let img: React.ReactElement | null = null;
   if (imgSrc != null) {
     img = (
       <img
