@@ -7,7 +7,7 @@ RUN apk add --no-cache libc6-compat
 
 WORKDIR /app
 
-RUN npm install -g pnpm
+RUN npm install -g pnpm@9.15.9
 
 COPY . .
 
@@ -20,7 +20,7 @@ WORKDIR /app
 
 RUN apk add --no-cache openssl
 
-RUN npm install -g pnpm
+RUN npm install -g pnpm@9.15.9
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
@@ -33,7 +33,7 @@ WORKDIR /app
 
 RUN apk add --no-cache openssl
 
-RUN npm install -g pnpm
+RUN npm install -g pnpm@9.15.9
 
 ENV NODE_ENV=production
 ENV IS_DOCKER=true
