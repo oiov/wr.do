@@ -137,7 +137,7 @@
 
 ## 自部署教程
 
-> 注意，任何部署方式都需要先配置环境变量，若部署后修改了环境变量，需要**重新部署**才会生效。
+> 部署前请先配置环境变量。修改容器运行时环境变量后，需要重建容器才会生效。
 
 ### 使用 Vercel 部署
 
@@ -147,7 +147,9 @@
 
 ### 使用 Docker Compose 部署
 
-在服务器中创建一个文件夹，进入该文件夹并新建 [docker-compose.yml](https://github.com/oiov/wr.do/blob/main/docker-compose.yml)、[.env](https://github.com/oiov/wr.do/blob/main/.env.example) 文件：
+官方镜像发布在 [GitHub Container Registry](https://github.com/oiov/wr.do/pkgs/container/wr.do%2Fwrdo)：`ghcr.io/oiov/wr.do/wrdo:main`（也可使用 `latest`）。无需在服务器上构建镜像。
+
+在服务器中创建一个文件夹，下载仓库中的 [docker-compose.yml](https://github.com/oiov/wr.do/blob/main/docker-compose.yml) 和 [.env.example](https://github.com/oiov/wr.do/blob/main/.env.example)，将后者重命名为 `.env`：
 
 ```yml
 - wrdo
@@ -155,19 +157,16 @@
   | - .env
 ```
 
-在 `.env` 中填写必要的环境变量，然后执行: 
+准备好 PostgreSQL 数据库，在 `.env` 中填写 `DATABASE_URL`、`AUTH_SECRET`、`AUTH_URL` 和其他所需配置。`AUTH_SECRET` 请使用随机生成的密钥，不要使用 Compose 文件中的默认值。然后拉取并启动镜像：
 
 ```bash
+docker compose pull
 docker compose up -d
 ```
 
-> 或只创建 docker-compose.yml 文件，环境变量直接填写在yml中，比如将`DATABASE_URL: ${DATABASE_URL}`替换成`DATABASE_URL: your-database-uri`
+修改 `.env` 中的服务端变量后，执行 `docker compose up -d --force-recreate`。镜像构建时不会注入任何部署者的 GitHub Secrets；`DATABASE_URL`、`AUTH_SECRET` 等实例专属配置由容器启动时提供。
 
-### 使用 EdgeOne 部署
-
-> 此方法部署目前无法build成功，不建议使用
-
-[![使用 EdgeOne Pages 部署](https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg)](https://edgeone.ai/pages/new?repository-url=https%3A%2F%2Fgithub.com%2Foiov%2Fwr.do)
+> 注意：Next.js 会将客户端使用的 `NEXT_PUBLIC_*` 变量在构建时写入浏览器代码。预构建的公共镜像无法通过容器启动时的 `.env` 更改这些客户端值；如果部署需要自定义站点 URL、名称或其他客户端配置，需要从源码构建并在执行 `pnpm run build` 前提供这些变量。目前不能保证仅靠公共镜像完成这些客户端配置。
 
 ## 本地开发
 
@@ -229,13 +228,6 @@ pnpm dev
 <a href="https://github.com/oiov/wr.do/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=oiov/wr.do" />
 </a>
-
-## 请作者喝咖啡
-  
-[爱发电主页打赏](wr.do/afdhome)
-
-<img width="100" src="https://wr.do/bbpt9z?ref=https://github.com/oiov/wr.do" />
-
 
 ## Star History
 

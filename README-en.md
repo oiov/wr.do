@@ -101,7 +101,9 @@ Remember to fill in the necessary environment variables.
 
 ### Deploy with Docker Compose
 
-Create a new folder and copy the [`docker-compose.yml`](https://github.com/oiov/wr.do/blob/main/docker-compose.yml)、[`.env`](https://github.com/oiov/wr.do/blob/main/.env.example) file to the folder.
+The official prebuilt image is published on [GitHub Container Registry](https://github.com/oiov/wr.do/pkgs/container/wr.do%2Fwrdo) as `ghcr.io/oiov/wr.do/wrdo:main` (or `latest`). No server-side image build is required.
+
+Create a folder, download [`docker-compose.yml`](https://github.com/oiov/wr.do/blob/main/docker-compose.yml) and [`.env.example`](https://github.com/oiov/wr.do/blob/main/.env.example), and rename `.env.example` to `.env`.
 
 ```yml
 - wrdo
@@ -109,11 +111,16 @@ Create a new folder and copy the [`docker-compose.yml`](https://github.com/oiov/
   | - .env
 ```
 
-Fill in the environment variables in the `.env` file, then: 
+Provision a PostgreSQL database and set `DATABASE_URL`, `AUTH_SECRET`, `AUTH_URL`, and any other required values in `.env`. Generate a random `AUTH_SECRET`; do not use the Compose file's default. Then pull and start the image:
 
 ```bash
+docker compose pull
 docker compose up -d
 ```
+
+After changing server-side variables in `.env`, run `docker compose up -d --force-recreate`. The image build does not include deployment-specific GitHub Secrets; values such as `DATABASE_URL` and `AUTH_SECRET` are supplied when the container starts.
+
+> Note: Next.js embeds client-side `NEXT_PUBLIC_*` values at build time. Changing `.env` at container startup cannot change those values in the prebuilt public image. If your deployment needs custom site URLs, branding, or other client-side settings, build from source with those variables set before running `pnpm run build`. The public image alone cannot currently guarantee custom client-side configuration.
 
 ## Local development
 
