@@ -1,5 +1,14 @@
 FROM node:20-alpine AS base
 
+FROM base AS geoip
+WORKDIR /geoip
+ARG GEOLITE2_NPM_VERSION=1.0.329
+ARG GEOIP_NPM_REGISTRY=https://registry.npmjs.org
+RUN set -eu; \
+    archive="$(npm pack "@maxminddatabase/geolite2@${GEOLITE2_NPM_VERSION}" --registry="${GEOIP_NPM_REGISTRY}" --silent)"; \
+    tar -xzf "${archive}" --strip-components=2 package/database/GeoLite2-City.mmdb; \
+    test -s GeoLite2-City.mmdb
+
 FROM base AS deps
 
 RUN apk add --no-cache openssl
@@ -25,7 +34,7 @@ RUN npm install -g pnpm@9.15.9
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-RUN pnpm test:auth && pnpm run build
+RUN pnpm test:auth && pnpm test:geo && pnpm run build
 
 FROM base AS runner
 
@@ -47,6 +56,7 @@ COPY --from=builder /app/prisma ./prisma
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=geoip /geoip/GeoLite2-City.mmdb /app/geoip/GeoLite2-City.mmdb
 
 # Check db
 COPY scripts/check-db.js /app/scripts/check-db.js

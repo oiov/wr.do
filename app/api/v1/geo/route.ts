@@ -1,4 +1,4 @@
-import { getIpInfo } from "@/lib/geo";
+import { getIpInfo } from "@/lib/geo-node";
 
 export async function GET(req: Request) {
   try {

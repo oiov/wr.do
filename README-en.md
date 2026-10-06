@@ -103,6 +103,8 @@ Before deploying, configure `DATABASE_URL`, `AUTH_URL`, and a random `AUTH_SECRE
 
 The official prebuilt image is published on [GitHub Container Registry](https://github.com/oiov/wr.do/pkgs/container/wr.do%2Fwrdo) as `ghcr.io/oiov/wr.do/wrdo:main` (or `latest`). No server-side image build is required.
 
+The Docker image includes a GeoLite2 City database fetched from npm at build time to fill in missing short-link visitor locations. No MaxMind account or manual mount is needed. Vercel does not need the database. See the [deployment guide](https://likedo.vercel.app/docs/developer/deploy) for updates and proxy configuration.
+
 Create a folder, download [`docker-compose.yml`](https://github.com/oiov/wr.do/blob/main/docker-compose.yml) and [`.env.example`](https://github.com/oiov/wr.do/blob/main/.env.example), and rename `.env.example` to `.env`.
 
 ```yml

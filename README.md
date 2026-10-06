@@ -149,6 +149,8 @@
 
 官方镜像发布在 [GitHub Container Registry](https://github.com/oiov/wr.do/pkgs/container/wr.do%2Fwrdo)：`ghcr.io/oiov/wr.do/wrdo:main`（也可使用 `latest`）。无需在服务器上构建镜像。
 
+Docker 镜像在构建时从 npm 自动获取 GeoLite2 City 数据库，用于补齐短链访客地理信息；无需 MaxMind 账号或手动挂载。Vercel 不需要该数据库。更新方法和代理配置见[部署文档](https://likedo.vercel.app/docs/developer/deploy-zh)。
+
 在服务器中创建一个文件夹，下载仓库中的 [docker-compose.yml](https://github.com/oiov/wr.do/blob/main/docker-compose.yml) 和 [.env.example](https://github.com/oiov/wr.do/blob/main/.env.example)，将后者重命名为 `.env`：
 
 ```yml

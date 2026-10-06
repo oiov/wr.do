@@ -73,6 +73,8 @@ pnpm install
 | NEXT_PUBLIC_SUPPORT_EMAIL | `support@your-domain.com` | '联系站长'邮箱 |
 | SKIP_DB_CHECK | `false` | 跳过数据库连接检测, 建议设置为 `false` |
 | SKIP_DB_MIGRATION | `false` | 跳过数据库表更新, 建议设置为 `false` |
+| MAXMIND_DB_PATH | `/app/geoip/GeoLite2-City.mmdb` | Docker 地理位置数据库路径，镜像已从 npm 自动获取；Vercel 不需要。见[部署说明](/docs/developer/deploy-zh#docker-访客地理位置)。 |
+| GEO_TRUST_FORWARDED | `false` | Docker 代理覆盖 `Forwarded` / `X-Forwarded-For` 时才设为 `true`。 |
 
 如需逐步安装说明，请参见 [快速开始](/docs/developer/quick-start)。
 

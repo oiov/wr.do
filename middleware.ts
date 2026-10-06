@@ -1,15 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ipAddress } from "@vercel/functions";
 
 import { siteConfig } from "./config/site";
-import { extractRealIP, getGeolocation, getUserAgent } from "./lib/geo";
+import { getClientIp, getEdgeGeolocation, getUserAgent } from "./lib/geo";
 import { extractHost } from "./lib/utils";
 
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
-
-const isVercel = process.env.VERCEL;
 
 // 门户域名配置(只保留主机名，不包含端口、协议)
 const PORTAL_DOMAIN = extractHost(
@@ -107,10 +104,10 @@ async function handleShortUrl(req: NextRequest) {
 
 async function processShortUrl(req: NextRequest, slug: string, url: URL) {
   const headers = req.headers;
-  const ip = isVercel ? ipAddress(req) : extractRealIP(headers);
+  const ip = getClientIp(req) || "127.0.0.1";
   const ua = getUserAgent(req);
 
-  const geo = await getGeolocation(req, ip || "::1");
+  const geo = getEdgeGeolocation(req);
 
   const password = url.searchParams.get("password") || "";
 

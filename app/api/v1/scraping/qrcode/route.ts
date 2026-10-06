@@ -2,7 +2,7 @@ import { ImageResponse } from "@vercel/og";
 
 import { checkApiKey } from "@/lib/dto/api-key";
 import { createScrapeMeta } from "@/lib/dto/scrape";
-import { getIpInfo } from "@/lib/geo";
+import { getIpInfo } from "@/lib/geo-node";
 import { WRDO_QR_LOGO } from "@/lib/qr/constants";
 import { QRCodeSVG } from "@/lib/qr/utils";
 import { getSearchParams } from "@/lib/utils";

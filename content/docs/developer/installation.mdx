@@ -74,6 +74,8 @@ Copy/paste the `.env.example` in the `.env` file:
 | NEXT_PUBLIC_SUPPORT_EMAIL | `support@your-domain.com` | The email address for support. |
 | SKIP_DB_CHECK | `false` | Skip database check. |
 | SKIP_DB_MIGRATION | `false` | Skip database migration. |
+| MAXMIND_DB_PATH | `/app/geoip/GeoLite2-City.mmdb` | Docker database path; the image fetches it from npm at build time. Not needed on Vercel. See [deployment](/docs/developer/deploy#docker-visitor-geolocation). |
+| GEO_TRUST_FORWARDED | `false` | Enable only when the Docker ingress replaces `Forwarded` / `X-Forwarded-For`. |
 
 - How to get `GOOGLE_CLIENT_ID`、`GITHUB_ID`, see [Authentification](/docs/developer/authentification).
 - How to get `RESEND_API_KEY`, see [Email](/docs/developer/email).

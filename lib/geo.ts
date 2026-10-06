@@ -1,146 +1,104 @@
-import { NextRequest, userAgent } from "next/server";
-import { Geo, geolocation, ipAddress } from "@vercel/functions";
-import UAParser from "ua-parser-js";
+import { userAgent } from "next/server";
+import { geolocation, ipAddress, type Geo } from "@vercel/functions";
 
-interface GeoLocation extends Geo {
-  ip?: string;
-}
+export type GeoRequest = Request;
 
-const isVercel = process.env.VERCEL;
-
-export async function getGeolocation(
-  req: NextRequest,
-  ip: string,
-): Promise<GeoLocation | null> {
-  // console.log("[Runtime Env]", isVercel ? "Vercel" : "Other");
-
-  if (isVercel) {
-    return geolocation(req);
-  } else {
-    return await getClientGeolocationWithIpApi(ip);
-  }
-}
-
-export function getUserAgent(req: NextRequest) {
-  if (isVercel) {
-    return userAgent(req);
-  } else {
-    const headers = req.headers;
-    const userAgent = headers.get("user-agent") || "";
-    const parser = new UAParser(userAgent);
-    return {
-      browser: parser.getBrowser(),
-      device: parser.getDevice(),
-      os: parser.getOS(),
-      engine: parser.getEngine(),
-      cpu: parser.getCPU(),
-      isBot: false,
-    };
-  }
-}
-
-export async function getClientGeolocation(ip): Promise<GeoLocation | null> {
-  // const new_headers = new Headers();
-  // new_headers.set("X-Forwarded-For", ip);
-  // new_headers.set("User-Agent", req.headers.get("user-agent") || "");
-  const response = await fetch(`https://ip.wr.do/api?ip=${ip}`);
-  if (!response.ok) return null;
-  return await response.json();
-}
-export async function getClientGeolocationWithIpApi(ip: string) {
-  const response = await fetch(`http://ip-api.com/json/${ip}`);
-  if (!response.ok) return null;
-  const res = await response.json();
-  //   {
-  //     "query": "154.64.226.29",
-  //     "status": "success",
-  //     "continent": "North America",
-  //     "continentCode": "NA",
-  //     "country": "United States",
-  //     "countryCode": "US",
-  //     "region": "CA",
-  //     "regionName": "California",
-  //     "city": "Los Angeles",
-  //     "district": "",
-  //     "zip": "90009",
-  //     "lat": 34.0549,
-  //     "lon": -118.243,
-  //     "timezone": "America/Los_Angeles",
-  //     "offset": -25200,
-  //     "currency": "USD",
-  //     "isp": "Cogent Communications",
-  //     "org": "NetLab Global",
-  //     "as": "AS51847 Nearoute Limited",
-  //     "asname": "NEAROUTE",
-  //     "mobile": true,
-  //     "proxy": true,
-  //     "hosting": false
-  // }
-  return {
-    ip: res.query,
-    country: res.countryCode,
-    countryName: res.country,
-    region: res.region,
-    regionName: res.regionName,
-    city: res.city,
-    latitude: res.lat?.toString(),
-    longitude: res.lon?.toString(),
-    timezone: res.timezone,
-  };
-}
-
-export function extractRealIP(headers: Headers): string {
-  const ipHeaders = [
-    "X-Forwarded-For",
-    "X-Real-IP",
-    "CF-Connecting-IP",
-    "X-Client-IP",
-    "X-Cluster-Client-IP",
-  ];
-
-  for (const header of ipHeaders) {
-    const value = headers.get(header);
-    if (value) {
-      const ip = value.split(",")[0].trim();
-      if (isValidIP(ip)) {
-        return ip;
-      }
-    }
-  }
-
-  return "::1";
-}
+export type RequestGeo = Pick<
+  Geo,
+  "city" | "region" | "country" | "latitude" | "longitude" | "flag"
+>;
 
 function isValidIP(ip: string): boolean {
-  // IPv4 正则
-  const ipv4Regex =
-    /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-  // IPv6 正则（简化版）
-  const ipv6Regex = /^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$/;
+  if (/^(?:\d{1,3}\.){3}\d{1,3}$/.test(ip)) {
+    return ip
+      .split(".")
+      .every((part) => Number(part) <= 255 && String(Number(part)) === part);
+  }
 
-  return ipv4Regex.test(ip) || ipv6Regex.test(ip);
+  if (!ip.includes(":") || !/^[\da-f:.]+$/i.test(ip)) return false;
+  try {
+    return new URL(`http://[${ip}]/`).hostname.length > 0;
+  } catch {
+    return false;
+  }
 }
 
-export async function getIpInfo(req) {
-  const headers = req.headers;
-  const ip = isVercel ? ipAddress(req) : extractRealIP(headers);
-  const ua = getUserAgent(req);
-  const geo = await getGeolocation(req, ip || "::1");
+function forwardedIP(value: string): string | null {
+  const first = value.split(",", 1)[0];
+  const match = first.match(
+    /(?:^|;)\s*for=(?:"([^";]+)"|([^;\s]+))(?:\s*;|\s*$)/i,
+  );
+  if (!match) return null;
 
-  const userLanguage =
-    req.headers.get("accept-language")?.split(",")[0] || "en-US";
+  const raw = (match[1] || match[2]).trim();
+  const candidate = raw.startsWith("[")
+    ? raw.match(/^\[([^\]]+)\](?::\d+)?$/)?.[1]
+    : raw.includes(".") && /^\d+(?:\.\d+){3}:\d+$/.test(raw)
+      ? raw.replace(/:\d+$/, "")
+      : raw;
+  return candidate && isValidIP(candidate) ? candidate : null;
+}
 
+export function getClientIp(req: GeoRequest): string | null {
+  if (process.env.VERCEL === "1") {
+    const ip = ipAddress(req);
+    return ip && isValidIP(ip) ? ip : null;
+  }
+
+  // These headers must be replaced by a trusted proxy. CF-Ray is only a
+  // routing hint, not proof of origin: restrict access to the origin server.
+  const viaCloudflare = req.headers.get("cf-ray") !== null;
+  for (const name of ["cf-connecting-ip", "true-client-ip", "x-real-ip"]) {
+    if (name === "x-real-ip" && viaCloudflare) continue;
+    const value = req.headers.get(name)?.trim();
+    if (value && isValidIP(value)) return value;
+  }
+
+  // Forwarded chains are client-controlled unless the ingress replaces them.
+  if (process.env.GEO_TRUST_FORWARDED === "true") {
+    const forwarded = req.headers.get("forwarded");
+    if (forwarded) return forwardedIP(forwarded);
+    const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim();
+    return ip && isValidIP(ip) ? ip : null;
+  }
+
+  return null;
+}
+
+function coordinate(value: string | null, limit: number): string | undefined {
+  if (!value?.trim()) return undefined;
+  const number = Number(value);
+  return Number.isFinite(number) && Math.abs(number) <= limit
+    ? String(number)
+    : undefined;
+}
+
+export function getEdgeGeolocation(req: GeoRequest): RequestGeo {
+  if (process.env.VERCEL === "1") {
+    const geo = geolocation(req);
+    return {
+      city: geo.city,
+      region: geo.countryRegion,
+      country: geo.country,
+      latitude: geo.latitude,
+      longitude: geo.longitude,
+      flag: geo.flag,
+    };
+  }
+
+  const country = req.headers.get("cf-ipcountry")?.trim().toUpperCase();
   return {
-    referer: headers.get("referer") || "(None)",
-    ip: isVercel ? ip : geo?.ip,
-    city: geo?.city || "",
-    region: geo?.region || "",
-    country: geo?.country || "",
-    latitude: geo?.latitude || "",
-    longitude: geo?.longitude || "",
-    flag: geo?.flag,
-    lang: userLanguage,
-    device: ua.device.model || "Unknown",
-    browser: ua.browser.name || "Unknown",
+    city: req.headers.get("cf-ipcity") || undefined,
+    region: req.headers.get("cf-region-code") || undefined,
+    country:
+      country && /^[A-Z]{2}$/.test(country) && country !== "XX"
+        ? country
+        : undefined,
+    latitude: coordinate(req.headers.get("cf-iplatitude"), 90),
+    longitude: coordinate(req.headers.get("cf-iplongitude"), 180),
   };
+}
+
+export function getUserAgent(req: GeoRequest) {
+  return userAgent(req);
 }

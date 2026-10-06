@@ -2,7 +2,7 @@ import cheerio from "cheerio";
 
 import { checkApiKey } from "@/lib/dto/api-key";
 import { createScrapeMeta } from "@/lib/dto/scrape";
-import { getIpInfo } from "@/lib/geo";
+import { getIpInfo } from "@/lib/geo-node";
 import { isLink, removeUrlPrefix } from "@/lib/utils";
 
 export const revalidate = 600;

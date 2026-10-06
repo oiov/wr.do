@@ -28,6 +28,8 @@ services:
       GITHUB_TOKEN: ${GITHUB_TOKEN}
       SKIP_DB_CHECK: ${SKIP_DB_CHECK}
       SKIP_DB_MIGRATION: ${SKIP_DB_MIGRATION}
+      MAXMIND_DB_PATH: ${MAXMIND_DB_PATH:-/app/geoip/GeoLite2-City.mmdb}
+      GEO_TRUST_FORWARDED: ${GEO_TRUST_FORWARDED:-false}
     networks:
       - wrdo-network
     restart: unless-stopped

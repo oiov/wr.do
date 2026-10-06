@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { geolocation } from "@vercel/functions";
+
+import { getIpInfo } from "@/lib/geo-node";
 
 interface CurrentLocation {
   latitude: number;
@@ -10,7 +11,7 @@ export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
   try {
-    const geo = geolocation(req);
+    const geo = await getIpInfo(req);
 
     const location: CurrentLocation = {
       latitude: Number(geo.latitude || "0"),

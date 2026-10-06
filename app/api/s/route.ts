@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 
 import { createUserShortUrlMeta, getUrlBySuffix } from "@/lib/dto/short-urls";
+import { completeGeolocation } from "@/lib/geo-node";
 
 export async function POST(req: NextRequest) {
   try {
@@ -48,15 +49,20 @@ export async function POST(req: NextRequest) {
       return Response.json("Expired[0001]");
     }
 
+    const geo = await completeGeolocation(
+      { city, region, country, latitude, longitude },
+      ip,
+    );
+
     await createUserShortUrlMeta({
       urlId: res.id,
       click: 1,
       ip: ip ? ip.split(",")[0] : "127.0.0.1",
-      city,
-      region,
-      country,
-      latitude,
-      longitude,
+      city: geo.city ?? null,
+      region: geo.region ?? null,
+      country: geo.country ?? null,
+      latitude: geo.latitude ?? null,
+      longitude: geo.longitude ?? null,
       referer,
       lang,
       device,

@@ -15,6 +15,9 @@ description: 选择你的部署方式
 
 首次部署前，设置随机的 `AUTH_SECRET`、`BOOTSTRAP_ADMIN_EMAIL` 和 `BOOTSTRAP_ADMIN_PASSWORD`。升级时只会停用仍使用出厂密码的历史管理员；已经修改密码的账号不受影响。
 
+Vercel 会提供访客 IP 和地理位置请求头。MaxMind 仅是 Docker 部署可选的本地数据库；
+Vercel 部署不需要安装 MaxMind，也不需要设置 `MAXMIND_DB_PATH`。
+
 ## 使用 Docker Compose 部署
 
 <Callout type="warning" twClass="mt-4">
@@ -44,6 +47,9 @@ docker compose up -d
 
 此命令会自动拉取最新的镜像并启动服务。（自动初始化数据库表，可以在容器日志中查看启动日志）
 
+若短链统计需要补齐代理未提供的地理信息，参见下方的
+[Docker 访客地理位置](#docker-访客地理位置)。
+
 ## 使用 Docker Compose（本地数据库）部署
 
 创建一个新文件夹，并将 `docker-compose-localdb.yml` 和 `.env` 文件复制到该文件夹中。
@@ -59,6 +65,77 @@ docker compose up -d
 ```bash
 docker compose up -d
 ```
+
+此 Compose 版本同样适用下方的 [Docker 访客地理位置](#docker-访客地理位置) 配置。
+
+## Docker 访客地理位置
+
+本节仅适用于 Docker 部署；Vercel 使用平台提供的访客 IP 和地理位置请求头，
+不需要安装 MaxMind 或下载数据库。Docker 优先读取 Cloudflare 提供的地理位置请求头，
+再用本地 GeoLite2 City 数据库补齐缺失的城市、地区、国家和经纬度。
+
+### 自动获取数据库
+
+官方 Docker 镜像已内置 `GeoLite2-City.mmdb`，使用上述任一 Compose 文件即可，
+无需手动下载或挂载，也无需 MaxMind 账号和许可密钥。构建镜像时会从 npm 的
+[`@maxminddatabase/geolite2`](https://www.npmjs.com/package/@maxminddatabase/geolite2)
+数据包直接提取数据库，不访问 MaxMind 官网或 GitHub 下载地址，不执行数据包脚本。
+数据库只进入 Docker 镜像，不会作为 npm 依赖安装到 Vercel 部署中。
+
+默认位置为 `/app/geoip/GeoLite2-City.mmdb`，由 `MAXMIND_DB_PATH` 指定。
+短链访问时只查询本地数据，不发起外部 IP 定位请求。数据库缺失、损坏或查询不到
+某个 IP 时仍会正常记录点击和跳转，缺失的地理字段留空。
+
+数据包由第三方维护，数据源为 MaxMind GeoLite2；数据库准确度和新鲜度取决于
+上游发布，使用时请遵守 [GeoLite2 许可条款](https://dev.maxmind.com/geoip/geolite2-free-geolocation-data/)。
+This product includes GeoLite2 data created by MaxMind, available from
+[MaxMind](https://www.maxmind.com).
+
+### 更新数据库与国内构建
+
+镜像携带构建时固定版本的数据快照，不会在每次容器启动时下载。更新到包含新版
+数据库的镜像后重建容器即可：
+
+```bash
+docker compose pull app
+docker compose up -d app
+```
+
+自行构建时，`GEOLITE2_NPM_VERSION` 可指定 npm 包版本；当前默认值见仓库
+`Dockerfile`。在国内可通过 `GEOIP_NPM_REGISTRY` 使用 npm 镜像站。以下命令
+从镜像站获取最新版本号，再构建含该版本数据库的应用镜像：
+
+```bash
+GEOIP_VERSION=$(npm view @maxminddatabase/geolite2 version --registry=https://registry.npmmirror.com)
+docker build \
+  --build-arg GEOLITE2_NPM_VERSION="$GEOIP_VERSION" \
+  --build-arg GEOIP_NPM_REGISTRY=https://registry.npmmirror.com \
+  -t wrdo:geoip .
+```
+
+这两个构建参数仅控制 GeoIP 数据包；其他应用依赖和 Docker 基础镜像仍使用各自的
+下载源。将 Compose 的 `app.image` 改成 `wrdo:geoip`，执行
+`docker compose up -d --force-recreate app` 使用新镜像。
+
+如需单独维护数据库，也可以自行准备有效的 `GeoLite2-City.mmdb`，在 `app`
+服务下增加文件挂载：
+
+```yaml
+volumes:
+  - ./geoip/GeoLite2-City.mmdb:/app/geoip/GeoLite2-City.mmdb:ro
+```
+
+挂载前确保宿主机文件存在，挂载文件会覆盖镜像内置数据库。更新文件后执行
+`docker compose up -d --force-recreate app`，以重新挂载并加载数据。
+
+### 传递真实访客 IP
+
+使用 Cloudflare 时，开启 IP Geolocation 和“Add visitor location headers”托管转换，
+并确保反向代理转发 `CF-*` 请求头。其他代理应由代理覆盖 `X-Real-IP` 为访客 IP，
+例如 Nginx 直接接收访客连接时设置 `proxy_set_header X-Real-IP $remote_addr;`。
+仅当代理会覆盖 `Forwarded` 或 `X-Forwarded-For`（而非追加客户端提供的值）时，
+才设置 `GEO_TRUST_FORWARDED=true`。限制客户端直接访问应用端口，避免伪造
+可信代理请求头。没有可信 IP 时无法使用数据库补全地理位置，但仍会记录点击。
 
 ## 官方镜像
 

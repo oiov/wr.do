@@ -21,7 +21,8 @@
     "check-db": "node scripts/check-db.js",
     "bootstrap-admin": "node scripts/bootstrap-admin.js",
     "test:bootstrap": "node --test scripts/bootstrap-admin.test.js",
-    "test:auth": "node --test scripts/auth.test.js"
+    "test:auth": "node --test scripts/auth.test.js",
+    "test:geo": "node --test scripts/geo.test.js"
   },
   "prisma": {
     "schema": "./prisma/schema.prisma"
@@ -115,6 +116,7 @@
     "lodash.throttle": "^4.1.1",
     "lucide-react": "^0.414.0",
     "lucide-static": "^0.460.0",
+    "maxmind": "^5.0.7",
     "minimist": "^1.2.8",
     "ms": "^2.1.3",
     "next": "15.5.24",

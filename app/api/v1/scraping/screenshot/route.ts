@@ -1,7 +1,7 @@
 import { env } from "@/env.mjs";
 import { checkApiKey } from "@/lib/dto/api-key";
 import { createScrapeMeta } from "@/lib/dto/scrape";
-import { getIpInfo } from "@/lib/geo";
+import { getIpInfo } from "@/lib/geo-node";
 import { isLink } from "@/lib/utils";
 
 export const revalidate = 60;

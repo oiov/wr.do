@@ -18,6 +18,10 @@ Remember to fill in the necessary environment variables.
 
 For a new installation, set a random `AUTH_SECRET` and provide `BOOTSTRAP_ADMIN_EMAIL` and `BOOTSTRAP_ADMIN_PASSWORD` before deploying. Existing administrators with a changed password are retained; the historical default account is disabled only if its original password is still in use.
 
+Vercel supplies visitor IP and location headers. MaxMind is only an optional
+database for Docker deployments; do not install it or set `MAXMIND_DB_PATH` on
+Vercel.
+
 ## Deploy with Docker Compose
 
 <Callout type="warning" twClass="mt-4">
@@ -44,6 +48,9 @@ Set `AUTH_SECRET` to the output of `openssl rand -base64 32`. On a new instance,
 docker compose up -d
 ```
 
+See [Docker visitor geolocation](#docker-visitor-geolocation) below if short-link
+analytics need location data beyond what your proxy provides.
+
 ## Deploy with Docker Compose (Local DB)
 
 Create a new folder and copy the `docker-compose-localdb.yml`、`.env` file to the folder.
@@ -59,6 +66,90 @@ Fill in the environment variables in the `.env` file, then:
 ```bash
 docker compose up -d
 ```
+
+The same [Docker visitor geolocation](#docker-visitor-geolocation) setup applies
+to this Compose variant.
+
+## Docker visitor geolocation
+
+This section applies only to Docker deployments. Vercel supplies visitor IP and
+location headers, so it needs neither MaxMind nor a database download. Docker
+uses Cloudflare location headers first and fills in missing city, region,
+country, and coordinates from a local GeoLite2 City database.
+
+### Automatic database download
+
+The official Docker image includes `GeoLite2-City.mmdb`. Both Compose files work
+without a manual download, mount, MaxMind account, or license key. During the
+image build, the database is extracted directly from the npm package
+[`@maxminddatabase/geolite2`](https://www.npmjs.com/package/@maxminddatabase/geolite2).
+This does not contact MaxMind or GitHub download servers or execute package
+scripts. The database is included only in Docker images, not installed as an
+npm dependency in Vercel deployments.
+
+`MAXMIND_DB_PATH` defaults to `/app/geoip/GeoLite2-City.mmdb`. Short-link requests
+query the local database without contacting an external IP lookup service.
+Missing or corrupt databases and unknown IPs do not prevent clicks from being
+recorded or visitors from being redirected; unavailable location fields stay
+empty.
+
+The npm package is maintained by a third party and redistributes MaxMind
+GeoLite2 data. Accuracy and freshness depend on upstream releases; observe the
+[GeoLite2 license terms](https://dev.maxmind.com/geoip/geolite2-free-geolocation-data/).
+This product includes GeoLite2 data created by MaxMind, available from
+[MaxMind](https://www.maxmind.com).
+
+### Database updates and registry mirrors
+
+The image contains a database snapshot from a pinned package version. It does
+not download data on every container startup. To use an image containing an
+updated database, pull that image and recreate the container:
+
+```bash
+docker compose pull app
+docker compose up -d app
+```
+
+For source builds, set `GEOLITE2_NPM_VERSION` to the npm version to include; see
+`Dockerfile` for the current default. `GEOIP_NPM_REGISTRY` supports npm mirrors,
+including npmmirror for deployments in mainland China. This example queries the
+latest package version and builds the application image with that database:
+
+```bash
+GEOIP_VERSION=$(npm view @maxminddatabase/geolite2 version --registry=https://registry.npmmirror.com)
+docker build \
+  --build-arg GEOLITE2_NPM_VERSION="$GEOIP_VERSION" \
+  --build-arg GEOIP_NPM_REGISTRY=https://registry.npmmirror.com \
+  -t wrdo:geoip .
+```
+
+These build arguments affect only the GeoIP package; application dependencies
+and Docker base images still use their own sources. Set `app.image` in Compose
+to `wrdo:geoip`, then run `docker compose up -d --force-recreate app`.
+
+To manage the database independently, prepare a valid `GeoLite2-City.mmdb` and
+add this file mount under the `app` service:
+
+```yaml
+volumes:
+  - ./geoip/GeoLite2-City.mmdb:/app/geoip/GeoLite2-City.mmdb:ro
+```
+
+The host file must exist before mounting. It overrides the bundled database.
+After replacing the file, run `docker compose up -d --force-recreate app` to
+remount and reload it.
+
+### Forwarding the visitor IP
+
+For Cloudflare, enable IP Geolocation and the "Add visitor location headers"
+Managed Transform, then forward `CF-*` headers through the reverse proxy.
+Other proxies should replace `X-Real-IP` with the visitor IP. For example, use
+`proxy_set_header X-Real-IP $remote_addr;` when Nginx receives connections
+directly from visitors. Set `GEO_TRUST_FORWARDED=true` only if the proxy replaces
+`Forwarded` or `X-Forwarded-For`, rather than appending to client-supplied values.
+Restrict direct access to the application so clients cannot forge trusted proxy
+headers. Without a trusted IP, database lookups cannot fill in missing location
+fields, but clicks are still recorded.
 
 ## Official Image
 
