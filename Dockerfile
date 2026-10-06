@@ -12,30 +12,26 @@ RUN set -eu; \
 
 FROM base AS deps
 
-RUN apk add --no-cache openssl
-RUN apk add --no-cache libc6-compat
+RUN apk add --no-cache openssl libc6-compat
 
 WORKDIR /app
 
 RUN npm install -g pnpm@9.15.9
 
-COPY . .
+COPY package.json pnpm-lock.yaml .npmrc ./
+# Prisma's postinstall needs the schema even when the dependency layer is cached.
+COPY prisma ./prisma
 
 # RUN pnpm config set registry https://registry.npmmirror.com
 
-RUN pnpm i --frozen-lockfile
+RUN --mount=type=cache,target=/pnpm/store \
+    pnpm i --frozen-lockfile --store-dir=/pnpm/store
 
-FROM base AS builder
-WORKDIR /app
-
-RUN apk add --no-cache openssl
-
-RUN npm install -g pnpm@9.15.9
-
-COPY --from=deps /app/node_modules ./node_modules
+FROM deps AS builder
 COPY . .
 
-RUN pnpm test:auth && pnpm test:geo && pnpm run build
+# Keep the compiler cache out of the large intermediate builder layer.
+RUN pnpm test:auth && pnpm test:geo && pnpm run build && rm -rf .next/cache
 
 FROM base AS runner
 
