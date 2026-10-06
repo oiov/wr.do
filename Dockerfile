@@ -1,6 +1,7 @@
 FROM node:20-alpine AS base
 
-FROM base AS geoip
+# The MMDB is architecture-independent; download it on the native builder.
+FROM --platform=$BUILDPLATFORM node:20-alpine AS geoip
 WORKDIR /geoip
 ARG GEOLITE2_NPM_VERSION=1.0.329
 ARG GEOIP_NPM_REGISTRY=https://registry.npmjs.org
