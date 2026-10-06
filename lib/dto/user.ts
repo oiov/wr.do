@@ -87,17 +87,6 @@ export async function getAllUsersCount() {
   }
 }
 
-export async function setFirstUserAsAdmin(userId: string) {
-  try {
-    return await prisma.user.update({
-      where: { id: userId },
-      data: { role: UserRole.ADMIN },
-    });
-  } catch (error) {
-    return null;
-  }
-}
-
 export async function getAllUsersActiveApiKeyCount() {
   try {
     return await prisma.user.count({ where: { apiKey: { not: null } } });
@@ -232,7 +221,7 @@ export function checkUserStatus(user: any) {
 
 export function getFirstAdminUser() {
   return prisma.user.findFirst({
-    where: { role: UserRole.ADMIN, email: { not: "admin@admin.com" } },
+    where: { role: UserRole.ADMIN, active: 1 },
     select: { email: true },
   });
 }

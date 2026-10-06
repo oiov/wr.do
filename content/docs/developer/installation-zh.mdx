@@ -52,8 +52,10 @@ pnpm install
 | -------------------------- | ------------------------------------------------- | ------------------------------------------------------------------------ |
 | NEXT_PUBLIC_APP_URL              | `http://localhost:3000`                           | Next.js 应用的 URL。                                                         |
 | NEXT_PUBLIC_APP_NAME              | `wr.do`                                           | 网站名称。                                                             |
-| AUTH\_SECRET               | `123465`                                          | 用于加密令牌和邮件验证哈希的密钥。                                                        |
+| AUTH\_SECRET               | `openssl rand -base64 32` 的输出                    | 至少 32 字节的随机认证密钥。                                                        |
 | AUTH_URL | `http://localhost:3000`                           | NextAuth.js 的回调 URL。                                                         |
+| BOOTSTRAP_ADMIN_EMAIL | `you@example.com` | 没有可用管理员时必填，使用自己的邮箱。 |
+| BOOTSTRAP_ADMIN_PASSWORD | 至少 16 位且含至少 8 种不同字符的独立密码 | 首次初始化后从环境变量中移除。 |
 | DATABASE\_URL              | `postgres://username:password@host:port/database` | Postgres 数据库的路径。                                                         |
 | GOOGLE\_CLIENT\_ID         | `123465`                                          | Google OAuth 客户端的 ID。                                                    |
 | GOOGLE\_CLIENT\_SECRET     | `123465`                                          | Google OAuth 客户端的密钥。                                                     |

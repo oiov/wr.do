@@ -25,7 +25,7 @@ RUN npm install -g pnpm@9.15.9
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-RUN pnpm run build
+RUN pnpm test:auth && pnpm run build
 
 FROM base AS runner
 
@@ -50,6 +50,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # Check db
 COPY scripts/check-db.js /app/scripts/check-db.js
+COPY scripts/bootstrap-admin.js /app/scripts/bootstrap-admin.js
 
 EXPOSE 3000
 

@@ -1,7 +1,5 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { ipAddress } from "@vercel/functions";
-import { auth } from "auth";
-import { NextAuthRequest } from "next-auth/lib";
 
 import { siteConfig } from "./config/site";
 import { extractRealIP, getGeolocation, getUserAgent } from "./lib/geo";
@@ -39,6 +37,7 @@ const systemRoutes = [
   "/auth",
   "/login",
   "/register",
+  "/setup",
   "/emails",
   "/link-status",
   "/password-prompt",
@@ -70,7 +69,7 @@ function handleBusinessDomainRedirect(hostname: string): NextResponse {
   return NextResponse.redirect(portalUrl, 302);
 }
 
-async function handleShortUrl(req: NextAuthRequest) {
+async function handleShortUrl(req: NextRequest) {
   const url = new URL(req.url);
   const pathname = url.pathname;
 
@@ -106,7 +105,7 @@ async function handleShortUrl(req: NextAuthRequest) {
   return await processShortUrl(req, slug, url);
 }
 
-async function processShortUrl(req: NextAuthRequest, slug: string, url: URL) {
+async function processShortUrl(req: NextRequest, slug: string, url: URL) {
   const headers = req.headers;
   const ip = isVercel ? ipAddress(req) : extractRealIP(headers);
   const ua = getUserAgent(req);
@@ -182,7 +181,7 @@ function extractSlug(url: string): string | null {
   return match ? match[1] : null;
 }
 
-export default auth(async (req) => {
+export default async function middleware(req: NextRequest) {
   try {
     const { pathname } = new URL(req.nextUrl);
     const hostname = req.headers.get("host") || "";
@@ -194,4 +193,4 @@ export default auth(async (req) => {
     console.error("Middleware error:", error);
     return NextResponse.redirect(siteConfig.url, 302);
   }
-});
+}

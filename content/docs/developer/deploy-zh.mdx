@@ -13,6 +13,8 @@ description: 选择你的部署方式
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/oiov/wr.do.git&project-name=wrdo)
 
+首次部署前，设置随机的 `AUTH_SECRET`、`BOOTSTRAP_ADMIN_EMAIL` 和 `BOOTSTRAP_ADMIN_PASSWORD`。升级时只会停用仍使用出厂密码的历史管理员；已经修改密码的账号不受影响。
+
 ## 使用 Docker Compose 部署
 
 <Callout type="warning" twClass="mt-4">
@@ -33,6 +35,8 @@ description: 选择你的部署方式
 ````
 
 在 `.env` 文件中填写环境变量，然后执行：
+
+使用 `openssl rand -base64 32` 生成 `AUTH_SECRET`。新实例还需填写 `BOOTSTRAP_ADMIN_EMAIL` 和 `BOOTSTRAP_ADMIN_PASSWORD`，首次启动成功后移除初始化密码。
 
 ```bash
 docker compose up -d

@@ -60,16 +60,18 @@ pnpm db:push
 ### 添加 AUTH_SECRET 环境变量
 
 `AUTH_SECRET` 环境变量用于加密 token 和邮件验证哈希（NextAuth.js）。
-你可以通过 [https://generate-secret.vercel.app/32](https://generate-secret.vercel.app/32) 生成
+使用 `openssl rand -base64 32` 在本地生成随机密钥。
 
 `AUTH_URL` 是用于 NextAuth.js 的回调 URL。
 
 注意，`AUTH_URL` 与 `NEXT_PUBLIC_APP_URL` 需要保持一致
 
 ```js title=".env"
-AUTH_SECRET=10000032bsfasfafk4lkkfsa
+AUTH_SECRET=<openssl rand -base64 32 的输出>
 AUTH_URL=http://localhost:3000
 NEXT_PUBLIC_APP_URL=http://localhost:3000
+BOOTSTRAP_ADMIN_EMAIL=you@example.com
+BOOTSTRAP_ADMIN_PASSWORD=<至少 16 位的独立密码>
 ```
 
 ## 2. 配置认证服务
@@ -193,15 +195,13 @@ GITHUB_TOKEN=
 ## 6. 启动开发服务器
 
 ```bash
+pnpm bootstrap-admin
 pnpm dev
 ```
 
 通过浏览器访问：[http://localhost:3000](http://localhost:3000)
 
-- 默认账号(管理员)：`admin@admin.com`
-- 默认密码：`123456`
-
-> 登录后请及时修改密码
+使用 `BOOTSTRAP_ADMIN_EMAIL` 和 `BOOTSTRAP_ADMIN_PASSWORD` 登录。管理员初始化后，删除环境变量中的初始化密码。升级时，只有仍使用出厂密码的历史账号会停用；如果没有其他管理员，请在升级前设置初始化凭据。
 
 ## 7. 部署教程
 

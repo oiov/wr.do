@@ -16,6 +16,8 @@ description: Choose your deployment method
 
 Remember to fill in the necessary environment variables.
 
+For a new installation, set a random `AUTH_SECRET` and provide `BOOTSTRAP_ADMIN_EMAIL` and `BOOTSTRAP_ADMIN_PASSWORD` before deploying. Existing administrators with a changed password are retained; the historical default account is disabled only if its original password is still in use.
+
 ## Deploy with Docker Compose
 
 <Callout type="warning" twClass="mt-4">
@@ -35,6 +37,8 @@ Create a new folder and copy the [docker-compose.yml](https://github.com/oiov/wr
 ```
 
 Fill in the environment variables in the `.env` file, then: 
+
+Set `AUTH_SECRET` to the output of `openssl rand -base64 32`. On a new instance, also set `BOOTSTRAP_ADMIN_EMAIL` and `BOOTSTRAP_ADMIN_PASSWORD`; remove the password after the first successful start.
 
 ```bash
 docker compose up -d

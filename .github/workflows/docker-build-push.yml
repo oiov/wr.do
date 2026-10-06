@@ -27,6 +27,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Test administrator bootstrap
+        run: node --test scripts/bootstrap-admin.test.js
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
         with:

@@ -53,8 +53,10 @@ Copy/paste the `.env.example` in the `.env` file:
 |----------------------|-------|-------------|
 | NEXT_PUBLIC_APP_URL | `http://localhost:3000` | The URL of the Next.js application. |
 | NEXT_PUBLIC_APP_NAME | `wr.do` | The name of website. |
-| AUTH_SECRET | `123465` | The secret used to encrypt tokens and email verification hashes. |
+| AUTH_SECRET | `openssl rand -base64 32` output | Random authentication secret, at least 32 bytes. |
 | AUTH_URL | `http://localhost:3000` | NextAuth.js callback URL。   
+| BOOTSTRAP_ADMIN_EMAIL | `you@example.com` | Your administrator email, required if no active administrator exists. |
+| BOOTSTRAP_ADMIN_PASSWORD | A unique password with at least 16 characters and 8 distinct characters | Remove from the environment after initial setup. |
 | DATABASE_URL | `postgres://username:password@host:port/database` | The path to the postgres database. |
 | GOOGLE_CLIENT_ID | `123465` | The ID of the Google OAuth client. |
 | GOOGLE_CLIENT_SECRET | `123465` | The secret of the Google OAuth client. |

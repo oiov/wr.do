@@ -60,11 +60,13 @@ copy the sql code to the database to initialize the database schema.
 ### Add the AUTH_SECRET Environment Variable
 
 The `AUTH_SECRET` environment variable is used to encrypt tokens and email verification hashes(NextAuth.js).
-You can generate one from https://generate-secret.vercel.app/32:
+Generate a random value with `openssl rand -base64 32`:
 
 ```js title=".env"
-AUTH_SECRET=10000032bsfasfafk4lkkfsa
+AUTH_SECRET=<output of openssl rand -base64 32>
 AUTH_URL=http://localhost:3000
+BOOTSTRAP_ADMIN_EMAIL=you@example.com
+BOOTSTRAP_ADMIN_PASSWORD=<a unique password of at least 16 characters>
 ```
 
 ## 2. Configure Authentication Service
@@ -184,12 +186,12 @@ GITHUB_TOKEN=
 ## 6. Start the Dev Server
 
 ```bash
+pnpm bootstrap-admin
 pnpm dev
 ```
 Via [http://localhost:3000](http://localhost:3000)
 
-- Default admin account：`admin@admin.com`
-- Default admin password：`123456`
+Generate `AUTH_SECRET` with `openssl rand -base64 32`. Set `BOOTSTRAP_ADMIN_EMAIL` to your email address and `BOOTSTRAP_ADMIN_PASSWORD` to a password of at least 16 characters. Sign in with these credentials, then remove the bootstrap password from your environment. On upgrade, the historical default account is disabled only if its password was never changed.
 
 ## 7. Deploy
 

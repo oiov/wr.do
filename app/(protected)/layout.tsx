@@ -32,7 +32,7 @@ export default async function Dashboard({ children }: ProtectedLayoutProps) {
     <div className="relative flex min-h-screen w-full">
       <DashboardSidebar links={filteredLinks} />
 
-      <div className="flex flex-1 flex-col">
+      <div className="flex min-w-0 flex-1 flex-col">
         <Notification />
         <header className="sticky top-0 z-50 flex h-14 bg-background px-4 lg:h-[60px] xl:px-8">
           <MaxWidthWrapper className="flex max-w-7xl items-center gap-x-3 px-0">

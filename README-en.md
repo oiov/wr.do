@@ -97,7 +97,7 @@ See step by step installation tutorial at [Quick Start for Developer](https://wr
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/oiov/wr.do.git&project-name=wrdo)
 
-Remember to fill in the necessary environment variables.
+Before deploying, configure `DATABASE_URL`, `AUTH_URL`, and a random `AUTH_SECRET` (generate it with `openssl rand -base64 32`). If there is no active administrator, also set `BOOTSTRAP_ADMIN_EMAIL` and `BOOTSTRAP_ADMIN_PASSWORD`; the build initializes the administrator automatically. The password must contain at least 16 characters and at least 8 distinct characters.
 
 ### Deploy with Docker Compose
 
@@ -111,7 +111,7 @@ Create a folder, download [`docker-compose.yml`](https://github.com/oiov/wr.do/b
   | - .env
 ```
 
-Provision a PostgreSQL database and set `DATABASE_URL`, `AUTH_SECRET`, `AUTH_URL`, and any other required values in `.env`. Generate a random `AUTH_SECRET`; do not use the Compose file's default. Then pull and start the image:
+Provision a PostgreSQL database and set `DATABASE_URL`, `AUTH_URL`, and any other required values in `.env`. Generate `AUTH_SECRET` with `openssl rand -base64 32`. For a new installation, set `BOOTSTRAP_ADMIN_EMAIL` to your own email address and `BOOTSTRAP_ADMIN_PASSWORD` to a password of at least 16 characters. Existing instances with an active administrator do not need bootstrap credentials. Then pull and start the image:
 
 ```bash
 docker compose pull
@@ -119,6 +119,8 @@ docker compose up -d
 ```
 
 After changing server-side variables in `.env`, run `docker compose up -d --force-recreate`. The image build does not include deployment-specific GitHub Secrets; values such as `DATABASE_URL` and `AUTH_SECRET` are supplied when the container starts.
+
+After the first administrator is created, remove `BOOTSTRAP_ADMIN_PASSWORD` from `.env` and recreate the container. On upgrade, `admin@admin.com` is disabled only if it still uses the original password. If no other active administrator exists, set bootstrap credentials before upgrading. Do not rotate an existing instance's `AUTH_SECRET` without planning for existing login sessions to expire.
 
 > Note: Next.js embeds client-side `NEXT_PUBLIC_*` values at build time. Changing `.env` at container startup cannot change those values in the prebuilt public image. If your deployment needs custom site URLs, branding, or other client-side settings, build from source with those variables set before running `pnpm run build`. The public image alone cannot currently guarantee custom client-side configuration.
 
@@ -137,6 +139,7 @@ copy `.env.example` to `.env` and fill in the necessary environment variables.
 ```bash
 pnpm postinstall
 pnpm db:push
+pnpm bootstrap-admin
 ```
 
 ```bash
@@ -144,14 +147,7 @@ pnpm db:push
 pnpm dev
 ```
 
-- Default admin account：`admin@admin.com`
-- Default admin password：`123456`
-
-#### Setup Admin Panel
-
-> After v1.0.2, this setup guide is not needed anymore
-
-Follow https://localhost:3000/setup
+Generate `AUTH_SECRET` with `openssl rand -base64 32`. Set `BOOTSTRAP_ADMIN_EMAIL` to your own email address and `BOOTSTRAP_ADMIN_PASSWORD` to a password of at least 16 characters before running `pnpm bootstrap-admin`. Remove the bootstrap password from `.env` after setup. Existing administrators with a changed password are retained; the historical default account is disabled only if it still has its original password.
 
 
 ## Environment Variables

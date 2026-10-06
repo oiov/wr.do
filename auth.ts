@@ -60,7 +60,7 @@ export const {
 
       const dbUser = await getUserById(token.sub);
 
-      if (!dbUser) return token;
+      if (!dbUser || dbUser.active !== 1) return null;
 
       token.name = dbUser.name;
       token.email = dbUser.email;

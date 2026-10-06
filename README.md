@@ -143,7 +143,7 @@
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/oiov/wr.do.git&project-name=wrdo)
 
-记得填写必要的环境变量。
+部署前设置 `DATABASE_URL`、`AUTH_URL` 和随机的 `AUTH_SECRET`（使用 `openssl rand -base64 32` 生成）。如果没有可用管理员，还须设置 `BOOTSTRAP_ADMIN_EMAIL` 和 `BOOTSTRAP_ADMIN_PASSWORD`；构建时会自动初始化管理员。密码至少 16 位，含至少 8 种不同字符。
 
 ### 使用 Docker Compose 部署
 
@@ -157,7 +157,7 @@
   | - .env
 ```
 
-准备好 PostgreSQL 数据库，在 `.env` 中填写 `DATABASE_URL`、`AUTH_SECRET`、`AUTH_URL` 和其他所需配置。`AUTH_SECRET` 请使用随机生成的密钥，不要使用 Compose 文件中的默认值。然后拉取并启动镜像：
+准备好 PostgreSQL 数据库，在 `.env` 中填写 `DATABASE_URL`、`AUTH_URL` 和其他所需配置。使用 `openssl rand -base64 32` 生成 `AUTH_SECRET`。首次部署还须设置 `BOOTSTRAP_ADMIN_EMAIL`（个人邮箱）和至少 16 位的 `BOOTSTRAP_ADMIN_PASSWORD`；已有可用管理员的实例不需要填写这两项。然后拉取并启动镜像：
 
 ```bash
 docker compose pull
@@ -165,6 +165,8 @@ docker compose up -d
 ```
 
 修改 `.env` 中的服务端变量后，执行 `docker compose up -d --force-recreate`。镜像构建时不会注入任何部署者的 GitHub Secrets；`DATABASE_URL`、`AUTH_SECRET` 等实例专属配置由容器启动时提供。
+
+首次管理员创建成功后，从 `.env` 移除 `BOOTSTRAP_ADMIN_PASSWORD` 并重新创建容器。升级时，仍使用出厂密码的 `admin@admin.com` 会被停用；已修改密码的账号不受影响。如果没有其他可用管理员，升级前先配置上述两项初始化凭据。不要随意更换已有实例的 `AUTH_SECRET`，否则现有登录会话会失效。
 
 > 注意：Next.js 会将客户端使用的 `NEXT_PUBLIC_*` 变量在构建时写入浏览器代码。预构建的公共镜像无法通过容器启动时的 `.env` 更改这些客户端值；如果部署需要自定义站点 URL、名称或其他客户端配置，需要从源码构建并在执行 `pnpm run build` 前提供这些变量。目前不能保证仅靠公共镜像完成这些客户端配置。
 
@@ -183,6 +185,7 @@ pnpm install
 ```bash
 pnpm postinstall
 pnpm db:push
+pnpm bootstrap-admin
 ```
 
 ```bash
@@ -190,16 +193,7 @@ pnpm db:push
 pnpm dev
 ```
 
-- 默认账号(管理员)：`admin@admin.com`
-- 默认密码：`123456`
-
-> 登录后请及时修改密码
-
-#### 管理员初始化
-
-> 此初始化引导在 v1.0.2 版本后, 不再是必要步骤
-
-访问 https://localhost:3000/setup
+管理员使用 `.env` 中的 `BOOTSTRAP_ADMIN_EMAIL` 和 `BOOTSTRAP_ADMIN_PASSWORD` 初始化。`AUTH_SECRET` 必须是至少 32 字节的随机值。
 
 ## 环境变量
 

@@ -1,5 +1,5 @@
 {
-  "buildCommand": "pnpm check-db && pnpm build",
+  "buildCommand": "pnpm check-db && pnpm bootstrap-admin && pnpm build",
   "installCommand": "pnpm install",
   "functions": {
     "app/api/**/*": {

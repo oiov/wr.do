@@ -1,24 +1,27 @@
 {
   "name": "wr.do",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "author": {
     "name": "oiov",
     "url": "https://github.com/oiov"
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "node scripts/bootstrap-admin.js --check-secret && next dev",
     "build": "next build",
-    "turbo": "next dev --turbo",
-    "start": "next start",
-    "start-docker": "npm-run-all check-db start-server",
-    "start-server": "node server.js",
+    "turbo": "node scripts/bootstrap-admin.js --check-secret && next dev --turbo",
+    "start": "node scripts/bootstrap-admin.js --check-secret && next start",
+    "start-docker": "npm-run-all check-db bootstrap-admin start-server",
+    "start-server": "node scripts/bootstrap-admin.js --check-secret && node server.js",
     "lint": "next lint",
-    "preview": "next build && next start",
+    "preview": "next build && pnpm start",
     "postinstall": "prisma generate",
     "db:push": "npx prisma migrate deploy",
     "email": "email dev --dir emails --port 3333",
     "remove-content": "node ./setup.mjs",
-    "check-db": "node scripts/check-db.js"
+    "check-db": "node scripts/check-db.js",
+    "bootstrap-admin": "node scripts/bootstrap-admin.js",
+    "test:bootstrap": "node --test scripts/bootstrap-admin.test.js",
+    "test:auth": "node --test scripts/auth.test.js"
   },
   "prisma": {
     "schema": "./prisma/schema.prisma"
