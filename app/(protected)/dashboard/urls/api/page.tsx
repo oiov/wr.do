@@ -37,7 +37,8 @@ curl -X POST \\
     "prefix": "wr.do",
     "visible": 1,
     "active": 1,
-    "password": ""
+    "password": "",
+    "inAppBrowserGuideOverride": null
   }' \\
   https://wr.do/api/v1/short
         `}

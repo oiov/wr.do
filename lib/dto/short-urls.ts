@@ -16,6 +16,7 @@ export interface ShortUrlFormData {
   active: number;
   expiration: string;
   password: string;
+  inAppBrowserGuideOverride?: boolean | null;
   createdAt?: Date;
   updatedAt?: Date;
   user?: {
@@ -279,6 +280,7 @@ export async function createUserShortUrl(data: ShortUrlFormData) {
         active: data.active,
         expiration: data.expiration,
         password: data.password,
+        inAppBrowserGuideOverride: data.inAppBrowserGuideOverride ?? null,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       },
@@ -304,6 +306,9 @@ export async function updateUserShortUrl(data: ShortUrlFormData) {
         // active: data.active,
         expiration: data.expiration,
         password: data.password,
+        ...(data.inAppBrowserGuideOverride !== undefined && {
+          inAppBrowserGuideOverride: data.inAppBrowserGuideOverride,
+        }),
         updatedAt: new Date().toISOString(),
       },
     });
@@ -332,6 +337,9 @@ export async function updateUserShortUrlAdmin(
         // active: data.active,
         expiration: data.expiration,
         password: data.password,
+        ...(data.inAppBrowserGuideOverride !== undefined && {
+          inAppBrowserGuideOverride: data.inAppBrowserGuideOverride,
+        }),
         updatedAt: new Date().toISOString(),
       },
     });
@@ -419,6 +427,7 @@ export async function getUrlBySuffix(suffix: string) {
       prefix: true,
       expiration: true,
       password: true,
+      inAppBrowserGuideOverride: true,
       updatedAt: true,
     },
   });

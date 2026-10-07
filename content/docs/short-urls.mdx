@@ -35,6 +35,18 @@ Once the generated short chain becomes invalid, it will not be deleted. When acc
 
 Users can set a password for the short link to protect it from unauthorized access.
 
+## In-App Browser Guide
+
+The optional in-app browser guide helps visitors who open a short link from an embedded browser such as WeChat, QQ, Weibo, Instagram, Facebook, Line, DingTalk, or Alipay. When enabled for a domain, the short link shows a page asking the visitor to open the link in their system browser. The visit is still recorded in the short-link statistics.
+
+This feature is disabled by default. Enable it in the domain settings, then choose one of these options for each short link:
+
+- **Use domain setting**: Follow the domain setting (default).
+- **Always show**: Show the guide in supported embedded browsers for this link.
+- **Always hide**: Keep the normal redirect for this link.
+
+The domain settings also control the guide message and whether the copy-link button is displayed. Regular browsers always follow the normal redirect.
+
 ## API Reference
 
 The `POST /api/v1/short` endpoint allows you to create a new short link for a given long URL.
@@ -51,7 +63,8 @@ curl -X POST \
     "prefix": "wr.do",
     "visible": 1,
     "active": 1,
-    "password": ""
+    "password": "",
+    "inAppBrowserGuideOverride": null
   }' \
   https://wr.do/api/v1/short
 ```
@@ -66,7 +79,8 @@ curl -X POST \
   "prefix": "wr.do", // optional, default: wr.do
   "visible": 1, // optional, default: 1, 1: visible, 0: invisible
   "active": 1, // optional, default: 1, 1: active, 0: inactive
-  "password": "" // optional, max length: 6
+  "password": "", // optional, max length: 6
+  "inAppBrowserGuideOverride": null // optional, null uses the domain setting; true always shows the guide; false always hides it
 }
 ```
 
@@ -90,6 +104,7 @@ Add the header `wrdo-api-key: YOUR_API_KEY` to your request.
   "active": 1,
   "expiration": "-1",
   "password": "",
+  "inAppBrowserGuideOverride": null,
   "createdAt": 2025-01-01T00:00:00.000Z,
   "updatedAt": 2025-01-01T00:00:00.000Z
 }

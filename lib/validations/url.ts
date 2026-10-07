@@ -27,4 +27,6 @@ export const createUrlSchema = z.object({
   active: z.number().default(1),
   prefix: z.string().default("wr.do"),
   password: z.string().max(6).default(""),
+  // null means "inherit the domain setting", undefined means "leave unchanged"
+  inAppBrowserGuideOverride: z.boolean().nullable().optional(),
 });

@@ -35,8 +35,17 @@ export async function POST(req: Request) {
       });
     }
 
-    const { target, url, prefix, visible, active, id, expiration, password } =
-      createUrlSchema.parse(data);
+    const {
+      target,
+      url,
+      prefix,
+      visible,
+      active,
+      id,
+      expiration,
+      password,
+      inAppBrowserGuideOverride,
+    } = createUrlSchema.parse(data);
     const res = await updateUserShortUrlAdmin(
       {
         id,
@@ -49,6 +58,7 @@ export async function POST(req: Request) {
         active,
         expiration,
         password,
+        inAppBrowserGuideOverride,
       },
       target_user.id,
     );

@@ -23,8 +23,16 @@ export async function POST(req: Request) {
 
     const { data } = await req.json();
 
-    const { target, url, prefix, visible, active, expiration, password } =
-      createUrlSchema.parse(data);
+    const {
+      target,
+      url,
+      prefix,
+      visible,
+      active,
+      expiration,
+      password,
+      inAppBrowserGuideOverride,
+    } = createUrlSchema.parse(data);
 
     const zones = await getDomainsByFeature("enable_short_link");
     if (
@@ -47,6 +55,7 @@ export async function POST(req: Request) {
       active,
       expiration,
       password,
+      inAppBrowserGuideOverride,
     });
     if (res.status !== "success") {
       return Response.json(res.status, {

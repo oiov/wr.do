@@ -66,6 +66,10 @@ export async function POST(req: NextRequest) {
       max_short_links: data.max_short_links,
       max_email_forwards: data.max_email_forwards,
       max_dns_records: data.max_dns_records,
+      in_app_browser_guide_enabled: !!data.in_app_browser_guide_enabled,
+      in_app_browser_guide_copy_enabled:
+        data.in_app_browser_guide_copy_enabled !== false,
+      in_app_browser_guide_message: data.in_app_browser_guide_message || null,
       min_url_length: data.min_url_length,
       min_email_length: data.min_email_length,
       min_record_length: data.min_record_length,
@@ -106,6 +110,9 @@ export async function PUT(req: NextRequest) {
       max_short_links,
       max_email_forwards,
       max_dns_records,
+      in_app_browser_guide_enabled,
+      in_app_browser_guide_copy_enabled,
+      in_app_browser_guide_message,
       active,
       id,
     } = await req.json();
@@ -113,7 +120,10 @@ export async function PUT(req: NextRequest) {
       return Response.json("domain id is required", { status: 400 });
     }
 
-    const updatedDomain = await updateDomain(id, {
+    // Only touch the in-app browser guide settings when the caller actually sent
+    // them: the domain table status toggle PUTs just { id, active, enable_* }, so
+    // any absent key must be left out of the update rather than coerced.
+    const updateData: any = {
       domain_name,
       enable_short_link: !!enable_short_link,
       enable_email: !!enable_email,
@@ -133,7 +143,21 @@ export async function PUT(req: NextRequest) {
       max_short_links,
       max_email_forwards,
       max_dns_records,
-    });
+    };
+
+    if (in_app_browser_guide_enabled !== undefined) {
+      updateData.in_app_browser_guide_enabled = !!in_app_browser_guide_enabled;
+    }
+    if (in_app_browser_guide_copy_enabled !== undefined) {
+      updateData.in_app_browser_guide_copy_enabled =
+        in_app_browser_guide_copy_enabled !== false;
+    }
+    if (in_app_browser_guide_message !== undefined) {
+      updateData.in_app_browser_guide_message =
+        in_app_browser_guide_message || null;
+    }
+
+    const updatedDomain = await updateDomain(id, updateData);
 
     return Response.json(updatedDomain, { status: 200 });
   } catch (error) {

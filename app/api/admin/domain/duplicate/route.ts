@@ -38,6 +38,10 @@ export async function POST(req: NextRequest) {
       max_short_links: target_domain.max_short_links,
       max_email_forwards: target_domain.max_email_forwards,
       max_dns_records: target_domain.max_dns_records,
+      in_app_browser_guide_enabled: target_domain.in_app_browser_guide_enabled,
+      in_app_browser_guide_copy_enabled:
+        target_domain.in_app_browser_guide_copy_enabled,
+      in_app_browser_guide_message: target_domain.in_app_browser_guide_message,
       min_url_length: target_domain.min_url_length,
       min_email_length: target_domain.min_email_length,
       min_record_length: target_domain.min_record_length,

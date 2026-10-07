@@ -255,6 +255,12 @@ test("short-link middleware and API record the original IP and enriched geo befo
     let recorded;
     const route = load("app/api/s/route.ts", {
       "@/lib/geo-node": node,
+      "@/lib/dto/domains": {
+        getInAppBrowserGuideConfig: async () => null,
+      },
+      "@/lib/in-app-browser": {
+        isInAppBrowser: () => false,
+      },
       "@/lib/dto/short-urls": {
         getUrlBySuffix: async () => ({
           id: "link-id",
@@ -304,4 +310,160 @@ test("short-link middleware and API record the original IP and enriched geo befo
     assert.equal(recorded.city, available ? "Shanghai" : null);
     assert.equal(recorded.latitude, available ? "31.23" : null);
   }
+});
+
+test("redirects an embedded browser to the generic guide when enabled", async () => {
+  const { geo, node } = setup();
+  const route = load("app/api/s/route.ts", {
+    "@/lib/geo-node": node,
+    "@/lib/dto/domains": {
+      getInAppBrowserGuideConfig: async () => ({
+        in_app_browser_guide_enabled: true,
+      }),
+    },
+    "@/lib/in-app-browser": {
+      isInAppBrowser: () => true,
+    },
+    "@/lib/dto/short-urls": {
+      getUrlBySuffix: async () => ({
+        id: "link-id",
+        active: 1,
+        password: "",
+        expiration: "-1",
+        updatedAt: new Date(),
+        prefix: "short.example",
+        target: "https://destination.example/",
+      }),
+      createUserShortUrlMeta: async () => undefined,
+    },
+  });
+  const middleware = load(
+    "middleware.ts",
+    {
+      "./lib/geo": geo,
+      "./config/site": { siteConfig: { url: "https://short.example" } },
+      "./lib/utils": { extractHost: () => "short.example" },
+    },
+    {},
+    {
+      fetch: async (url, options) =>
+        route.POST(new NextRequest(url, options)),
+    },
+  );
+
+  const response = await middleware.default(
+    request({
+      host: "short.example",
+      "x-real-ip": "203.0.113.5",
+      "user-agent": "Mozilla/5.0 MicroMessenger/8.0.40",
+    }),
+  );
+
+  assert.equal(response.status, 302);
+  assert.equal(
+    response.headers.get("location"),
+    "https://short.example/in-app-browser-guide?slug=test",
+  );
+});
+
+test("keeps the guide disabled by default and honors per-link overrides", async () => {
+  const { node } = setup();
+
+  async function call({ override = null, domainEnabled = false }) {
+    const route = load("app/api/s/route.ts", {
+      "@/lib/geo-node": node,
+      "@/lib/dto/domains": {
+        getInAppBrowserGuideConfig: async () => ({
+          in_app_browser_guide_enabled: domainEnabled,
+        }),
+      },
+      "@/lib/in-app-browser": {
+        isInAppBrowser: (userAgent) => userAgent.includes("MicroMessenger"),
+      },
+      "@/lib/dto/short-urls": {
+        getUrlBySuffix: async () => ({
+          id: "link-id",
+          active: 1,
+          password: "",
+          expiration: "-1",
+          updatedAt: new Date(),
+          prefix: "short.example",
+          target: "https://destination.example/",
+          inAppBrowserGuideOverride: override,
+        }),
+        createUserShortUrlMeta: async () => undefined,
+      },
+    });
+
+    const response = await route.POST(
+      new NextRequest("https://short.example/api/s", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          slug: "test",
+          ip: "203.0.113.5",
+          userAgent: "Mozilla/5.0 MicroMessenger/8.0.40",
+        }),
+      }),
+    );
+    return response.json();
+  }
+
+  assert.equal(await call({}), "https://destination.example/");
+  assert.deepEqual(await call({ domainEnabled: true }), {
+    target: "https://destination.example/",
+    showGuide: true,
+  });
+  assert.deepEqual(await call({ override: true }), {
+    target: "https://destination.example/",
+    showGuide: true,
+  });
+  assert.equal(
+    await call({ override: false, domainEnabled: true }),
+    "https://destination.example/",
+  );
+});
+
+test("never shows the guide to crawlers, even with an embedded browser UA", async () => {
+  const { node } = setup();
+  const route = load("app/api/s/route.ts", {
+    "@/lib/geo-node": node,
+    "@/lib/dto/domains": {
+      getInAppBrowserGuideConfig: async () => ({
+        in_app_browser_guide_enabled: true,
+      }),
+    },
+    "@/lib/in-app-browser": {
+      isInAppBrowser: () => true,
+    },
+    "@/lib/dto/short-urls": {
+      getUrlBySuffix: async () => ({
+        id: "link-id",
+        active: 1,
+        password: "",
+        expiration: "-1",
+        updatedAt: new Date(),
+        prefix: "short.example",
+        target: "https://destination.example/",
+      }),
+      createUserShortUrlMeta: async () => undefined,
+    },
+  });
+
+  const response = await route.POST(
+    new NextRequest("https://short.example/api/s", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        slug: "test",
+        ip: "203.0.113.5",
+        isBot: true,
+        userAgent: "Mozilla/5.0 MicroMessenger/8.0.40",
+      }),
+    }),
+  );
+
+  // WeChat link-preview crawlers carry a MicroMessenger UA; they must follow
+  // the redirect so previews still unfurl.
+  assert.equal(await response.json(), "https://destination.example/");
 });

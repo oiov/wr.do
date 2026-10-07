@@ -22,7 +22,8 @@
     "bootstrap-admin": "node scripts/bootstrap-admin.js",
     "test:bootstrap": "node --test scripts/bootstrap-admin.test.js",
     "test:auth": "node --test scripts/auth.test.js",
-    "test:geo": "node --test scripts/geo.test.js"
+    "test:geo": "node --test scripts/geo.test.js",
+    "test:in-app-browser": "node --test scripts/in-app-browser.test.js"
   },
   "prisma": {
     "schema": "./prisma/schema.prisma"

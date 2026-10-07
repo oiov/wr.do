@@ -236,7 +236,16 @@
     "Brevo API Key": "Brevo API Key",
     "Link Slug": "Slug",
     "Link Target": "Target",
-    "Username": "Username"
+    "Username": "Username",
+    "In-app browser guide": "In-app browser guide",
+    "Enable in-app browser guide": "Enable in-app browser guide",
+    "Show copy link button": "Show copy link button",
+    "Guide message": "Guide message",
+    "Guide message placeholder": "This link is best opened in your system browser.",
+    "Use domain setting": "Use domain setting",
+    "Always show": "Always show",
+    "Always hide": "Always hide",
+    "The guide is shown only in supported in-app browsers": "The guide is shown only in supported in-app browsers"
   },
   "Components": {
     "Dashboard": "Dashboard",
@@ -784,5 +793,16 @@
     "Email": "Email",
     "Unverified": "Unverified",
     "Verified at {date}": "Verified at {date}"
+  },
+  "InAppBrowserGuide": {
+    "title": "Open this link in your browser",
+    "description": "This link was opened inside an embedded browser and may not work correctly here.",
+    "instructionsWechat": "Tap the menu at the top right, then choose Open in Browser",
+    "instructionsQq": "Tap the menu at the top right, then choose Open in Browser, or tap the address bar and switch to your system browser",
+    "instructionsOther": "Tap the menu at the top right, then choose Open in Browser. If that option is not available, copy the link below and paste it into your system browser.",
+    "copyLink": "Copy link",
+    "copied": "Link copied",
+    "copyFailed": "Failed to copy, please copy the link manually",
+    "backToHome": "Back to home"
   }
 }

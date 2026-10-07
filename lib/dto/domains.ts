@@ -25,6 +25,9 @@ export interface DomainConfig {
   max_short_links: number | null;
   max_email_forwards: number | null;
   max_dns_records: number | null;
+  in_app_browser_guide_enabled: boolean;
+  in_app_browser_guide_copy_enabled: boolean;
+  in_app_browser_guide_message: string | null;
   active: boolean;
 }
 
@@ -118,6 +121,24 @@ export async function getDomainByName(domain_name: string) {
   return await prisma.domain.findUnique({
     where: { domain_name },
   });
+}
+
+export async function getInAppBrowserGuideConfig(domain_name: string) {
+  try {
+    // Narrow select on purpose: this runs on the public short-link redirect path.
+    return await prisma.domain.findUnique({
+      where: { domain_name },
+      select: {
+        in_app_browser_guide_enabled: true,
+        in_app_browser_guide_copy_enabled: true,
+        in_app_browser_guide_message: true,
+      },
+    });
+  } catch (error) {
+    // A failed optional lookup must not break the short-link redirect.
+    console.error("Failed to fetch in-app browser guide config:", error);
+    return null;
+  }
 }
 
 export async function checkDomainIsConfiguratedEmailProvider(

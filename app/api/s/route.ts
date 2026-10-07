@@ -1,7 +1,9 @@
 import { NextRequest } from "next/server";
 
+import { getInAppBrowserGuideConfig } from "@/lib/dto/domains";
 import { createUserShortUrlMeta, getUrlBySuffix } from "@/lib/dto/short-urls";
 import { completeGeolocation } from "@/lib/geo-node";
+import { isInAppBrowser } from "@/lib/in-app-browser";
 
 export async function POST(req: NextRequest) {
   try {
@@ -22,6 +24,7 @@ export async function POST(req: NextRequest) {
       cpu,
       isBot,
       password,
+      userAgent,
     } = await req.json();
 
     if (!slug || !ip) return Response.json("Missing[0000]");
@@ -72,7 +75,32 @@ export async function POST(req: NextRequest) {
       cpu,
       isBot,
     });
-    return Response.json(res.target);
+    // Crawlers must always be redirected, otherwise link previews break.
+    if (isBot) return Response.json(res.target);
+
+    if (!isInAppBrowser(userAgent)) return Response.json(res.target);
+
+    if (res.inAppBrowserGuideOverride === false) {
+      return Response.json(res.target);
+    }
+
+    if (res.inAppBrowserGuideOverride === true) {
+      return Response.json({
+        target: res.target,
+        showGuide: true,
+      });
+    }
+
+    const domainConfig = await getInAppBrowserGuideConfig(res.prefix);
+
+    if (!domainConfig?.in_app_browser_guide_enabled) {
+      return Response.json(res.target);
+    }
+
+    return Response.json({
+      target: res.target,
+      showGuide: true,
+    });
   } catch (error) {
     return Response.json("Error[0003]");
   }

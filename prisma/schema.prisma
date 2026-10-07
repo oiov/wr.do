@@ -110,18 +110,19 @@ model UserRecord {
 }
 
 model UserUrl {
-  id         String   @id @default(cuid())
-  userId     String
-  userName   String
-  target     String
-  url        String   @unique // slug
-  prefix     String
-  visible    Int      @default(0)
-  active     Int      @default(1)
-  expiration String   @default("-1")
-  password   String   @default("")
-  createdAt  DateTime @default(now()) @map(name: "created_at")
-  updatedAt  DateTime @default(now()) @map(name: "updated_at")
+  id                        String   @id @default(cuid())
+  userId                    String
+  userName                  String
+  target                    String
+  url                       String   @unique // slug
+  prefix                    String
+  visible                   Int      @default(0)
+  active                    Int      @default(1)
+  expiration                String   @default("-1")
+  password                  String   @default("")
+  inAppBrowserGuideOverride Boolean? @map("in_app_browser_guide_override")
+  createdAt                 DateTime @default(now()) @map(name: "created_at")
+  updatedAt                 DateTime @default(now()) @map(name: "updated_at")
 
   user    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   UrlMeta UrlMeta[]
@@ -255,26 +256,29 @@ model UserSendEmail {
 }
 
 model Domain {
-  id                   String  @id @default(uuid())
-  domain_name          String  @unique
-  enable_short_link    Boolean @default(false)
-  enable_email         Boolean @default(false)
-  enable_dns           Boolean @default(false)
-  cf_zone_id           String?
-  cf_api_key           String?
-  cf_email             String?
-  cf_record_types      String  @default("CNAME,A,TXT")
-  cf_api_key_encrypted Boolean
-  email_provider       String  @default("resend")
-  resend_api_key       String?
-  brevo_api_key        String?
-  max_short_links      Int?
-  max_email_forwards   Int?
-  max_dns_records      Int?
-  min_url_length       Int     @default(1)
-  min_email_length     Int     @default(1)
-  min_record_length    Int     @default(1)
-  active               Boolean @default(true)
+  id                                String  @id @default(uuid())
+  domain_name                       String  @unique
+  enable_short_link                 Boolean @default(false)
+  enable_email                      Boolean @default(false)
+  enable_dns                        Boolean @default(false)
+  cf_zone_id                        String?
+  cf_api_key                        String?
+  cf_email                          String?
+  cf_record_types                   String  @default("CNAME,A,TXT")
+  cf_api_key_encrypted              Boolean
+  email_provider                    String  @default("resend")
+  resend_api_key                    String?
+  brevo_api_key                     String?
+  max_short_links                   Int?
+  max_email_forwards                Int?
+  max_dns_records                   Int?
+  in_app_browser_guide_enabled      Boolean @default(false)
+  in_app_browser_guide_copy_enabled Boolean @default(true)
+  in_app_browser_guide_message      String?
+  min_url_length                    Int     @default(1)
+  min_email_length                  Int     @default(1)
+  min_record_length                 Int     @default(1)
+  active                            Boolean @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())

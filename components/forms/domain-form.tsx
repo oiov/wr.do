@@ -95,6 +95,11 @@ export function DomainForm({
       max_short_links: initData?.max_short_links || 0,
       max_email_forwards: initData?.max_email_forwards || 0,
       max_dns_records: initData?.max_dns_records || 0,
+      in_app_browser_guide_enabled: initData?.in_app_browser_guide_enabled ?? false,
+      in_app_browser_guide_copy_enabled:
+        initData?.in_app_browser_guide_copy_enabled ?? true,
+      in_app_browser_guide_message:
+        initData?.in_app_browser_guide_message || "",
       active: initData?.active || true,
     },
   });
@@ -349,6 +354,73 @@ export function DomainForm({
             />
           </div>
         </div>
+
+        <Collapsible className="relative mt-2 rounded-md bg-neutral-100 p-4 dark:bg-neutral-800">
+          <CollapsibleTrigger className="flex w-full items-center justify-between">
+            <h2 className="absolute left-2 top-4 text-xs font-semibold text-neutral-400">
+              {t("In-app browser guide")} ({t("Optional")})
+            </h2>
+            <Icons.chevronDown className="ml-auto size-4" />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="mt-3 space-y-3">
+            <div className="flex w-full items-center justify-between gap-2">
+              <Label
+                className="cursor-pointer"
+                htmlFor="in-app-browser-guide-enabled"
+              >
+                {t("Enable in-app browser guide")}:
+              </Label>
+              <Switch
+                id="in-app-browser-guide-enabled"
+                {...register("in_app_browser_guide_enabled")}
+                defaultChecked={initData?.in_app_browser_guide_enabled ?? false}
+                onCheckedChange={(value) =>
+                  setValue("in_app_browser_guide_enabled", value)
+                }
+              />
+            </div>
+
+            <div className="flex w-full items-center justify-between gap-2">
+              <Label
+                className="cursor-pointer"
+                htmlFor="in-app-browser-guide-copy"
+              >
+                {t("Show copy link button")}:
+              </Label>
+              <Switch
+                id="in-app-browser-guide-copy"
+                {...register("in_app_browser_guide_copy_enabled")}
+                defaultChecked={
+                  initData?.in_app_browser_guide_copy_enabled ?? true
+                }
+                onCheckedChange={(value) =>
+                  setValue("in_app_browser_guide_copy_enabled", value)
+                }
+              />
+            </div>
+
+            <div className="flex w-full items-start justify-between gap-2">
+              <Label
+                className="mt-2.5 text-nowrap"
+                htmlFor="in-app-browser-guide-message"
+              >
+                {t("Guide message")}:
+              </Label>
+              <div className="w-full sm:w-3/5">
+                <Input
+                  id="in-app-browser-guide-message"
+                  className="flex-1 bg-neutral-50 shadow-inner"
+                  maxLength={500}
+                  placeholder={t("Guide message placeholder")}
+                  {...register("in_app_browser_guide_message")}
+                />
+                <p className="p-1 text-[13px] text-muted-foreground">
+                  {t("Optional")}.
+                </p>
+              </div>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
 
         <Collapsible className="relative mt-2 rounded-md bg-neutral-100 p-4 dark:bg-neutral-800">
           <CollapsibleTrigger className="flex w-full items-center justify-between">

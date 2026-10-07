@@ -39,6 +39,22 @@ export type FormData = ShortUrlFormData;
 
 export type FormType = "add" | "edit";
 
+// null means "inherit the domain setting"
+const IN_APP_BROWSER_GUIDE_ENUMS = [
+  {
+    value: "domain",
+    override: null,
+  },
+  {
+    value: "enabled",
+    override: true,
+  },
+  {
+    value: "disabled",
+    override: false,
+  },
+];
+
 export interface RecordFormProps {
   user: Pick<User, "id" | "name">;
   isShowForm: boolean;
@@ -80,6 +96,7 @@ export function UrlForm({
       visible: initData?.visible || 0,
       expiration: initData?.expiration || "-1",
       password: initData?.password || "",
+      inAppBrowserGuideOverride: initData?.inAppBrowserGuideOverride ?? null,
     },
   });
 
@@ -375,6 +392,37 @@ export function UrlForm({
             </p>
           </FormSectionColumns>
         </div>
+
+        <FormSectionColumns title={t("In-app browser guide")}>
+          <Select
+            defaultValue={
+              IN_APP_BROWSER_GUIDE_ENUMS.find(
+                (e) =>
+                  e.override === (initData?.inAppBrowserGuideOverride ?? null),
+              )?.value
+            }
+            onValueChange={(value: string) => {
+              setValue(
+                "inAppBrowserGuideOverride",
+                IN_APP_BROWSER_GUIDE_ENUMS.find((e) => e.value === value)
+                  ?.override ?? null,
+              );
+            }}
+            name="inAppBrowserGuideOverride"
+          >
+            <SelectTrigger className="w-full shadow-inner">
+              <SelectValue placeholder={t("Use domain setting")} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="domain">{t("Use domain setting")}</SelectItem>
+              <SelectItem value="enabled">{t("Always show")}</SelectItem>
+              <SelectItem value="disabled">{t("Always hide")}</SelectItem>
+            </SelectContent>
+          </Select>
+          <p className="p-1 text-[13px] text-muted-foreground">
+            {t("The guide is shown only in supported in-app browsers")}
+          </p>
+        </FormSectionColumns>
 
         {/* Action buttons */}
         <div className="mt-3 flex justify-end gap-3">

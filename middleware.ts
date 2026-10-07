@@ -38,6 +38,7 @@ const systemRoutes = [
   "/emails",
   "/link-status",
   "/password-prompt",
+  "/in-app-browser-guide",
   "/chat",
   "/manifest.json",
   "/robots.txt",
@@ -129,6 +130,7 @@ async function processShortUrl(req: NextRequest, slug: string, url: URL) {
     cpu: ua.cpu.architecture || "",
     isBot: ua.isBot,
     password,
+    userAgent: headers.get("user-agent") || "",
   };
 
   // console.log("Tracking data:", trackingData, siteConfig.url);
@@ -145,7 +147,8 @@ async function processShortUrl(req: NextRequest, slug: string, url: URL) {
       302,
     );
 
-  const target = await res.json();
+  const result = await res.json();
+  const target = typeof result === "string" ? result : result?.target;
 
   if (!target || typeof target !== "string") {
     return NextResponse.redirect(
@@ -154,16 +157,16 @@ async function processShortUrl(req: NextRequest, slug: string, url: URL) {
     );
   }
 
-  if (target in redirectMap) {
-    if (
-      ["PasswordRequired[0004]", "IncorrectPassword[0005]"].includes(target)
-    ) {
-      return NextResponse.redirect(
-        `${siteConfig.url}${redirectMap[target]}${slug}`,
-        302,
-      );
-    }
+  if (typeof result === "object" && result?.showGuide === true) {
+    const guideUrl = new URL("/in-app-browser-guide", siteConfig.url);
+    url.searchParams.forEach((value, key) => {
+      guideUrl.searchParams.set(key, value);
+    });
+    guideUrl.searchParams.set("slug", slug);
+    return NextResponse.redirect(guideUrl.toString(), 302);
+  }
 
+  if (target in redirectMap) {
     return NextResponse.redirect(
       `${siteConfig.url}${redirectMap[target]}${slug}`,
       302,

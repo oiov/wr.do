@@ -236,7 +236,16 @@
     "Brevo API Key": "Brevo 密钥",
     "Link Slug": "后缀",
     "Link Target": "目标链接",
-    "Username": "用户名"
+    "Username": "用户名",
+    "In-app browser guide": "内置浏览器引导",
+    "Enable in-app browser guide": "启用内置浏览器引导",
+    "Show copy link button": "显示复制链接按钮",
+    "Guide message": "引导文案",
+    "Guide message placeholder": "建议在系统浏览器中打开此链接。",
+    "Use domain setting": "使用域名设置",
+    "Always show": "始终显示",
+    "Always hide": "始终关闭",
+    "The guide is shown only in supported in-app browsers": "仅在支持的内置浏览器中显示引导"
   },
   "Components": {
     "Dashboard": "用户面板",
@@ -783,5 +792,16 @@
     "Unverified": "未验证邮箱",
     "Email": "邮箱",
     "Verified at {date}": "已于 {date} 验证"
+  },
+  "InAppBrowserGuide": {
+    "title": "请在浏览器中打开此链接",
+    "description": "此链接当前在应用内置浏览器中打开，可能无法正常访问。",
+    "instructionsWechat": "请点击右上角 ⋯，选择「在浏览器中打开」",
+    "instructionsQq": "请点击右上角 ⋯，选择「在浏览器中打开」；若没有该选项，可点击顶部地址栏切换系统浏览器打开",
+    "instructionsOther": "请点击右上角 ⋯，选择「在浏览器中打开」；若没有该选项，请复制下方链接后粘贴到系统浏览器中访问。",
+    "copyLink": "复制链接",
+    "copied": "链接已复制",
+    "copyFailed": "复制失败，请手动复制链接",
+    "backToHome": "返回首页"
   }
 }
