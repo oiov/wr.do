@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
       cf_api_key: target_domain.cf_api_key,
       cf_email: target_domain.cf_email,
       cf_record_types: target_domain.cf_record_types,
-      cf_api_key_encrypted: false,
+      cf_api_key_encrypted: target_domain.cf_api_key_encrypted,
       email_provider: target_domain.email_provider,
       resend_api_key: target_domain.resend_api_key,
       brevo_api_key: target_domain.brevo_api_key,

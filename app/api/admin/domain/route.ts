@@ -133,7 +133,6 @@ export async function PUT(req: NextRequest) {
       cf_api_key,
       cf_email,
       cf_record_types,
-      cf_api_key_encrypted: false,
       email_provider,
       brevo_api_key,
       resend_api_key,
