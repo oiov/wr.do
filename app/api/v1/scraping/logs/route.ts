@@ -2,6 +2,7 @@
 import { NextRequest } from "next/server";
 
 import { getScrapeStatsByUserId } from "@/lib/dto/scrape";
+import { getClientIp } from "@/lib/geo";
 
 export interface LogsResponse {
   logs: {
@@ -25,10 +26,21 @@ export interface LogsQueryParams {
 
 const rateLimit = new Map<string, { count: number; timestamp: number }>();
 
+// Cap how many IPs we track so a flood of distinct clients cannot grow the map
+// without bound. Expired entries are only swept once the map is this large, so
+// the common path stays cheap.
+const MAX_TRACKED_IPS = 10_000;
+
 function checkRateLimit(ip: string): boolean {
   const now = Date.now();
   const windowMs = 60 * 1000; // 1分钟窗口
   const maxRequests = 60; // 每分钟最大请求数
+
+  if (rateLimit.size >= MAX_TRACKED_IPS) {
+    rateLimit.forEach((entry, key) => {
+      if (now - entry.timestamp > windowMs) rateLimit.delete(key);
+    });
+  }
 
   const current = rateLimit.get(ip) || { count: 0, timestamp: now };
 
@@ -47,9 +59,10 @@ function checkRateLimit(ip: string): boolean {
 
 export async function GET(request: NextRequest) {
   try {
-    const ip =
-      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-      "127.0.0.1";
+    // X-Forwarded-For is client-controlled, so it must not key the rate limit:
+    // a forged value would hand out a fresh bucket on every request. getClientIp
+    // only trusts headers a proxy is expected to replace.
+    const ip = getClientIp(request) || "127.0.0.1";
 
     if (!checkRateLimit(ip)) {
       return Response.json(

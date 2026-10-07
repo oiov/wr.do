@@ -32,7 +32,7 @@
     "overrides": {
       "postcss": "8.5.29",
       "protobufjs": "7.6.6",
-      "shell-quote": "1.9.0"
+      "shell-quote": "1.11.0"
     }
   },
   "dependencies": {
