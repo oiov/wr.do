@@ -225,6 +225,10 @@ pnpm dev
   <img src="https://contrib.rocks/image?repo=oiov/wr.do" />
 </a>
 
+- [Nbility Gen](https://gen.nbility.ai) - AI 生图/视频媒体站
+- [AttachReady](https://attachready.com) - 支持API与MCP调用的图片、PDF转换与处理工具集
+- [KeepVideo](https://keep.video) - YouTube、Instagram 等平台桌面视频下载器
+
 ## Star History
 
 <a href="https://star-history.com/#oiov/wr.do&Date">
