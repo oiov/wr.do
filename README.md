@@ -20,12 +20,12 @@
 
 <img align="center" width="50%" alt="og-banner" src="https://github.com/user-attachments/assets/b338bfca-71ed-447a-bde5-18e5677cb8dc" />
 
-> 🌟 推荐 **Claude**、**OpenAI** 稳定 API 网关：[nbility.ai](https://nbility.ai//auth/register?aff=Dptp) ，支持 claude-fable-5、gpt-5.6-sol 等主流 AI Coding 大模型🥳
+> 🌟 推荐 **Claude**、**OpenAI** 稳定 API 网关：[nbility.ai](https://nbility.ai//auth/register?aff=Dptp) ，支持 claude-fable-5、gpt-6-astra 等主流 AI Coding 大模型
 
 ## 版本说明
 
-- 开源版 Demo：[likedo.vercel.app](https://likedo.vercel.app)
-- 运营版 LikeDo：[like.do](https://like.do) ，集成 [AI Agent](https://like.do/zh/docs/user-guide/ai-chat-assistant) 统一调度管理站内资源，内置[激励共创系统](https://like.do/zh/blog/introducing-co-creation-program)，点击使用[邀请码注册](https://like.do/auth/register?ref=DAR5HDV4) 。
+- 开源版 Demo：likedo.vercel.app（已暂停，请自行部署）
+- 运营版：[wr.do](https://wr.do) ，集成 [AI Agent](https://wr.do/zh/docs/user-guide/ai-chat-assistant) 统一调度管理站内资源，点击使用[邀请码注册](https://wr.do/auth/register?ref=DAR5HDV4) 。
 
 ## 截图预览
 
