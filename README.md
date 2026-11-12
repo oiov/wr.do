@@ -18,10 +18,6 @@
   <!-- <img width="15" src="https://storage.wr.do/2025/11/20/561763627504_.pic.jpg" /> 免费体验 Sora AI 视频生成 👉 <a href="https://sora.hk/i/5KY5N1FL">点击注册</a> -->
 </div>
 
-<img align="center" width="50%" alt="og-banner" src="https://github.com/user-attachments/assets/b338bfca-71ed-447a-bde5-18e5677cb8dc" />
-
-> 🌟 推荐 **Claude**、**OpenAI** 稳定 API 网关：[nbility.ai](https://nbility.ai//auth/register?aff=Dptp) ，支持 claude-fable-5、gpt-6-astra 等主流 AI Coding 大模型
-
 ## 版本说明
 
 - 开源版 Demo：likedo.vercel.app（已暂停，请自行部署）
@@ -120,6 +116,14 @@
 <li>子域名管理（管理所有用户创建的子域名）
 </ul>
 </details>
+
+## 赞助
+
+WR.DO 是一个业余时间维护的开源项目。如果你愿意支持这个项目，或希望出现在这里，欢迎[创建一个 Issue](https://github.com/oiov/wr.do/issues/new) 或[发邮件](mailto:hi@oiov.dev)联系我。
+
+| 支持方 | 说明 |
+|--------|------|
+| [<img src="https://github.com/user-attachments/assets/b338bfca-71ed-447a-bde5-18e5677cb8dc" alt="nbility" width="220" />](https://nbility.ai/auth/register?aff=Dptp&utm_source=github&utm_campaign=horizon) |  Nbility AI Gateway：满血、稳定、不掺水，以更低成本使用全球 AI 大模型，兼容协议支持 GPT、Claude、Gemini、Grok 等领先模型，通过[此专属链接](https://nbility.ai/auth/register?aff=Dptp&utm_source=github&utm_campaign=horizon)注册即可开始使用。 |
 
 ## 技术栈
 
