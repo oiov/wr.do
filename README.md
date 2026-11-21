@@ -124,6 +124,7 @@ WR.DO 是一个业余时间维护的开源项目。如果你愿意支持这个�
 | 支持方 | 说明 |
 |--------|------|
 | [<img src="https://github.com/user-attachments/assets/b338bfca-71ed-447a-bde5-18e5677cb8dc" alt="nbility" width="220" />](https://nbility.ai/auth/register?aff=Dptp&utm_source=github&utm_campaign=horizon) |  Nbility AI Gateway：满血、稳定、不掺水，以更低成本使用全球 AI 大模型，兼容协议支持 GPT、Claude、Gemini、Grok 等领先模型，通过[此专属链接](https://nbility.ai/auth/register?aff=Dptp&utm_source=github&utm_campaign=horizon)注册即可开始使用。 |
+| [<img src="https://raw.githubusercontent.com/Ciao1019/ArcMD/main/docs/images/readme/logo-horizontal.png" alt="Arcmd" width="220" />](https://arcmd.wl.do&utm_source=github&utm_campaign=horizon) | MyGo 原生也能美成艺术品！开源 Markdown 编辑器 [ArcMD](https://arcmd.wl.do&utm_source=github&utm_campaign=horizon)，120Hz 满帧跟手，把 Arc 的优雅审美与极致丝滑，还给本地写作！ |
 
 ## 技术栈
 
